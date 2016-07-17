@@ -9,7 +9,6 @@ import Util from '../util/Util';
 import Global from '../util/Global';
 import NetUitl from '../net/NetUitl';
 import JsonUitl from '../util/JsonUitl';
-
 import React, { Component} from 'react';
 import {
     Alert,
@@ -107,7 +106,18 @@ class Login extends React.Component {
                     onPress={this.login}
                     text="登录"
                     style={{width:200}}/>
+
+
+                <View style={{flex:1,flexDirection:'row',alignItems: 'flex-end',bottom:10}}>
+                    <Text style={styles.style_view_unlogin}>
+                        无法登录?
+                    </Text>
+                    <Text style={styles.style_view_register}>
+                        新用户
+                    </Text>
+                </View>
             </View>
+
         );
     }
 }
@@ -134,6 +144,21 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         height: 55,
     },
+    style_view_unlogin:{
+        fontSize:15,
+        color:'#63B8FF',
+        marginLeft:10,
+    },
+    style_view_register:{
+        fontSize:15,
+        color:'#63B8FF',
+        marginRight:10,
+        alignItems:'flex-end',
+        flex:1,
+        flexDirection:'row',
+        textAlign:'right',
+    },
+
 });
 
 module.exports = Login;

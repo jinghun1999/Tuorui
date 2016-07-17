@@ -20,7 +20,7 @@ class Head extends Component {
                     健康管理
                 </Text>
             </View>
-        ); 
+        );
     }
 }
 

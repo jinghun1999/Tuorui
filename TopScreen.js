@@ -14,7 +14,7 @@ import {
     } from 'react-native';
 
 import ViewPager from 'react-native-viewpager';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/FontAwesome';
 var deviceWidth = Dimensions.get('window').width;
 
 let IMGS = [
@@ -23,6 +23,7 @@ let IMGS = [
     require('./image/job3.jpg'),
 ];
 import Head from './Head';
+var sale = require('./Sale');
 class TopScreen extends Component {
 
     constructor(props) {
@@ -34,8 +35,20 @@ class TopScreen extends Component {
 
 
     _onPressButton1() {
-        alert("健康圈子");
-        ToastAndroid.show("健康圈子", ToastAndroid.SHORT);
+        alert("销售单");
+        ToastAndroid.show("销售单", ToastAndroid.SHORT);
+        const { navigator } = this.props;
+        var _me = this;
+        if(navigator)
+        {
+            navigator.push({
+                name: 'View',
+                component: sale,
+                params: {
+                    id: this.state.id,
+                }
+            })
+        }
     }
 
     _onPressButton2() {
@@ -62,10 +75,10 @@ class TopScreen extends Component {
                     <TouchableOpacity style={styles.grid_view} onPress={this._onPressButton1}>
                         <View>
                             <Text style={styles.icon_box}>
-                                <Icon name={'ios-flask'} size={50} color={'#000'}/>
+                                <Icon name={'list'} size={50} color={'white'} />
                             </Text>
                             <Text style={{fontSize:15}}>
-                                健康圈子
+                                销售单
                             </Text>
                         </View>
                     </TouchableOpacity>
@@ -77,7 +90,7 @@ class TopScreen extends Component {
                             </Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.grid_view} onPress={this._onPressButton2}>
+                    <TouchableOpacity style={styles.grid_view} onPress={this._onPressButton3}>
                         <View>
                             <Image source={require('./image/base_health.png')} style={{width:50,height:50}}/>
                             <Text style={{fontSize:15}}>
@@ -136,7 +149,7 @@ const styles = StyleSheet.create({
         textAlign:'center',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor:"red"
+        backgroundColor:"orange"
     }
 });
 
