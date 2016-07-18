@@ -10,7 +10,7 @@ import{
     Text,
     ScrollView,
     Image,
-    View
+    View 
     } from 'react-native';
 import Head from './Head';
 class HealthTools extends Component {
