@@ -31,6 +31,8 @@ import NetUitl from './app/net/NetUitl';
 import Head from './Head';
 import TopScreen from './TopScreen';
 import NButton from './app/commonview/NButton';
+import Sale from './Sale';
+
 const MY_HEALTH = '首页';
 const MY_HEALTH_NORMAL = require('./image/my_health_un.png');
 const MY_HEALTH_FOCUS = require('./image/my_health_on.png');

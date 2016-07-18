@@ -39,7 +39,12 @@ class MyAccount extends React.Component {
     configureScenceAndroid() {
         return Navigator.SceneConfigs.FadeAndroid;
     }
+    /**
+     *组件将要被加载在视图
+     */
+    componentWillMount() {
 
+    }
     /**
      *配置跳转路由
      */
@@ -49,8 +54,7 @@ class MyAccount extends React.Component {
             return (
                 <View style={styles.container} onPress={this._onPressButton}>
                     <Head/>
-                    <TouchableOpacity style={styles.view} onPress={() => {
-              _navigator.push({title:'Login',id:'login'});
+                    <TouchableOpacity style={styles.view} onPress={() => {_navigator.push({title:'Login',id:'login'});
               ToastAndroid.show('启动应用', ToastAndroid.SHORT); }}>
                         <View style={styles.view}>
                             <Image source={require('./image/base_health.png')} style={styles.imageIcon}/>
@@ -67,7 +71,7 @@ class MyAccount extends React.Component {
                 <Login navigator={navigator} route={route}/>
             );
         }
-    }
+}
 
 
     render() {
@@ -80,6 +84,7 @@ class MyAccount extends React.Component {
                 configureScence={{configureScence}}
                 renderScene={renderScene} />
         );
+
     }
 
     //一般用于优化，可以返回false或true来控制是否进行渲染

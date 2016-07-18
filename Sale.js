@@ -2,51 +2,41 @@
  * Created by tuorui on 2016/7/15.
  */
 'use strict';
+
 import React, {Component} from 'react';
-import{
+import {
     AppRegistry,
     StyleSheet,
     Text,
+    View,
+    Dimensions,
+    ToastAndroid,
+    TouchableOpacity,
     Image,
-    ScrollView,
-    View
 } from 'react-native';
-class Sale extends Component {
+import TopScreen from './TopScreen';
+import Head from './Head';
+export default class Sale extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {};
+    }
     onPress() {
         //或者写成 const navigator = this.props.navigator;
         const { navigator } = this.props;
-
-        if (this.props.getSomething) {
-            var flag = 'Axiba002'
-            this.props.getSomething(flag);
-        }
         if (navigator) {
             navigator.pop();
         }
     }
-
     render() {
         return (
             <View>
-                <View style={styles.home}>
-                    <TouchableHighlight onPress={this.onPress}>
-                        <Text>push sucess!I get {this.props.id},i want back!</Text>
-                    </TouchableHighlight>
-                </View>
+                <Head/>
+                <TouchableOpacity onPress={this.oenPress}>
+                <Text>点我跳转回去</Text>
+                    </TouchableOpacity>
             </View>
         );
     }
 }
-var styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        // justifyContent: 'center',
-        // alignItems: 'center',
-        backgroundColor: '#F5FCFF',
-    },
-    home: {
-        paddingTop: 74,
-
-    },
-})
 module.exports = Sale;
