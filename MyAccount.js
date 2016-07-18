@@ -10,6 +10,7 @@ import{
     ToastAndroid,
     TouchableOpacity,
     WebView,
+    BackAndroid,
     View
     } from 'react-native';
 import Head from './Head';
@@ -31,7 +32,7 @@ class MyAccount extends React.Component {
 
     _onPressButton1() {
         alert("1111");
-        ToastAndroid.show("--rrrrrrrrrrrrrrrr-", ToastAndroid.SHORT);
+        ToastAndroid.show("--rrrrrrrr-", ToastAndroid.SHORT);
         // _navigator.push({title:'Login',id:'login'});
     }
 
@@ -79,6 +80,22 @@ class MyAccount extends React.Component {
                 configureScence={{configureScence}}
                 renderScene={renderScene} />
         );
+    }
+
+    //一般用于优化，可以返回false或true来控制是否进行渲染
+    shouldComponentUpdate() {
+    }
+
+    //组件刷新前调用，类似componentWillMount
+    componentWillUpdate() {
+    }
+
+    //更新后的hook
+    componentDidUpdate() {
+    }
+
+    //销毁期，用于清理一些无用的内容，如：点击事件Listener
+    componentWillUnmount() {
     }
 }
 

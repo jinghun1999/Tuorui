@@ -1,7 +1,7 @@
 /**
  *MainPage
- * @author:
- * @date：2016-02-28
+ * @author: TOM CHOW
+ * @date：2016-07-15
  */
 'use strict';
 import React, {Component} from 'react';
@@ -57,6 +57,7 @@ class MainPage extends React.Component {
             tabBarShow: true
         };
         this._renderTabItem = this._renderTabItem.bind(this);
+        this._navigator = this.props.navigator;
     }
 
     /**
@@ -85,7 +86,7 @@ class MainPage extends React.Component {
                 renderView = <MyHealth />;
                 break;
             case MY_HEALTH_CONSULT:
-                renderView = <TopScreen />;
+                renderView = <TopScreen  navigator={_navigator}/>;
                 break;
             case MY_HEALTH_TOOLS:
                 renderView = <HealthTools />;
@@ -118,13 +119,13 @@ class MainPage extends React.Component {
                 <TabNavigator hidesTabTouch={true}
                               sceneStyle={{paddingBottom: 0}}
                               tabBarStyle={tabBarShow ? styles.tabNav : styles.tabNavHide}>
-                    {this._renderTabItem(MY_HEALTH_NORMAL, MY_HEALTH_FOCUS, MY_HEALTH, this._createChildView1(MY_HEALTH))}
-                    {this._renderTabItem(MY_HEALTH_CONSULT_NORMAL, MY_HEALTH_CONSULT_FOCUS, MY_HEALTH_CONSULT, this._createChildView1(MY_HEALTH_CONSULT))}
+                    {this._renderTabItem(MY_HEALTH_NORMAL, MY_HEALTH_FOCUS, MY_HEALTH, this._createChildView1(MY_HEALTH_CONSULT))}
+                    {this._renderTabItem(MY_HEALTH_CONSULT_NORMAL, MY_HEALTH_CONSULT_FOCUS, MY_HEALTH_CONSULT, this._createChildView1(MY_HEALTH))}
                     {this._renderTabItem(MY_HEALTH_TOOLS_NORMAL, MY_HEALTH_TOOLS_FOCUS, MY_HEALTH_TOOLS, this._createChildView1(MY_HEALTH_TOOLS))}
                     {this._renderTabItem(MY_HEALTH_COMMUNITY_NORMAL, MY_HEALTH_COMMUNITY_FOCUS, MY_HEALTH_COMMUNITY, this._createChildView1(MY_HEALTH_COMMUNITY))}
                     {this._renderTabItem(MY_HEALTH_ACCOUNT_NORMAL, MY_HEALTH_ACCOUNT_FOCUS, MY_HEALTH_ACCOUNT, this._createChildView1(MY_HEALTH_ACCOUNT))}
                 </TabNavigator>
-            </View >
+            </View>
         );
     }
 }
