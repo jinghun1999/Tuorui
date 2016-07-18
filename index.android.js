@@ -16,6 +16,7 @@ import {
     TouchableOpacity,
     ToastAndroid,
     ViewPagerAndroid,
+    BackAndroid,
     Image,
     View
     } from 'react-native';
@@ -101,10 +102,19 @@ class Demo extends Component {
 
     //用了render方法后，组件加载成功并被成功渲染出来以后所执行的hook函数，一般会将网络请求等加载数据的操作，放在这个函数里进行，来保证不会出现UI上的错误
     componentDidMount() {
+        var navigator = this._navigator;
+        BackAndroid.addEventListener('hardwareBackPress', function() {
+            if (navigator && navigator.getCurrentRoutes().length > 1) {
+                navigator.pop();
+                return true;
+            }
+            return false;
+        });
     }
 
     //指父元素对组件的props或state进行了修改
     componentWillReceiveProps() {
+        BackAndroid.removeEventListener('hardwareBackPress');
     }
 
     //一般用于优化，可以返回false或true来控制是否进行渲染

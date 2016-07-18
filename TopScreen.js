@@ -35,10 +35,12 @@ class TopScreen extends Component {
 
 
     _onPressButton1() {
-        alert("销售单");
-        ToastAndroid.show("销售单", ToastAndroid.SHORT);
+        //alert("销售单");
+        ToastAndroid.show("---销售单", ToastAndroid.SHORT);
+        //const navigator = this.props.navigator;
         const { navigator } = this.props;
         var _me = this;
+        alert(this.props.navigator);
         if(navigator)
         {
             navigator.push({
@@ -72,7 +74,7 @@ class TopScreen extends Component {
                     isLoop={true}
                     autoPlay={true}/>
                 <View style={{flex: 1, flexDirection:'row', height:80,}}>
-                    <TouchableOpacity style={styles.grid_view} onPress={this._onPressButton1}>
+                    <TouchableOpacity style={styles.grid_view} onPress={this._onPressButton1.bind(this)}>
                         <View>
                             <Text style={styles.icon_box}>
                                 <Icon name={'list'} size={50} color={'white'} />

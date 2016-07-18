@@ -18,7 +18,8 @@ import {
     TextInput,
     ToastAndroid,
     crypto,
-    View
+    View,
+    BackAndroid
     } from 'react-native';
 
 class Login extends React.Component {
