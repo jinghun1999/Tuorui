@@ -15,7 +15,7 @@ import{
 import Head from './Head';
 class HealthTools extends Component {
     render() {
-        return ( 
+        return (
             <View style={styles.container}>
                 <Head/>
                 <ScrollView key={'scrollView'}
