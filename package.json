@@ -8,8 +8,11 @@
   "dependencies": {
     "md5": "^2.1.0",
     "react": "15.2.1",
+    "react-date-range": "^0.2.4",
     "react-native": "0.29.0",
+    "react-native-calendar-android": "0.0.4",
     "react-native-scrollable-tab-view": "^0.5.3",
+    "react-native-swiper": "^1.4.6",
     "react-native-tab-navigator": "^0.3.2",
     "react-native-vector-icons": "^2.0.3",
     "react-native-viewpager": "^0.2.11"

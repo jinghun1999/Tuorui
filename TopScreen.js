@@ -97,7 +97,6 @@ class TopScreen extends Component {
             return (
                 <View style={styles.container} onPress={this._onPressButton}>
                     <Head/>
-
                     <View style={styles.container}>
                         <View style={{flex: 1, flexDirection:'row', height:80,}}>
                             <TouchableOpacity style={styles.view} onPress={() => {_navigator.push({title:'Sale',id:'sale'});
