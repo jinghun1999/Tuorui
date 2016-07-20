@@ -41,8 +41,8 @@ class TopScreen extends Component {
     }
 
     //一般用于优化，可以返回false或true来控制是否进行渲染
-    shouldComponentUpdate (){
-        return true;
+    shouldComponentUpdate(nextProps, nextState){
+
     }
 
     //组件刷新前调用，类似componentWillMount
