@@ -15,22 +15,25 @@ import {
     TouchableHighlight,
     TextInput,
     DatePickerAndroid,
+    Navigator,
 } from 'react-native';
 import TopScreen from './TopScreen';
 import Head from './SaleHead';
 import NButton from './app/commonview/NButton';
-import Calendar from './app/commonview/CalendarView';
-var goods = require('./Goods');
+import Goods from './Goods';
 export default class Sale extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {presetDate: new Date(2016, 7, 19),
+        this.state = {
+            presetDate: new Date(2016, 7, 19),
             allDate: new Date(2020, 4, 5),
             simpleText: '选择日期,默认今天',
             minText: '选择日期,不能比今日再早',
             maxText: '选择日期,不能比今日再晚',
-            presetText: '选择日期,指定2016/3/5',};
+            presetText: '选择日期,指定2016/3/5',
+        };
     }
+
     //进行创建时间日期选择器
     async showPicker(stateKey, options) {
         try {
@@ -45,12 +48,23 @@ export default class Sale extends React.Component {
             }
             this.setState(newState);
         } catch (o) {
-           alert('控件异常。');
+            alert('控件异常。');
         }
     }
+
+    _pressButton() {
+        const { navigator } = this.props;
+        if (navigator) {
+            navigator.push({
+                name: 'Goods',
+                component: Goods,
+            })
+        }
+    }
+
     render() {
         return (
-            <View style={styles.container} >
+            <View style={styles.container}>
                 <Head />
                 <TouchableHighlight
                     style={styles.button}
@@ -59,14 +73,14 @@ export default class Sale extends React.Component {
                     <Text style={styles.buttonText}>{this.state.simpleText}</Text>
                 </TouchableHighlight>
                 <TouchableHighlight
-                    style={styles.button}
-                    underlayColor="#a5a5a5">
+                    onPress={this._pressButton.bind(this)}>
                     <Text>添加商品</Text>
                 </TouchableHighlight>
             </View>
         )
     }
 }
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,

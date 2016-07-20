@@ -13,11 +13,13 @@ import {
     ToastAndroid,
     TextInput,
 } from 'react-native';
-export default class Goods extends React.Component {
+import Head from './Head';
+class Goods extends React.Component {
     render() {
         return (
             <View>
-                <Text> 123 </Text>
+                <Head />
+                <Text>123456</Text>
             </View>
         )
     }

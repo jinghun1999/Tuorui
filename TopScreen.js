@@ -29,6 +29,7 @@ import Head from './Head';
 import ViewPager from 'react-native-viewpager';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Sale from './Sale';
+import Goods from './Goods';
 class TopScreen extends Component {
 
     constructor(props) {
@@ -40,7 +41,8 @@ class TopScreen extends Component {
     }
 
     //一般用于优化，可以返回false或true来控制是否进行渲染
-    shouldComponentUpdate() {
+    shouldComponentUpdate (){
+        return true;
     }
 
     //组件刷新前调用，类似componentWillMount
@@ -106,7 +108,7 @@ class TopScreen extends Component {
                                         <Icon name={'list'} size={50} color={'white'}/>
                                     </Text>
                                     <Text style={{fontSize:15}}> 销售单</Text>
-                                </View>
+                        </View>
                             </TouchableOpacity>
 
                         </View>
