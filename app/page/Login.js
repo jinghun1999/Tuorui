@@ -1,165 +1,200 @@
 /**
+ * Created by User on 2016-07-18.
+ */
+/**
  * Sample React Native App
  * https://github.com/facebook/react-native
  */
 'use strict';
-import NButton from '../commonview/NButton';
-import Md5Uitl from '../util/Md5Uitl';
+import React,{Component,} from 'react';
+import {
+    AppRegistry,
+    StyleSheet,
+    Text,
+    Image,
+    View,
+    ToastAndroid,
+    TextInput,
+    TouchableOpacity,
+    } from 'react-native';
+var QRCodeScreen = require('../commonview/QRCodeScreen');
 import Util from '../util/Util';
 import Global from '../util/Global';
 import NetUitl from '../net/NetUitl';
 import JsonUitl from '../util/JsonUitl';
-import React, { Component} from 'react';
-import {
-    Alert,
-    AppRegistry,
-    StyleSheet,
-    Text,
-    TextInput,
-    ToastAndroid,
-    crypto,
-    View,
-    BackAndroid
-    } from 'react-native';
-
-class Login extends React.Component {
-
+//import SecondPageComponent from './SecondPageComponent';
+import Index from '../../Index';
+var base64 = require('base-64');
+var NButton = require('../commonview/NButton');
+//import Example from 'react-native-camera/Example/Example';
+class Login extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            text: '',
-            phone: '',
-            pwd: '',
-        };
-        this.login = this.login.bind(this);
+        this.state = {};
     }
 
-    checkPhone(phone) {
-        return phone.length > 6;
-    }
-
-    checkPWD(pwd) {
-        return pwd.length > 4;
-    }
-
-    login() {
-        let phone = this.state.phone;
-        let pwd = this.state.pwd;
-        alert(phone);
-        if (!this.checkPhone(phone)) {
-            Alert.alert("登陆提醒","请输入正确的手机号码",[
-                {text: '好的'},
-            ]);
-            return;
+    _pressButton() {
+        if (!this.state.user || this.state.user.length == 0) {
+            ToastAndroid.show("请输入用户名", ToastAndroid.SHORT);
+            //return;
         }
-        if (!this.checkPWD(pwd)) {
-            Alert.alert("登陆提醒", "密码为大于6位数字",[
-                {text: '好的'},
-            ]);
-            return;
+        if (!this.state.pwd || this.state.pwd.length == 0) {
+            ToastAndroid.show("请输入密码", ToastAndroid.SHORT);
+            //return;
         }
 
-        let url = Global.LOGIN;
-        let map = new Map()
-        map.set('username', phone);
-        map.set('password', pwd);
-        map.set('orgid', '0010000');
-        let sx = JsonUitl.mapToJson(Util.tokenAndKo(map));
-        NetUitl.postFrom(url, sx, function (set) {
-            switch (set.retCode) {
-                case "0000":
-                    alert("登录成功");
-                    break;
-                case "0001":
-                    alert("登录失败");
-                    break;
-                default:
-            }
-        });
+        var thiz = this;
+        const { navigator } = this.props;
+        let url = Global.LOGIN + "?userName=1&password=b0df67a70dd3ee4f";
+        var header = {'Authorization': 'Anonymous ' + base64.encode(Global.ENTCODE)};
+        try {
+            NetUitl.get(url, header, function (data) {
+                if (data.Sign && data.Message) {
+                    alert("登录成功" + data.Message.SafetyCode);
+                    storage.save({
+                        key: 'loginState',  //注意:请不要在key中使用_下划线符号!
+                        rawData: {
+                            personcode: data.Message.PersonCode,
+                            personname: data.Message.PersonName,
+                            password: data.Message.Password,
+                            entid: data.Message.EntID,
+                            token: data.Message.SafetyCode
+                        },
+                        expires: 1000 * 3600 * 24
+                    });
+                    //ToastAndroid.show("请输入用户名", ToastAndroid.SHORT);
+                    //或者写成 const navigator = this.props.navigator;
+                    //<Component {...route.params} navigator={navigator} />
+                    //这里传递了navigator作为props
+                    if (navigator) {
+                        navigator.pop();
+                        navigator.push({
+                            name: 'Index',
+                            component: Index,
+                            params: {
+                                user: thiz.state.user,
+                                pwd: thiz.state.pwd,
+                                CurrentUser: data.Message,
+                            }
+                        });
+                    }
+                } else {
+                    alert('登陆失败，远程返回：' + data.Sign + data.Exception);
+                }
+            });
+        } catch (e) {
+            alert("登陆失败，错误信息：" + e);
+        }
+    }
+
+    _cantLogin() {
+        ToastAndroid.show("完善中", ToastAndroid.SHORT);
+    }
+
+    _register() {
+        ToastAndroid.show("完善中", ToastAndroid.SHORT);
     }
 
     render() {
         return (
-            <View style={styles.container}>
-                <Text style={styles.welcome}>
-                    登录
-                </Text>
+            <View style={{backgroundColor:'#f4f4f4',flex:1}}>
+                <Image
+                    style={styles.style_image}
+                    source={require('../../image/base_log.png')}/>
                 <TextInput
                     style={styles.style_user_input}
-                    placeholder='QQ号/手机号/邮箱'
+                    placeholder='手机号'
                     numberOfLines={1}
-                    autoFocus={true}
                     underlineColorAndroid={'transparent'}
-                    textAlign='center'
-                    onChangeText={(text) => this.setState({phone: text})}
-                    />
-                <View style={{height:1,backgroundColor:'#f4f4f4'}} />
+                    onChangeText={(text) => this.setState({user: text})}
+                    textAlignVertical='center'
+                    textAlign='center'/>
+                <View style={{height:1,backgroundColor:'#f4f4f4'}}/>
                 <TextInput
                     style={styles.style_pwd_input}
                     placeholder='密码'
                     numberOfLines={1}
                     underlineColorAndroid={'transparent'}
-                    secureTextEntry={true}
-                    textAlign='center'
                     onChangeText={(text) => this.setState({pwd: text})}
+                    secureTextEntry={true}
+                    textAlignVertical='center'
+                    textAlign='center'
                     />
-                <NButton
-                    onPress={this.login}
-                    text="登录"
-                    style={{width:200}}/>
-
+                <View>
+                    <NButton
+                        underlayColor='#4169e1'
+                        style={styles.style_view_button}
+                        onPress={this._pressButton.bind(this)}
+                        text='登录'>
+                    </NButton>
+                </View>
 
                 <View style={{flex:1,flexDirection:'row',alignItems: 'flex-end',bottom:10}}>
-                    <Text style={styles.style_view_unlogin}>
+                    <Text style={styles.style_view_unlogin} onPress={this._cantLogin.bind(this)}>
                         无法登录?
                     </Text>
-                    <Text style={styles.style_view_register}>
+                    <Text style={styles.style_view_register} onPress={this._register.bind(this)}>
                         新用户
                     </Text>
                 </View>
             </View>
-
         );
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        flexDirection: 'column',
-    },
-    welcome: {
-        fontSize: 20,
-        textAlign: 'center',
-        backgroundColor: '#3CB371',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: 40,
+    style_image: {
+        borderRadius: 45,
+        height: 70,
+        width: 70,
+        marginTop: 40,
+        alignSelf: 'center',
     },
     style_user_input: {
         backgroundColor: '#fff',
         marginTop: 10,
-        height: 55,
+        height: 45,
     },
     style_pwd_input: {
         backgroundColor: '#fff',
-        height: 55,
+        height: 45,
     },
-    style_view_unlogin:{
-        fontSize:15,
-        color:'#63B8FF',
-        marginLeft:10,
+    style_view_commit: {
+        marginTop: 15,
+        marginLeft: 10,
+        marginRight: 10,
+        backgroundColor: '#63B8FF',
+        borderColor: '#5bc0de',
+        height: 45,
+        borderRadius: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
-    style_view_register:{
-        fontSize:15,
-        color:'#63B8FF',
-        marginRight:10,
-        alignItems:'flex-end',
-        flex:1,
-        flexDirection:'row',
-        textAlign:'right',
+    style_view_button: {
+        marginTop: 15,
+        marginLeft: 10,
+        marginRight: 10,
+        backgroundColor: '#63B8FF',
+        borderColor: '#5bc0de',
+        height: 45,
+        borderRadius: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
-
+    style_view_unlogin: {
+        fontSize: 15,
+        color: '#63B8FF',
+        marginLeft: 10,
+    },
+    style_view_register: {
+        fontSize: 15,
+        color: '#63B8FF',
+        marginRight: 10,
+        alignItems: 'flex-end',
+        flex: 1,
+        flexDirection: 'row',
+        textAlign: 'right',
+    },
 });
 
-module.exports = Login;
+export default Login

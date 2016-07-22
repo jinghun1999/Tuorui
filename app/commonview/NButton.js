@@ -22,25 +22,20 @@ class NButton extends React.Component {
     }
 }
 const styles = StyleSheet.create({
-    messageText: {
-        fontSize: 27,
-        fontWeight: '500',
-        padding: 15,
-        color: '#00f',
-        marginTop: 50,
-        marginLeft: 15,
-    },
     button: {
-        backgroundColor: 'green',
-        padding: 15,
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: '#CDCDCD',
-        alignSelf: 'center',
-        borderRadius:5
+        marginTop:15,
+        marginLeft:10,
+        marginRight:10,
+        backgroundColor:'#63B8FF',
+        borderColor:'#5bc0de',
+        height:45,
+        borderRadius:5,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     buttonText: {
         color:'#fff',
-        fontSize:18,
+        fontSize:16,
     }
 });
 module.exports = NButton;

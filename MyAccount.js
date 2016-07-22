@@ -13,7 +13,7 @@ import{
     BackAndroid,
     View
     } from 'react-native';
-import Head from './Head';
+import Head from './app/commonview/Head';
 let _navigator;
 import Login from './app/page/Login';
 import NButton from './app/commonview/NButton';
@@ -45,13 +45,12 @@ class MyAccount extends React.Component {
      */
     renderSceneAndroid(route, navigator) {
         _navigator = navigator;
-        if (route.id === 'main') {
+        if (route.id === 'main' && false) {
             return (
                 <View style={styles.container} onPress={this._onPressButton}>
                     <Head/>
                     <TouchableOpacity style={styles.view} onPress={() => {
-              _navigator.push({title:'Login',id:'login'});
-              ToastAndroid.show('启动应用', ToastAndroid.SHORT); }}>
+                        _navigator.push({title:'Login',id:'login'}); ToastAndroid.show('启动应用', ToastAndroid.SHORT); }}>
                         <View style={styles.view}>
                             <Image source={require('./image/base_health.png')} style={styles.imageIcon}/>
                             <Text style={styles.t0}>登 录</Text>
@@ -81,9 +80,25 @@ class MyAccount extends React.Component {
                 renderScene={renderScene} />
         );
     }
+    //用了render方法后，组件加载成功并被成功渲染出来以后所执行的hook函数，一般会将网络请求等加载数据的操作，放在这个函数里进行，来保证不会出现UI上的错误
+    componentDidMount() {
+        var navigator = this._navigator;
+        BackAndroid.addEventListener('hardwareBackPress', function() {
+            if (navigator && navigator.getCurrentRoutes().length > 1) {
+                navigator.pop();
+                return true;
+            }
+            return false;
+        });
+    }
 
+    //指父元素对组件的props或state进行了修改
+    componentWillReceiveProps() {
+        BackAndroid.removeEventListener('hardwareBackPress');
+    }
     //一般用于优化，可以返回false或true来控制是否进行渲染
     shouldComponentUpdate() {
+        return false;
     }
 
     //组件刷新前调用，类似componentWillMount
@@ -130,6 +145,7 @@ const styles = StyleSheet.create({
     t0: {
         alignSelf: 'center',
         fontSize: 20,
+        flex:1,
     },
 
     imageArr: {

@@ -6,33 +6,16 @@ import Util from '../util/Util';
 import Global from '../util/Global';
 class NetUitl extends React.Component {
 
-    //post请求
-    static  postFrom(url, data, callback) {
-        var fetchOptions = {
-            method: 'POST',
-            headers: {
+    static postJson(url, data, head, callback) {
+        if(!head){
+            head = {
                 'Accept': 'application/json',
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: 'data=' + data + ''
-        };
-
-        fetch(url, fetchOptions)
-            .then((response) => response.text())
-            .then((responseText) => {
-                callback(JSON.parse(responseText));
-            }).done();
-    }
-
-    //
-    static postJson(url, data, callback) {
-        var fetchOptions = {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                //json形式
                 'Content-Type': 'application/json'
-            },
+            };
+        }
+        var fetchOptions = {
+            method: 'POST',
+            headers: head,
             body: JSON.stringify(data)
         };
 
@@ -43,15 +26,32 @@ class NetUitl extends React.Component {
             }).done();
     }
 
-
     //get请求
-    static  get(url, callback) {
-        fetch(url)
+    static get(url, head, callback) {
+        if(!head){
+            head = {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            };
+        }
+        var fetchOptions = {
+            method: 'GET',
+            headers: head
+        };
+        fetch(url, fetchOptions)
             .then((response) => response.text())
             .then((responseText) => {
                 callback(JSON.parse(responseText));
             }).done();
     }
+    /*get请求
+    static get(url, callback) {
+        fetch(url)
+            .then((response) => response.text())
+            .then((responseText) => {
+                callback(JSON.parse(responseText));
+            }).done();
+    }*/
 
     log(obj) {
         var description = "";

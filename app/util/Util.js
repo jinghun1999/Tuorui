@@ -35,8 +35,6 @@ class Util extends React.Component {
         map.set('token', Util.getToken(time));
         return map;
     }
-
-
 }
 
 module.exports = Util;

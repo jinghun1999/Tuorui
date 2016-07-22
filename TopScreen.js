@@ -1,6 +1,5 @@
 'use strict';
 
-//var React = require('react-native');
 import React, {Component} from 'react';
 import {
     AppRegistry,
@@ -8,13 +7,18 @@ import {
     Text,
     View,
     Dimensions,
+    Navigator,
+    WebView,
+    BackAndroid,
     ToastAndroid,
     TouchableOpacity,
     Image,
     } from 'react-native';
-
 import ViewPager from 'react-native-viewpager';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import GoodsAdd from './app/commonview/AddGood';
+import Head from './app/commonview/Head';
+import Sale from './Sale';
 var deviceWidth = Dimensions.get('window').width;
 
 let IMGS = [
@@ -22,10 +26,28 @@ let IMGS = [
     require('./image/job2.jpg'),
     require('./image/job3.jpg'),
 ];
-import Head from './Head';
-var sale = require('./Sale');
-class TopScreen extends Component {
 
+class TopScreen extends Component {
+    render() {
+        var defaultName = 'TopScreenMain';
+        var defaultComponent = TopScreenMain;
+        return (
+            <Navigator
+                initialRoute={{ name: defaultName, component: defaultComponent }}
+                configureScene={(route) => {
+                        return Navigator.SceneConfigs.FadeAndroid;
+                    }
+                }
+                renderScene={(route, navigator) => {
+                    let Component = route.component;
+                    return <Component {...route.params} navigator={navigator} />
+                }}/>
+        );
+    }
+}
+
+/****************MainTopSceen*****************/
+class TopScreenMain extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -33,97 +55,86 @@ class TopScreen extends Component {
         };
     }
 
-
     _onPressButton1() {
-        //alert("销售单");
-        ToastAndroid.show("---销售单", ToastAndroid.SHORT);
-        //const navigator = this.props.navigator;
         const { navigator } = this.props;
         var _me = this;
-        alert(this.props.navigator);
-        if(navigator)
-        {
+        if (navigator) {
             navigator.push({
-                name: 'View',
-                component: sale,
+                name: 'Sale',
+                component: Sale,
                 params: {
-                    id: this.state.id,
+                    id: _me.state.id,
                 }
             })
         }
     }
 
     _onPressButton2() {
-        alert("健康道场");
-        ToastAndroid.show("健康道场", ToastAndroid.SHORT);
+        alert("###");
+        ToastAndroid.show("###", ToastAndroid.SHORT);
     }
-
-    _onPressButton3() {
-        alert("健康小伙伴");
-        ToastAndroid.show("健康小伙伴", ToastAndroid.SHORT);
+    _renderViewPage(data) {
+        return (<Image source={data} style={styles.page}/>);
     }
-
+    componentWillReceiveProps(){
+        //alert(this.state.store);
+    }
     render() {
         return (
             <View style={styles.container}>
-                <Head/>
-                <ViewPager
-                    style={this.props.style}
-                    renderPage={this._renderPage}
+                <Head title='首页'/>
+                {/*<ViewPager
+                    style={{height:150}}
+                    renderPage={this._renderViewPage}
                     dataSource={this.state.dataSource}
                     isLoop={true}
-                    autoPlay={true}/>
+                    autoPlay={true}/>*/}
                 <View style={{flex: 1, flexDirection:'row', height:80,}}>
                     <TouchableOpacity style={styles.grid_view} onPress={this._onPressButton1.bind(this)}>
                         <View>
-                            <Text style={styles.icon_box}>
-                                <Icon name={'list'} size={50} color={'white'} />
-                            </Text>
-                            <Text style={{fontSize:15}}>
-                                销售单
-                            </Text>
+                            <View style={[styles.iconouter, {backgroundColor:'#C67171'}]}>
+                                <Text style={styles.icon_box}>
+                                    <Icon name={'shopping-cart'} size={40} color={'white'}/>
+                                </Text>
+                            </View>
+                            <View style={styles.icontext}>
+                                <Text style={{fontSize:15}}>
+                                    商品销售
+                                </Text>
+                            </View>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.grid_view} onPress={this._onPressButton2}>
                         <View>
-                            <Image source={require('./image/base_health.png')} style={{width:50,height:50}}/>
-                            <Text style={{fontSize:15}}>
-                                健康道场
-                            </Text>
+                            <View style={[styles.iconouter, {backgroundColor:'#CD8500'}]}>
+                                <Text style={styles.icon_box}>
+                                    <Icon name={'cube'} size={40} color={'white'}/>
+                                </Text>
+                            </View>
+                            <View style={styles.icontext}>
+                                <Text style={{fontSize:15}}>
+                                    XXX
+                                </Text>
+                            </View>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.grid_view} onPress={this._onPressButton3}>
+                    <TouchableOpacity style={styles.grid_view} onPress={this._onPressButton2}>
                         <View>
-                            <Image source={require('./image/base_health.png')} style={{width:50,height:50}}/>
-                            <Text style={{fontSize:15}}>
-                                健康小伙伴
-                            </Text>
+                            <View style={[styles.iconouter, {backgroundColor:'#9A32CD'}]}>
+                                <Text style={styles.icon_box}>
+                                    <Icon name={'cube'} size={40} color={'white'}/>
+                                </Text>
+                            </View>
+                            <View style={styles.icontext}>
+                                <Text style={{fontSize:15}}>
+                                    XXX
+                                </Text>
+                            </View>
                         </View>
                     </TouchableOpacity>
-                </View>
-                <View style={styles.flexContainer}>
-                    <View style={styles.cellfixed}>
-                        <Text style={styles.welcome}>
-                            fixed
-                        </Text>
-                    </View>
-                    <View style={styles.cell}>
-                        <Text style={styles.welcome}>
-                            flex
-                        </Text>
-                    </View>
-                    <View style={styles.cellfixed}>
-                        <Text style={styles.welcome}>
-                            fixed
-                        </Text>
-                    </View>
                 </View>
             </View>
         );
-    }
-
-    _renderPage(data) {
-        return (<Image source={data} style={styles.page}/>);
     }
 }
 
@@ -137,21 +148,24 @@ const styles = StyleSheet.create({
         top: 1,
         height: 100,
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'center'
     },
     page: {
         width: deviceWidth,
         backgroundColor: '#088856',
         height: 270,
     },
-    icon_box: {
-        width:50,
-        height:50,
-        borderRadius:5,
-        textAlign:'center',
+    iconouter: {
+        backgroundColor: "orange",
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor:"orange"
+        width: 100,
+        height: 50,
+        borderRadius: 25,
+    },
+    icontext: {
+        width: 100,
+        alignItems: 'center',
     }
 });
 

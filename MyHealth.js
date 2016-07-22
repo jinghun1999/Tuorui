@@ -13,7 +13,7 @@ import{
     ScrollView,
     View
 } from 'react-native';
-import Head from './Head';
+import Head from './app/commonview/Head';
 import TopScreen from './TopScreen';
 class MyHealth extends Component {
 

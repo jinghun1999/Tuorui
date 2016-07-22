@@ -8,7 +8,7 @@ import{
     } from 'react-native';
 import NetUitl from './app/net/NetUitl';
 import ScrollableTabView  from 'react-native-scrollable-tab-view';
-import Head from './Head';
+import Head from './app/commonview/Head';
 
 class HealthSQ extends Component {
 

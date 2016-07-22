@@ -12,7 +12,7 @@ import{
     Image,
     View
     } from 'react-native';
-import Head from './Head';
+import Head from './app/commonview/Head';
 class HealthTools extends Component {
     render() {
         return (

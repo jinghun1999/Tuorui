@@ -28,7 +28,7 @@ import Login from './app/page/Login';
 import Global from './app/util/Global';
 import Util from './app/util/Util';
 import NetUitl from './app/net/NetUitl';
-import Head from './Head';
+import Head from './app/commonview/Head';
 import TopScreen from './TopScreen';
 import NButton from './app/commonview/NButton';
 const MY_HEALTH = '首页';
@@ -49,7 +49,6 @@ const MY_HEALTH_ACCOUNT_FOCUS = require('./image/my_account_on.png');
 var _navigator;
 let tabBarHidden = false;
 class MainPage extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -58,14 +57,17 @@ class MainPage extends React.Component {
         };
         this._renderTabItem = this._renderTabItem.bind(this);
         this._navigator = this.props.navigator;
+        //get login info
+        storage.load({
+            key: 'loginState',
+            autoSync: true,
+            syncInBackground: true
+        }).then(ret => {
+        }).catch(err => {
+            alert(err);
+        })
     }
 
-    /**
-     *img ；默认图标
-     *selectedImg：选中的图标
-     *tag：标题
-     *childView：子控件
-     */
     _renderTabItem(img, selectedImg, tag, childView) {
         return (
             <TabNavigator.Item
@@ -86,7 +88,7 @@ class MainPage extends React.Component {
                 renderView = <MyHealth />;
                 break;
             case MY_HEALTH_CONSULT:
-                renderView = <TopScreen  navigator={_navigator}/>;
+                renderView = <TopScreen navigator={_navigator}/>;
                 break;
             case MY_HEALTH_TOOLS:
                 renderView = <HealthTools />;
@@ -103,17 +105,8 @@ class MainPage extends React.Component {
         return (<View style={styles.container}>{renderView}</View>)
     }
 
-    static _createChildView(tag) {
-        return (
-            <View style={{flex:1,backgroundColor:'#00baff',alignItems:'center',justifyContent:'center'}}>
-                <Text style={{fontSize:22}}>{tag}</Text>
-            </View>
-        )
-    }
-
     render() {
         let {tabBarShow} = this.state;
-        console.log(tabBarShow);
         return (
             <View style={{flex: 1}}>
                 <TabNavigator hidesTabTouch={true}
@@ -143,6 +136,7 @@ const styles = StyleSheet.create({
         borderTopColor: '#E8E8E8'
     },
     tabNavHide: {
+        //隐藏底部导航
         position: 'absolute',
         top: Dimensions.get('window').height,
         height: 0,
