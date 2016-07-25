@@ -14,7 +14,7 @@ import {
     TouchableOpacity,
     Image,
     ViewPagerAndroid
-} from 'react-native';
+    } from 'react-native';
 import ViewPager from 'react-native-viewpager';
 import Icon from 'react-native-vector-icons/Ionicons';
 import GoodsAdd from './app/page/Sales/AddGood';
@@ -74,8 +74,6 @@ class TopScreenMain extends Component {
             dataSource: new ViewPager.DataSource({pageHasChanged: (p1, p2)=>p1 !== p2}).cloneWithPages(IMGS),
         };
         this._onPressButton = this._onPressButton.bind(this);
-    }
-
     }
 
     //组件刷新前调用，类似componentWillMount
@@ -159,29 +157,8 @@ class TopScreenMain extends Component {
                         </View>
                     </TouchableOpacity>
                 </View>
-
-            );
-
-        }
-
-        if (route.id === 'sale') {
-            return (
-                <Sale navigator={navigator} route={route}/>
-            );
-        }
-    }
-
-    render() {
-        var renderScene = this.renderSceneAndroid;
-        var configureScence = this.configureScenceAndroid;
-        return (
-            <Navigator
-                debugOverlay={false}
-                initialRoute={{ title: 'Main', id:'main'}}
-                configureScence={{configureScence}}
-                renderScene={renderScene} />
+            </View>
         );
-
     }
 }
 
