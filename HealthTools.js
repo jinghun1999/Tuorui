@@ -17,7 +17,7 @@ class HealthTools extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Head/>
+                <Head title="健康工具"/>
                 <ScrollView key={'scrollView'}
                             horizontal={false}
                             showsVerticalScrollIndicator={true}
@@ -33,7 +33,6 @@ class HealthTools extends Component {
                         <Image source={require('./image/arrows_right.png')}
                                style={styles.imageArr}/>
                     </View>
-                    <View style={styles.line}/>
                     <View style={styles.view}>
                         <Image source={require('./image/tool_bmi.png')}
                                style={styles.imageIcon}/>
@@ -44,7 +43,6 @@ class HealthTools extends Component {
                         <Image source={require('./image/arrows_right.png')}
                                style={styles.imageArr}/>
                     </View>
-                    <View style={styles.line}/>
                     <View style={styles.view}>
                         <Image source={require('./image/tool_ytb.png')}
                                style={styles.imageIcon}/>
@@ -84,7 +82,6 @@ class HealthTools extends Component {
                         </View>
                         <Image source={require('./image/arrows_right.png')} style={styles.imageArr}/>
                     </View>
-                    <View style={styles.line}/>
                     <View style={styles.view}>
                         <Image source={require('./image/tool_ydnh.png')} style={styles.imageIcon}/>
                         <View style={styles.view2}>
@@ -93,7 +90,6 @@ class HealthTools extends Component {
                         </View>
                         <Image source={require('./image/arrows_right.png')} style={styles.imageArr}/>
                     </View>
-                    <View style={styles.line}/>
                 </ScrollView>
             </View>
 
@@ -106,13 +102,11 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
-        backgroundColor: '#F5FCFF',
     },
     contentContainer: {
         flex: 1,
-        flexDirection: 'column',
+        flexDirection: 'row',
         paddingVertical: 20,
-        backgroundColor: "red",
     },
     view: {
         flex: 1,
@@ -120,17 +114,17 @@ const styles = StyleSheet.create({
         alignItems: 'stretch',
         height: 60,
         alignSelf: 'stretch',
-        backgroundColor: '#F8F8FF',
+        borderBottomWidth:StyleSheet.hairlineWidth,
+        borderBottomColor:'#ccc',
     },
     view2: {
         flex: 1,
-        flexDirection: 'column',
         height: 50,
+        padding:5,
+        justifyContent:'center',
         alignSelf: 'center',
-        backgroundColor: '#F8F8FF',
     },
     imageIcon: {
-        flex: 1,
         height: 50,
         width: 50,
         alignSelf: 'center',
@@ -138,7 +132,6 @@ const styles = StyleSheet.create({
         marginRight: 20,
     },
     imageArr: {
-        flex: 1,
         height: 20,
         width: 50,
         alignSelf: 'center',
@@ -149,12 +142,6 @@ const styles = StyleSheet.create({
     },
     t1: {
         fontSize: 10,
-    },
-    line: {
-        flex: 1,
-        height: 1,
-        alignSelf: 'stretch',
-        backgroundColor: '#708090',
     },
 });
 

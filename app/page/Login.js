@@ -17,7 +17,7 @@ import {
     TextInput,
     TouchableOpacity,
     } from 'react-native';
-var QRCodeScreen = require('../commonview/QRCodeScreen');
+var QRCodeScreen = require('../commonview/ScanQr');
 import Util from '../util/Util';
 import Global from '../util/Global';
 import NetUitl from '../net/NetUitl';
@@ -35,11 +35,11 @@ class Login extends Component {
 
     _pressButton() {
         if (!this.state.user || this.state.user.length == 0) {
-            ToastAndroid.show("请输入用户名", ToastAndroid.SHORT);
+            //ToastAndroid.show("请输入用户名", ToastAndroid.SHORT);
             //return;
         }
         if (!this.state.pwd || this.state.pwd.length == 0) {
-            ToastAndroid.show("请输入密码", ToastAndroid.SHORT);
+            //ToastAndroid.show("请输入密码", ToastAndroid.SHORT);
             //return;
         }
 

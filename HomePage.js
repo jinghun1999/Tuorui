@@ -5,14 +5,11 @@ import React, { Component } from 'react';
 import {
     AppRegistry,
     StyleSheet,
-    Text,
     Navigator,
-    TouchableHighlight,
-    TouchableOpacity,
     ToastAndroid,
     ViewPagerAndroid,
-    BackAndroid,
     Image,
+
     View
     } from 'react-native';
 var _navigator;
@@ -24,7 +21,7 @@ class HomePage extends Component {
     }
     renderSceneAndroid(route, navigator) {
         _navigator = navigator;
-        if (route.id === 'main') {
+        /*if (route.id === 'main') {
             return (
                 <ViewPagerAndroid style={styles.viewPager} initialPage={0}>
                     <View style={styles.pageStyle}>
@@ -43,12 +40,12 @@ class HomePage extends Component {
                     </View>
                 </ViewPagerAndroid>
             );
-        }
-        if (route.id === 'page') {
+        }*/
+        //if (route.id === 'page') {
             return (
                 <MainPage navigator={navigator} route={route}/>
             );
-        }
+        //}
     }
 
     render() {
@@ -61,11 +58,7 @@ class HomePage extends Component {
     }
 
     componentWillReceiveProps() {
-        BackAndroid.removeEventListener('hardwareBackPress');
-    }
 
-    shouldComponentUpdate() {
-        return true;
     }
 }
 

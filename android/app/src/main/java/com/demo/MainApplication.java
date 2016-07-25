@@ -12,6 +12,7 @@ import com.oblador.vectoricons.VectorIconsPackage;
 import java.util.Arrays;
 import java.util.List;
 import com.lwansbrough.RCTCamera.RCTCameraPackage;
+import com.eguma.barcodescanner.BarcodeScannerPackage;
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
@@ -25,7 +26,8 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(), 
 		  new VectorIconsPackage(),
-		  new RCTCameraPackage()
+		  new RCTCameraPackage(),
+		  new BarcodeScannerPackage()
       );
     }
   };

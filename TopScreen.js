@@ -8,17 +8,17 @@ import {
     View,
     Dimensions,
     Navigator,
-    WebView,
     BackAndroid,
+    Platform,
     ToastAndroid,
     TouchableOpacity,
     Image,
     } from 'react-native';
 import ViewPager from 'react-native-viewpager';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import GoodsAdd from './app/commonview/AddGood';
+import Icon from 'react-native-vector-icons/Ionicons';
+import GoodsAdd from './app/page/Sales/AddGood';
 import Head from './app/commonview/Head';
-import Sale from './Sale';
+import Sale from './app/page/Sales/Sale';
 var deviceWidth = Dimensions.get('window').width;
 
 let IMGS = [
@@ -35,14 +35,33 @@ class TopScreen extends Component {
             <Navigator
                 initialRoute={{ name: defaultName, component: defaultComponent }}
                 configureScene={(route) => {
-                        return Navigator.SceneConfigs.FadeAndroid;
+                        let gestureType = Navigator.SceneConfigs.HorizontalSwipeJump;
+                        gestureType.gestures.jumpForward=null;
+                        gestureType.gestures.jumpBack=null;
+                        return gestureType
                     }
                 }
                 renderScene={(route, navigator) => {
+                    this._navigator = navigator;
                     let Component = route.component;
                     return <Component {...route.params} navigator={navigator} />
                 }}/>
         );
+    }
+
+    componentDidMount() {
+        var nav = this._navigator;
+        BackAndroid.addEventListener('hardwareBackPress', function () {
+            if (nav && nav.getCurrentRoutes().length > 1) {
+                nav.pop();
+                return true;
+            }
+            return false;
+        });
+    }
+
+    componentWillUnmount() {
+        BackAndroid.removeEventListener('hardwareBackPress');
     }
 }
 
@@ -73,63 +92,54 @@ class TopScreenMain extends Component {
         alert("###");
         ToastAndroid.show("###", ToastAndroid.SHORT);
     }
+
     _renderViewPage(data) {
         return (<Image source={data} style={styles.page}/>);
     }
-    componentWillReceiveProps(){
+
+    componentWillReceiveProps() {
         //alert(this.state.store);
     }
+
     render() {
         return (
             <View style={styles.container}>
                 <Head title='首页'/>
-                {/*<ViewPager
+                <ViewPager
                     style={{height:150}}
                     renderPage={this._renderViewPage}
                     dataSource={this.state.dataSource}
                     isLoop={true}
-                    autoPlay={true}/>*/}
+                    autoPlay={true}/>
                 <View style={{flex: 1, flexDirection:'row', height:80,}}>
                     <TouchableOpacity style={styles.grid_view} onPress={this._onPressButton1.bind(this)}>
-                        <View>
-                            <View style={[styles.iconouter, {backgroundColor:'#C67171'}]}>
-                                <Text style={styles.icon_box}>
-                                    <Icon name={'shopping-cart'} size={40} color={'white'}/>
-                                </Text>
-                            </View>
-                            <View style={styles.icontext}>
-                                <Text style={{fontSize:15}}>
-                                    商品销售
-                                </Text>
-                            </View>
+                        <View style={[styles.iconOuter, {backgroundColor:'#C67171'}]}>
+                            <Icon name={'ios-cart'} size={40} color={'white'}/>
+                        </View>
+                        <View style={styles.iconText}>
+                            <Text style={{fontSize:15}}>
+                                商品销售
+                            </Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.grid_view} onPress={this._onPressButton2}>
-                        <View>
-                            <View style={[styles.iconouter, {backgroundColor:'#CD8500'}]}>
-                                <Text style={styles.icon_box}>
-                                    <Icon name={'cube'} size={40} color={'white'}/>
-                                </Text>
-                            </View>
-                            <View style={styles.icontext}>
-                                <Text style={{fontSize:15}}>
-                                    XXX
-                                </Text>
-                            </View>
+                        <View style={[styles.iconOuter, {backgroundColor:'#CD8500'}]}>
+                            <Icon name={'ios-cog'} size={40} color={'white'}/>
+                        </View>
+                        <View style={styles.iconText}>
+                            <Text style={{fontSize:15}}>
+                                配置管理
+                            </Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.grid_view} onPress={this._onPressButton2}>
-                        <View>
-                            <View style={[styles.iconouter, {backgroundColor:'#9A32CD'}]}>
-                                <Text style={styles.icon_box}>
-                                    <Icon name={'cube'} size={40} color={'white'}/>
-                                </Text>
-                            </View>
-                            <View style={styles.icontext}>
-                                <Text style={{fontSize:15}}>
-                                    XXX
-                                </Text>
-                            </View>
+                        <View style={[styles.iconOuter, {backgroundColor:'#9A32CD'}]}>
+                            <Icon name={'logo-googleplus'} size={40} color={'white'}/>
+                        </View>
+                        <View style={styles.iconText}>
+                            <Text style={{fontSize:15}}>
+                                Google+
+                            </Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -155,15 +165,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#088856',
         height: 270,
     },
-    iconouter: {
+    iconOuter: {
         backgroundColor: "orange",
         justifyContent: 'center',
         alignItems: 'center',
-        width: 100,
+        width: 50,
         height: 50,
         borderRadius: 25,
     },
-    icontext: {
+    iconText: {
         width: 100,
         alignItems: 'center',
     }

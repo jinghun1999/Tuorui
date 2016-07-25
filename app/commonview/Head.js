@@ -24,8 +24,7 @@ class Head extends Component {
         if (this.props.canBack) {
             return (
                 <View style={styles.container}>
-
-                    <TouchableHighlight underlayColor='#219772' style={styles.backBtn} onPress={this.props.onPress}>
+                    <TouchableHighlight underlayColor='#52b0ff' style={styles.backBtn} onPress={this.props.onPress}>
                         <Icon name={'angle-left'} size={40} color={'white'}/>
                     </TouchableHighlight>
 
@@ -58,7 +57,7 @@ const styles = StyleSheet.create({
         alignItems: 'stretch',
         height: 50,
         alignSelf: 'stretch',
-        backgroundColor: 'green',
+        backgroundColor: '#63B8FF',
         justifyContent: 'center',
     },
     backBtn: {

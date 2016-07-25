@@ -31,21 +31,13 @@ import NetUitl from './app/net/NetUitl';
 import Head from './app/commonview/Head';
 import TopScreen from './TopScreen';
 import NButton from './app/commonview/NButton';
+import Icon from 'react-native-vector-icons/Ionicons';
+
 const MY_HEALTH = '首页';
-const MY_HEALTH_NORMAL = require('./image/my_health_un.png');
-const MY_HEALTH_FOCUS = require('./image/my_health_on.png');
 const MY_HEALTH_CONSULT = '健康百科';
-const MY_HEALTH_CONSULT_NORMAL = require('./image/my_health_consult_un.png');
-const MY_HEALTH_CONSULT_FOCUS = require('./image/my_health_consult_on.png');
 const MY_HEALTH_TOOLS = '健康工具';
-const MY_HEALTH_TOOLS_NORMAL = require('./image/my_health_tool_un.png');
-const MY_HEALTH_TOOLS_FOCUS = require('./image/my_health_tool_on.png');
 const MY_HEALTH_COMMUNITY = '健康社区';
-const MY_HEALTH_COMMUNITY_NORMAL = require('./image/my_health_community_un.png');
-const MY_HEALTH_COMMUNITY_FOCUS = require('./image/my_health_community_on.png');
 const MY_HEALTH_ACCOUNT = '我的账号';
-const MY_HEALTH_ACCOUNT_NORMAL = require('./image/my_account_un.png');
-const MY_HEALTH_ACCOUNT_FOCUS = require('./image/my_account_on.png');
 var _navigator;
 let tabBarHidden = false;
 class MainPage extends React.Component {
@@ -68,27 +60,27 @@ class MainPage extends React.Component {
         })
     }
 
-    _renderTabItem(img, selectedImg, tag, childView) {
+    _renderTabItem(ico, tag, childView) {
         return (
             <TabNavigator.Item
                 selected={this.state.selectedTab === tag}
-                renderIcon={() => <Image style={styles.tabIcon} source={img}/>}
+                renderIcon={() => <View style={styles.tabIcon}><Icon name={ico} size={35} color={'#b2b2b2'}/></View>}
                 title={tag}
-                renderSelectedIcon={() => <Image style={styles.tabIcon} source={selectedImg}/>}
+                renderSelectedIcon={() => <View style={styles.tabIcon}><Icon name={ico} size={35} color={'#63B8FF'}/></View>}
                 onPress={() => this.setState({ selectedTab: tag })}>
                 {childView}
             </TabNavigator.Item>
         );
     }
 
-    _createChildView1(tag) {
+    _createChildView(tag) {
         let renderView;
         switch (tag) {
             case MY_HEALTH:
                 renderView = <MyHealth />;
                 break;
             case MY_HEALTH_CONSULT:
-                renderView = <TopScreen navigator={_navigator}/>;
+                renderView = <TopScreen />;
                 break;
             case MY_HEALTH_TOOLS:
                 renderView = <HealthTools />;
@@ -112,11 +104,11 @@ class MainPage extends React.Component {
                 <TabNavigator hidesTabTouch={true}
                               sceneStyle={{paddingBottom: 0}}
                               tabBarStyle={tabBarShow ? styles.tabNav : styles.tabNavHide}>
-                    {this._renderTabItem(MY_HEALTH_NORMAL, MY_HEALTH_FOCUS, MY_HEALTH, this._createChildView1(MY_HEALTH_CONSULT))}
-                    {this._renderTabItem(MY_HEALTH_CONSULT_NORMAL, MY_HEALTH_CONSULT_FOCUS, MY_HEALTH_CONSULT, this._createChildView1(MY_HEALTH))}
-                    {this._renderTabItem(MY_HEALTH_TOOLS_NORMAL, MY_HEALTH_TOOLS_FOCUS, MY_HEALTH_TOOLS, this._createChildView1(MY_HEALTH_TOOLS))}
-                    {this._renderTabItem(MY_HEALTH_COMMUNITY_NORMAL, MY_HEALTH_COMMUNITY_FOCUS, MY_HEALTH_COMMUNITY, this._createChildView1(MY_HEALTH_COMMUNITY))}
-                    {this._renderTabItem(MY_HEALTH_ACCOUNT_NORMAL, MY_HEALTH_ACCOUNT_FOCUS, MY_HEALTH_ACCOUNT, this._createChildView1(MY_HEALTH_ACCOUNT))}
+                    {this._renderTabItem('ios-home', MY_HEALTH, this._createChildView(MY_HEALTH_CONSULT))}
+                    {this._renderTabItem('ios-book', MY_HEALTH_CONSULT, this._createChildView(MY_HEALTH))}
+                    {this._renderTabItem('ios-color-fill', MY_HEALTH_TOOLS, this._createChildView(MY_HEALTH_TOOLS))}
+                    {this._renderTabItem('ios-film', MY_HEALTH_COMMUNITY, this._createChildView(MY_HEALTH_COMMUNITY))}
+                    {this._renderTabItem('ios-person', MY_HEALTH_ACCOUNT, this._createChildView(MY_HEALTH_ACCOUNT))}
                 </TabNavigator>
             </View>
         );
@@ -132,7 +124,7 @@ const styles = StyleSheet.create({
         height: 60,
         backgroundColor: '#FFF',
         alignItems: 'center',
-        borderTopWidth: 0.5,
+        borderTopWidth: StyleSheet.hairlineWidth,
         borderTopColor: '#E8E8E8'
     },
     tabNavHide: {
@@ -142,19 +134,16 @@ const styles = StyleSheet.create({
         height: 0,
         overflow: 'hidden'
     },
-    webview_style: {
-        backgroundColor: '#00ff00',
-    },
     tab: {
         height: 60,
         backgroundColor: '#303030',
         alignItems: 'center',
     },
     tabIcon: {
-        width: 30,
+        flex:1,
         height: 30,
-        resizeMode: 'stretch',
-        marginTop: 12.5
+        //resizeMode: 'stretch',
+        marginTop: 7.5
     },
 
 });

@@ -20,8 +20,7 @@ class MyHealth extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Head/>
-                    <View style={styles.line}/>
+                <Head title='健康工具'/>
                     <View style={styles.view}>
                         <Image source={require('./image/health_test.png')}
                                style={styles.imageIcon}/>
@@ -29,7 +28,6 @@ class MyHealth extends Component {
                         <Image source={require('./image/arrows_right.png')}
                                style={styles.imageArr}/>
                     </View>
-                    <View style={styles.line}/>
                     <View style={styles.view}>
                         <Image source={require('./image/health_report.png')}
                                style={styles.imageIcon}/>
@@ -37,7 +35,6 @@ class MyHealth extends Component {
                         <Image source={require('./image/arrows_right.png')}
                                style={styles.imageArr}/>
                     </View>
-                    <View style={styles.line}/>
                     <View style={styles.view}>
                         <Image source={require('./image/base_log.png')}
                                style={styles.imageIcon}/>
@@ -45,7 +42,6 @@ class MyHealth extends Component {
                         <Image source={require('./image/arrows_right.png')}
                                style={styles.imageArr}/>
                     </View>
-                    <View style={styles.line}/>
                     <View style={styles.view}>
                         <Image source={require('./image/health_manage_task.png')}
                                style={styles.imageIcon}/>
@@ -53,7 +49,6 @@ class MyHealth extends Component {
                         <Image source={require('./image/arrows_right.png')}
                                style={styles.imageArr}/>
                     </View>
-                    <View style={styles.line}/>
                     <View style={styles.view}>
                         <Image source={require('./image/health_manage.png')}
                                style={styles.imageIcon}/>
@@ -61,7 +56,6 @@ class MyHealth extends Component {
                             <Image source={require('./image/arrows_right.png')}
                                    style={styles.imageArr}/>
                     </View>
-                    <View style={styles.line}/>
 
             </View>
         );
@@ -78,12 +72,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         height: 50,
         backgroundColor: '#F8F8FF',
-    },
-
-    line: {
-        height: 1,
-        alignSelf: 'stretch',
-        backgroundColor: '#708090',
+        borderBottomWidth:StyleSheet.hairlineWidth,
+        borderBottomColor:'#ccc',
     },
     imageIcon: {
         height: 30,

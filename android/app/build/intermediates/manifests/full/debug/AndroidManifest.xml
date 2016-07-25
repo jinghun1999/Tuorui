@@ -17,12 +17,16 @@
         android:name="android.hardware.camera"
         android:required="false" />
     <uses-feature
-        android:name="android.hardware.camera.autofocus"
+        android:name="android.hardware.camera.front"
         android:required="false" />
 
     <android:uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
 
     <application
         android:name="com.demo.MainApplication"

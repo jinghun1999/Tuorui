@@ -24,6 +24,7 @@ ADDED from D:\Work\GitHub\Tuorui\android\app\src\main\AndroidManifest.xml:7:5-77
 MERGED from [com.facebook.react:react-native:0.29.0] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.facebook.react\react-native\0.29.0\AndroidManifest.xml:11:5-78
 MERGED from [com.facebook.react:react-native:0.29.0] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.facebook.react\react-native\0.29.0\AndroidManifest.xml:11:5-78
 MERGED from [com.facebook.react:react-native:0.29.0] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.facebook.react\react-native\0.29.0\AndroidManifest.xml:11:5-78
+MERGED from [com.facebook.react:react-native:0.29.0] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.facebook.react\react-native\0.29.0\AndroidManifest.xml:11:5-78
 	android:name
 		ADDED from D:\Work\GitHub\Tuorui\android\app\src\main\AndroidManifest.xml:7:22-75
 uses-permission#android.permission.VIBRATE
@@ -32,6 +33,31 @@ ADDED from D:\Work\GitHub\Tuorui\android\app\src\main\AndroidManifest.xml:8:2-62
 		ADDED from D:\Work\GitHub\Tuorui\android\app\src\main\AndroidManifest.xml:8:19-60
 uses-sdk
 ADDED from D:\Work\GitHub\Tuorui\android\app\src\main\AndroidManifest.xml:9:5-11:41
+MERGED from [Demo:react-native-barcodescanner:unspecified] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\Demo\react-native-barcodescanner\unspecified\AndroidManifest.xml:7:5-9:41
+MERGED from [com.facebook.react:react-native:0.29.0] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.facebook.react\react-native\0.29.0\AndroidManifest.xml:7:5-9:41
+MERGED from [com.facebook.fresco:imagepipeline-okhttp3:0.11.0] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.facebook.fresco\imagepipeline-okhttp3\0.11.0\AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:fbcore:0.11.0] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.facebook.fresco\fbcore\0.11.0\AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:imagepipeline:0.11.0] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.facebook.fresco\imagepipeline\0.11.0\AndroidManifest.xml:5:5-7:41
+MERGED from [com.android.support:support-v4:23.2.1] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\AndroidManifest.xml:20:5-43
+MERGED from [com.facebook.fresco:fbcore:0.11.0] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.facebook.fresco\fbcore\0.11.0\AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:imagepipeline-base:0.11.0] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.facebook.fresco\imagepipeline-base\0.11.0\AndroidManifest.xml:5:5-7:41
+MERGED from [com.android.support:support-v4:23.2.1] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\AndroidManifest.xml:20:5-43
+MERGED from [com.facebook.fresco:fbcore:0.11.0] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.facebook.fresco\fbcore\0.11.0\AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:fresco:0.11.0] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.facebook.fresco\fresco\0.11.0\AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:drawee:0.11.0] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.facebook.fresco\drawee\0.11.0\AndroidManifest.xml:5:5-7:41
+MERGED from [com.android.support:support-v4:23.2.1] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\AndroidManifest.xml:20:5-43
+MERGED from [com.facebook.fresco:fbcore:0.11.0] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.facebook.fresco\fbcore\0.11.0\AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:fbcore:0.11.0] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.facebook.fresco\fbcore\0.11.0\AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:imagepipeline:0.11.0] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.facebook.fresco\imagepipeline\0.11.0\AndroidManifest.xml:5:5-7:41
+MERGED from [com.android.support:support-v4:23.2.1] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\AndroidManifest.xml:20:5-43
+MERGED from [com.facebook.fresco:fbcore:0.11.0] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.facebook.fresco\fbcore\0.11.0\AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:imagepipeline-base:0.11.0] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.facebook.fresco\imagepipeline-base\0.11.0\AndroidManifest.xml:5:5-7:41
+MERGED from [com.android.support:support-v4:23.2.1] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\AndroidManifest.xml:20:5-43
+MERGED from [com.facebook.fresco:fbcore:0.11.0] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.facebook.fresco\fbcore\0.11.0\AndroidManifest.xml:5:5-7:41
+MERGED from [com.android.support:recyclerview-v7:23.0.1] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\23.0.1\AndroidManifest.xml:20:5-43
+MERGED from [com.android.support:support-v4:23.2.1] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\AndroidManifest.xml:20:5-43
+MERGED from [com.android.support:appcompat-v7:23.0.1] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.0.1\AndroidManifest.xml:20:5-43
+MERGED from [com.android.support:support-v4:23.2.1] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\AndroidManifest.xml:20:5-43
 MERGED from [Demo:react-native-camera:unspecified] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\Demo\react-native-camera\unspecified\AndroidManifest.xml:7:5-9:41
 MERGED from [com.facebook.react:react-native:0.29.0] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.facebook.react\react-native\0.29.0\AndroidManifest.xml:7:5-9:41
 MERGED from [com.facebook.fresco:imagepipeline-okhttp3:0.11.0] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.facebook.fresco\imagepipeline-okhttp3\0.11.0\AndroidManifest.xml:5:5-7:41
@@ -128,6 +154,16 @@ MERGED from [com.android.support:support-v4:23.2.1] D:\Work\GitHub\Tuorui\androi
 MERGED from [com.android.support:support-v4:23.2.1] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:appcompat-v7:23.0.1] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.0.1\AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:support-v4:23.2.1] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\AndroidManifest.xml:22:5-20
+MERGED from [com.facebook.react:react-native:0.29.0] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.facebook.react\react-native\0.29.0\AndroidManifest.xml:13:5-20
+MERGED from [org.webkit:android-jsc:r174650] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\org.webkit\android-jsc\r174650\AndroidManifest.xml:2:3-17
+MERGED from [com.android.support:support-v4:23.2.1] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\AndroidManifest.xml:22:5-20
+MERGED from [com.android.support:support-v4:23.2.1] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\AndroidManifest.xml:22:5-20
+MERGED from [com.android.support:support-v4:23.2.1] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\AndroidManifest.xml:22:5-20
+MERGED from [com.android.support:support-v4:23.2.1] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\AndroidManifest.xml:22:5-20
+MERGED from [com.android.support:support-v4:23.2.1] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\AndroidManifest.xml:22:5-20
+MERGED from [com.android.support:support-v4:23.2.1] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\AndroidManifest.xml:22:5-20
+MERGED from [com.android.support:appcompat-v7:23.0.1] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.0.1\AndroidManifest.xml:22:5-20
+MERGED from [com.android.support:support-v4:23.2.1] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:appcompat-v7:23.0.1] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.0.1\AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:support-v4:23.2.1] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\AndroidManifest.xml:22:5-20
 MERGED from [com.facebook.react:react-native:0.29.0] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\com.facebook.react\react-native\0.29.0\AndroidManifest.xml:13:5-20
@@ -183,24 +219,32 @@ ADDED from D:\Work\GitHub\Tuorui\android\app\src\main\AndroidManifest.xml:28:7-8
 	android:name
 		ADDED from D:\Work\GitHub\Tuorui\android\app\src\main\AndroidManifest.xml:28:17-81
 uses-permission#android.permission.CAMERA
-ADDED from [Demo:react-native-camera:unspecified] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\Demo\react-native-camera\unspecified\AndroidManifest.xml:11:5-65
+ADDED from [Demo:react-native-barcodescanner:unspecified] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\Demo\react-native-barcodescanner\unspecified\AndroidManifest.xml:11:5-65
+MERGED from [Demo:react-native-camera:unspecified] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\Demo\react-native-camera\unspecified\AndroidManifest.xml:11:5-65
 	android:name
-		ADDED from [Demo:react-native-camera:unspecified] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\Demo\react-native-camera\unspecified\AndroidManifest.xml:11:22-62
+		ADDED from [Demo:react-native-barcodescanner:unspecified] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\Demo\react-native-barcodescanner\unspecified\AndroidManifest.xml:11:22-62
 uses-feature#android.hardware.camera
-ADDED from [Demo:react-native-camera:unspecified] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\Demo\react-native-camera\unspecified\AndroidManifest.xml:13:5-15:36
+ADDED from [Demo:react-native-barcodescanner:unspecified] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\Demo\react-native-barcodescanner\unspecified\AndroidManifest.xml:13:5-15:36
+MERGED from [Demo:react-native-camera:unspecified] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\Demo\react-native-camera\unspecified\AndroidManifest.xml:13:5-15:36
 	android:required
-		ADDED from [Demo:react-native-camera:unspecified] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\Demo\react-native-camera\unspecified\AndroidManifest.xml:15:9-33
+		ADDED from [Demo:react-native-barcodescanner:unspecified] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\Demo\react-native-barcodescanner\unspecified\AndroidManifest.xml:15:9-33
 	android:name
-		ADDED from [Demo:react-native-camera:unspecified] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\Demo\react-native-camera\unspecified\AndroidManifest.xml:14:9-47
-uses-feature#android.hardware.camera.autofocus
-ADDED from [Demo:react-native-camera:unspecified] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\Demo\react-native-camera\unspecified\AndroidManifest.xml:16:5-18:36
+		ADDED from [Demo:react-native-barcodescanner:unspecified] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\Demo\react-native-barcodescanner\unspecified\AndroidManifest.xml:14:9-47
+uses-feature#android.hardware.camera.front
+ADDED from [Demo:react-native-barcodescanner:unspecified] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\Demo\react-native-barcodescanner\unspecified\AndroidManifest.xml:16:5-18:36
 	android:required
-		ADDED from [Demo:react-native-camera:unspecified] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\Demo\react-native-camera\unspecified\AndroidManifest.xml:18:9-33
+		ADDED from [Demo:react-native-barcodescanner:unspecified] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\Demo\react-native-barcodescanner\unspecified\AndroidManifest.xml:18:9-33
 	android:name
-		ADDED from [Demo:react-native-camera:unspecified] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\Demo\react-native-camera\unspecified\AndroidManifest.xml:17:9-57
+		ADDED from [Demo:react-native-barcodescanner:unspecified] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\Demo\react-native-barcodescanner\unspecified\AndroidManifest.xml:17:9-53
 android:uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
 IMPLIED from D:\Work\GitHub\Tuorui\android\app\src\main\AndroidManifest.xml:1:1-31:12 reason: org.webkit.android_jsc has a targetSdkVersion < 4
 android:uses-permission#android.permission.READ_PHONE_STATE
 IMPLIED from D:\Work\GitHub\Tuorui\android\app\src\main\AndroidManifest.xml:1:1-31:12 reason: org.webkit.android_jsc has a targetSdkVersion < 4
 android:uses-permission#android.permission.READ_EXTERNAL_STORAGE
 IMPLIED from D:\Work\GitHub\Tuorui\android\app\src\main\AndroidManifest.xml:1:1-31:12 reason: org.webkit.android_jsc requested WRITE_EXTERNAL_STORAGE
+uses-feature#android.hardware.camera.autofocus
+ADDED from [Demo:react-native-camera:unspecified] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\Demo\react-native-camera\unspecified\AndroidManifest.xml:16:5-18:36
+	android:required
+		ADDED from [Demo:react-native-camera:unspecified] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\Demo\react-native-camera\unspecified\AndroidManifest.xml:18:9-33
+	android:name
+		ADDED from [Demo:react-native-camera:unspecified] D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\Demo\react-native-camera\unspecified\AndroidManifest.xml:17:9-57
