@@ -88,7 +88,7 @@ class TopScreenMain extends Component {
     componentWillUnmount() {
     }
 
-    _onPressButton1() {
+    _salesPress() {
         const { navigator } = this.props;
         var _me = this;
         if (navigator) {
@@ -126,7 +126,7 @@ class TopScreenMain extends Component {
                     isLoop={true}
                     autoPlay={true}/>
                 <View style={{flex: 1, flexDirection:'row', height:80,}}>
-                    <TouchableOpacity style={styles.grid_view} onPress={this._onPressButton1.bind(this)}>
+                    <TouchableOpacity style={styles.grid_view} onPress={this._salesPress.bind(this)}>
                         <View style={[styles.iconOuter, {backgroundColor:'#C67171'}]}>
                             <Icon name={'ios-cart'} size={40} color={'white'}/>
                         </View>
