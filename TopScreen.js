@@ -13,14 +13,15 @@ import {
     ToastAndroid,
     TouchableOpacity,
     Image,
-    } from 'react-native';
+    ViewPagerAndroid
+} from 'react-native';
 import ViewPager from 'react-native-viewpager';
 import Icon from 'react-native-vector-icons/Ionicons';
 import GoodsAdd from './app/page/Sales/AddGood';
 import Head from './app/commonview/Head';
 import Sale from './app/page/Sales/Sale';
 var deviceWidth = Dimensions.get('window').width;
-
+var _navigator; //全局navigator对象
 let IMGS = [
     require('./image/job1.jpg'),
     require('./image/job2.jpg'),
@@ -72,6 +73,21 @@ class TopScreenMain extends Component {
         this.state = {
             dataSource: new ViewPager.DataSource({pageHasChanged: (p1, p2)=>p1 !== p2}).cloneWithPages(IMGS),
         };
+        this._onPressButton = this._onPressButton.bind(this);
+    }
+
+    }
+
+    //组件刷新前调用，类似componentWillMount
+    componentWillUpdate() {
+    }
+
+    //更新后的hook
+    componentDidUpdate() {
+    }
+
+    //销毁期，用于清理一些无用的内容，如：点击事件Listener
+    componentWillUnmount() {
     }
 
     _onPressButton1() {
@@ -143,8 +159,29 @@ class TopScreenMain extends Component {
                         </View>
                     </TouchableOpacity>
                 </View>
-            </View>
+
+            );
+
+        }
+
+        if (route.id === 'sale') {
+            return (
+                <Sale navigator={navigator} route={route}/>
+            );
+        }
+    }
+
+    render() {
+        var renderScene = this.renderSceneAndroid;
+        var configureScence = this.configureScenceAndroid;
+        return (
+            <Navigator
+                debugOverlay={false}
+                initialRoute={{ title: 'Main', id:'main'}}
+                configureScence={{configureScence}}
+                renderScene={renderScene} />
         );
+
     }
 }
 

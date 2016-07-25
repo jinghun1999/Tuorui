@@ -39,7 +39,12 @@ class MyAccount extends React.Component {
     configureScenceAndroid() {
         return Navigator.SceneConfigs.FadeAndroid;
     }
+    /**
+     *组件将要被加载在视图
+     */
+    componentWillMount() {
 
+    }
     /**
      *配置跳转路由
      */
@@ -66,7 +71,7 @@ class MyAccount extends React.Component {
                 <Login navigator={navigator} route={route}/>
             );
         }
-    }
+}
 
 
     render() {
@@ -79,6 +84,7 @@ class MyAccount extends React.Component {
                 configureScence={{configureScence}}
                 renderScene={renderScene} />
         );
+
     }
     //用了render方法后，组件加载成功并被成功渲染出来以后所执行的hook函数，一般会将网络请求等加载数据的操作，放在这个函数里进行，来保证不会出现UI上的错误
     componentDidMount() {
