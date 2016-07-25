@@ -99,14 +99,10 @@ class HealthTools extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start',
+
     },
     contentContainer: {
-        flex: 1,
-        flexDirection: 'row',
-        paddingVertical: 20,
+
     },
     view: {
         flex: 1,
@@ -132,10 +128,11 @@ const styles = StyleSheet.create({
         marginRight: 20,
     },
     imageArr: {
-        height: 20,
-        width: 50,
-        alignSelf: 'center',
-        marginLeft: 10,
+        height: 30,
+        width: 20,
+        marginRight:10,
+        justifyContent:'center',
+        alignSelf:'center',
     },
     t0: {
         fontSize: 20,
