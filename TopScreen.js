@@ -73,7 +73,6 @@ class TopScreenMain extends Component {
         this.state = {
             dataSource: new ViewPager.DataSource({pageHasChanged: (p1, p2)=>p1 !== p2}).cloneWithPages(IMGS),
         };
-        this._onPressButton = this._onPressButton.bind(this);
     }
 
     //组件刷新前调用，类似componentWillMount
