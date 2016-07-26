@@ -18,7 +18,7 @@ import {
     ScrollView,
     ListView,
     Image,
-    } from 'react-native';
+} from 'react-native';
 import Global from './../../util/Global';
 import Head from './../../commonview/Head';
 import NButton from './../../commonview/NButton';
@@ -37,13 +37,15 @@ export default class Sale extends React.Component {
         super(props);
         var now = new Date();
         this.state = {
-            simpleText: now.getFullYear() + '-' + now.getMonth() + '-' + now.getDate(),
+            simpleText: now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate(),
             simpleDate: now,
             SelectedGoods: {DisCount: 100, MustPay: 0, RealPay: 0, items: []},
             goodsDataSource: [],
             Guest: {GestName: '选择会员', ID: null},
             Store: {WarehouseName: '选择仓库', ID: null},
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
+            goodDiscountInput: '',
+            goodAmountInput: '',
         };
     }
 
@@ -56,7 +58,7 @@ export default class Sale extends React.Component {
                 newState[stateKey + 'Text'] = 'dismissed';
             } else {
                 var date = new Date(year, month, day);
-                newState[stateKey + 'Text'] = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
+                newState[stateKey + 'Text'] = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
                 newState[stateKey + 'Date'] = date;
             }
             this.setState(newState);
@@ -91,6 +93,7 @@ export default class Sale extends React.Component {
             navigator.push({
                 name: 'ChooseStore',
                 component: ChooseStore,
+                tabBarShow:false,
                 params: {
                     getResult: function (g) {
                         _this.setState({
@@ -115,6 +118,7 @@ export default class Sale extends React.Component {
                 component: AddGood,
                 params: {
                     storeId: _this.state.Store.ID,
+                    tabBarShow:false,
                     getResult: function (good) {
                         //如已经添加了此商品，则更新数量和金额，否则添加到集合
                         var _goods = _this.state.SelectedGoods, _exists = false;
@@ -127,12 +131,14 @@ export default class Sale extends React.Component {
                                 _exists = true;
                             }
                         });
-                        _goods.RealPay = (_goods.MustPay*_goods.DisCount/100).toFixed(1);
+                        _goods.RealPay = (_goods.MustPay * _goods.DisCount / 100).toFixed(1);
                         if (!_exists) {
                             _goods.items.push(good);
                         }
                         _this.setState({
                             SelectedGoods: _goods,
+                            goodAmountInput: _goods.RealPay.toString(),
+                            goodDiscountInput:_goods.DisCount.toString(),
                         });
                     }
                 }
@@ -150,6 +156,9 @@ export default class Sale extends React.Component {
             return false;
         } else if (_this.state.SelectedGoods.items.length == 0) {
             ToastAndroid.show("请选择商品", ToastAndroid.SHORT);
+            return false;
+        } else if(!_this.state.SelectedGoods.RealPay || isNaN(_this.state.SelectedGoods.RealPay)){
+            ToastAndroid.show("请输入付款金额", ToastAndroid.SHORT);
             return false;
         }
         storage.load({
@@ -288,31 +297,52 @@ export default class Sale extends React.Component {
                     <View style={[styles.pickerBox, {marginTop:10,}]}>
                         <FormInput title="应收金额" value={this.state.SelectedGoods.MustPay.toString()} enabled={false}/>
                         <View style={{flexDirection:'row'}}>
-                            <FormInput style={{flex:1}} title="折扣" value={this.state.SelectedGoods.DisCount.toString()}
+                            <FormInput style={{flex:1}} title="折扣" value={this.state.goodDiscountInput}
                                        onChangeText={(text)=>{
-                                var good = this.state.SelectedGoods, d = parseFloat(text);
-                                if(!d){
-                                    ToastAndroid.show('请输入数字', ToastAndroid.SHORT);
+                                       this.setState({
+                                            goodDiscountInput: text
+                                        });
+                                var d = parseFloat(text);
+                                if(!d || isNaN(d)){
+                                    var value= 0;
+                                    this.setState({
+                                        goodAmountInput: value.toString(),
+                                    })
                                     return false;
                                 }else{
+                                    var good = this.state.SelectedGoods;
                                     good.DisCount = d;
                                     good.RealPay = (good.MustPay*d/100).toFixed(1);
                                     this.setState({
-                                        SelectedGoods: good
+                                        SelectedGoods: good,
+                                        goodAmountInput: good.RealPay,
                                     })
                                 }
                             }}
-                                />
+                            />
                             <View style={{width:20, justifyContent:'center'}}>
                                 <Text>%</Text>
                             </View>
                         </View>
-                        <FormInput title="实收金额" value={this.state.SelectedGoods.RealPay.toString()} enabled={true}
+                        <FormInput title="实收金额" value={this.state.goodAmountInput} enabled={true}
                                    showbottom={false}
                                    onChangeText={(text)=>{
-                                        var _t = this.state.SelectedGoods;
-                                        _t.RealPay = parseFloat(text).toFixed(1);;
-                                        this.setState({SelectedGoods: _t});
+                                        //var _t = this.state.SelectedGoods;
+                                        // _t.RealPay = parseFloat(_t).toFixed(1);
+                                        this.setState({
+                                            goodAmountInput: text
+                                        });
+                                        var val = parseFloat(text).toFixed(1);
+                                        if(isNaN(val) || !val){
+                                            return false;
+                                        }
+                                        else{
+                                            var t =this.state.SelectedGoods;
+                                            t.RealPay= val;
+                                            this.setState({
+                                                SelectedGoods: t,
+                                            });
+                                        }
                                     }}/>
                     </View>
                     <View style={{height:130}}>

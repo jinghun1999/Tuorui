@@ -19,7 +19,6 @@ import {
     View
     } from 'react-native';
 import TabNavigator from 'react-native-tab-navigator';
-import ScrollableTabView  from 'react-native-scrollable-tab-view';
 import MyHealth from './MyHealth';
 import HealthTools from './HealthTools';
 import HealthSQ  from './HealthSQ';

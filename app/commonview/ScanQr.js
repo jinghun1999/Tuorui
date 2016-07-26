@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     cancelButton: {
         flexDirection: 'row',
         justifyContent: 'center',
-        backgroundColor: 'white',
+        backgroundColor: 'blue',
         borderRadius: 3,
         padding: 15,
         width: 100,

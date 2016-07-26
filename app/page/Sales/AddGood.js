@@ -15,7 +15,7 @@ import {
     TouchableOpacity,
     BackAndroid,
     ScrollView
-    } from 'react-native';
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Util from '../../util/Util';
 import Global from '../../util/Global';
@@ -42,6 +42,7 @@ class GoodsAdd extends Component {
             //GoodAmount: 0.00,
             kw: null,
             storeId: null,
+            goodCountInput: '',
         };
         this._this = this;
     }
@@ -61,7 +62,7 @@ class GoodsAdd extends Component {
                 component: ScanQr,
                 title: 'ScanQr',
                 params: {
-                    onSucess: function(v){
+                    onSucess: function (v) {
                         _this.setState({kw: v});
                         _this._getGood();
                     },
@@ -72,7 +73,7 @@ class GoodsAdd extends Component {
 
     _getGood() {
         var _this = this;
-        if(_this.state.kw==null||_this.state.kw.length==0){
+        if (_this.state.kw == null || _this.state.kw.length == 0) {
             ToastAndroid.show('未获得条码/编号', ToastAndroid.SHORT);
             return false;
         }
@@ -164,6 +165,7 @@ class GoodsAdd extends Component {
                         _this.setState({
                             GoodInfo: res,
                             kw: res.ItemCode,
+                            goodCountInput: res.GoodCount.toString(),
                         });
                     }
                 }
@@ -207,20 +209,23 @@ class GoodsAdd extends Component {
                     </View>
                     <View style={[styles.pickerBox,{marginTop:10,}]}>
                         <FormInput title="数量"
-                                   value={this.state.GoodInfo.GoodCount.toString()}
+                                   value={this.state.goodCountInput}
                                    enabled={true}
-                                   keyboardType={'numeric'}
                                    onChangeText={(text)=>{
+                                        this.setState({
+                                            goodCountInput:text
+                                        });
                                         var t = parseInt(text);
-                                        if(!t){
+                                        if(!t || isNaN(t)){
                                             return false;
-                                        }
+                                        }else{
                                         var good = this.state.GoodInfo;
                                         good.GoodCount= t;
                                         good.GoodAmount = t * this.state.GoodInfo.SellPrice
                                         this.setState({
                                             GoodInfo: good,
-                                        });
+                                        })
+                                        }
                                     }}/>
                         <FormInput title="售价" value={this.state.GoodInfo.SellPrice.toString()} enabled={false}/>
                         <FormInput title="金额"
