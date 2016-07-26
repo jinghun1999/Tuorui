@@ -28,7 +28,7 @@ let IMGS = [
     require('./image/job3.jpg'),
 ];
 
-class TopScreen extends Component {
+class TopScreenAAA extends Component {
     render() {
         var defaultName = 'TopScreenMain';
         var defaultComponent = TopScreenMain;
@@ -67,7 +67,7 @@ class TopScreen extends Component {
 }
 
 /****************MainTopSceen*****************/
-class TopScreenMain extends Component {
+class TopScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -89,13 +89,14 @@ class TopScreenMain extends Component {
 
     _salesPress() {
         const { navigator } = this.props;
-        var _me = this;
+        var _this = this;
         if (navigator) {
             navigator.push({
                 name: 'Sale',
+                id:'page',
                 component: Sale,
                 params: {
-                    id: _me.state.id,
+                    id: _this.state.id,
                 }
             })
         }

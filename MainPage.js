@@ -15,6 +15,7 @@ import {
     TouchableOpacity,
     ToastAndroid,
     WebView,
+    BackAndroid,
     View
     } from 'react-native';
 import TabNavigator from 'react-native-tab-navigator';
@@ -24,13 +25,13 @@ import HealthTools from './HealthTools';
 import HealthSQ  from './HealthSQ';
 import MyAccount  from './MyAccount';
 
-import Login from './app/page/Login';
+//import Login from './app/page/Login';
 import Global from './app/util/Global';
 import Util from './app/util/Util';
 import NetUitl from './app/net/NetUitl';
 import Head from './app/commonview/Head';
 import TopScreen from './TopScreen';
-import NButton from './app/commonview/NButton';
+//import NButton from './app/commonview/NButton';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const MY_HEALTH = '首页';
@@ -39,7 +40,6 @@ const MY_HEALTH_TOOLS = '健康工具';
 const MY_HEALTH_COMMUNITY = '健康社区';
 const MY_HEALTH_ACCOUNT = '我的账号';
 var _navigator;
-let tabBarHidden = false;
 class MainPage extends React.Component {
     constructor(props) {
         super(props);
@@ -76,11 +76,11 @@ class MainPage extends React.Component {
     _createChildView(tag) {
         let renderView;
         switch (tag) {
+            case MY_HEALTH_CONSULT:
+                renderView = <TopScreen navigator={this._navigator}/>;
+                break;
             case MY_HEALTH:
                 renderView = <MyHealth />;
-                break;
-            case MY_HEALTH_CONSULT:
-                renderView = <TopScreen />;
                 break;
             case MY_HEALTH_TOOLS:
                 renderView = <HealthTools />;
@@ -98,7 +98,7 @@ class MainPage extends React.Component {
     }
 
     render() {
-        let {tabBarShow} = this.state;
+        let {tabBarShow} = this.props;
         return (
             <View style={{flex: 1}}>
                 <TabNavigator hidesTabTouch={true}
@@ -112,6 +112,20 @@ class MainPage extends React.Component {
                 </TabNavigator>
             </View>
         );
+    }
+    componentDidMount() {
+        var nav = this._navigator;
+        BackAndroid.addEventListener('hardwareBackPress', function () {
+            if (nav && nav.getCurrentRoutes().length > 1) {
+                nav.pop();
+                return true;
+            }
+            return false;
+        });
+    }
+
+    componentWillUnmount() {
+        BackAndroid.removeEventListener('hardwareBackPress');
     }
 }
 
@@ -143,7 +157,7 @@ const styles = StyleSheet.create({
         flex:1,
         height: 30,
         //resizeMode: 'stretch',
-        marginTop: 7.5
+        marginTop: 0.5
     },
 
 });

@@ -9,38 +9,60 @@ import {
     StyleSheet,
     Text,
     Navigator,
-    BackAndroid,
+
     Image,
     View
     } from 'react-native';
-import HomePage from './HomePage';
-import Start from './Start';
+import HomePage from './MainPage';
 import Login from './app/page/Login';
 class Index extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
     }
-    componentDidMount() {
-        //这里获取从FirstPageComponent传递过来的参数: id
-        this.setState({
-            user:this.props.user,
-            pwd:this.props.pwd,
-            CurrentUser: this.props.CurrentUser,
+
+    componentWillMount() {
+        var _this = this;
+        storage.load({
+            key: 'loginState',
+            autoSync: true,
+            syncInBackground: true
+        }).then(ret => {
+            _this.setState({
+                user: ret.personname,
+                pwd: ret.password,
+                token: ret.token,
+            });
+        }).catch(err => {
+            alert('error:' + err);
         });
-        if(this.state.CurrentUser)
-            alert(this.state.CurrentUser.SafetyCode)
     }
+
     render() {
-        if (this.state.CurrentUser && this.state.CurrentUser.SafetyCode) {
-            return (
-                <HomePage />
-            )
-        } else {
-            return (
-                <Start />
-            )
+        var defaultName = 'Login';
+        var defaultComponent = Login;
+        alert(this.state.token);
+        if (this.state.token && this.state.token.length > 0) {
+
         }
+        defaultName = 'HomePage';
+        defaultComponent = HomePage;
+        return (
+            <Navigator
+                initialRoute={{ name: defaultName, component: defaultComponent, id: 'main' }}
+                configureScene={(route) => {
+                        let gestureType = Navigator.SceneConfigs.HorizontalSwipeJump;
+                        gestureType.gestures.jumpForward=null;
+                        gestureType.gestures.jumpBack=null;
+                        return gestureType;
+                    }
+                }
+                renderScene={(route, navigator) => {
+                    this._navigator = navigator;
+                    let Component = route.component;
+                    return <Component {...route.params} navigator={navigator} tabBarShow={route.id==='main'} />
+                }}/>
+        );
     }
 }
 

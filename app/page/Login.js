@@ -23,7 +23,7 @@ import Global from '../util/Global';
 import NetUitl from '../net/NetUitl';
 import JsonUitl from '../util/JsonUitl';
 //import SecondPageComponent from './SecondPageComponent';
-import Index from '../../Index';
+import MainPage from '../../Index';
 var base64 = require('base-64');
 var NButton = require('../commonview/NButton');
 //import Example from 'react-native-camera/Example/Example';
@@ -50,7 +50,7 @@ class Login extends Component {
         try {
             NetUitl.get(url, header, function (data) {
                 if (data.Sign && data.Message) {
-                    alert("登录成功" + data.Message.SafetyCode);
+                    //alert("登录成功" + data.Message.SafetyCode);
                     storage.save({
                         key: 'loginState',  //注意:请不要在key中使用_下划线符号!
                         rawData: {
@@ -62,15 +62,11 @@ class Login extends Component {
                         },
                         expires: 1000 * 3600 * 24
                     });
-                    //ToastAndroid.show("请输入用户名", ToastAndroid.SHORT);
-                    //或者写成 const navigator = this.props.navigator;
-                    //<Component {...route.params} navigator={navigator} />
-                    //这里传递了navigator作为props
                     if (navigator) {
                         navigator.pop();
                         navigator.push({
-                            name: 'Index',
-                            component: Index,
+                            name: 'MainPage',
+                            component: MainPage,
                             params: {
                                 user: thiz.state.user,
                                 pwd: thiz.state.pwd,
