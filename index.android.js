@@ -7,27 +7,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import {
-    AppRegistry,
-    StyleSheet,
-    Text,
-    Navigator,
-    BackAndroid,
-    Image,
-    View
-    } from 'react-native';
+import {AppRegistry,} from 'react-native';
 import Index from './Index';
-class Demo extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {};
-    }
 
-    render() {
-        return (
-            <Index />
-        )
-    }
-}
-
-AppRegistry.registerComponent('Demo', () => Demo);
+AppRegistry.registerComponent('Demo', () => Index);

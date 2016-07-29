@@ -120,12 +120,12 @@ class TopScreen extends Component {
             <View style={styles.container}>
                 <Head title='首页'/>
                 <ViewPager
-                    style={{height:150}}
+                    style={{height:300}}
                     renderPage={this._renderViewPage}
                     dataSource={this.state.dataSource}
                     isLoop={true}
                     autoPlay={true}/>
-                <View style={{flex: 1, flexDirection:'row', height:80,}}>
+                <View style={{flex: 1, flexDirection:'row'}}>
                     <TouchableOpacity style={styles.grid_view} onPress={this._salesPress.bind(this)}>
                         <View style={[styles.iconOuter, {backgroundColor:'#C67171'}]}>
                             <Icon name={'ios-cart'} size={40} color={'white'}/>
@@ -156,6 +156,22 @@ class TopScreen extends Component {
                             </Text>
                         </View>
                     </TouchableOpacity>
+                    <TouchableOpacity style={styles.grid_view} onPress={this._onPressButton2}>
+                        <View style={[styles.iconOuter, {backgroundColor:'#9A32CD'}]}>
+                            <Icon name={'logo-googleplus'} size={40} color={'white'}/>
+                        </View>
+                        <View style={styles.iconText}>
+                            <Text style={{fontSize:15}}>
+                                Google+
+                            </Text>
+                        </View>
+                    </TouchableOpacity>
+
+                </View>
+                <View style={styles.HomeInfoStyle}>
+                    <Text> 我是咨询简介</Text>
+                    <Text> 我是咨询简介</Text>
+                    <Text> 我是咨询简介</Text>
                 </View>
             </View>
         );
@@ -165,19 +181,20 @@ class TopScreen extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
     },
     grid_view: {
         flex: 1,
         top: 1,
-        height: 100,
         alignItems: 'center',
         justifyContent: 'center'
     },
     page: {
         width: deviceWidth,
         backgroundColor: '#088856',
-        height: 270,
+        height: 300,
+        flex: 1,
+        //height: 130,
+        resizeMode: 'stretch'
     },
     iconOuter: {
         backgroundColor: "orange",
@@ -190,6 +207,10 @@ const styles = StyleSheet.create({
     iconText: {
         width: 100,
         alignItems: 'center',
+    },
+    HomeInfoStyle:{
+        flex:1,
+        flexDirection:'column',
     }
 });
 

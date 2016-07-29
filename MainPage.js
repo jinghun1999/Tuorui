@@ -34,10 +34,10 @@ import TopScreen from './TopScreen';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const MY_HEALTH = '首页';
-const MY_HEALTH_CONSULT = '健康百科';
-const MY_HEALTH_TOOLS = '健康工具';
+const MY_HEALTH_CONSULT = '知识库';
 const MY_HEALTH_COMMUNITY = '健康社区';
-const MY_HEALTH_ACCOUNT = '我的账号';
+const MY_HEALTH_TOOLS = '应用服务';
+const MY_HEALTH_ACCOUNT = '我的';
 var _navigator;
 class MainPage extends React.Component {
     constructor(props) {
@@ -55,7 +55,6 @@ class MainPage extends React.Component {
             syncInBackground: true
         }).then(ret => {
         }).catch(err => {
-            alert(err);
         })
     }
 
@@ -79,7 +78,7 @@ class MainPage extends React.Component {
                 renderView = <TopScreen navigator={this._navigator}/>;
                 break;
             case MY_HEALTH:
-                renderView = <MyHealth />;
+                renderView = <MyHealth navigator={this._navigator} />;
                 break;
             case MY_HEALTH_TOOLS:
                 renderView = <HealthTools />;
@@ -105,8 +104,8 @@ class MainPage extends React.Component {
                               tabBarStyle={tabBarShow ? styles.tabNav : styles.tabNavHide}>
                     {this._renderTabItem('ios-home', MY_HEALTH, this._createChildView(MY_HEALTH_CONSULT))}
                     {this._renderTabItem('ios-book', MY_HEALTH_CONSULT, this._createChildView(MY_HEALTH))}
-                    {this._renderTabItem('ios-color-fill', MY_HEALTH_TOOLS, this._createChildView(MY_HEALTH_TOOLS))}
                     {this._renderTabItem('ios-film', MY_HEALTH_COMMUNITY, this._createChildView(MY_HEALTH_COMMUNITY))}
+                    {this._renderTabItem('ios-color-fill', MY_HEALTH_TOOLS, this._createChildView(MY_HEALTH_TOOLS))}
                     {this._renderTabItem('ios-person', MY_HEALTH_ACCOUNT, this._createChildView(MY_HEALTH_ACCOUNT))}
                 </TabNavigator>
             </View>

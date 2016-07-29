@@ -19,7 +19,7 @@ class HealthSQ extends Component {
     render() {
         return (
             <View style={{flex:1}}>
-                <Head/>
+                <Head title="健康社区"/>
                 <ScrollableTabView>
                     <WebView tabLabel="个人体重"
                              style={styles.webview_style}

@@ -2,60 +2,11 @@
 <items version="2" >
 
     <item
-        jar="C:\Users\tuorui\.gradle\caches\modules-2\files-2.1\com.squareup.okio\okio\1.8.0\5ea7af56cc7c567ed9856d99efb30740e9b17ff\okio-1.8.0.jar"
+        jar="C:\Users\tuorui\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp3\okhttp-urlconnection\3.2.0\6f8a4b1435c9e0a6f9c5fe4a1be46627b848fd0c\okhttp-urlconnection-3.2.0.jar"
         jumboMode="false"
         revision="23.0.1"
-        sha1="05ea7af56cc7c567ed9856d99efb30740e9b17ff">
-        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\okio-1.8.0-e75e13802b21d382ffd369b6c32b8a09ff3b286f.jar" />
-    </item>
-    <item
-        jar="C:\Users\tuorui\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp3\okhttp\3.2.0\f7873a2ebde246a45c2a8d6f3247108b4c88a879\okhttp-3.2.0.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="f7873a2ebde246a45c2a8d6f3247108b4c88a879">
-        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\okhttp-3.2.0-3df265de2b9f0ec4e77c7f0f165ee3b65a3e6e26.jar" />
-    </item>
-    <item
-        jar="D:\work\Git\Tuorui\android\app\build\intermediates\exploded-aar\com.facebook.fresco\imagepipeline\0.11.0\jars\classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="3341b66c54367e777a0647e2db96c045329bfeab">
-        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\classes-1a6aae5e1190660e4127738cb7708ed54b28490e.jar" />
-    </item>
-    <item
-        jar="D:\work\Git\Tuorui\android\app\build\intermediates\exploded-aar\Demo\react-native-vector-icons\unspecified\jars\classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="a4c91e75389e200aff59a2af5b4d6d7abe207825">
-        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\classes-78d93a98c9e62f036a64af42aa3907bba03e66d2.jar" />
-    </item>
-    <item
-        jar="D:\work\Git\Tuorui\android\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\23.0.1\jars\classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="4356e230a981d1bbf047d848b91bc0d9b7c5bacc">
-        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\classes-1cb135e7524d7b77717b34eeccea744e1ef636df.jar" />
-    </item>
-    <item
-        jar="D:\work\Git\Tuorui\android\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.0.1\jars\classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="d86429b0f0b3f3cafbeb78dda1b9d89119ccb05d">
-        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\classes-7600b57ef1f4ce8c25a71fe28a182dd26937daa4.jar" />
-    </item>
-    <item
-        jar="D:\work\Git\Tuorui\android\app\build\intermediates\exploded-aar\Demo\react-native-camera\unspecified\jars\classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="905e56b8b42647862f1880236f85ac9c43268c71">
-        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\classes-2a852e9f2df47eee015650b1534278baf3783648.jar" />
-    </item>
-    <item
-        jar="D:\work\Git\Tuorui\android\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\jars\libs\internal_impl-23.2.1.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="607a3d0b8013b4ccbfeb0b7cb293351994e021fb">
-        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\internal_impl-23.2.1-d8d866be2de53d6cc437577b0b9010c2103c062f.jar" />
+        sha1="6f8a4b1435c9e0a6f9c5fe4a1be46627b848fd0c">
+        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\okhttp-urlconnection-3.2.0-07bf8c6a41a21caac7cedf7787207160e43a0ad5.jar" />
     </item>
     <item
         jar="D:\work\Git\Tuorui\android\app\build\intermediates\exploded-aar\com.facebook.react\react-native\0.29.0\jars\libs\infer-annotations-1.5.jar"
@@ -65,53 +16,25 @@
         <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\infer-annotations-1.5-bf508d6f21233ac7efe5984e0803e7dbb7c4aa2e.jar" />
     </item>
     <item
-        jar="D:\Android\Androidsdk\extras\android\m2repository\com\android\support\support-annotations\23.2.1\support-annotations-23.2.1.jar"
+        jar="C:\Users\tuorui\.gradle\caches\modules-2\files-2.1\com.parse.bolts\bolts-tasks\1.4.0\d85884acf6810a3bbbecb587f239005cbc846dc4\bolts-tasks-1.4.0.jar"
         jumboMode="false"
         revision="23.0.1"
-        sha1="ccb693bc0774fcb637246f7360de25b4af7df318">
-        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\support-annotations-23.2.1-4ca2b745e2cea1bef21004b22b9745e03e3c6bcc.jar" />
+        sha1="d85884acf6810a3bbbecb587f239005cbc846dc4">
+        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\bolts-tasks-1.4.0-5f5a08d9bfb5600b019c31dbbd778853585565f0.jar" />
     </item>
     <item
-        jar="C:\Users\tuorui\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-core\2.2.3\1a0113da2cab5f4c216b4e5e7c1dbfaa67087e14\jackson-core-2.2.3.jar"
+        jar="D:\work\Git\Tuorui\android\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.0.1\jars\classes.jar"
         jumboMode="false"
         revision="23.0.1"
-        sha1="1a0113da2cab5f4c216b4e5e7c1dbfaa67087e14">
-        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\jackson-core-2.2.3-19e06b1a918a08491a65bb79c0227d45a0591999.jar" />
+        sha1="d86429b0f0b3f3cafbeb78dda1b9d89119ccb05d">
+        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\classes-7600b57ef1f4ce8c25a71fe28a182dd26937daa4.jar" />
     </item>
     <item
-        jar="D:\work\Git\Tuorui\android\app\build\intermediates\exploded-aar\com.facebook.fresco\imagepipeline-base\0.11.0\jars\classes.jar"
+        jar="D:\work\Git\Tuorui\android\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\23.0.1\jars\classes.jar"
         jumboMode="false"
         revision="23.0.1"
-        sha1="ca63c521b5745ae9a09629d7ca67ff6bc2a967fe">
-        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\classes-b764be0e6b184261620297d78377eb21da16361d.jar" />
-    </item>
-    <item
-        jar="C:\Users\tuorui\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp3\okhttp-urlconnection\3.2.0\6f8a4b1435c9e0a6f9c5fe4a1be46627b848fd0c\okhttp-urlconnection-3.2.0.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="6f8a4b1435c9e0a6f9c5fe4a1be46627b848fd0c">
-        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\okhttp-urlconnection-3.2.0-07bf8c6a41a21caac7cedf7787207160e43a0ad5.jar" />
-    </item>
-    <item
-        jar="D:\work\Git\Tuorui\android\app\build\intermediates\exploded-aar\Demo\react-native-barcodescanner\unspecified\jars\classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="f855535096172e325374c90ac9f52ab864999670">
-        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\classes-0d8b3b6b0b919bc2b95a3b415b1d62832180c743.jar" />
-    </item>
-    <item
-        jar="C:\Users\tuorui\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp3\okhttp-ws\3.2.0\1ea229d6984444c8c58b8e97ba4c8429d9d135b3\okhttp-ws-3.2.0.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="1ea229d6984444c8c58b8e97ba4c8429d9d135b3">
-        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\okhttp-ws-3.2.0-5c2ab0966a7c55499c0709b96c19636359fe0000.jar" />
-    </item>
-    <item
-        jar="C:\Users\tuorui\.gradle\caches\modules-2\files-2.1\com.google.code.findbugs\jsr305\3.0.0\5871fb60dc68d67da54a663c3fd636a10a532948\jsr305-3.0.0.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="5871fb60dc68d67da54a663c3fd636a10a532948">
-        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\jsr305-3.0.0-d485f341a5356a1d9a0cffd577fc3f9a6165fd4a.jar" />
+        sha1="4356e230a981d1bbf047d848b91bc0d9b7c5bacc">
+        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\classes-1cb135e7524d7b77717b34eeccea744e1ef636df.jar" />
     </item>
     <item
         jar="C:\Users\tuorui\.gradle\caches\modules-2\files-2.1\com.google.zxing\core\3.2.1\2287494d4f5f9f3a9a2bb6980e3f32053721b315\core-3.2.1.jar"
@@ -121,6 +44,20 @@
         <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\core-3.2.1-950ce9641548def6d502d990bcb7c76cc26b7c23.jar" />
     </item>
     <item
+        jar="D:\work\Git\Tuorui\android\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="3be474b1b21b31cf2fa93fe6bd641ae108d96452">
+        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\classes-2726daebdf7da068dbfdba7d7c6d7530c08fda80.jar" />
+    </item>
+    <item
+        jar="D:\work\Git\Tuorui\android\app\build\intermediates\exploded-aar\com.facebook.fresco\imagepipeline-base\0.11.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="ca63c521b5745ae9a09629d7ca67ff6bc2a967fe">
+        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\classes-b764be0e6b184261620297d78377eb21da16361d.jar" />
+    </item>
+    <item
         jar="D:\work\Git\Tuorui\android\app\build\intermediates\exploded-aar\com.facebook.fresco\fresco\0.11.0\jars\classes.jar"
         jumboMode="false"
         revision="23.0.1"
@@ -128,11 +65,74 @@
         <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\classes-29c5ba7ce205e98ff51633a794669525d1dc7eaa.jar" />
     </item>
     <item
-        jar="D:\work\Git\Tuorui\android\app\build\intermediates\exploded-aar\com.facebook.react\react-native\0.29.0\jars\classes.jar"
+        jar="C:\Users\tuorui\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp3\okhttp\3.2.0\f7873a2ebde246a45c2a8d6f3247108b4c88a879\okhttp-3.2.0.jar"
         jumboMode="false"
         revision="23.0.1"
-        sha1="3d3b981aa5d57d8b9104a719b8879abcbbd7a91e">
-        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\classes-a589517b20576fcf6704e09565c9347c7325ca36.jar" />
+        sha1="f7873a2ebde246a45c2a8d6f3247108b4c88a879">
+        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\okhttp-3.2.0-3df265de2b9f0ec4e77c7f0f165ee3b65a3e6e26.jar" />
+    </item>
+    <item
+        jar="C:\Users\tuorui\.gradle\caches\modules-2\files-2.1\com.squareup.okio\okio\1.8.0\5ea7af56cc7c567ed9856d99efb30740e9b17ff\okio-1.8.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="05ea7af56cc7c567ed9856d99efb30740e9b17ff">
+        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\okio-1.8.0-e75e13802b21d382ffd369b6c32b8a09ff3b286f.jar" />
+    </item>
+    <item
+        jar="D:\work\Git\Tuorui\android\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\jars\libs\internal_impl-23.2.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="607a3d0b8013b4ccbfeb0b7cb293351994e021fb">
+        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\internal_impl-23.2.1-d8d866be2de53d6cc437577b0b9010c2103c062f.jar" />
+    </item>
+    <item
+        jar="D:\work\Git\Tuorui\android\app\build\intermediates\exploded-aar\Demo\react-native-vector-icons\unspecified\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="2eee8fae42bb6a96ee54bd2a54b7b993d07a9d4c">
+        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\classes-78d93a98c9e62f036a64af42aa3907bba03e66d2.jar" />
+    </item>
+    <item
+        jar="D:\work\Git\Tuorui\android\app\build\intermediates\exploded-aar\com.facebook.fresco\imagepipeline\0.11.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="3341b66c54367e777a0647e2db96c045329bfeab">
+        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\classes-1a6aae5e1190660e4127738cb7708ed54b28490e.jar" />
+    </item>
+    <item
+        jar="C:\Users\tuorui\.gradle\caches\modules-2\files-2.1\com.nineoldandroids\library\2.4.0\e9b63380f3a242dbdbf103a2355ad7e43bad17cb\library-2.4.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb">
+        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\library-2.4.0-35510338909df4f3dc77073553c9d5c2672172c8.jar" />
+    </item>
+    <item
+        jar="D:\work\Git\Tuorui\android\app\build\intermediates\exploded-aar\com.facebook.fresco\drawee\0.11.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="1137942adeb03984c1311b662363dd38fc238fd3">
+        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\classes-9941a8392b16d57cf5c4c4a144456cfcd30c9c28.jar" />
+    </item>
+    <item
+        jar="C:\Users\tuorui\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp3\okhttp-ws\3.2.0\1ea229d6984444c8c58b8e97ba4c8429d9d135b3\okhttp-ws-3.2.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="1ea229d6984444c8c58b8e97ba4c8429d9d135b3">
+        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\okhttp-ws-3.2.0-5c2ab0966a7c55499c0709b96c19636359fe0000.jar" />
+    </item>
+    <item
+        jar="D:\work\Git\Tuorui\android\app\build\intermediates\exploded-aar\Demo\react-native-camera\unspecified\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="8c59ef80e551649babf0fe33bd5f3b9309fc2e08">
+        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\classes-2a852e9f2df47eee015650b1534278baf3783648.jar" />
+    </item>
+    <item
+        jar="C:\Users\tuorui\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-core\2.2.3\1a0113da2cab5f4c216b4e5e7c1dbfaa67087e14\jackson-core-2.2.3.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="1a0113da2cab5f4c216b4e5e7c1dbfaa67087e14">
+        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\jackson-core-2.2.3-19e06b1a918a08491a65bb79c0227d45a0591999.jar" />
     </item>
     <item
         jar="D:\work\Git\Tuorui\android\app\build\intermediates\exploded-aar\com.facebook.fresco\imagepipeline-okhttp3\0.11.0\jars\classes.jar"
@@ -149,32 +149,32 @@
         <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\classes-1bb5f80b41518f00ef96ef8eab3f45681a8f8a90.jar" />
     </item>
     <item
-        jar="C:\Users\tuorui\.gradle\caches\modules-2\files-2.1\com.nineoldandroids\library\2.4.0\e9b63380f3a242dbdbf103a2355ad7e43bad17cb\library-2.4.0.jar"
+        jar="D:\work\Git\Tuorui\android\app\build\intermediates\exploded-aar\Demo\react-native-barcodescanner\unspecified\jars\classes.jar"
         jumboMode="false"
         revision="23.0.1"
-        sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb">
-        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\library-2.4.0-35510338909df4f3dc77073553c9d5c2672172c8.jar" />
+        sha1="7690a06b11580ec5fdc22428c706d673ab68a241">
+        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\classes-0d8b3b6b0b919bc2b95a3b415b1d62832180c743.jar" />
     </item>
     <item
-        jar="D:\work\Git\Tuorui\android\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.2.1\jars\classes.jar"
+        jar="C:\Users\tuorui\.gradle\caches\modules-2\files-2.1\com.google.code.findbugs\jsr305\3.0.0\5871fb60dc68d67da54a663c3fd636a10a532948\jsr305-3.0.0.jar"
         jumboMode="false"
         revision="23.0.1"
-        sha1="3be474b1b21b31cf2fa93fe6bd641ae108d96452">
-        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\classes-2726daebdf7da068dbfdba7d7c6d7530c08fda80.jar" />
+        sha1="5871fb60dc68d67da54a663c3fd636a10a532948">
+        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\jsr305-3.0.0-d485f341a5356a1d9a0cffd577fc3f9a6165fd4a.jar" />
     </item>
     <item
-        jar="C:\Users\tuorui\.gradle\caches\modules-2\files-2.1\com.parse.bolts\bolts-tasks\1.4.0\d85884acf6810a3bbbecb587f239005cbc846dc4\bolts-tasks-1.4.0.jar"
+        jar="D:\Android\Androidsdk\extras\android\m2repository\com\android\support\support-annotations\23.2.1\support-annotations-23.2.1.jar"
         jumboMode="false"
         revision="23.0.1"
-        sha1="d85884acf6810a3bbbecb587f239005cbc846dc4">
-        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\bolts-tasks-1.4.0-5f5a08d9bfb5600b019c31dbbd778853585565f0.jar" />
+        sha1="ccb693bc0774fcb637246f7360de25b4af7df318">
+        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\support-annotations-23.2.1-4ca2b745e2cea1bef21004b22b9745e03e3c6bcc.jar" />
     </item>
     <item
-        jar="D:\work\Git\Tuorui\android\app\build\intermediates\exploded-aar\com.facebook.fresco\drawee\0.11.0\jars\classes.jar"
+        jar="D:\work\Git\Tuorui\android\app\build\intermediates\exploded-aar\com.facebook.react\react-native\0.29.0\jars\classes.jar"
         jumboMode="false"
         revision="23.0.1"
-        sha1="1137942adeb03984c1311b662363dd38fc238fd3">
-        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\classes-9941a8392b16d57cf5c4c4a144456cfcd30c9c28.jar" />
+        sha1="3d3b981aa5d57d8b9104a719b8879abcbbd7a91e">
+        <dex dex="D:\work\Git\Tuorui\android\app\build\intermediates\pre-dexed\debug\classes-a589517b20576fcf6704e09565c9347c7325ca36.jar" />
     </item>
 
 </items>

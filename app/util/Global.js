@@ -5,17 +5,18 @@ import React, {
 /*https://github.com/sunnylqm/react-native-storage/blob/master/README-CHN.md*/
 import Storage from 'react-native-storage';
 var API_ADDRESS ='http://120.24.89.243:16000/TR.PHM.Service';
+var LOCAL_HOST_ADDRESS='http://192.168.1.105:8989/';
 //var API_ADDRESS ='http://192.168.1.114/TR.PHM.Service';
 //var API_ADDRESS ='http://192.168.1.120/TR.PHM.Service';
 var storage = new Storage({
-    // ×î´óÈÝÁ¿£¬Ä¬ÈÏÖµ1000ÌõÊý¾ÝÑ­»·´æ´¢
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¬ï¿½ï¿½Öµ1000ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ­ï¿½ï¿½ï¿½æ´¢
     size: 1000,
     defaultExpires: 1000 * 3600 * 24,
     enableCache: true,
-    // Èç¹ûstorageÖÐÃ»ÓÐÏàÓ¦Êý¾Ý£¬»òÊý¾ÝÒÑ¹ýÆÚ£¬
-    // Ôò»áµ÷ÓÃÏàÓ¦µÄsyncÍ¬²½·½·¨£¬ÎÞ·ì·µ»Ø×îÐÂÊý¾Ý¡£
+    // ï¿½ï¿½ï¿½storageï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½Ý£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½Ú£ï¿½
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½syncÍ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ·ì·µï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¡ï¿½
     sync : {
-        // Í¬²½·½·¨µÄ¾ßÌåËµÃ÷»áÔÚºóÎÄÌáµ½
+        // Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¾ï¿½ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½Úºï¿½ï¿½ï¿½ï¿½áµ½
     },
 });
 var GLOBAL = {
@@ -25,13 +26,9 @@ var GLOBAL = {
     SAVESALES: API_ADDRESS + '/api/Store_DirectSell/DirectSellBillSave',
     GETGUEST: API_ADDRESS + '/api/Gest/GetModelListWithSort',
     GETSTORES: API_ADDRESS + '/api/Warehouse/GetModelList',
+    GETDURG:LOCAL_HOST_ADDRESS+'durg.html',
     ENTCODE: '2D24-D13F-45C3-3584-DF26-E2D5',
 };
 global.storage = storage;
-
-
-
-
-
 
 module.exports = GLOBAL;

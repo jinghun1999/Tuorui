@@ -6,21 +6,55 @@
 import React, {Component} from 'react';
 import{
     AppRegistry,
-
     StyleSheet,
     Text,
     Image,
     ScrollView,
-    View
+    View,
+    Navigator,
 } from 'react-native';
 import Head from './app/commonview/Head';
+import IconView from './app/commonview/ComIconView';
 import TopScreen from './TopScreen';
+import DrugHandBook from './app/page/Handbook/DrugHandBook';
 class MyHealth extends Component {
-
+    constructor(props) {
+        super(props);
+        this.state = {
+            DurgSource:[],
+        };
+    }
+    //药品手册跳转
+    _durgHandbook(){
+        const { navigator } = this.props;
+        if (navigator) {
+            navigator.push({
+                name: 'DrugHandBook',
+                component: DrugHandBook,
+            });
+        }
+    }
+    _bbb(){
+        alert("bbb");
+    }
+    _ccc(){
+        alert("ccc");
+    }
+    _ddd(){
+        alert("ddd");
+    }
+    _eee(){
+        alert("eee");
+    }
     render() {
         return (
             <View style={styles.container}>
-                <Head title='健康工具'/>
+                <Head title='知识库'/>
+                <IconView text="药品手册" icon={'book'} color={'white'} IconColor={'orange'}  onPress={this._durgHandbook.bind(this)} />
+                <IconView text="化验手册" icon={'opacity'} color={'white'} IconColor={'#CC3333'} onPress={this._bbb.bind(this)}/>
+                <IconView text="诊断手册" icon={'local-hospital'} color={'white'} IconColor={'#66FFFF'} onPress={this._ccc.bind(this)}/>
+                <IconView text="咨询信息" icon={'tag-faces'} color={'white'} IconColor={'#99CC66'} onPress={this._ddd.bind(this)}/>
+                <IconView text="我要投稿" icon={'library-books'} color={'white'} IconColor={'#993399'} onPress={this._eee.bind(this)}/>
                     <View style={styles.view}>
                         <Image source={require('./image/health_test.png')}
                                style={styles.imageIcon}/>

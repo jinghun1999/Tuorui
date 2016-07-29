@@ -34,14 +34,14 @@ class Index extends React.Component {
                 token: ret.token,
             });
         }).catch(err => {
-            alert('error:' + err);
+            //alert('error:' + err);
         });
     }
 
     render() {
         var defaultName = 'Login';
         var defaultComponent = Login;
-        alert(this.state.token);
+        //alert(this.state.token);
         if (this.state.token && this.state.token.length > 0) {
 
         }
