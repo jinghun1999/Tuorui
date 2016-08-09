@@ -44,6 +44,7 @@ class DrugDetails extends React.Component{
                              startInLoadingState={true}
                              scalesPageToFit={this.state.scalesPageToFit}
                     />*/}
+                    <Text>{this.props.id}</Text>
                 </View>
             </View>
         )

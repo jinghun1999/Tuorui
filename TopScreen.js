@@ -16,6 +16,7 @@ import {
     ViewPagerAndroid,
     ListView,
     ScrollView,
+    RefreshControl,
 } from 'react-native';
 import ViewPager from 'react-native-viewpager';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -29,6 +30,7 @@ var fetchPath = 'http://192.168.1.105:8088/api/AppInfo/GetHomeInfo';
 import IconView from 'react-native-vector-icons/MaterialIcons';
 import HomeIcon from './app/commonview/HomeIcon';
 import DrugHandBook from './app/page/Handbook/DrugHandBook';
+import DrugDetails from './app/page/Handbook/DrugDetails';
 var _navigator; //全局navigator对象
 let IMGS = [
     require('./image/job1.jpg'),
@@ -80,14 +82,14 @@ class TopScreen extends Component {
         super(props);
         this.state = {
             imageSource: new ViewPager.DataSource({pageHasChanged: (p1, p2)=>p1 !== p2}).cloneWithPages(IMGS),
-            informationSource: null,
-            pid: null,
+            informationSource: new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2}),
             infoloaded: false,
             pageIndex: 1,
-            pageSize: 20,
+            pageSize: 10,
             total: 0,
             totalPage: 0,
-            infolist: [],
+            isRefreshing: false,
+            dataCache:[]
         };
     }
 
@@ -105,28 +107,28 @@ class TopScreen extends Component {
     }
 
     componentDidMount() {
-        this.fetchData(this.state.pid, this.state.pageSize, this.state.pageIndex);
+        this._fetchData(this.state.pageSize, this.state.pageIndex);
     }
 
-    fetchData(pid, pageSize, pageIndex) {
+    _fetchData(pageSize, pageIndex) {
         let _this = this;
-        let ds = new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2});
+        _this.setState({isRefreshing: true})
         fetch(fetchPath + "?pid=&PageSize=" + pageSize + "&PageIndex=" + pageIndex)
             .then((response) => response.text())
             .then((responseData) => {
                 let dt = JSON.parse(responseData);
                 if (dt.Status) {
-                    var _infoList = dt.Data.rows;
+                    let _dataRows =[];
+                    _dataRows = dt.Data.rows;
                     _this.setState({
-                        informationSource: ds.cloneWithRows(dt.Data.rows),
+                        informationSource: _this.state.informationSource.cloneWithRows(_dataRows),
                         total: dt.Data.total,
                         totalPage: dt.Data.TotalPage,
-                        pid: null,
                         infoloaded: true,
                         pageIndex: pageIndex,
                         pageSize: pageSize,
                         isRefreshing: false,
-                        infolist: _infoList
+                        dataCache:_dataRows,
                     });
                 }
                 else {
@@ -161,6 +163,15 @@ class TopScreen extends Component {
 
     _ClickPress(Info) {
         alert('点击事件弹窗');
+        let _this=this;
+        const { navigator } = this.props;
+        if(navigator){
+            navigator.push({
+                name:'DrugDetails',
+                component:DrugDetails,
+                params:{id:Info.RequestID}
+            })
+        }
     }
 
 
@@ -172,29 +183,24 @@ class TopScreen extends Component {
     _onEndReached() {
         let _this = this;
         let _pageIndex = _this.state.pageIndex + 1;
-        fetch(fetchPath + "?pid=&PageIndex" + _pageIndex + "&PageSize" + _this.state.pageSize)
+        let _fetchPath = fetchPath + "?pid=&PageIndex=" + _pageIndex + "&PageSize=" + _this.state.pageSize;
+        fetch(_fetchPath)
             .then((response) => response.text())
             .then((responseData) => {
                 let dt = JSON.parse(responseData);
+                let _infoList = _this.state.dataCache;
+                _infoList.forEach((row=dt.Data.rows)=>{
+                    _infoList.push(row)
+                })
                 if (dt.Status) {
-                    let _infoList = _this.state.infolist;
-                    alert(_infoList);
-                    var itemList = dt.Data.rows;
-                    let indexArr = _this.state.pageSize;
-                    _infoList.forEach((itemList,indexArr)=>{
-                        _infoList.push(itemList);
-                    });
-                    alert(_infoList);
                     _this.setState({
-                     informationSource: _infoList,
-                     pageIndex: _pageIndex
-                     });
+                        informationSource: _this.state.informationSource.cloneWithRows(_infoList),
+                        pageIndex: _pageIndex,
+                        isRefreshing: false,
+                        dataCache:_infoList,
+                    });
                 }
             }).done();
-    }
-
-    _scrollTo() {
-        //alert('scrollTo弹窗')
     }
 
     _drugPress() {
@@ -245,7 +251,9 @@ class TopScreen extends Component {
             </View>
         );
     }
-
+    ClickMore(){
+        alert('123')
+    }
     render() {
         var _infoList;
         if (!this.state.infoloaded) {
@@ -254,10 +262,8 @@ class TopScreen extends Component {
             return (
                 <View style={styles.container}>
                     <Head title='首页'/>
-                    <ListView dataSource={this.state.informationSource}
-                              renderRow={this.renderInfo.bind(this)}
-                              onEndReached={this._onEndReached.bind(this)}
-                              renderHeader={()=>
+                    <ListView
+                        renderHeader={()=>
                               <View>
                                 <ViewPager style={{height:300}}
                                         renderPage={this._renderViewPage}
@@ -278,9 +284,24 @@ class TopScreen extends Component {
                                     <HomeIcon text="资讯" iconName={'ios-list-box'} iconColor={'#FF3333'}
                                               onPress={this._onPressButton2.bind(this)}/>
                                     <HomeIcon text="工具" iconName={'ios-build'} iconColor={'#FF77FF'}
-                                              onPress={this._onPressButton2.bind(this)}/>
+                                              onPress={this._salesPress.bind(this)}/>
                                 </View>
                               </View>}
+                        //renderFooter={()=>
+                        //<View>
+                        //    <TouchableOpacity style={{marginBottom:60}} onPress={()=>this.ClickMore.bind(this)}>
+                        //    <Text>点击加载更多</Text>
+                        //    </TouchableOpacity>
+                        //</View>}
+                        dataSource={this.state.informationSource}
+                        renderRow={this.renderInfo.bind(this)}
+                        onEndReached={this._onEndReached.bind(this)}
+                        onEndReachedThreshold={100}
+                        scrollRenderAheadDistance ={500}
+                        initialListSize={this.state.total}
+                        pageSize={this.state.total}
+                        removeClippedSubviews={false}
+                        enableEmptySections = {true}
                     />
                 </View>
             )

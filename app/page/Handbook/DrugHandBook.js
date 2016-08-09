@@ -101,6 +101,7 @@ class DrugHandBook extends React.Component {
                     name: 'DrugDetails',
                     component: DrugDetails,
                     params: {
+                        id: g.ID,
                         parentId: g.ID,
                         headTitle: g.ClassName
                     }

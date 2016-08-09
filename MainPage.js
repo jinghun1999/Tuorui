@@ -74,11 +74,12 @@ class MainPage extends React.Component {
     _createChildView(tag) {
         let renderView;
         switch (tag) {
-            case MY_HEALTH_CONSULT:
-                renderView = <TopScreen navigator={this._navigator}/>;
-                break;
+            //case MY_HEALTH_CONSULT:
+            //    renderView = <TopScreen navigator={this._navigator}/>;
+            //    break;
             case MY_HEALTH:
-                renderView = <MyHealth navigator={this._navigator} />;
+                //renderView = <MyHealth navigator={this._navigator} />;
+                renderView = <TopScreen navigator={this._navigator}/>;
                 break;
             case MY_HEALTH_TOOLS:
                 renderView = <HealthTools />;
@@ -102,8 +103,7 @@ class MainPage extends React.Component {
                 <TabNavigator hidesTabTouch={true}
                               sceneStyle={{paddingBottom: 0}}
                               tabBarStyle={tabBarShow ? styles.tabNav : styles.tabNavHide}>
-                    {this._renderTabItem('ios-home', MY_HEALTH, this._createChildView(MY_HEALTH_CONSULT))}
-                    {this._renderTabItem('ios-book', MY_HEALTH_CONSULT, this._createChildView(MY_HEALTH))}
+                    {this._renderTabItem('ios-home', MY_HEALTH, this._createChildView(MY_HEALTH))}
                     {this._renderTabItem('ios-film', MY_HEALTH_COMMUNITY, this._createChildView(MY_HEALTH_COMMUNITY))}
                     {this._renderTabItem('ios-color-fill', MY_HEALTH_TOOLS, this._createChildView(MY_HEALTH_TOOLS))}
                     {this._renderTabItem('ios-person', MY_HEALTH_ACCOUNT, this._createChildView(MY_HEALTH_ACCOUNT))}
