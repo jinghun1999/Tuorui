@@ -5,7 +5,6 @@ import React, {
 /*https://github.com/sunnylqm/react-native-storage/blob/master/README-CHN.md*/
 import Storage from 'react-native-storage';
 var API_ADDRESS ='http://120.24.89.243:16000/TR.PHM.Service';
-var LOCAL_HOST_ADDRESS='http://192.168.1.105:8989/';
 //var API_ADDRESS ='http://192.168.1.114/TR.PHM.Service';
 //var API_ADDRESS ='http://192.168.1.120/TR.PHM.Service';
 var storage = new Storage({
@@ -26,7 +25,6 @@ var GLOBAL = {
     SAVESALES: API_ADDRESS + '/api/Store_DirectSell/DirectSellBillSave',
     GETGUEST: API_ADDRESS + '/api/Gest/GetModelListWithSort',
     GETSTORES: API_ADDRESS + '/api/Warehouse/GetModelList',
-    GETDURG:LOCAL_HOST_ADDRESS+'durg.html',
     ENTCODE: '2D24-D13F-45C3-3584-DF26-E2D5',
 };
 global.storage = storage;

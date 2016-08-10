@@ -83,7 +83,7 @@ class TopScreen extends Component {
         this.state = {
             imageSource: new ViewPager.DataSource({pageHasChanged: (p1, p2)=>p1 !== p2}).cloneWithPages(IMGS),
             informationSource: new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2}),
-            infoloaded: false,
+            infoLoaded: false,
             pageIndex: 1,
             pageSize: 10,
             total: 0,
@@ -118,17 +118,14 @@ class TopScreen extends Component {
             .then((responseData) => {
                 let dt = JSON.parse(responseData);
                 if (dt.Status) {
-                    let _dataRows =[];
-                    _dataRows = dt.Data.rows;
                     _this.setState({
-                        informationSource: _this.state.informationSource.cloneWithRows(_dataRows),
                         total: dt.Data.total,
                         totalPage: dt.Data.TotalPage,
-                        infoloaded: true,
+                        infoLoaded: true,
                         pageIndex: pageIndex,
                         pageSize: pageSize,
                         isRefreshing: false,
-                        dataCache:_dataRows,
+                        dataCache:dt.Data.rows,
                     });
                 }
                 else {
@@ -160,16 +157,19 @@ class TopScreen extends Component {
     _renderViewPage(data) {
         return (<Image source={data} style={styles.page}/>);
     }
-
+    //点击事件
     _ClickPress(Info) {
-        alert('点击事件弹窗');
         let _this=this;
         const { navigator } = this.props;
         if(navigator){
             navigator.push({
                 name:'DrugDetails',
                 component:DrugDetails,
-                params:{id:Info.RequestID}
+                params:{
+                    requestId:Info.RequestID,
+                    headTitle:Info.InfoTitle,
+                    url:'http://cn.bing.com/'
+                }
             })
         }
     }
@@ -185,19 +185,19 @@ class TopScreen extends Component {
         let _pageIndex = _this.state.pageIndex + 1;
         let _fetchPath = fetchPath + "?pid=&PageIndex=" + _pageIndex + "&PageSize=" + _this.state.pageSize;
         fetch(_fetchPath)
-            .then((response) => response.text())
-            .then((responseData) => {
-                let dt = JSON.parse(responseData);
-                let _infoList = _this.state.dataCache;
-                _infoList.forEach((row=dt.Data.rows)=>{
-                    _infoList.push(row)
+            .then((responses) => responses.text())
+            .then((resData) => {
+                let dataTable = JSON.parse(resData);
+                let _dataCache = _this.state.dataCache;
+                let _data =  dataTable.Data.rows;
+                _data.forEach((_data)=>{
+                    _dataCache.push(_data);
                 })
-                if (dt.Status) {
+                if (dataTable.Status) {
                     _this.setState({
-                        informationSource: _this.state.informationSource.cloneWithRows(_infoList),
                         pageIndex: _pageIndex,
                         isRefreshing: false,
-                        dataCache:_infoList,
+                        dataCache:_dataCache,
                     });
                 }
             }).done();
@@ -227,7 +227,7 @@ class TopScreen extends Component {
 
     renderInfo(Info) {
         return (
-            <TouchableOpacity style={{height:50,}} onPress={()=>this._ClickPress(Info)}>
+            <TouchableOpacity style={{height:50,overflow:'hidden'}} onPress={()=>this._ClickPress(Info)}>
                 <View style={{flex:1,flexDirection:'row'}}>
                     <IconView name={'lens'} size={20} color={'#99CCFF'}
                               style={{marginLeft:10,justifyContent:'center',alignSelf:'center'}}/>
@@ -251,12 +251,8 @@ class TopScreen extends Component {
             </View>
         );
     }
-    ClickMore(){
-        alert('123')
-    }
     render() {
-        var _infoList;
-        if (!this.state.infoloaded) {
+        if (!this.state.infoLoaded) {
             return this.renderLoadingView();
         } else {
             return (
@@ -287,21 +283,13 @@ class TopScreen extends Component {
                                               onPress={this._salesPress.bind(this)}/>
                                 </View>
                               </View>}
-                        //renderFooter={()=>
-                        //<View>
-                        //    <TouchableOpacity style={{marginBottom:60}} onPress={()=>this.ClickMore.bind(this)}>
-                        //    <Text>点击加载更多</Text>
-                        //    </TouchableOpacity>
-                        //</View>}
-                        dataSource={this.state.informationSource}
+                        dataSource={this.state.informationSource.cloneWithRows(this.state.dataCache)}
                         renderRow={this.renderInfo.bind(this)}
                         onEndReached={this._onEndReached.bind(this)}
                         onEndReachedThreshold={100}
-                        scrollRenderAheadDistance ={500}
                         initialListSize={this.state.total}
                         pageSize={this.state.total}
-                        removeClippedSubviews={false}
-                        enableEmptySections = {true}
+                        enableEmptySections={true}
                     />
                 </View>
             )

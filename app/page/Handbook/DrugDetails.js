@@ -10,14 +10,16 @@ import {
     ScrollView,
     Text,
     WebView,
+    Dimensions,
 } from 'react-native';
 import Head from './../../commonview/Head'
-var WEBVIEW_REF;
+var Width=Dimensions.get('window').width;
+var Height=Dimensions.get('window').height;
 class DrugDetails extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            url:null,
+            url:this.props.url,
         }
     }
     _onBack(){
@@ -29,22 +31,20 @@ class DrugDetails extends React.Component{
     }
     render(){
         return(
-            <View>
+            <View style={{flex:1}}>
                 <Head title={this.props.headTitle}  canBack={true} onPress={this._onBack.bind(this)}/>
-                <View>
-                    {/*<WebView ref={WEBVIEW_REF}
-                             automaticallyAdjustContentInsets={false}
+                <View style={{flex:1}}>
+                    <Text>{this.props.requestId}</Text>
+                    <Text>{this.state.url}</Text>
+                    <WebView ref='webView'
                              style={styles.webView}
                              source={{uri: this.state.url}}
-                             javaScriptEnabled={true}
+                             startInLoadingState={false}
                              domStorageEnabled={true}
+                             javaScriptEnabled={true}
                              decelerationRate="normal"
-                             onNavigationStateChange={this.onNavigationStateChange}
-                             onShouldStartLoadWithRequest={this.onShouldStartLoadWithRequest}
-                             startInLoadingState={true}
-                             scalesPageToFit={this.state.scalesPageToFit}
-                    />*/}
-                    <Text>{this.props.id}</Text>
+                             automaticallyAdjustContentInsets={false}
+                    />
                 </View>
             </View>
         )
@@ -55,6 +55,12 @@ class DrugDetails extends React.Component{
 const styles= StyleSheet.create({
     TextStyle:{
 
+    },
+    webView:{
+        backgroundColor: 'red',
+        flex:1,
+        width:Width,
+        height:Height,
     }
 })
 module.exports=DrugDetails;

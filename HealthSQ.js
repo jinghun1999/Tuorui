@@ -6,7 +6,7 @@ import{
     WebView,
     View
     } from 'react-native';
-import NetUitl from './app/net/NetUitl';
+import NetUtil from './app/net/NetUitl';
 import ScrollableTabView  from 'react-native-scrollable-tab-view';
 import Head from './app/commonview/Head';
 
@@ -22,36 +22,36 @@ class HealthSQ extends Component {
                 <Head title="健康社区"/>
                 <ScrollableTabView>
                     <WebView tabLabel="个人体重"
-                             style={styles.webview_style}
-                             source={{uri: NetUitl.url_healthmonitnorm("IA-003")}}
+                             style={styles.webView_style}
+                             source={{uri: NetUtil.url_healthmonitnorm("IA-003")}}
                              startInLoadingState={true}
                              domStorageEnabled={true}
                              javaScriptEnabled={true}>
                     </WebView>
                     <WebView tabLabel="腰围尺寸"
-                             style={styles.webview_style}
-                             source={{uri: NetUitl.url_healthmonitnorm("IA-006")}}
+                             style={styles.webView_style}
+                             source={{uri: NetUtil.url_healthmonitnorm("IA-006")}}
                              startInLoadingState={true}
                              domStorageEnabled={true}
                              javaScriptEnabled={true}>
                     </WebView>
                     <WebView tabLabel="BIM指数"
-                             style={styles.webview_style}
-                             source={{uri: NetUitl.url_healthmonitnorm("IA-005")}}
+                             style={styles.webView_style}
+                             source={{uri: NetUtil.url_healthmonitnorm("IA-005")}}
                              startInLoadingState={true}
                              domStorageEnabled={true}
                              javaScriptEnabled={true}>
                     </WebView>
                     <WebView tabLabel="血压值"
-                             style={styles.webview_style}
-                             source={{uri: NetUitl.url_healthmonitnorm("IA-012")}}
+                             style={styles.webView_style}
+                             source={{uri: NetUtil.url_healthmonitnorm("IA-012")}}
                              startInLoadingState={true}
                              domStorageEnabled={true}
                              javaScriptEnabled={true}>
                     </WebView>
                     <WebView tabLabel="心跳频率"
-                             style={styles.webview_style}
-                             source={{uri: NetUitl.url_healthmonitnorm("IA-000")}}
+                             style={styles.webView_style}
+                             source={{uri: NetUtil.url_healthmonitnorm("IA-000")}}
                              startInLoadingState={true}
                              domStorageEnabled={true}
                              javaScriptEnabled={true}>
@@ -63,7 +63,7 @@ class HealthSQ extends Component {
 }
 
 const styles = StyleSheet.create({
-    webview_style: {
+    webView_style: {
         backgroundColor: '#00ff00',
     },
 });
