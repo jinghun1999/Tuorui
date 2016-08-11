@@ -82,7 +82,7 @@ class MainPage extends React.Component {
                 renderView = <TopScreen navigator={this._navigator}/>;
                 break;
             case MY_HEALTH_TOOLS:
-                renderView = <HealthTools />;
+                renderView = <HealthTools navigator={this._navigator} />;
                 break;
             case MY_HEALTH_COMMUNITY:
                 renderView = <HealthSQ />;
