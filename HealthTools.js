@@ -21,7 +21,10 @@ class HealthTools extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            memberName:'天津拓瑞宠物医院',
+            memberAddress:'天津市滨海新区大同路120号',
+            memberNumber:123,
+            memberPetNumber:456
         }
     };
     _member() {
@@ -64,43 +67,43 @@ class HealthTools extends Component {
                         style={{flexDirection:'row',borderBottomColor:'#666',borderBottomWidth:StyleSheet.hairlineWidth}}>
                         <Icon name={'ios-home-outline'} size={80} style={{marginTop:15,marginLeft:30}}/>
                         <View style={{flexDirection:'column',height:80,marginLeft:30,marginTop:30}}>
-                            <Text style={{justifyContent:'center',height:40}}>天津拓瑞宠物医院</Text>
-                            <Text style={{justifyContent:'center'}}>天津市滨海新区大同路120号</Text>
+                            <Text style={{justifyContent:'center',height:40}}>{this.state.memberName}</Text>
+                            <Text style={{justifyContent:'center'}}>{this.state.memberAddress}</Text>
                         </View>
                     </View>
                     <View
                         style={{flexDirection:'row',height:50,borderBottomColor: '#666', borderBottomWidth:StyleSheet.hairlineWidth,}}>
                         <View
                             style={{flex:1,borderRightColor: '#666', borderRightWidth: StyleSheet.hairlineWidth, justifyContent:'center'}}>
-                            <Text style={{marginLeft:30,alignItems:'flex-start',}}>会员：123</Text>
+                            <Text style={{marginLeft:30,alignItems:'flex-start',}}>会员：{this.state.memberNumber}</Text>
                         </View>
                         <View style={{flex:1,justifyContent:'center'}}>
-                            <Text style={{marginLeft:30,alignItems:'flex-start',}}>宠物：321</Text>
+                            <Text style={{marginLeft:30,alignItems:'flex-start',}}>宠物：{this.state.memberPetNumber}</Text>
                         </View>
                     </View>
                 </View>
                 <View style={{flexDirection:'row',marginTop:20,borderTopColor:'#666',borderTopWidth:StyleSheet.hairlineWidth}}>
-                    <IconButton text="我的会员" iconName={'md-people'} iconColor={'#DAA520'}
+                    <IconButton text="我的会员" iconName={'md-people'} iconColor={'#66CCCC'}
                                 onPress={this._member.bind(this)}/>
-                    <IconButton text="宠物管理" iconName={'md-paw'} iconColor={'#DC143C'}
+                    <IconButton text="宠物管理" iconName={'md-paw'} iconColor={'#CCFF66'}
                                 onPress={this._more.bind(this)}/>
-                    <IconButton text="我的疫苗" iconName={'logo-steam'} iconColor={'#00bfff'}
+                    <IconButton text="我的疫苗" iconName={'logo-steam'} iconColor={'#FF99CC'}
                                 onPress={this._more.bind(this)}/>
                 </View>
                 <View style={{flexDirection:'row',marginTop:20}}>
-                    <IconButton text="驱虫疫苗" iconName={'ios-pulse'} iconColor={'#8a2be2'}
+                    <IconButton text="驱虫疫苗" iconName={'ios-pulse'} iconColor={'#CCCC99'}
                                 onPress={this._more.bind(this)}/>
-                    <IconButton text="商品销售" iconName={'ios-cart'} iconColor={'#6495ed'}
+                    <IconButton text="商品销售" iconName={'ios-cart'} iconColor={'#CC3399'}
                                 onPress={this._salesPress.bind(this)}/>
-                    <IconButton text="送检查询" iconName={'ios-search'} iconColor={'#cd5c5c'}
+                    <IconButton text="送检查询" iconName={'ios-search'} iconColor={'#99CC00'}
                                 onPress={this._more.bind(this)}/>
                 </View>
                 <View style={{flexDirection:'row',marginTop:20}}>
-                    <IconButton text="分析报表" iconName={'ios-podium'} iconColor={'#ff7f50'}
+                    <IconButton text="分析报表" iconName={'ios-podium'} iconColor={'#FF6666'}
                                 onPress={this._more.bind(this)}/>
-                    <IconButton text="美容服务" iconName={'ios-rose'} iconColor={'#ff1493'}
+                    <IconButton text="美容服务" iconName={'ios-rose'} iconColor={'#FFFF00'}
                                 onPress={this._more.bind(this)}/>
-                    <IconButton text="more" iconName={'ios-more'} iconColor={'#7fffd4'}
+                    <IconButton text="more" iconName={'ios-more'} iconColor={'#3399CC'}
                                 onPress={this._more.bind(this)}/>
                 </View>
             </View>
