@@ -16,6 +16,7 @@ import Head from './app/commonview/Head';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconButton from './app/commonview/HomeIcon';
 import Sale from './app/page/Sales/Sale';
+import Member from './app/page/Member/MemberManage';
 class HealthTools extends Component {
     constructor(props) {
         super(props);
@@ -24,7 +25,17 @@ class HealthTools extends Component {
         }
     };
     _member() {
-        alert('会员管理')
+        const{navigator} = this.props;
+        var _this=this;
+        if(navigator){
+            navigator.push({
+                name:'member',
+                component:Member,
+                params:{
+                    headTitle:'会员管理'
+                }
+            })
+        }
     }
 
     _more() {
@@ -53,7 +64,7 @@ class HealthTools extends Component {
                         style={{flexDirection:'row',borderBottomColor:'#666',borderBottomWidth:StyleSheet.hairlineWidth}}>
                         <Icon name={'ios-home-outline'} size={80} style={{marginTop:15,marginLeft:30}}/>
                         <View style={{flexDirection:'column',height:80,marginLeft:30,marginTop:30}}>
-                            <Text style={{justifyContent:'center',height:40}}>天津若瑞宠物医院</Text>
+                            <Text style={{justifyContent:'center',height:40}}>天津拓瑞宠物医院</Text>
                             <Text style={{justifyContent:'center'}}>天津市滨海新区大同路120号</Text>
                         </View>
                     </View>
@@ -69,27 +80,27 @@ class HealthTools extends Component {
                     </View>
                 </View>
                 <View style={{flexDirection:'row',marginTop:20,borderTopColor:'#666',borderTopWidth:StyleSheet.hairlineWidth}}>
-                    <IconButton text="我的会员" iconName={'ios-people'} iconColor={'#FF88C2'}
+                    <IconButton text="我的会员" iconName={'md-people'} iconColor={'#DAA520'}
                                 onPress={this._member.bind(this)}/>
-                    <IconButton text="宠物管理" iconName={'ios-send'} iconColor={'#CCFF33'}
+                    <IconButton text="宠物管理" iconName={'md-paw'} iconColor={'#DC143C'}
                                 onPress={this._more.bind(this)}/>
-                    <IconButton text="我的疫苗" iconName={'ios-star'} iconColor={'#D2B48C'}
+                    <IconButton text="我的疫苗" iconName={'logo-steam'} iconColor={'#00bfff'}
                                 onPress={this._more.bind(this)}/>
                 </View>
                 <View style={{flexDirection:'row',marginTop:20}}>
-                    <IconButton text="驱虫疫苗" iconName={'ios-medical'} iconColor={'#87CEFA'}
+                    <IconButton text="驱虫疫苗" iconName={'ios-pulse'} iconColor={'#8a2be2'}
                                 onPress={this._more.bind(this)}/>
-                    <IconButton text="商品销售" iconName={'ios-bus'} iconColor={'#9F88FF'}
+                    <IconButton text="商品销售" iconName={'ios-cart'} iconColor={'#6495ed'}
                                 onPress={this._salesPress.bind(this)}/>
-                    <IconButton text="送检查询" iconName={'ios-search'} iconColor={'#778899'}
+                    <IconButton text="送检查询" iconName={'ios-search'} iconColor={'#cd5c5c'}
                                 onPress={this._more.bind(this)}/>
                 </View>
                 <View style={{flexDirection:'row',marginTop:20}}>
-                    <IconButton text="分析报表" iconName={'ios-globe'} iconColor={'#5599FF'}
+                    <IconButton text="分析报表" iconName={'ios-podium'} iconColor={'#ff7f50'}
                                 onPress={this._more.bind(this)}/>
-                    <IconButton text="美容服务" iconName={'ios-happy'} iconColor={'#FFB7DD'}
+                    <IconButton text="美容服务" iconName={'ios-rose'} iconColor={'#ff1493'}
                                 onPress={this._more.bind(this)}/>
-                    <IconButton text="more" iconName={'ios-more'} iconColor={'#FFA488'}
+                    <IconButton text="more" iconName={'ios-more'} iconColor={'#7fffd4'}
                                 onPress={this._more.bind(this)}/>
                 </View>
             </View>
