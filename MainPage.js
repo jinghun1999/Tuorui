@@ -88,7 +88,7 @@ class MainPage extends React.Component {
                 renderView = <HealthSQ />;
                 break;
             case MY_HEALTH_ACCOUNT:
-                renderView = <MyAccount />;
+                renderView = <MyAccount navigator={this._navigator} />;
                 break;
             default:
                 break;

@@ -18,11 +18,11 @@ class ComIconView extends React.Component {
             <TouchableOpacity style={{flex:1,flexDirection:'row'}} onPress={this.props.onPress}>
                 <View style={styles.ViewBorder}>
                     <View style={[{backgroundColor:this.props.IconColor},styles.IconStyle]}>
-                        <OtherIcon name={this.props.icon} size={30} color={this.props.color}  />
+                        <Icon name={this.props.icon} size={30} color={this.props.color}  />
                     </View>
                     <Text style={styles.TextStyle}>{this.props.text}</Text>
                     <View style={styles.IconRightOuter}>
-                        <Icon name={'ios-arrow-forward'} size={25} color={'black'} />
+                        <Icon name={'ios-arrow-forward'} size={15} color={'#666'} />
                     </View>
                 </View>
             </TouchableOpacity>
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
         flex:1,
         alignSelf: 'center',
         marginLeft:20,
-        fontSize:20,
+        fontSize:15,
         color:'#666',
     },
     IconRightOuter:{
