@@ -15,11 +15,13 @@ import {
 import Head from './../../commonview/Head'
 var Width=Dimensions.get('window').width;
 var Height=Dimensions.get('window').height;
+import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 class DrugDetails extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
             url:this.props.url,
+            loaded:false,
         }
     }
     _onBack(){
@@ -28,6 +30,15 @@ class DrugDetails extends React.Component{
         if (navigator) {
             navigator.pop();
         }
+    }
+    renderLoad(){
+        return(
+            <View>
+                <View style={{flexDirection:'column', justifyContent: 'center',alignItems: 'center',}}>
+                    <Bars size={10} color="#1CAFF6"/>
+                </View>
+            </View>
+        )
     }
     render(){
         return(
@@ -39,8 +50,9 @@ class DrugDetails extends React.Component{
                     <WebView ref='webView'
                              style={styles.webView}
                              source={{uri: this.state.url}}
-                             startInLoadingState={false}
+                             startInLoadingState={true}
                              domStorageEnabled={true}
+                             renderLoading={this.renderLoad.bind(this)}
                              javaScriptEnabled={true}
                              decelerationRate="normal"
                              automaticallyAdjustContentInsets={false}

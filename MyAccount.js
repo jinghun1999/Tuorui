@@ -45,7 +45,7 @@ class MyAccount extends React.Component {
                         <Image source={require('./image/my_account_on.png')}
                             style={styles.imageStyle} />
                         <View style={{flexDirection:'column',height:60,marginLeft:30,marginTop:20}}>
-                            <Text style={{justifyContent:'center',height:40}}>天津拓瑞宠物医院</Text>
+                            <Text style={{justifyContent:'center',height:30}}>天津拓瑞宠物医院</Text>
                             <Text style={{justifyContent:'center'}}>天津市滨海新区大同路120号</Text>
                         </View>
                     </View>
@@ -54,12 +54,11 @@ class MyAccount extends React.Component {
                             <Text style={styles.fontStyle}>会员：123</Text>
                         </View>
                         <View style={styles.fontViewStyle}>
-                            <Text
-                                style={styles.fontStyle}>宠物：333</Text>
+                            <Text style={styles.fontStyle}>宠物：333</Text>
                         </View>
                     </View>
                 </View>
-                <View style={{marginTop:20,borderTopColor:'#666',borderTopWidth:StyleSheet.hairlineWidth}}>
+                <View style={styles.iconViewStyle}>
                     <MyHomeIcon text="我的信息" icon={'ios-mail'} color={'#00BBFF'} IconColor={'white'}  onPress={this._more.bind(this)}/>
                     <MyHomeIcon text="邀请朋友" icon={'md-person-add'} color={'#FF3333'} IconColor={'white'}  onPress={this._more.bind(this)}/>
                     <MyHomeIcon text="我的问题" icon={'ios-quote'} color={'#7FFFD4'} IconColor={'white'}  onPress={this._more.bind(this)}/>
@@ -70,9 +69,7 @@ class MyAccount extends React.Component {
                 </View>
             </View>
         );
-
     }
-
     //用了render方法后，组件加载成功并被成功渲染出来以后所执行的hook函数，一般会将网络请求等加载数据的操作，放在这个函数里进行，来保证不会出现UI上的错误
     componentDidMount() {
 
@@ -128,6 +125,11 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         marginLeft: 20,
         marginTop:10,
+    },
+    iconViewStyle:{
+        marginTop:20,
+        borderTopColor:'#666',
+        borderTopWidth:StyleSheet.hairlineWidth,
     }
 });
 

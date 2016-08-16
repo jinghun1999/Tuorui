@@ -11,12 +11,14 @@ import{
     ScrollView,
     Image,
     View,
+    Dimensions,
 } from 'react-native';
 import Head from './app/commonview/Head';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconButton from './app/commonview/HomeIcon';
 import Sale from './app/page/Sales/Sale';
 import memberPet from './app/page/Member/MemberPetClass';
+var deviceWidth = Dimensions.get('window').width;
 class HealthTools extends Component {
     constructor(props) {
         super(props);
@@ -77,29 +79,26 @@ class HealthTools extends Component {
             <View style={styles.container}>
                 <Head title="应用服务"/>
                 <View style={{flex:1}}>
-                    <View
-                        style={{flexDirection:'row',borderBottomColor:'#666',borderBottomWidth:StyleSheet.hairlineWidth}}>
-                        <Icon name={'ios-home-outline'} size={80} style={{marginTop:5,marginLeft:30}}/>
+                    <View style={styles.homeStyle}>
+                        <Icon name={'ios-home-outline'} size={80} style={{marginTop:5,marginLeft:30,color:'#802A2A'}}/>
                         <View style={{flexDirection:'column',height:60,marginLeft:30,marginTop:20}}>
                             <Text style={{justifyContent:'center',height:40}}>{this.state.memberName}</Text>
                             <Text style={{justifyContent:'center'}}>{this.state.memberAddress}</Text>
                         </View>
                     </View>
-                    <View
-                        style={{flexDirection:'row',height:50,borderBottomColor: '#666', borderBottomWidth:StyleSheet.hairlineWidth,}}>
-                        <View
-                            style={{flex:1,borderRightColor: '#666', borderRightWidth: StyleSheet.hairlineWidth, justifyContent:'center'}}>
-                            <Text style={{marginLeft:30,alignItems:'flex-start',}}>会员：{this.state.memberNumber}</Text>
+                    <View style={styles.memberStyle}>
+                        <View style={{justifyContent:'center',borderRightWidth:StyleSheet.hairlineWidth,borderRightColor:'#666'}}>
+                            <Text style={styles.memberFont}>会员：{this.state.memberNumber}</Text>
                         </View>
-                        <View style={{flex:1,justifyContent:'center'}}>
-                            <Text style={{marginLeft:30,alignItems:'flex-start',}}>宠物：{this.state.memberPetNumber}</Text>
+                        <View style={{justifyContent:'center'}}>
+                            <Text style={styles.memberFont}>宠物：{this.state.memberPetNumber}</Text>
                         </View>
                     </View>
                 </View>
-                <View style={{flexDirection:'row',marginTop:20,borderTopColor:'#666',borderTopWidth:StyleSheet.hairlineWidth}}>
+                <View style={styles.iconViewStyle}>
                     <IconButton text="我的会员" iconName={'md-people'} iconColor={'#669999'}
                                 onPress={this._member.bind(this)}/>
-                    <IconButton text="宠物管理" iconName={'md-paw'} iconColor={'#FFFFCC'}
+                    <IconButton text="宠物管理" iconName={'md-paw'} iconColor={'#7FFFD4'}
                                 onPress={this._Pet.bind(this)}/>
                     <IconButton text="我的疫苗" iconName={'logo-steam'} iconColor={'#6666CC'}
                                 onPress={this._more.bind(this)}/>
@@ -200,51 +199,32 @@ class HealthTools extends Component {
 }
 
 const styles = StyleSheet.create({
-    container: {},
-    contentContainer: {},
-    view: {
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'stretch',
-        height: 60,
-        alignSelf: 'stretch',
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: '#ccc',
+    container: {
+
     },
-    view2: {
-        flex: 1,
-        height: 50,
-        padding: 5,
-        justifyContent: 'center',
-        alignSelf: 'center',
+    homeStyle:{
+        flexDirection:'row',
+        borderBottomColor:'#666',
+        borderBottomWidth:StyleSheet.hairlineWidth,
     },
-    imageIcon: {
-        height: 50,
-        width: 50,
-        alignSelf: 'center',
-        marginLeft: 20,
-        marginRight: 20,
+    iconViewStyle:{
+        flexDirection:'row',
+        marginTop:20,
+        borderTopColor:'#666',
+        borderTopWidth:StyleSheet.hairlineWidth,
     },
-    imageArr: {
-        height: 30,
-        width: 20,
-        marginRight: 10,
-        justifyContent: 'center',
-        alignSelf: 'center',
+    memberStyle:{
+        flexDirection:'row',
+        height:50,
+        borderBottomColor: '#666',
+        borderBottomWidth:StyleSheet.hairlineWidth,
     },
-    t0: {
-        fontSize: 20,
+    memberFont:{
+        fontSize:16,
+        marginLeft:30,
+        width:deviceWidth/2,
     },
-    t1: {
-        fontSize: 10,
-    },
-    iconOuter: {
-        justifyContent: 'center',
-        width: 80,
-        height: 80,
-        borderRadius: 30,
-        marginLeft: 30,
-    },
+
 });
 
 module.exports = HealthTools;
