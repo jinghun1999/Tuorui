@@ -45,8 +45,8 @@ class MyAccount extends React.Component {
                         <Image source={require('./image/my_account_on.png')}
                             style={styles.imageStyle} />
                         <View style={{flexDirection:'column',height:60,marginLeft:30,marginTop:20}}>
-                            <Text style={{justifyContent:'center',height:30}}>天津拓瑞宠物医院</Text>
-                            <Text style={{justifyContent:'center'}}>天津市滨海新区大同路120号</Text>
+                            <Text>天津拓瑞宠物医院</Text>
+                            <Text style={{marginTop:10}}>天津市滨海新区大同路120号</Text>
                         </View>
                     </View>
                     <View style={styles.viewStyle}>

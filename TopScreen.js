@@ -168,7 +168,7 @@ class TopScreen extends Component {
                 params:{
                     requestId:Info.RequestID,
                     headTitle:Info.InfoTitle,
-                    url:'http://cn.bing.com/'
+                    url:'http://www.baidu.com/'
                 }
             })
         }

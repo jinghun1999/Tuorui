@@ -82,16 +82,16 @@ class HealthTools extends Component {
                     <View style={styles.homeStyle}>
                         <Icon name={'ios-home-outline'} size={80} style={{marginTop:5,marginLeft:30,color:'#802A2A'}}/>
                         <View style={{flexDirection:'column',height:60,marginLeft:30,marginTop:20}}>
-                            <Text style={{justifyContent:'center',height:40}}>{this.state.memberName}</Text>
-                            <Text style={{justifyContent:'center'}}>{this.state.memberAddress}</Text>
+                            <Text >{this.state.memberName}</Text>
+                            <Text style={{marginTop:10}}>{this.state.memberAddress}</Text>
                         </View>
                     </View>
-                    <View style={styles.memberStyle}>
-                        <View style={{justifyContent:'center',borderRightWidth:StyleSheet.hairlineWidth,borderRightColor:'#666'}}>
-                            <Text style={styles.memberFont}>会员：{this.state.memberNumber}</Text>
+                    <View style={styles.homeStyle}>
+                        <View style={styles.fontViewStyle}>
+                            <Text style={styles.fontStyle}>会员：{this.state.memberNumber}</Text>
                         </View>
-                        <View style={{justifyContent:'center'}}>
-                            <Text style={styles.memberFont}>宠物：{this.state.memberPetNumber}</Text>
+                        <View style={styles.fontViewStyle}>
+                            <Text style={styles.fontStyle}>宠物：{this.state.memberPetNumber}</Text>
                         </View>
                     </View>
                 </View>
@@ -213,11 +213,16 @@ const styles = StyleSheet.create({
         borderTopColor:'#666',
         borderTopWidth:StyleSheet.hairlineWidth,
     },
-    memberStyle:{
-        flexDirection:'row',
+    fontStyle:{
+        marginLeft:30,
+        alignItems:'flex-start',
+    },
+    fontViewStyle:{
+        flex:1,
         height:50,
-        borderBottomColor: '#666',
-        borderBottomWidth:StyleSheet.hairlineWidth,
+        borderRightColor: '#666',
+        borderRightWidth: StyleSheet.hairlineWidth,
+        justifyContent:'center',
     },
     memberFont:{
         fontSize:16,

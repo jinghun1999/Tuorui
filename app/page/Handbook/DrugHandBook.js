@@ -18,6 +18,7 @@ import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import DrugDetails from './DrugDetails';
 var fetchPath = 'http://192.168.1.105:8088/api/AppInfo/GetClass';
+var DetailsUrl = 'http://192.168.1.105:22000/App/home';
 class DrugHandBook extends React.Component {
     constructor(props) {
         super(props);
@@ -45,7 +46,6 @@ class DrugHandBook extends React.Component {
     }
 
     componentDidMount() {
-        alert(this.props.headTitle)
         var parentId = this.props.parentId;
         this.timer = setTimeout(
             () => {
@@ -103,7 +103,8 @@ class DrugHandBook extends React.Component {
                     params: {
                         requestId: g.ID,
                         parentId: g.ID,
-                        headTitle: g.ClassName
+                        headTitle: g.ClassName,
+                        url:DetailsUrl,
                     }
                 })
             }
