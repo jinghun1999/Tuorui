@@ -1,5 +1,4 @@
 'use strict';
-
 import React, {Component} from 'react';
 import {
     AppRegistry,
@@ -29,8 +28,9 @@ var deviceHeight = Dimensions.get('window').height;
 var fetchPath = 'http://192.168.1.105:8088/api/AppInfo/GetHomeInfo';
 import IconView from 'react-native-vector-icons/MaterialIcons';
 import HomeIcon from './app/commonview/HomeIcon';
-import DrugHandBook from './app/page/Handbook/DrugHandBook';
-import DrugDetails from './app/page/Handbook/DrugDetails';
+import DrugHandBook from './app/page/HomePage/DrugHandBook';
+import DrugDetails from './app/page/HomePage/DrugDetails';
+import Information from './app/page/HomePage/Information';
 var _navigator; //全局navigator对象
 let IMGS = [
     require('./image/job1.jpg'),
@@ -202,7 +202,19 @@ class TopScreen extends Component {
                 }
             }).done();
     }
-
+    _informationClick(){
+        var _this = this;
+        const {navigator} = _this.props;
+        if(navigator){
+            navigator.push({
+                name:'Information',
+                component:Information,
+                params:{
+                    headTitle:'资讯'
+                }
+            });
+        }
+    }
     _drugPress() {
         var _this = this;
         const { navigator } = _this.props;
@@ -229,7 +241,7 @@ class TopScreen extends Component {
         return (
             <TouchableOpacity style={{height:50,overflow:'hidden'}} onPress={()=>this._ClickPress(Info)}>
                 <View style={{flex:1,flexDirection:'row'}}>
-                    <IconView name={'lens'} size={20} color={'#99CCFF'}
+                    <IconView name={'local-post-office'} size={20} color={'#ADD8E6'}
                               style={{marginLeft:10,justifyContent:'center',alignSelf:'center'}}/>
                     {/*<Image resource={Info.ImagePath}/>*/}
                     <Text
@@ -277,9 +289,9 @@ class TopScreen extends Component {
                                 <View style={{flexDirection:'row'}}>
                                     <HomeIcon text="文献" iconName={'ios-book'} iconColor={'#CD853F'}
                                               onPress={this._onPressButton2.bind(this)}/>
-                                    <HomeIcon text="资讯" iconName={'ios-list-box'} iconColor={'#FF3333'}
-                                              onPress={this._onPressButton2.bind(this)}/>
-                                    <HomeIcon text="工具" iconName={'ios-build'} iconColor={'#FF77FF'}
+                                    <HomeIcon text="资讯" iconName={'ios-list-box'} iconColor={'#66CCFF'}
+                                              onPress={this._informationClick.bind(this)}/>
+                                    <HomeIcon text="工具" iconName={'ios-build'} iconColor={'#FFAEB9'}
                                               onPress={this._salesPress.bind(this)}/>
                                 </View>
                               </View>}

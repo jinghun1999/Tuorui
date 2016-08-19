@@ -1,6 +1,7 @@
 /**
  * Created by tuorui on 2016/7/27.
  */
+'use strict';
 import React, {Component} from 'react';
 import {
     AppRegistry,
@@ -23,21 +24,27 @@ class DrugHandBook extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            drugSource: null,
+            drugSource: new ListView.DataSource(
+                    {rowHasChanged: (row1, row2) => row1 !== row2,
+                    sectionHeaderHasChanged: (s1, s2) => s1 !== s2}),
+            drugHeaderSource: null,
             loaded: false,
             parentId: null,
+            data:null,
         };
     };
 
     fetchData(parentId) {
-        let ds = new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2});
         {
             fetch(fetchPath + "?parentId=" + parentId)
                 .then((response) => response.text())
                 .then((responseData) => {
                     //let ret=JSON.parse(responseData);
+                    let result = JSON.parse(responseData).Data;
                     this.setState({
-                        drugSource: ds.cloneWithRows(JSON.parse(responseData).Data),
+                        drugSource: this.state.drugSource.cloneWithRowsAndSections(result),
+                        data:result,
+                        drugHeaderSource:result.Pin,
                         loaded: true,
                     });
                 })
@@ -54,6 +61,7 @@ class DrugHandBook extends React.Component {
         );
 
     }
+
     //返回方法
     _onBack() {
         const { navigator } = this.props;
@@ -61,10 +69,12 @@ class DrugHandBook extends React.Component {
             navigator.pop();
         }
     }
+
     componentWillUnmount() {
         var _this = this;
         _this.timer && clearTimeout(_this.timer);
     }
+
     renderLoadingView() {
         return (
             <View>
@@ -104,7 +114,7 @@ class DrugHandBook extends React.Component {
                         requestId: g.ID,
                         parentId: g.ID,
                         headTitle: g.ClassName,
-                        url:DetailsUrl,
+                        url: DetailsUrl,
                     }
                 })
             }
@@ -112,14 +122,21 @@ class DrugHandBook extends React.Component {
     }
 
     //LIST VIEW 数据
-    renderDrug(g, sectionID, rowID) {
+    _renderDrug(data) {
         return (
-            <TouchableOpacity style={styles.container} onPress={()=>this._Press(g)}>
-                        <Icon name={'lens'} size = {20} color={'#99CCFF'} style={styles.LeftIconStyles} />
-                    <Text style={styles.NameStyle}>{g.ClassName}</Text>
-                    <Icon name={'chevron-right'} size={30} color={'black'} style={styles.IconStyle}/>
+            <TouchableOpacity style={styles.container} onPress={()=>this._Press(data)}>
+                <Icon name={'lens'} size={20} color={'#99CCFF'} style={styles.LeftIconStyles}/>
+                <Text style={styles.NameStyle}>{data.ID}</Text>
+                <Icon name={'chevron-right'} size={20} color={'black'} style={styles.IconStyle}/>
             </TouchableOpacity>
         )
+    }
+
+    _renderSectionHeader(g) {
+        return (
+                <Text>{g.Pin}</Text>
+        )
+
     }
 
     render() {
@@ -129,14 +146,11 @@ class DrugHandBook extends React.Component {
             return (
                 <View>
                     <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
-                    <ScrollView key={'scrollView'}
-                                horizontal={false}
-                                showsVerticalScrollIndicator={true}
-                                scrollEnabled={true}>
-                        <ListView dataSource={ this.state.drugSource}
-                                  renderRow={this.renderDrug.bind(this)}
-                        />
-                    </ScrollView>
+                    <ListView dataSource={this.state.drugSource}
+                              renderRow={this._renderDrug.bind(this)}
+                              renderSectionHeader={this._renderSectionHeader.bind(this)}
+                    />
+
                 </View>
             )
         }
@@ -147,23 +161,23 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         height: 50,
-        justifyContent:'center',
-        alignSelf:'center',
-        alignItems:'center',
+        justifyContent: 'center',
+        alignSelf: 'center',
+        alignItems: 'center',
         borderBottomColor: '#666',
         borderBottomWidth: StyleSheet.hairlineWidth,
     },
     LeftIconStyles: {
-        marginLeft:20,
+        marginLeft: 20,
     },
     NameStyle: {
         flex: 1,
-        fontSize: 20,
+        fontSize: 16,
         color: '#888',
         marginLeft: 20,
     },
-    IconStyle:{
-        marginRight:10,
+    IconStyle: {
+        marginRight: 10,
     }
 });
 module.exports = DrugHandBook;

@@ -16,7 +16,7 @@ import{
 import Head from './app/commonview/Head';
 import IconView from './app/commonview/ComIconView';
 import TopScreen from './TopScreen';
-import DrugHandBook from './app/page/Handbook/DrugHandBook';
+import DrugHandBook from './app/page/HomePage/DrugHandBook';
 class MyHealth extends Component {
     constructor(props) {
         super(props);

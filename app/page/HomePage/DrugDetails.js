@@ -1,6 +1,7 @@
 /**
  * Created by tuorui on 2016/7/29.
  */
+'use strict';
 import React, {Component} from 'react';
 import {
     AppRegistry,

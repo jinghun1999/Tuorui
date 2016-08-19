@@ -18,7 +18,6 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import IconButton from './app/commonview/HomeIcon';
 import Sale from './app/page/Sales/Sale';
 import memberPet from './app/page/Member/MemberPetClass';
-var deviceWidth = Dimensions.get('window').width;
 class HealthTools extends Component {
     constructor(props) {
         super(props);
@@ -30,8 +29,8 @@ class HealthTools extends Component {
         }
     };
     _member() {
-        const{navigator} = this.props;
         var _this=this;
+        const{navigator} = _this.props;
         if(navigator){
             navigator.push({
                 name:'memberPet',
@@ -78,27 +77,29 @@ class HealthTools extends Component {
         return (
             <View style={styles.container}>
                 <Head title="应用服务"/>
-                <View style={{flex:1}}>
+                <View style={{flex:1,borderBottomColor:'#666', borderBottomWidth:StyleSheet.hairlineWidth,}}>
                     <View style={styles.homeStyle}>
-                        <Icon name={'ios-home-outline'} size={80} style={{marginTop:5,marginLeft:30,color:'#802A2A'}}/>
+                        <Icon name={'logo-octocat'} size={80} color={'#CD7054'} style={{marginTop:5,marginLeft:30,}}/>
                         <View style={{flexDirection:'column',height:60,marginLeft:30,marginTop:20}}>
                             <Text >{this.state.memberName}</Text>
                             <Text style={{marginTop:10}}>{this.state.memberAddress}</Text>
                         </View>
                     </View>
                     <View style={styles.homeStyle}>
-                        <View style={styles.fontViewStyle}>
+                        <View style={[styles.fontViewStyle,{backgroundColor:'#B9D3EE'}]}>
+                            <Icon name = {'ios-people'} color={'#00BBFF'} size={35} style={{marginLeft:15}} />
                             <Text style={styles.fontStyle}>会员：{this.state.memberNumber}</Text>
                         </View>
-                        <View style={styles.fontViewStyle}>
+                        <View style={[styles.fontViewStyle,{backgroundColor:'#B0C4DE'}]}>
+                            <Icon name = {'ios-paw'} color={'#EE9A00'} size={35} style={{marginLeft:15}}/>
                             <Text style={styles.fontStyle}>宠物：{this.state.memberPetNumber}</Text>
                         </View>
                     </View>
                 </View>
-                <View style={styles.iconViewStyle}>
-                    <IconButton text="我的会员" iconName={'md-people'} iconColor={'#669999'}
+                <View style={{flexDirection:'row',marginTop:20}}>
+                    <IconButton text="我的会员" iconName={'md-people'} iconColor={'#FFB6C1'}
                                 onPress={this._member.bind(this)}/>
-                    <IconButton text="宠物管理" iconName={'md-paw'} iconColor={'#7FFFD4'}
+                    <IconButton text="宠物管理" iconName={'md-paw'} iconColor={'#5CACEE'}
                                 onPress={this._Pet.bind(this)}/>
                     <IconButton text="我的疫苗" iconName={'logo-steam'} iconColor={'#6666CC'}
                                 onPress={this._more.bind(this)}/>
@@ -106,7 +107,7 @@ class HealthTools extends Component {
                 <View style={{flexDirection:'row',marginTop:20}}>
                     <IconButton text="驱虫疫苗" iconName={'ios-pulse'} iconColor={'#9999CC'}
                                 onPress={this._more.bind(this)}/>
-                    <IconButton text="商品销售" iconName={'ios-cart'} iconColor={'#FF9999'}
+                    <IconButton text="商品销售" iconName={'ios-cart'} iconColor={'#DEB887'}
                                 onPress={this._salesPress.bind(this)}/>
                     <IconButton text="送检查询" iconName={'ios-search'} iconColor={'#666699'}
                                 onPress={this._more.bind(this)}/>
@@ -116,7 +117,7 @@ class HealthTools extends Component {
                                 onPress={this._more.bind(this)}/>
                     <IconButton text="美容服务" iconName={'ios-rose'} iconColor={'#66CCFF'}
                                 onPress={this._more.bind(this)}/>
-                    <IconButton text="more" iconName={'ios-more'} iconColor={'#CCFF66'}
+                    <IconButton text="more" iconName={'ios-more'} iconColor={'#FF9999'}
                                 onPress={this._more.bind(this)}/>
                 </View>
             </View>
@@ -204,32 +205,25 @@ const styles = StyleSheet.create({
     },
     homeStyle:{
         flexDirection:'row',
-        borderBottomColor:'#666',
-        borderBottomWidth:StyleSheet.hairlineWidth,
     },
     iconViewStyle:{
         flexDirection:'row',
-        marginTop:20,
         borderTopColor:'#666',
         borderTopWidth:StyleSheet.hairlineWidth,
     },
-    fontStyle:{
-        marginLeft:30,
-        alignItems:'flex-start',
-    },
     fontViewStyle:{
         flex:1,
+        flexDirection:'row',
         height:50,
-        borderRightColor: '#666',
-        borderRightWidth: StyleSheet.hairlineWidth,
+        alignSelf:'center',
+        alignItems:'center',
+    },
+    fontStyle:{
         justifyContent:'center',
+        alignSelf:'center',
+        alignItems:'center',
+        marginLeft:5,
     },
-    memberFont:{
-        fontSize:16,
-        marginLeft:30,
-        width:deviceWidth/2,
-    },
-
 });
 
 module.exports = HealthTools;
