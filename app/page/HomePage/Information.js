@@ -51,6 +51,7 @@ class Information extends React.Component {
     _Search() {
         let _this = this;
         let searchName = _this.state.infoSearchTextInput;
+        _this.state.infoCache = [];
         this._fetchData(searchName,1,this.state.pageSize);
     }
 
@@ -79,8 +80,9 @@ class Information extends React.Component {
             .done();
     }
 
-    _ClickPress() {
-        alert('123');
+    _ClickPress(info) {
+        let id = info.RequestID;
+        alert(id);
     }
 
     _renderInfo(info) {
