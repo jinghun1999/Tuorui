@@ -11,13 +11,11 @@ import {
     ScrollView,
     Text,
     TouchableOpacity,
-    Dimensions,
 } from 'react-native';
 import Head from './../../commonview/Head';
 import SearchBar from './../../commonview/SearchBar';
 import IconView from 'react-native-vector-icons/MaterialIcons';
 var infoPath = 'http://192.168.1.105:8088/api/AppInfo/GetInformationByName';
-var deviceWidth = Dimensions.get('window').width;
 class Information extends React.Component {
     constructor(props) {
         super(props);
