@@ -18,8 +18,8 @@ import JsonUtil from '../../util/JsonUitl';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import DrugDetails from './DrugDetails';
-var fetchPath = 'http://192.168.1.105:8088/api/AppInfo/GetClass';
-var DetailsUrl = 'http://192.168.1.105:22000/App/home';
+var fetchPath = 'http://120.24.89.243:20000/api/AppInfo/GetClass';
+var DetailsUrl = 'http://120.24.89.243:20000/App/home';
 class DrugHandBook extends React.Component {
     constructor(props) {
         super(props);
@@ -34,22 +34,31 @@ class DrugHandBook extends React.Component {
         };
     };
 
+    _Data(){
+        let _data ={"status": "success", "dataSource": [
+            {"Pin": "A", "data": {"name": ["adb", "aaa", "abc", "add"]}},
+            {"Pin": "B", "data": {"name": ["bbc", "beyoung", "be"]}},
+            {"Pin": "C", "data": {"name": ["ccc", "city"]}},
+            {"Pin": "D", "data": {"name": ["double"]}}
+        ]};
+        let _this = this;
+        _this.setState({
+            drugSource:this.state.drugSource.cloneWithRowsAndSections(_data),
+        });
+    }
     fetchData(parentId) {
-        {
-            fetch(fetchPath + "?parentId=" + parentId)
-                .then((response) => response.text())
-                .then((responseData) => {
-                    //let ret=JSON.parse(responseData);
-                    let result = JSON.parse(responseData).Data;
-                    this.setState({
-                        drugSource: this.state.drugSource.cloneWithRowsAndSections(result),
-                        data:result,
-                        drugHeaderSource:result.Pin,
-                        loaded: true,
-                    });
-                })
-                .done();
-        }
+        fetch(fetchPath + "?parentId=" + parentId)
+            .then((response) => response.text())
+            .then((responseData) => {
+                //let ret=JSON.parse(responseData);
+                let result = JSON.parse(responseData).Data;
+                this.setState({
+                    drugSource: this.state.drugSource.cloneWithRowsAndSections(result),
+                    data:result,
+                    drugHeaderSource:result.Pin,
+                    loaded: true,
+                });
+            }).done();
     }
 
     componentDidMount() {
@@ -126,7 +135,7 @@ class DrugHandBook extends React.Component {
         return (
             <TouchableOpacity style={styles.container} onPress={()=>this._Press(data)}>
                 <Icon name={'lens'} size={20} color={'#99CCFF'} style={styles.LeftIconStyles}/>
-                <Text style={styles.NameStyle}>{data.ID}</Text>
+                <Text style={styles.NameStyle}>{data.ID}1111111</Text>
                 <Icon name={'chevron-right'} size={20} color={'black'} style={styles.IconStyle}/>
             </TouchableOpacity>
         )

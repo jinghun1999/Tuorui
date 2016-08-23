@@ -25,7 +25,7 @@ import Sale from './app/page/Sales/Sale';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
-var fetchPath = 'http://192.168.1.105:8088/api/AppInfo/GetHomeInfo';
+var fetchPath = 'http://120.24.89.243:20000/api/AppInfo/GetHomeInfo';
 import IconView from 'react-native-vector-icons/MaterialIcons';
 import HomeIcon from './app/commonview/HomeIcon';
 import DrugHandBook from './app/page/HomePage/DrugHandBook';

@@ -15,7 +15,8 @@ import {
 import Head from './../../commonview/Head';
 import SearchBar from './../../commonview/SearchBar';
 import IconView from 'react-native-vector-icons/MaterialIcons';
-var infoPath = 'http://192.168.1.105:8088/api/AppInfo/GetInformationByName';
+var infoPath = 'http://120.24.89.243:20000/api/AppInfo/GetInformationByName';
+import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 class Information extends React.Component {
     constructor(props) {
         super(props);
@@ -27,11 +28,12 @@ class Information extends React.Component {
             totalPage: 0,
             infoSearchTextInput: '',
             infoCache: [],
+            infoLoaded: false,
         }
     }
 
     componentDidMount() {
-        this._fetchData(this.state.infoSearchTextInput,this.state.pageIndex, this.state.pageSize);
+        this._fetchData(this.state.infoSearchTextInput, this.state.pageIndex, this.state.pageSize);
     }
 
     componentWillReceiveProps() {
@@ -50,12 +52,13 @@ class Information extends React.Component {
         let _this = this;
         let searchName = _this.state.infoSearchTextInput;
         _this.state.infoCache = [];
-        this._fetchData(searchName,1,this.state.pageSize);
+        this._fetchData(searchName, 1, this.state.pageSize);
     }
 
     _fetchData(infoName, pageIndex, pageSize) {
         let _this = this;
         let fetchPath = infoPath + '?infoName=' + infoName + '&pageIndex=' + pageIndex + '&pageSize=' + pageSize;
+        _this.setState({isRefreshing: true});
         fetch(fetchPath)
             .then((response)=>response.text())
             .then((responseData)=> {
@@ -70,8 +73,9 @@ class Information extends React.Component {
                         total: dt.total,
                         totalPage: dt.TotalPage,
                         infoCache: _dataCache,
-                        pageSize:dt.Data.Pager.PageSize,
-                        pageIndex:dt.Data.Pager.PageIndex,
+                        pageSize: dt.Data.Pager.PageSize,
+                        pageIndex: dt.Data.Pager.PageIndex,
+                        infoLoaded: true,
                     })
                 }
             })
@@ -106,26 +110,41 @@ class Information extends React.Component {
         _this._fetchData(_infoInput, _this.state.pageSize, _pageIndex);
     }
 
-    render() {
+    _renderLoadingView() {
         return (
             <View style={styles.container}>
-                <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
-                <SearchBar onChangeText={(text)=>{
+                <Head title={this.props.headTitle}/>
+                <View style={{flexDirection:'column', justifyContent: 'center',alignItems: 'center',}}>
+                    <Bars size={10} color="#1CAFF6"/>
+                </View>
+            </View>
+        );
+    }
+
+    render() {
+        if (!this.state.infoLoaded) {
+            return this._renderLoadingView();
+        } else {
+            return (
+                <View style={styles.container}>
+                    <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
+                    <SearchBar onChangeText={(text)=>{
                                         this.setState({
                                         infoSearchTextInput:text});
                                         }}
-                           placeholder="search"
-                           keyboardType='default'
-                           onPress={this._Search.bind(this)}/>
-                <ListView dataSource={this.state.listInfoSource.cloneWithRows(this.state.infoCache)}
-                          renderRow={this._renderInfo.bind(this)}
-                          onEndReached={this._onEndReached.bind(this)}
-                          initialListSize={this.state.total}
-                          pageSize={this.state.total}
-                          enableEmptySections={true}
-                />
-            </View>
-        )
+                               placeholder="search"
+                               keyboardType='default'
+                               onPress={this._Search.bind(this)}/>
+                    <ListView dataSource={this.state.listInfoSource.cloneWithRows(this.state.infoCache)}
+                              renderRow={this._renderInfo.bind(this)}
+                              onEndReached={this._onEndReached.bind(this)}
+                              initialListSize={this.state.total}
+                              pageSize={this.state.total}
+                              enableEmptySections={true}
+                    />
+                </View>
+            )
+        }
     }
 }
 const styles = StyleSheet.create({
