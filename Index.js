@@ -18,10 +18,18 @@ import Login from './app/page/Login';
 class Index extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            loading: true,
+        };
     }
 
     componentWillMount() {
+        this._initState();
+    }
+    componentWillUpdate(){
+        this._initState();
+    }
+    _initState(){
         var _this = this;
         storage.load({
             key: 'loginState',
@@ -29,40 +37,50 @@ class Index extends React.Component {
             syncInBackground: true
         }).then(ret => {
             _this.setState({
-                user: ret.personname,
-                pwd: ret.password,
+                user: ret.phone,
+                name: ret.name,
                 token: ret.token,
+                loading: false,
             });
         }).catch(err => {
             //alert('error:' + err);
         });
     }
-
     render() {
         var defaultName = 'Login';
         var defaultComponent = Login;
         //alert(this.state.token);
-        if (this.state.token && this.state.token.length > 0) {
-
+        if(this.state.loading){
+            return (
+                <View>
+                    <Text>Loading</Text>
+                </View>
+            );
         }
-        defaultName = 'HomePage';
-        defaultComponent = HomePage;
-        return (
-            <Navigator
-                initialRoute={{ name: defaultName, component: defaultComponent, id: 'main' }}
-                configureScene={(route) => {
+        else if (this.state.token && this.state.token.length > 0) {
+            defaultName = 'HomePage';
+            defaultComponent = HomePage;
+            return (
+                <Navigator
+                    initialRoute={{ name: defaultName, component: defaultComponent, id: 'main' }}
+                    configureScene={(route) => {
                         let gestureType = Navigator.SceneConfigs.HorizontalSwipeJump;
                         gestureType.gestures.jumpForward=null;
                         gestureType.gestures.jumpBack=null;
                         return gestureType;
                     }
                 }
-                renderScene={(route, navigator) => {
+                    renderScene={(route, navigator) => {
                     this._navigator = navigator;
                     let Component = route.component;
                     return <Component {...route.params} navigator={navigator} tabBarShow={route.id==='main'} />
                 }}/>
-        );
+            );
+        }else {
+            return (
+                <Login />
+            );
+        }
     }
 }
 

@@ -35,30 +35,28 @@ class Login extends Component {
 
     _pressButton() {
         if (!this.state.user || this.state.user.length == 0) {
-            //ToastAndroid.show("请输入用户名", ToastAndroid.SHORT);
-            //return;
+            ToastAndroid.show("请输入用户名", ToastAndroid.SHORT);
+            return;
         }
         if (!this.state.pwd || this.state.pwd.length == 0) {
-            //ToastAndroid.show("请输入密码", ToastAndroid.SHORT);
-            //return;
+            ToastAndroid.show("请输入密码", ToastAndroid.SHORT);
+            return;
         }
 
         var thiz = this;
         const { navigator } = this.props;
-        let url = Global.LOGIN + "?userName=1&password=b0df67a70dd3ee4f";
-        var header = {'Authorization': 'Anonymous ' + base64.encode(Global.ENTCODE)};
+        let url = Global.LOGIN + "?identity="+this.state.user+"&password="+this.state.pwd+"&type=m";
+        //var header = {'Authorization': 'Anonymous ' + base64.encode(Global.ENTCODE)};
         try {
-            NetUitl.get(url, header, function (data) {
+            NetUitl.get(url, false, function (data) {
                 if (data.Sign && data.Message) {
-                    //alert("登录成功" + data.Message.SafetyCode);
+                    alert("登录成功" + data.Message.Token);
                     storage.save({
                         key: 'loginState',  //注意:请不要在key中使用_下划线符号!
                         rawData: {
-                            personcode: data.Message.PersonCode,
-                            personname: data.Message.PersonName,
-                            password: data.Message.Password,
-                            entid: data.Message.EntID,
-                            token: data.Message.SafetyCode
+                            phone: data.Message.Mobile,
+                            name: data.Message.FullName,
+                            token: data.Message.Token
                         },
                         expires: 1000 * 3600 * 24
                     });
@@ -75,7 +73,7 @@ class Login extends Component {
                         });
                     }
                 } else {
-                    alert('登陆失败，远程返回：' + data.Sign + data.Exception);
+                    alert(data.Exception);
                 }
             });
         } catch (e) {
