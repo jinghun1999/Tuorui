@@ -11,12 +11,14 @@ import {
     ScrollView,
     Text,
     TouchableOpacity,
+    TextInput,
 } from 'react-native';
 import Head from './../../commonview/Head';
-import SearchBar from './../../commonview/SearchBar';
 import IconView from 'react-native-vector-icons/MaterialIcons';
 var infoPath = 'http://120.24.89.243:20000/api/AppInfo/GetInformationByName';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
+import Icon from 'react-native-vector-icons/Ionicons';
+import SearchInfo from './SearchAnyInfo';
 class Information extends React.Component {
     constructor(props) {
         super(props);
@@ -121,6 +123,20 @@ class Information extends React.Component {
         );
     }
 
+    _onPressSearch() {
+        let _this =this;
+        const {navigator} = _this.props;
+        if(navigator){
+            navigator.push({
+                name:'SearchInfo',
+                component:SearchInfo,
+                param:{
+
+                }
+            })
+        }
+    }
+
     render() {
         if (!this.state.infoLoaded) {
             return this._renderLoadingView();
@@ -128,13 +144,17 @@ class Information extends React.Component {
             return (
                 <View style={styles.container}>
                     <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
-                    <SearchBar onChangeText={(text)=>{
-                                        this.setState({
-                                        infoSearchTextInput:text});
-                                        }}
-                               placeholder="search"
-                               keyboardType='default'
-                               onPress={this._Search.bind(this)}/>
+                    <View style={styles.touchStyle}>
+                        <TouchableOpacity style={{flexDirection:'row',flex:1,}} onPress={this._onPressSearch.bind(this)}>
+                            <View style={styles.iconStyle}>
+                                <Icon name={'ios-search'} size={20} color={'#666'}/>
+                            </View>
+                            <Text style={{flex:1,}}/>
+                            <View style={styles.textStyle}>
+                                <Text>搜索</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
                     <ListView dataSource={this.state.listInfoSource.cloneWithRows(this.state.infoCache)}
                               renderRow={this._renderInfo.bind(this)}
                               onEndReached={this._onEndReached.bind(this)}
@@ -153,6 +173,29 @@ const styles = StyleSheet.create({
     },
     listViewStyle: {
         flexDirection: 'row',
+    },
+    touchStyle: {
+        margin: 5,
+        flexDirection: 'row',
+        height: 40,
+        borderColor: '#666',
+        borderWidth: StyleSheet.hairlineWidth,
+        borderRadius: 10,
+    },
+    iconStyle: {
+        height: 30,
+        width: 25,
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'center',
+    },
+    textStyle: {
+        height: 30,
+        width: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'center',
+        marginRight: 5,
     },
 
 });

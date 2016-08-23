@@ -34,18 +34,6 @@ class DrugHandBook extends React.Component {
         };
     };
 
-    _Data(){
-        let _data ={"status": "success", "dataSource": [
-            {"Pin": "A", "data": {"name": ["adb", "aaa", "abc", "add"]}},
-            {"Pin": "B", "data": {"name": ["bbc", "beyoung", "be"]}},
-            {"Pin": "C", "data": {"name": ["ccc", "city"]}},
-            {"Pin": "D", "data": {"name": ["double"]}}
-        ]};
-        let _this = this;
-        _this.setState({
-            drugSource:this.state.drugSource.cloneWithRowsAndSections(_data),
-        });
-    }
     fetchData(parentId) {
         fetch(fetchPath + "?parentId=" + parentId)
             .then((response) => response.text())
@@ -68,7 +56,6 @@ class DrugHandBook extends React.Component {
                 this.fetchData(parentId);
             }, 500
         );
-
     }
 
     //返回方法
@@ -94,7 +81,6 @@ class DrugHandBook extends React.Component {
             </View>
         );
     }
-
     //加载数据后点击事件
     _Press(g) {
         var hasChildren = g.HasChildren;
@@ -131,11 +117,11 @@ class DrugHandBook extends React.Component {
     }
 
     //LIST VIEW 数据
-    _renderDrug(data) {
+    _renderDrug(g) {
         return (
-            <TouchableOpacity style={styles.container} onPress={()=>this._Press(data)}>
+            <TouchableOpacity style={styles.container} onPress={()=>this._Press(g)}>
                 <Icon name={'lens'} size={20} color={'#99CCFF'} style={styles.LeftIconStyles}/>
-                <Text style={styles.NameStyle}>{data.ID}1111111</Text>
+                <Text style={styles.NameStyle}>{g.ID}1111111</Text>
                 <Icon name={'chevron-right'} size={20} color={'black'} style={styles.IconStyle}/>
             </TouchableOpacity>
         )
