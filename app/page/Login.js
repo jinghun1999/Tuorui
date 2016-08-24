@@ -59,7 +59,7 @@ class Login extends Component {
                             token: data.Message.Token
                         },
                         expires: 1000 * 3600 * 24
-                    });
+                    }); 
                     /*
                     if (navigator) {
                         navigator.pop();
