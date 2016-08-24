@@ -27,7 +27,7 @@ class Index extends React.Component {
     componentWillUpdate(){
         this._initState();
     }
-    _initState(){
+    _initState(){ 
         var _this = this;
         storage.load({
             key: 'loginState',
