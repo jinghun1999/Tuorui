@@ -18,8 +18,8 @@ import JsonUtil from '../../util/JsonUitl';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import DrugDetails from './DrugDetails';
-var fetchPath = 'http://192.168.1.105:8088/api/AppInfo/GetClass';
-var DetailsUrl = 'http://192.168.1.105:22000/App/home';
+var fetchPath = 'http://120.24.89.243:20000/api/AppInfo/GetClass';
+var DetailsUrl = 'http://120.24.89.243:20000/App/home';
 class DrugHandBook extends React.Component {
     constructor(props) {
         super(props);
@@ -35,21 +35,18 @@ class DrugHandBook extends React.Component {
     };
 
     fetchData(parentId) {
-        {
-            fetch(fetchPath + "?parentId=" + parentId)
-                .then((response) => response.text())
-                .then((responseData) => {
-                    //let ret=JSON.parse(responseData);
-                    let result = JSON.parse(responseData).Data;
-                    this.setState({
-                        drugSource: this.state.drugSource.cloneWithRowsAndSections(result),
-                        data:result,
-                        drugHeaderSource:result.Pin,
-                        loaded: true,
-                    });
-                })
-                .done();
-        }
+        fetch(fetchPath + "?parentId=" + parentId)
+            .then((response) => response.text())
+            .then((responseData) => {
+                //let ret=JSON.parse(responseData);
+                let result = JSON.parse(responseData).Data;
+                this.setState({
+                    drugSource: this.state.drugSource.cloneWithRowsAndSections(result),
+                    data:result,
+                    drugHeaderSource:result.Pin,
+                    loaded: true,
+                });
+            }).done();
     }
 
     componentDidMount() {
@@ -59,7 +56,6 @@ class DrugHandBook extends React.Component {
                 this.fetchData(parentId);
             }, 500
         );
-
     }
 
     //返回方法
@@ -85,7 +81,6 @@ class DrugHandBook extends React.Component {
             </View>
         );
     }
-
     //加载数据后点击事件
     _Press(g) {
         var hasChildren = g.HasChildren;
@@ -122,11 +117,11 @@ class DrugHandBook extends React.Component {
     }
 
     //LIST VIEW 数据
-    _renderDrug(data) {
+    _renderDrug(g) {
         return (
-            <TouchableOpacity style={styles.container} onPress={()=>this._Press(data)}>
+            <TouchableOpacity style={styles.container} onPress={()=>this._Press(g)}>
                 <Icon name={'lens'} size={20} color={'#99CCFF'} style={styles.LeftIconStyles}/>
-                <Text style={styles.NameStyle}>{data.ID}</Text>
+                <Text style={styles.NameStyle}>{g.ID}1111111</Text>
                 <Icon name={'chevron-right'} size={20} color={'black'} style={styles.IconStyle}/>
             </TouchableOpacity>
         )
