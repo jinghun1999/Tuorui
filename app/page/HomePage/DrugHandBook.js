@@ -20,20 +20,75 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import DrugDetails from './DrugDetails';
 var fetchPath = 'http://120.24.89.243:20000/api/AppInfo/GetClass';
 var DetailsUrl = 'http://120.24.89.243:20000/App/home';
+import Path from '../../util/tsconfig.json';
 class DrugHandBook extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             drugSource: new ListView.DataSource(
                     {rowHasChanged: (row1, row2) => row1 !== row2,
-                    sectionHeaderHasChanged: (s1, s2) => s1 !== s2}),
+                    sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
+                        }),
             drugHeaderSource: null,
             loaded: false,
             parentId: null,
             data:null,
         };
     };
+    _getDataInfo(){
+        var data =[
+            {
+                "Pin":"A",
+                "ID":1,
+                "results":[
+                    {
+                        "info":{
+                            "RequestID":"day 1",
+                            "ClassName":"the ClassName 1",
+                            "Path":"http://www.baidu.com"
+                        }
+                    },
+                    {
+                        "info":{
+                            "RequestID":"day 2",
+                            "ClassName":"the ClassName 2",
+                            "Path":"http://www.baidu.com"
+                        }
+                    },
+                    {
+                        "info":{
+                            "RequestID":"day 3",
+                            "ClassName":"the ClassName 3",
+                            "Path":"http://www.baidu.com"
+                        }
+                    },
+                    {
+                        "info":{
+                            "RequestID":"day 4",
+                            "ClassName":"the ClassName 4",
+                            "Path":"http://www.baidu.com"
+                        }
+                    },
+                    {
+                        "info":{
+                            "RequestID":"day 5",
+                            "ClassName":"the ClassName 5",
+                            "Path":"http://www.baidu.com"
+                        }
+                    }
+                ]
+            }
+        ];
 
+        let _this=this;
+        _this.setState({
+            drugSource:this.state.drugSource.cloneWithRowsAndSections(data),
+            data:data.results,
+            drugHeaderSource:data.Pin,
+            loaded: true,
+        })
+
+    }
     fetchData(parentId) {
         fetch(fetchPath + "?parentId=" + parentId)
             .then((response) => response.text())
@@ -50,12 +105,13 @@ class DrugHandBook extends React.Component {
     }
 
     componentDidMount() {
-        var parentId = this.props.parentId;
-        this.timer = setTimeout(
-            () => {
-                this.fetchData(parentId);
-            }, 500
-        );
+        //var parentId = this.props.parentId;
+        //this.timer = setTimeout(
+        //    () => {
+        //        this.fetchData(parentId);
+        //    }, 500
+        //);
+        this._getDataInfo();
     }
 
     //返回方法
@@ -121,7 +177,7 @@ class DrugHandBook extends React.Component {
         return (
             <TouchableOpacity style={styles.container} onPress={()=>this._Press(g)}>
                 <Icon name={'lens'} size={20} color={'#99CCFF'} style={styles.LeftIconStyles}/>
-                <Text style={styles.NameStyle}>{g.ID}1111111</Text>
+                <Text style={styles.NameStyle}>{g.ClassName}1111111</Text>
                 <Icon name={'chevron-right'} size={20} color={'black'} style={styles.IconStyle}/>
             </TouchableOpacity>
         )
@@ -142,8 +198,8 @@ class DrugHandBook extends React.Component {
                 <View>
                     <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
                     <ListView dataSource={this.state.drugSource}
-                              renderRow={this._renderDrug.bind(this)}
-                              renderSectionHeader={this._renderSectionHeader.bind(this)}
+                              renderRow={this._renderDrug.bind(this.state.data)}
+                              renderSectionHeader={this._renderSectionHeader.bind(this.state.drugHeaderSource)}
                     />
 
                 </View>

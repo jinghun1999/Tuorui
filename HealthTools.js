@@ -77,26 +77,28 @@ class HealthTools extends Component {
         return (
             <View style={styles.container}>
                 <Head title="应用服务"/>
-                <View style={{flex:1,borderBottomColor:'#666', borderBottomWidth:StyleSheet.hairlineWidth,}}>
+                <View style={{flex:1,height:120,}}>
                     <View style={styles.homeStyle}>
-                        <Icon name={'logo-octocat'} size={80} color={'#CD7054'} style={{marginTop:5,marginLeft:30,}}/>
-                        <View style={{flexDirection:'column',height:60,marginLeft:30,marginTop:20}}>
-                            <Text >{this.state.memberName}</Text>
-                            <Text style={{marginTop:10}}>{this.state.memberAddress}</Text>
+                        <View  style={styles.IconStyle}>
+                        <Icon name={'logo-octocat'} size={60} color={'#CD7054'}/>
+                            </View>
+                        <View style={styles.titleViewStyle}>
+                            <Text style={styles.titleTextStyle}>{this.state.memberName}</Text>
+                            <Text style={styles.titleTextStyle}>{this.state.memberAddress}</Text>
                         </View>
                     </View>
                     <View style={styles.homeStyle}>
-                        <View style={[styles.fontViewStyle,{backgroundColor:'#B9D3EE'}]}>
-                            <Icon name = {'ios-people'} color={'#00BBFF'} size={35} style={{marginLeft:15}} />
+                        <View style={styles.fontViewStyle}>
+                            <Icon name = {'ios-people'} color={'#00BBFF'} size={30} />
                             <Text style={styles.fontStyle}>会员：{this.state.memberNumber}</Text>
                         </View>
-                        <View style={[styles.fontViewStyle,{backgroundColor:'#B0C4DE'}]}>
-                            <Icon name = {'ios-paw'} color={'#EE9A00'} size={35} style={{marginLeft:15}}/>
+                        <View style={styles.fontViewStyle}>
+                            <Icon name = {'ios-paw'} color={'#EE9A00'} size={30} />
                             <Text style={styles.fontStyle}>宠物：{this.state.memberPetNumber}</Text>
                         </View>
                     </View>
                 </View>
-                <View style={{flexDirection:'row',marginTop:20}}>
+                <View style={styles.iconViewStyle}>
                     <IconButton text="我的会员" iconName={'md-people'} iconColor={'#FFB6C1'}
                                 onPress={this._member.bind(this)}/>
                     <IconButton text="宠物管理" iconName={'md-paw'} iconColor={'#5CACEE'}
@@ -104,7 +106,7 @@ class HealthTools extends Component {
                     <IconButton text="我的疫苗" iconName={'logo-steam'} iconColor={'#6666CC'}
                                 onPress={this._more.bind(this)}/>
                 </View>
-                <View style={{flexDirection:'row',marginTop:20}}>
+                <View style={styles.iconViewStyle}>
                     <IconButton text="驱虫疫苗" iconName={'ios-pulse'} iconColor={'#9999CC'}
                                 onPress={this._more.bind(this)}/>
                     <IconButton text="商品销售" iconName={'ios-cart'} iconColor={'#DEB887'}
@@ -112,7 +114,7 @@ class HealthTools extends Component {
                     <IconButton text="送检查询" iconName={'ios-search'} iconColor={'#666699'}
                                 onPress={this._more.bind(this)}/>
                 </View>
-                <View style={{flexDirection:'row',marginTop:20}}>
+                <View style={styles.iconViewStyle}>
                     <IconButton text="分析报表" iconName={'ios-podium'} iconColor={'#6666FF'}
                                 onPress={this._more.bind(this)}/>
                     <IconButton text="美容服务" iconName={'ios-rose'} iconColor={'#66CCFF'}
@@ -204,25 +206,42 @@ const styles = StyleSheet.create({
 
     },
     homeStyle:{
+        height:80,
         flexDirection:'row',
     },
-    iconViewStyle:{
-        flexDirection:'row',
-        borderTopColor:'#666',
-        borderTopWidth:StyleSheet.hairlineWidth,
+    titleViewStyle:{
+        flex:1,
+        height:50,
+        marginTop:10,
+        flexDirection:'column',
+        justifyContent:'center',
+    },
+    titleTextStyle:{
+        margin:10,
+    },
+    IconStyle:{
+        height:50,
+        width:120,
+        alignSelf:'center',
+        alignItems:'center',
+        justifyContent:'center',
     },
     fontViewStyle:{
         flex:1,
+        height:40,
         flexDirection:'row',
-        height:50,
-        alignSelf:'center',
+        borderColor:'#666',
         alignItems:'center',
+        justifyContent:'center',
+        borderWidth:StyleSheet.hairlineWidth,
     },
     fontStyle:{
-        justifyContent:'center',
-        alignSelf:'center',
-        alignItems:'center',
+        fontSize:16,
         marginLeft:5,
+    },
+    iconViewStyle:{
+        marginTop:20,
+        flexDirection:'row',
     },
 });
 

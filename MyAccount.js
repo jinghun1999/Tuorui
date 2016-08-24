@@ -40,7 +40,7 @@ class MyAccount extends React.Component {
         return (
             <View style={styles.container}>
                 <Head title="我的"/>
-                <View style={{flex:1}}>
+                <View style={{flex:1,height:120}}>
                     <View style={styles.viewStyle}>
                         <Image source={require('./image/my_account_on.png')}
                             style={styles.imageStyle} />
@@ -61,7 +61,7 @@ class MyAccount extends React.Component {
                 <View style={styles.iconViewStyle}>
                     <MyHomeIcon text="我的信息" icon={'ios-mail'} color={'#00BBFF'} IconColor={'white'}  onPress={this._more.bind(this)}/>
                     <MyHomeIcon text="邀请朋友" icon={'md-person-add'} color={'#FF3333'} IconColor={'white'}  onPress={this._more.bind(this)}/>
-                    <MyHomeIcon text="我的问题" icon={'ios-quote'} color={'#7FFFD4'} IconColor={'white'}  onPress={this._more.bind(this)}/>
+                    <MyHomeIcon text="我的问题" icon={'ios-quote'} color={'#BDB76B'} IconColor={'white'}  onPress={this._more.bind(this)}/>
                     <MyHomeIcon text="我的收藏" icon={'ios-star'} color={'#FF6666'} IconColor={'white'}  onPress={this._more.bind(this)}/>
                     <MyHomeIcon text="我的优惠券" icon={'ios-card'} color={'#9370DB'} IconColor={'white'}  onPress={this._more.bind(this)}/>
                     <MyHomeIcon text="设置" icon={'ios-settings'} color={'#BBBB00'} IconColor={'white'}  onPress={this._more.bind(this)}/>
@@ -105,24 +105,20 @@ const styles = StyleSheet.create({
     },
     viewStyle:{
         flexDirection:'row',
-        borderBottomColor:'#666',
-        borderBottomWidth:StyleSheet.hairlineWidth,
     },
     fontViewStyle:{
         flex:1,
-        height:50,
-        borderRightColor: '#666',
-        borderRightWidth: StyleSheet.hairlineWidth,
-        justifyContent:'center'
+        height:40,
+        borderColor:'#666',
+        justifyContent:'center',
+        borderWidth:StyleSheet.hairlineWidth,
     },
     fontStyle:{
-        marginLeft:30,
-        alignItems:'flex-start',
+        textAlign:'center',
     },
     imageStyle:{
         height: 50,
         width: 50,
-        alignSelf: 'center',
         marginLeft: 20,
         marginTop:10,
     },

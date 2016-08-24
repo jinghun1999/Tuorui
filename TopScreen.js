@@ -31,6 +31,7 @@ import HomeIcon from './app/commonview/HomeIcon';
 import DrugHandBook from './app/page/HomePage/DrugHandBook';
 import DrugDetails from './app/page/HomePage/DrugDetails';
 import Information from './app/page/HomePage/Information';
+import Contact from './app/page/HomePage/Contact';
 var _navigator; //全局navigator对象
 let IMGS = [
     require('./image/job1.jpg'),
@@ -230,7 +231,18 @@ class TopScreen extends Component {
     }
 
     _laboratoryPress() {
-        alert('检验点击弹窗')
+        alert('Contact');
+        var _this = this;
+        const { navigator } = _this.props;
+        if (navigator) {
+            navigator.push({
+                name: 'Contact',
+                component: Contact,
+                params: {
+                    headTitle: '检验信息'
+                }
+            });
+        }
     }
 
     _DiagnosisPress() {
