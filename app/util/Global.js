@@ -13,7 +13,7 @@ var storage = new Storage({
     enableCache: true,
     // 如果storage中没有相应数据，或数据已过期，
     // 则会调用相应的sync同步方法，无缝返回最新数据。
-    sync : {
+    sync : { 
         // 同步方法的具体说明会在后文提到
     },
 });
