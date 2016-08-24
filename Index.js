@@ -18,9 +18,7 @@ import Login from './app/page/Login';
 class Index extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            loading: true,
-        };
+        this.state = {};
     }
 
     componentWillMount() {
@@ -40,47 +38,34 @@ class Index extends React.Component {
                 user: ret.phone,
                 name: ret.name,
                 token: ret.token,
-                loading: false,
             });
         }).catch(err => {
-            //alert('error:' + err);
+            alert('error:' + err);
         });
     }
     render() {
         var defaultName = 'Login';
         var defaultComponent = Login;
-        //alert(this.state.token);
-        if(this.state.loading){
-            return (
-                <View>
-                    <Text>Loading</Text>
-                </View>
-            );
-        }
-        else if (this.state.token && this.state.token.length > 0) {
+        if (this.state.token && this.state.token.length > 0) {
             defaultName = 'HomePage';
             defaultComponent = HomePage;
-            return (
-                <Navigator
-                    initialRoute={{ name: defaultName, component: defaultComponent, id: 'main' }}
-                    configureScene={(route) => {
-                        let gestureType = Navigator.SceneConfigs.HorizontalSwipeJump;
-                        gestureType.gestures.jumpForward=null;
-                        gestureType.gestures.jumpBack=null;
-                        return gestureType;
-                    }
-                }
-                    renderScene={(route, navigator) => {
-                    this._navigator = navigator;
-                    let Component = route.component;
-                    return <Component {...route.params} navigator={navigator} tabBarShow={route.id==='main'} />
-                }}/>
-            );
-        }else {
-            return (
-                <Login />
-            );
         }
+        return (
+            <Navigator
+                initialRoute={{ name: defaultName, component: defaultComponent, id: 'main' }}
+                configureScene={(route) => {
+                    let gestureType = Navigator.SceneConfigs.HorizontalSwipeJump;
+                    gestureType.gestures.jumpForward=null;
+                    gestureType.gestures.jumpBack=null;
+                    return gestureType;
+                }
+            }
+                renderScene={(route, navigator) => {
+                this._navigator = navigator;
+                let Component = route.component;
+                return <Component {...route.params} navigator={navigator} tabBarShow={route.id==='main'} />
+            }}/>
+        );
     }
 }
 
