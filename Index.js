@@ -27,7 +27,7 @@ class Index extends React.Component {
         this._initState();
     }
     componentWillUpdate(){
-        this._initState();
+        //this._initState();
     }
     _initState(){
         var _this = this;
@@ -44,6 +44,9 @@ class Index extends React.Component {
             });
         }).catch(err => {
             alert('error:' + err);
+            _this.setState({
+                loading: false,
+            });
         });
     }
     render() {
