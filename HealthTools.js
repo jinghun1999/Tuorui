@@ -17,7 +17,8 @@ import Head from './app/commonview/Head';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconButton from './app/commonview/HomeIcon';
 import Sale from './app/page/Sales/Sale';
-import memberPet from './app/page/Member/MemberPetClass';
+//import MemberPet from './app/page/MemberInfo/MemberPetClass';
+import Info from './app/page/MemberInfo/MemberPetClass';
 class HealthTools extends Component {
     constructor(props) {
         super(props);
@@ -33,8 +34,8 @@ class HealthTools extends Component {
         const{navigator} = _this.props;
         if(navigator){
             navigator.push({
-                name:'memberPet',
-                component:memberPet,
+                name:'MemberPetClass',
+                component:Info,
                 params:{
                     headTitle:'会员信息列表',
                     id:1,
@@ -47,8 +48,8 @@ class HealthTools extends Component {
         var _this=this;
         if(navigator){
             navigator.push({
-                name:'memberPet',
-                component:memberPet,
+                name:'MemberPetClass',
+                component:Info,
                 params:{
                     headTitle:'宠物信息列表',
                     id:2,

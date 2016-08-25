@@ -26,7 +26,8 @@ class SearchAnyInfo extends React.Component {
         alert(_this.state.searchTextInput);
     }
     _onBack() {
-        const { navigator } = this.props;
+        let _this=this;
+        const { navigator } = _this.props;
         if (navigator) {
             navigator.pop();
         }

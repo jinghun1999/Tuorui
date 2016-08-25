@@ -20,7 +20,6 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import DrugDetails from './DrugDetails';
 var fetchPath = 'http://120.24.89.243:20000/api/AppInfo/GetClass';
 var DetailsUrl = 'http://120.24.89.243:20000/App/home';
-import Path from '../../util/tsconfig.json';
 class DrugHandBook extends React.Component {
     constructor(props) {
         super(props);

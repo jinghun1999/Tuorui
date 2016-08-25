@@ -11,8 +11,8 @@ import {
     Text,
     TouchableOpacity,
 } from 'react-native';
-import Head from './../../commonview/Head';
-import Icon from './../../commonview/HomeIcon';
+import Head from '../../commonview/Head';
+import IconView from '../../commonview/ComIconView';
 class MemberPetClass extends React.Component {
     constructor(props) {
         super(props);
@@ -45,13 +45,13 @@ class MemberPetClass extends React.Component {
             return (
                 <View style={styles.container}>
                     <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
-                    <View style={{flexDirection:'row',}}>
-                        <Icon text="会员列表" iconName={'md-contact'} iconColor={'#FF6666'}
-                              onPress={this._more.bind(this)}/>
-                        <Icon text="添加会员" iconName={'md-person-add'} iconColor={'#FF6666'}
-                              onPress={this._more.bind(this)}/>
-                        <Icon text="修改会员" iconName={'ios-create'} iconColor={'#FF6666'}
-                              onPress={this._more.bind(this)}/>
+                    <View style={styles.iconViewStyle}>
+                        <IconView text="会员列表" icon={'md-contact'} color={'#FF6666'} IconColor={'white'}
+                                  onPress={this._more.bind(this)}/>
+                        <IconView text="添加会员" icon={'md-person-add'} color={'#4F94CD'} IconColor={'white'}
+                                  onPress={this._more.bind(this)}/>
+                        <IconView text="修改会员" icon={'ios-create'} color={'#CD8500'} IconColor={'white'}
+                                  onPress={this._more.bind(this)}/>
                     </View>
                 </View>
             )
@@ -59,13 +59,13 @@ class MemberPetClass extends React.Component {
             return (
                 <View style={styles.container}>
                     <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
-                    <View style={{flexDirection:'row',}}>
-                        <Icon text="宠物列表" iconName={'md-paw'} iconColor={'#FF6666'}
-                              onPress={this._more.bind(this)}/>
-                        <Icon text="添加宠物" iconName={'md-add-circle'} iconColor={'#FF6666'}
-                              onPress={this._more.bind(this)}/>
-                        <Icon text="修改宠物" iconName={'md-create'} iconColor={'#FF6666'}
-                              onPress={this._more.bind(this)}/>
+                    <View style={styles.iconViewStyle}>
+                        <IconView text="宠物列表" icon={'md-paw'} color={'#8968CD'} IconColor={'white'}
+                                  onPress={this._more.bind(this)}/>
+                        <IconView text="添加宠物" icon={'md-add-circle'} color={'#66CDAA'} IconColor={'white'}
+                                  onPress={this._more.bind(this)}/>
+                        <IconView text="修改宠物" icon={'md-create'} color={'#FF6666'} IconColor={'white'}
+                                  onPress={this._more.bind(this)}/>
                     </View>
                 </View>
             )
@@ -76,6 +76,8 @@ class MemberPetClass extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    iconViewStyle:{
     },
 });
 module.exports = MemberPetClass;

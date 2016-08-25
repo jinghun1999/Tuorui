@@ -299,7 +299,7 @@ class TopScreen extends Component {
                                               onPress={this._DiagnosisPress.bind(this)}/>
                                 </View>
                                 <View style={{flexDirection:'row'}}>
-                                    <HomeIcon text="文献" iconName={'ios-book'} iconColor={'#CD853F'}
+                                    <HomeIcon text="文献" iconName={'ios-book'} iconColor={'#CDB7B5'}
                                               onPress={this._onPressButton2.bind(this)}/>
                                     <HomeIcon text="资讯" iconName={'ios-list-box'} iconColor={'#66CCFF'}
                                               onPress={this._informationClick.bind(this)}/>

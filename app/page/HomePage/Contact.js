@@ -14,6 +14,7 @@ import {
 // API URL
 var API_URL = "http://7xr387.com1.z0.glb.clouddn.com/users_data.json";
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
+import Head from '../../commonview/Head';
 var Contact = React.createClass({
     // initial state
     getInitialState: function() {
@@ -105,20 +106,24 @@ var Contact = React.createClass({
     renderLoadingView: function() {
         return (
             <View style={styles.header}>
-                <Text style={styles.headerText}>User List</Text>
+                <Head title={this.props.headTitle} canBack={true} onPress={this._onBack}/>
                 <View style={styles.container}>
                     <Bars size={20} color="#1CAFF6"/>
                 </View>
             </View>
         )
     },
-
+    _onBack:function(){
+        var _this=this;
+        const { navigator } = _this.props;
+        if (navigator) {
+            navigator.pop();
+        }
+    },
     renderListView: function() {
         return (
             <View style={styles.container}>
-                <View style={styles.header}>
-                    <Text style={styles.headerText}>User List</Text>
-                </View>
+                <Head title={this.props.headTitle} canBack={true} onPress={this._onBack}/>
                 <ListView
                     dataSource = {this.state.dataSource}
                     style      = {styles.listview}
