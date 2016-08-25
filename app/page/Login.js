@@ -17,7 +17,6 @@ import {
     TextInput,
     TouchableOpacity,
     } from 'react-native';
-var QRCodeScreen = require('../commonview/ScanQr');
 import Util from '../util/Util';
 import Global from '../util/Global';
 import NetUitl from '../net/NetUitl';
@@ -59,18 +58,13 @@ class Login extends Component {
                             token: data.Message.Token
                         },
                         expires: 1000 * 3600 * 24
-                    }); 
-                    /*
-                    if (navigator) {
+                    });
+                    /*if (navigator) {
                         navigator.pop();
                         navigator.push({
                             name: 'MainPage',
                             component: MainPage,
-                            params: {
-                                user: thiz.state.user,
-                                pwd: thiz.state.pwd,
-                                CurrentUser: data.Message,
-                            }
+                            params: {}
                         });
                     }*/
                 } else {

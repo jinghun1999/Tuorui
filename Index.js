@@ -18,7 +18,9 @@ import Login from './app/page/Login';
 class Index extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            loading: true
+        };
     }
 
     componentWillMount() {
@@ -31,13 +33,14 @@ class Index extends React.Component {
         var _this = this;
         storage.load({
             key: 'loginState',
-            autoSync: true,
-            syncInBackground: true
+            autoSync: false,
+            syncInBackground: false
         }).then(ret => {
             _this.setState({
                 user: ret.phone,
                 name: ret.name,
                 token: ret.token,
+                loading: false,
             });
         }).catch(err => {
             alert('error:' + err);
@@ -49,23 +52,30 @@ class Index extends React.Component {
         if (this.state.token && this.state.token.length > 0) {
             defaultName = 'HomePage';
             defaultComponent = HomePage;
-        }
-        return (
-            <Navigator
-                initialRoute={{ name: defaultName, component: defaultComponent, id: 'main' }}
-                configureScene={(route) => {
+            return (
+                <Navigator
+                    initialRoute={{ name: defaultName, component: defaultComponent, id: 'main' }}
+                    configureScene={(route) => {
                     let gestureType = Navigator.SceneConfigs.HorizontalSwipeJump;
                     gestureType.gestures.jumpForward=null;
                     gestureType.gestures.jumpBack=null;
-                    return gestureType;
-                }
-            }
-                renderScene={(route, navigator) => {
-                this._navigator = navigator;
-                let Component = route.component;
-                return <Component {...route.params} navigator={navigator} tabBarShow={route.id==='main'} />
-            }}/>
-        );
+                    return gestureType; } }
+                    renderScene={(route, navigator) => {
+                    this._navigator = navigator;
+                    let Component = route.component;
+                    return <Component {...route.params} navigator={navigator} tabBarShow={route.id==='main'} />
+                }}/>
+            );
+        }else if(this.state.loading){
+            return (
+                <View>
+                    <Text>Loading...</Text>
+                </View>
+            )
+        }
+        else{
+            return (<Login />);
+        }
     }
 }
 
