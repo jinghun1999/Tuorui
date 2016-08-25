@@ -36,7 +36,7 @@ class MemberPetClass extends React.Component {
     }
 
     _more() {
-        alert('no more')
+        alert('no More')
     }
 
     render() {

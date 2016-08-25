@@ -22,6 +22,9 @@ class MyAccount extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state({
+            memberNumber:123,
+        })
     }
 
 
@@ -51,7 +54,7 @@ class MyAccount extends React.Component {
                     </View>
                     <View style={styles.viewStyle}>
                         <View style={styles.fontViewStyle}>
-                            <Text style={styles.fontStyle}>会员：123</Text>
+                            <Text style={styles.fontStyle}>会员：{this.state.memberNumber}</Text>
                         </View>
                         <View style={styles.fontViewStyle}>
                             <Text style={styles.fontStyle}>宠物：333</Text>
