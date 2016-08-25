@@ -169,7 +169,7 @@ class TopScreen extends Component {
                 params:{
                     requestId:Info.RequestID,
                     headTitle:Info.InfoTitle,
-                    url:'http://www.baidu.com/'
+                    url:'http://www.sougou.com/'
                 }
             })
         }

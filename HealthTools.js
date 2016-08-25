@@ -29,7 +29,7 @@ class HealthTools extends Component {
             memberPetNumber:456
         }
     };
-    _member() {
+    _memberInfo() {
         var _this=this;
         const{navigator} = _this.props;
         if(navigator){
@@ -101,7 +101,7 @@ class HealthTools extends Component {
                 </View>
                 <View style={styles.iconViewStyle}>
                     <IconButton text="我的会员" iconName={'md-people'} iconColor={'#FFB6C1'}
-                                onPress={this._member.bind(this)}/>
+                                onPress={this._memberInfo.bind(this)}/>
                     <IconButton text="宠物管理" iconName={'md-paw'} iconColor={'#5CACEE'}
                                 onPress={this._Pet.bind(this)}/>
                     <IconButton text="我的疫苗" iconName={'logo-steam'} iconColor={'#6666CC'}
