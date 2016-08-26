@@ -10,6 +10,7 @@ import{
     ScrollView,
     Image,
     View,
+    Picker,
     Dimensions,
     TouchableOpacity,
     DatePickerAndroid,
@@ -33,11 +34,13 @@ class AddMemberInfo extends Component {
             memberLevel: '普通会员',
             memberMoney: 0.00,
             memberPoint: 0,
-            memberAddress:'',
-            memberRemark:'',
-            memberInfo:{name:null,registrationTime:null,birthday:null,
-                        phone:null,sex:null,mail:null,level:null,
-                        money:null,point:null,address:null,remarks:null,}
+            memberAddress: '',
+            memberRemark: '',
+            memberInfo: {
+                name: null, registrationTime: null, birthday: null,
+                phone: null, sex: null, mail: null, level: null,
+                money: null, point: null, address: null, remarks: null,
+            }
         }
     };
 
@@ -67,7 +70,26 @@ class AddMemberInfo extends Component {
         }
     }
 
+    _save() {
+        alert('保存按钮')
+    }
+
+    _saveAndAddPet() {
+        alert('保存并添加宠物按钮')
+    }
+
     render() {
+        var picker =  <View style={styles.pickerStyle}>
+            <Text style={{width:80,marginLeft:15,justifyContent: 'center',}}>姓名</Text>
+            <Picker
+                selectedValue={this.state.memberSex}
+                mode="dropdown"
+                style={{flex:1,height:50,backgroundColor:'#fff',}}
+                onValueChange={(lang) => this.setState({memberSex: lang})}>
+                <Picker.Item label="男" value="男"/>
+                <Picker.Item label="女" value="女"/>
+            </Picker>
+        </View>
         return (
             <View style={styles.container}>
                 <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
@@ -91,10 +113,9 @@ class AddMemberInfo extends Component {
                                    keyboardType={'numeric'}
                                    onChangeText={(text)=>{this.setState({ memberPhone: text })}}
                         />
-                        <FormInput title="性别"
-                                   enabled={true}
-                                   onChangeText={(text)=>{this.setState({ memberSex: text })}}
-                        />
+                    </View>
+                    {picker}
+                    <View style={styles.pickerBoxStyle}>
                         <FormInput title="邮箱"
                                    enabled={true}
                                    onChangeText={(text)=>{this.setState({ memberMail: text })}}
@@ -141,7 +162,17 @@ class AddMemberInfo extends Component {
     }
 }
 const styles = StyleSheet.create({
-    container: {},
+    container: {
+        backgroundColor: '#DCDCDC',
+    },
+    pickerStyle:{
+        flex:1,
+        flexDirection:'row',
+        height:50,
+        justifyContent:'center',
+        alignItems:'center',
+        backgroundColor: '#fff',
+    },
     pickerBoxStyle: {
         backgroundColor: '#fff',
         borderBottomColor: '#ddd',
@@ -151,22 +182,27 @@ const styles = StyleSheet.create({
         paddingLeft: 5,
         paddingRight: 5,
     },
-    buttonStyle:{
-        height:50,
-        flexDirection:'row',
+    sexViewStyle: {
+        height: 50,
+        flexDirection: 'row',
     },
-    saveStyle:{
-        flex:1,
-        height:35,
-        borderRadius:5,
-        margin:10,
-        justifyContent:'center',
-        backgroundColor:'#63B8FF',
+    buttonStyle: {
+        height: 50,
+        flexDirection: 'row',
+        backgroundColor: '#fff',
     },
-    textStyle:{
-        color:'#FFF',
-        fontSize:16,
-        textAlign:'center',
+    saveStyle: {
+        flex: 1,
+        height: 35,
+        borderRadius: 5,
+        margin: 10,
+        justifyContent: 'center',
+        backgroundColor: '#63B8FF',
+    },
+    textStyle: {
+        color: '#FFF',
+        fontSize: 16,
+        textAlign: 'center',
     },
 })
 module.exports = AddMemberInfo;
