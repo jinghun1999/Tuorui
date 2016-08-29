@@ -20,6 +20,7 @@ import Head from '../../commonview/Head';
 import FormInput from '../../commonview/FormInput';
 import FormPicker from '../../commonview/FormPicker';
 import Icon from 'react-native-vector-icons/Ionicons';
+import PetDetails from './PetDetails';
 class MemberDetails extends Component {
     constructor(props) {
         super(props);
@@ -46,20 +47,26 @@ class MemberDetails extends Component {
 
     //进行创建时间日期选择器
     async showPicker(stateKey, options) {
-        try {
-            var newState = {};
-            const {action, year, month, day} = await DatePickerAndroid.open(options);
-            if (action === DatePickerAndroid.dismissedAction) {
-                newState[stateKey + 'Text'] = 'dismissed';
-            } else {
-                var date = new Date(year, month, day);
-                newState[stateKey + 'Text'] = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
-                newState[stateKey + 'Date'] = date;
+        var openState=this.state.enable;
+        if(openState==true){
+            try {
+                var newState = {};
+                const {action, year, month, day} = await DatePickerAndroid.open(options);
+                if (action === DatePickerAndroid.dismissedAction) {
+                    newState[stateKey + 'Text'] = 'dismissed';
+                } else {
+                    var date = new Date(year, month, day);
+                    newState[stateKey + 'Text'] = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+                    newState[stateKey + 'Date'] = date;
+                }
+                this.setState(newState);
+            } catch (o) {
+                alert('控件异常。');
             }
-            this.setState(newState);
-        } catch (o) {
-            alert('控件异常。');
+        }else{
+            return false;
         }
+
     }
 
     _onBack() {
@@ -95,7 +102,19 @@ class MemberDetails extends Component {
 
     _onPetDetails(g) {
         let _name = g.petName;
+        let _this = this;
         alert(_name);
+        const {navigator} = _this.props;
+        if(navigator){
+            navigator.push({
+                name:'PetDetails',
+                component:PetDetails,
+                params:{
+                    headTitle:'宠物详情',
+                    name: g.petName,
+                }
+            })
+        }
     }
 
     _onRenderRow(g) {
