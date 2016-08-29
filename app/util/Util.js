@@ -35,6 +35,25 @@ class Util extends React.Component {
         map.set('token', Util.getToken(time));
         return map;
     }
+    static cutString(str, len, suffix){
+        if(!str) return "";
+        if(len<= 0) return "";
+        if(!suffix) suffix = "";
+        var templen=0;
+        for(var i=0;i<str.length;i++){
+            if(str.charCodeAt(i)>255){
+                templen+=2;
+            }else{
+                templen++
+            }
+            if(templen == len){
+                return str.substring(0,i+1)+suffix;
+            }else if(templen >len){
+                return str.substring(0,i)+suffix;
+            }
+        }
+        return str;
+    }
 }
 
 module.exports = Util;

@@ -20,7 +20,7 @@ var Width=Dimensions.get('window').width;
 var Height=Dimensions.get('window').height;
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 class DrugDetails extends React.Component{
-    constructor(props) {
+    constructor(props) { 
         super(props);
         this.state = {
             url: Global.WEB + '/wx/home#/InfoDetail/' + this.props.requestId,

@@ -20,7 +20,7 @@ class Index extends React.Component {
         super(props);
         this.state = {
             loading: true
-        };
+        }; 
     }
 
     componentWillMount() {
