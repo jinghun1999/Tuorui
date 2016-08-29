@@ -27,9 +27,10 @@ class Index extends React.Component {
         this._initState();
     }
     componentWillUpdate(){
-        this._initState();
+        //this._initState();
     }
     _initState(){
+        //获取用户登录信息
         var _this = this;
         storage.load({
             key: 'loginState',
@@ -44,6 +45,9 @@ class Index extends React.Component {
             });
         }).catch(err => {
             alert('error:' + err);
+            _this.setState({
+                loading: false,
+            })
         });
     }
     render() {
@@ -52,6 +56,15 @@ class Index extends React.Component {
         if (this.state.token && this.state.token.length > 0) {
             defaultName = 'HomePage';
             defaultComponent = HomePage;
+        }
+        if(this.state.loading){
+            return (
+                <View>
+                    <Text>Loading...</Text>
+                </View>
+            );
+        }
+        else{
             return (
                 <Navigator
                     initialRoute={{ name: defaultName, component: defaultComponent, id: 'main' }}
@@ -66,15 +79,6 @@ class Index extends React.Component {
                     return <Component {...route.params} navigator={navigator} tabBarShow={route.id==='main'} />
                 }}/>
             );
-        }else if(this.state.loading){
-            return (
-                <View>
-                    <Text>Loading...</Text>
-                </View>
-            )
-        }
-        else{
-            return (<Login />);
         }
     }
 }
