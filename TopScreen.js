@@ -29,7 +29,7 @@ var fetchPath = 'http://120.24.89.243:20000/api/AppInfo/GetHomeInfo';
 import IconView from 'react-native-vector-icons/MaterialIcons';
 import HomeIcon from './app/commonview/HomeIcon';
 import DrugHandBook from './app/page/HomePage/DrugHandBook';
-import DrugDetails from './app/page/HomePage/DrugDetails';
+import InfoDetail from './app/page/HomePage/InfoDetail';
 import Information from './app/page/HomePage/Information';
 import Contact from './app/page/HomePage/Contact';
 var _navigator; //全局navigator对象
@@ -164,12 +164,12 @@ class TopScreen extends Component {
         const { navigator } = this.props;
         if(navigator){
             navigator.push({
-                name:'DrugDetails',
-                component:DrugDetails,
+                name:'InfoDetail',
+                component:InfoDetail,
                 params:{
-                    requestId:Info.RequestID,
-                    headTitle:Info.InfoTitle,
-                    url:'http://www.sougou.com/'
+                    requestId: Info.RequestID,
+                    title: Info.InfoTitle,
+                    url: 'http://www.sougou.com/'
                 }
             })
         }

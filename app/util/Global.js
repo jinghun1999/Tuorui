@@ -6,6 +6,7 @@ import React, {
 import Storage from 'react-native-storage';
 var API_Service ='http://192.168.1.10:16000/service';
 var API_Auth = 'http://192.168.1.10:16000/auth';
+var WEB_HOST = 'http://120.24.89.243/trweb';
 var storage = new Storage({
     // 最大容量，默认值1000条数据循环存储
     size: 1000,
@@ -18,6 +19,7 @@ var storage = new Storage({
     },
 });
 var GLOBAL = {
+    WEB: WEB_HOST,
     HOST: API_Service,
     LOGIN: API_Auth + '/api/ad',
     GETGOODS: API_Service + '/api/ItemTypeLeftJoinItemCount/SearchSellListByPage',

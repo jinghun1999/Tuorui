@@ -59,14 +59,14 @@ class Login extends Component {
                         },
                         expires: 1000 * 3600 * 24
                     });
-                    /*if (navigator) {
+                    if (navigator) {
                         navigator.pop();
                         navigator.push({
                             name: 'MainPage',
                             component: MainPage,
                             params: {}
                         });
-                    }*/
+                    }
                 } else {
                     alert(data.Exception);
                 }
