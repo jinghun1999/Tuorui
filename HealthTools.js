@@ -36,7 +36,7 @@ class HealthTools extends Component {
                 name:'MemberPetClass',
                 component:Info,
                 params:{
-                    headTitle:'会员信息列表',
+                    headTitle:'会员信息',
                     id:1,
                 }
             })
@@ -50,7 +50,7 @@ class HealthTools extends Component {
                 name:'MemberPetClass',
                 component:Info,
                 params:{
-                    headTitle:'宠物信息列表',
+                    headTitle:'宠物信息',
                     id:2,
                 }
             })

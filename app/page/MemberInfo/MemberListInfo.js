@@ -35,17 +35,6 @@ class MemberListInfo extends Component {
     };
 
     componentWillMount() {
-        //this._data();
-    }
-
-    _data() {
-        var data = {
-            'data': [{'id': 1, 'name': '张三', 'phone': '13838383338', 'memberLevel': '白金会员'},
-                {'id': 2, 'name': '李四', 'phone': '14141414441', 'memberLevel': '普通会员'},
-                {'id': 3, 'name': '王五', 'phone': '16866888886', 'memberLevel': '铂金会员'},
-            ]
-        };
-        this.state.setState({dataSource: this.state.dataSource.cloneWithRows(data)});
     }
 
     _onBack() {
@@ -107,7 +96,7 @@ class MemberListInfo extends Component {
     render() {
         return (
             <View Style={styles.container}>
-                <Head title="会员列表" canAdd={true} canBack={true} edit="新增" onPress={this._onBack.bind(this)}
+                <Head title={this.props.headTitle} canAdd={true} canBack={true} edit="新增" onPress={this._onBack.bind(this)}
                       editInfo={this._addInfo.bind(this)}/>
                 <ListView dataSource={this.state.dataSource}
                           renderRow={this._onRenderRow.bind(this)}/>
