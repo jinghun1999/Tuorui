@@ -30,7 +30,7 @@ class Index extends React.Component {
         //this._initState();
     }
     _initState(){
-        //鑾峰彇鐢ㄦ埛鐧诲綍淇℃伅
+        //获取用户登录信息
         var _this = this;
         storage.load({
             key: 'loginState',
@@ -47,7 +47,7 @@ class Index extends React.Component {
             alert('error:' + err);
             _this.setState({
                 loading: false,
-            })
+            });
         });
     }
     render() {

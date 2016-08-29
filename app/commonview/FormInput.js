@@ -15,7 +15,7 @@ class FormInput extends React.Component {
         return (
             <View style={[{flexDirection: 'row', flex: 1,}, _nob? styles.nobottom: styles.inputWrap]}>
                 <View style={styles.inputTitle}>
-                    <Text style={{color:'#888'}}>{this.props.title}</Text>
+                    <Text style={{color:'#888',}}>{this.props.title}</Text>
                 </View>
                 <View style={styles.inputBox}>
                     <TextInput value={this.props.value}
@@ -24,7 +24,7 @@ class FormInput extends React.Component {
                                underlineColorAndroid={'transparent'}
                                keyboardType={this.props.keyboardType}
                                placeholder={this.props.value}
-                               style={{height: 40, borderWidth:0, flex:1}}/>
+                               style={{height: 30, borderWidth:0, flex:1}}/>
                 </View>
             </View>
         );
@@ -36,10 +36,10 @@ const styles = StyleSheet.create({
         borderBottomColor: '#ccc',
     },
     inputTitle: {
-        width: 100,
+        width: 80,
         height: 50,
         justifyContent: 'center',
-        marginLeft: 10
+        marginLeft: 10,
     },
     inputBox: {
         flex: 1,

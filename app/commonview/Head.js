@@ -9,7 +9,8 @@ import{
     StyleSheet,
     Text,
     View,
-    TouchableHighlight
+    TouchableHighlight,
+    TouchableOpacity,
     } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 class Head extends Component {
@@ -17,10 +18,18 @@ class Head extends Component {
         super(props);
         this.state = {
             canBack: false,
+            canAdd:false,
         };
     }
 
     render() {
+        var canAdd=null;
+        if(this.props.canAdd){
+            canAdd = <TouchableOpacity onPress={this.props.editInfo}>
+                <Text style={{fontSize: 16, color:'#fff'}}>{this.props.edit}</Text>
+            </TouchableOpacity>
+        }
+
         if (this.props.canBack) {
             return (
                 <View style={styles.container}>
@@ -34,7 +43,7 @@ class Head extends Component {
                         </Text>
                     </View>
                     <View style={styles.backBtn}>
-
+                        {canAdd}
                     </View>
                 </View>
             );

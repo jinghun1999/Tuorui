@@ -17,8 +17,7 @@ import Head from './app/commonview/Head';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconButton from './app/commonview/HomeIcon';
 import Sale from './app/page/Sales/Sale';
-//import MemberPet from './app/page/MemberInfo/MemberPetClass';
-import Info from './app/page/MemberInfo/MemberPetClass';
+import Info from './app/page/MemberInfo/MemberListInfo';
 class HealthTools extends Component {
     constructor(props) {
         super(props);
