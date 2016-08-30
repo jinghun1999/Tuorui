@@ -42,9 +42,9 @@ class Login extends Component {
             return;
         }
 
-        var thiz = this;
-        const { navigator } = this.props;
-        let url = Global.LOGIN + "?identity="+this.state.user+"&password="+this.state.pwd+"&type=m";
+        var _this = this;
+        const { navigator } = _this.props;
+        let url = Global.LOGIN + "?identity=" + _this.state.user+"&password=" + _this.state.pwd+"&type=m";
         //var header = {'Authorization': 'Anonymous ' + base64.encode(Global.ENTCODE)};
         try {
             NetUitl.get(url, false, function (data) {
@@ -59,6 +59,7 @@ class Login extends Component {
                         },
                         expires: 1000 * 3600 * 24
                     });
+                    _this.setState({ok:1});
                     if (navigator) {
                         navigator.pop();
                         navigator.push({

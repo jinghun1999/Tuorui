@@ -14,6 +14,7 @@ import {
     TextInput,
 } from 'react-native';
 import SearchBar from './../../commonview/SearchBar';
+import ScrollableTabView, {DefaultTabBar, } from 'react-native-scrollable-tab-view';
 class SearchAnyInfo extends React.Component {
     constructor(props) {
         super(props);
@@ -41,6 +42,11 @@ class SearchAnyInfo extends React.Component {
                            onBack ={this._onBack.bind(this)}
                            onPress={this._onSearchPress.bind(this)}
                 />
+                <ScrollableTabView style={{marginTop: 5, }} renderTabBar={() => <DefaultTabBar />}>
+                    <View tabLabel='资讯'>
+                        <Text>老实了老师锻炼腹肌锻炼法</Text>
+                    </View>
+                </ScrollableTabView>
             </View>
         )
     }

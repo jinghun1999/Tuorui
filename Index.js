@@ -30,8 +30,10 @@ class Index extends React.Component {
         //this._initState();
     }
     _initState(){
-        //获取用户登录信息
         var _this = this;
+        //storage.remove({
+        //    key: 'loginState'
+        //});
         storage.load({
             key: 'loginState',
             autoSync: false,

@@ -32,6 +32,7 @@ import DrugHandBook from './app/page/HomePage/DrugHandBook';
 import InfoDetail from './app/page/HomePage/InfoDetail';
 import Information from './app/page/HomePage/Information';
 import Contact from './app/page/HomePage/Contact';
+import DiaClass from './app/page/Info/DiaClass';
 var _navigator; //全局navigator对象
 let IMGS = [
     require('./image/job1.jpg'),
@@ -150,11 +151,6 @@ class TopScreen extends Component {
         }
     }
 
-    _onPressButton2() {
-        alert("###");
-        ToastAndroid.show("###", ToastAndroid.SHORT);
-    }
-
     _renderViewPage(data) {
         return (<Image source={data} style={styles.page}/>);
     }
@@ -185,31 +181,29 @@ class TopScreen extends Component {
         let _this = this;
         let _pageIndex = _this.state.pageIndex + 1;
         let _fetchPath = fetchPath + "?pid=&PageIndex=" + _pageIndex + "&PageSize=" + _this.state.pageSize;
-        fetch(_fetchPath)
-            .then((responses) => responses.text())
-            .then((resData) => {
-                let dataTable = JSON.parse(resData);
-                let _dataCache = _this.state.dataCache;
-                let _data =  dataTable.Data.rows;
-                _data.forEach((_data)=>{
-                    _dataCache.push(_data);
-                })
-                if (dataTable.Status) {
-                    _this.setState({
-                        pageIndex: _pageIndex,
-                        isRefreshing: false,
-                        dataCache:_dataCache,
-                    });
-                }
-            }).done();
+        fetch(_fetchPath).then((responses) => responses.text()).then((resData) => {
+            let dataTable = JSON.parse(resData);
+            let _dataCache = _this.state.dataCache;
+            let _data =  dataTable.Data.rows;
+            _data.forEach((_data)=>{
+                _dataCache.push(_data);
+            })
+            if (dataTable.Status) {
+                _this.setState({
+                    pageIndex: _pageIndex,
+                    isRefreshing: false,
+                    dataCache:_dataCache,
+                });
+            }
+        }).done();
     }
     _informationClick(){
         var _this = this;
         const {navigator} = _this.props;
         if(navigator){
             navigator.push({
-                name:'Information',
-                component:Information,
+                name: 'Information',
+                component: Information,
                 params:{
                     headTitle:'资讯'
                 }
@@ -231,24 +225,45 @@ class TopScreen extends Component {
     }
 
     _laboratoryPress() {
-        alert('Contact');
         var _this = this;
         const { navigator } = _this.props;
         if (navigator) {
             navigator.push({
-                name: 'Contact',
-                component: Contact,
+                name: 'DrugHandBook',
+                component: DrugHandBook,
                 params: {
-                    headTitle: '检验信息'
+                    headTitle: '检验手册'
                 }
             });
         }
     }
 
     _DiagnosisPress() {
-        alert('诊断点击弹窗');
+        var _this = this;
+        const { navigator } = _this.props;
+        if (navigator) {
+            navigator.push({
+                name: 'DrugHandBook',
+                component: DrugHandBook,
+                params: {
+                    headTitle: '诊断手册'
+                }
+            });
+        }
     }
-
+    _onPressDoc() {
+        var _this = this;
+        const { navigator } = _this.props;
+        if (navigator) {
+            navigator.push({
+                name: 'DrugHandBook',
+                component: DrugHandBook,
+                params: {
+                    headTitle: '文献库'
+                }
+            });
+        }
+    }
     renderInfo(Info) {
         return (
             <TouchableOpacity style={{height:50,overflow:'hidden'}} onPress={()=>this._ClickPress(Info)}>
@@ -300,7 +315,7 @@ class TopScreen extends Component {
                                 </View>
                                 <View style={{flexDirection:'row'}}>
                                     <HomeIcon text="文献" iconName={'ios-book'} iconColor={'#CDB7B5'}
-                                              onPress={this._onPressButton2.bind(this)}/>
+                                              onPress={this._onPressDoc.bind(this)}/>
                                     <HomeIcon text="资讯" iconName={'ios-list-box'} iconColor={'#66CCFF'}
                                               onPress={this._informationClick.bind(this)}/>
                                     <HomeIcon text="工具" iconName={'ios-build'} iconColor={'#FFAEB9'}

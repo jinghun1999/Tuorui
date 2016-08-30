@@ -33,7 +33,7 @@ class SearchBar extends Component {
                                keyboardType={this.props.keyboardType}
                                placeholder={this.props.value}
                                underlineColorAndroid={'transparent'}
-                               style={{flex:1,}}/>
+                               style={{flex:1, height:30}}/>
                 </View>
                 <TouchableOpacity style={styles.buttonStyle} onPress={this.props.onPress}>
                     <Text>搜索</Text>
@@ -46,26 +46,29 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         height: 40,
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        paddingBottom:5,
+        borderBottomColor: '#ccc'
     },
     searchStyle: {
         flex: 1,
         flexDirection: 'row',
         marginTop: 5,
-        marginLeft: 5,
         borderColor: '#666',
         borderWidth: StyleSheet.hairlineWidth,
         borderRadius: 10,
     },
     buttonStyle: {
-        height: 30,
-        width: 30,
+        height: 40,
+        width: 50,
+        marginTop:5,
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'center',
-        marginRight: 5,
+
     },
     iconStyle: {
-        height: 30,
+        height: 40,
         width: 25,
         justifyContent: 'center',
         alignItems: 'center',
