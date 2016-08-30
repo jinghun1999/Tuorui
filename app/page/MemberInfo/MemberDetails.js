@@ -101,9 +101,7 @@ class MemberDetails extends Component {
     }
 
     _onPetDetails(g) {
-        let _name = g.petName;
         let _this = this;
-        alert(_name);
         const {navigator} = _this.props;
         if(navigator){
             navigator.push({

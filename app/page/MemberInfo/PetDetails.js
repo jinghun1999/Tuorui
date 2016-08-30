@@ -21,6 +21,7 @@ import{
 import Head from '../../commonview/Head';
 import FormInput from '../../commonview/FormInput';
 import FormPicker from '../../commonview/FormPicker';
+import ImagePicker from 'react-native-image-picker';
 class PetDetails extends Component {
     constructor(props) {
         super(props);
@@ -116,6 +117,13 @@ class PetDetails extends Component {
                                        onChangeText={(text)=>{this.setState({ petCaseNum: text })}}
                             />
                         </View>
+                        <View style={styles.borderStyle}>
+                            <FormInput value={this.props.petInfo.petName}
+                                       title="宠物昵称"
+                                       enabled={this.state.enable}
+                                       onChangeText={(text)=>{this.setState({ petNameText: text })}}
+                            />
+                        </View>
                     </View>
                     <View style={styles.imageStyle}>
                         <TouchableOpacity onPress={()=>this._onChooseImage(true)}>
@@ -129,12 +137,7 @@ class PetDetails extends Component {
                     </View>
                 </View>
                 <View style={{flexDirection:'column',}}>
-                    <View style={styles.borderStyle}>
-                        <FormInput value={this.props.petInfo.petName}
-                                   title="宠物昵称"
-                                   enabled={this.state.enable}
-                                   onChangeText={(text)=>{this.setState({ petNameText: text })}}
-                        />
+                    <View style={{height:15,backgroundColor:'#ccc'}}>
                     </View>
                     <View style={styles.borderStyle}>
                         <FormPicker title="出生日期" tips={this.state.birthText}
@@ -226,6 +229,8 @@ class PetDetails extends Component {
                             </Picker>
                         </View>
                     </View>
+                    <View style={{height:15,backgroundColor:'#ccc'}}>
+                    </View>
                     <View style={styles.borderStyle}>
                         <FormInput value={this.props.petInfo.reMarks}
                                    title="备注"
@@ -244,6 +249,7 @@ const styles = StyleSheet.create({
     basicStyle: {
         flex: 1,
         flexDirection: 'row',
+        marginTop:5,
     },
     borderStyle: {
         height: 50,
@@ -251,12 +257,11 @@ const styles = StyleSheet.create({
     },
     basicContentStyle: {
         flex: 1,
-        marginLeft: 10,
     },
     imageStyle: {
-        margin: 1,
-        height: 150,
-        width: 150,
+        margin: 2,
+        height: 200,
+        width: 180,
         borderColor: '#666',
         borderWidth: StyleSheet.hairlineWidth,
         justifyContent: 'center',
