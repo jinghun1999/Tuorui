@@ -111,7 +111,12 @@ class MemberDetails extends Component {
                 component:PetDetails,
                 params:{
                     headTitle:'宠物详情',
-                    name: g.petName,
+                    memberName:_this.props.memberName,
+                    petInfo:{
+                        petName: g.petName,
+                        petId: g.id,
+                        sterilizationState:false,
+                    }
                 }
             })
         }
