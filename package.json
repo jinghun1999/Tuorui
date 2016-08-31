@@ -12,6 +12,7 @@
     "react-native-barcode-scanner-universal": "^1.0.5",
     "react-native-barcodescanner": "^3.0.1",
     "react-native-camera": "git+https://github.com/lwansbrough/react-native-camera.git",
+    "react-native-checkbox": "^1.0.15",
     "react-native-loader": "^1.1.0",
     "react-native-loading-w": "^1.0.0",
     "react-native-scrollable-tab-view": "^0.5.3",

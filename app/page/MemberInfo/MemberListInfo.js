@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         height: 50,
-        borderBottomColor: '#666',
+        borderBottomColor: '#ccc',
         borderBottomWidth: StyleSheet.hairlineWidth,
         justifyContent: 'center',
         alignSelf: 'center',
