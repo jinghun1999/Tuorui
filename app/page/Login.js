@@ -44,9 +44,28 @@ class Login extends Component {
 
         var _this = this;
         const { navigator } = _this.props;
-        let url = Global.LOGIN + "?identity=" + _this.state.user+"&password=" + _this.state.pwd+"&type=m";
+        let url = Global.LOGIN + "?identity=" + _this.state.user + "&password=" + _this.state.pwd + "&type=m";
         //var header = {'Authorization': 'Anonymous ' + base64.encode(Global.ENTCODE)};
         try {
+            storage.save({
+                key: 'loginState',  //注意:请不要在key中使用_下划线符号!
+                rawData: {
+                    phone: '18307722503',
+                    name: 'tomchow',
+                    token: '081000001000120102012'
+                },
+                expires: 1000 * 3600 * 24
+            });
+            _this.setState({ok: 1});
+            if (navigator) {
+                navigator.pop();
+                navigator.push({
+                    name: 'MainPage',
+                    component: MainPage,
+                    params: {}
+                });
+            }
+            /*
             NetUitl.get(url, false, function (data) {
                 if (data.Sign && data.Message) {
                     alert("登录成功" + data.Message.Token);
@@ -59,7 +78,7 @@ class Login extends Component {
                         },
                         expires: 1000 * 3600 * 24
                     });
-                    _this.setState({ok:1});
+                    _this.setState({ok: 1});
                     if (navigator) {
                         navigator.pop();
                         navigator.push({
@@ -71,7 +90,7 @@ class Login extends Component {
                 } else {
                     alert(data.Exception);
                 }
-            });
+            });*/
         } catch (e) {
             alert("登陆失败，错误信息：" + e);
         }

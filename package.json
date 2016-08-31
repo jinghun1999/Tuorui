@@ -7,8 +7,8 @@
   },
   "dependencies": {
     "md5": "^2.1.0",
-    "react": "15.2.1",
-    "react-native": "0.29.0",
+    "react": "^15.3.0",
+    "react-native": "0.32.0",
     "react-native-barcode-scanner-universal": "^1.0.5",
     "react-native-barcodescanner": "^3.0.1",
     "react-native-camera": "git+https://github.com/lwansbrough/react-native-camera.git",

@@ -69,7 +69,7 @@ class Information extends React.Component {
                 isRefreshing: false,
             });
         }).catch(err => {
-            alert("error")
+            alert("暂无缓存数据");
             _this._fetchData(_this.state.pageSize, _this.state.pageIndex, false);
             //_this._loadData();
         });
