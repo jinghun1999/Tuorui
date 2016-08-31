@@ -42,11 +42,9 @@ class SearchAnyInfo extends React.Component {
                            onBack ={this._onBack.bind(this)}
                            onPress={this._onSearchPress.bind(this)}
                 />
-                <ScrollableTabView style={{marginTop: 5, }} renderTabBar={() => <DefaultTabBar />}>
-                    <View tabLabel='资讯'>
-                        <Text>老实了老师锻炼腹肌锻炼法</Text>
-                    </View>
-                </ScrollableTabView>
+                <View tabLabel='资讯'>
+                    <Text>搜索结果列表</Text>
+                </View>
             </View>
         )
     }
