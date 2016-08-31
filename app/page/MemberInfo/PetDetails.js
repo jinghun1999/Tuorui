@@ -21,7 +21,6 @@ import{
 import Head from '../../commonview/Head';
 import FormInput from '../../commonview/FormInput';
 import FormPicker from '../../commonview/FormPicker';
-import ImagePicker from 'react-native-image-picker';
 class PetDetails extends Component {
     constructor(props) {
         super(props);

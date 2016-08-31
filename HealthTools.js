@@ -11,13 +11,13 @@ import{
     ScrollView,
     Image,
     View,
-    Dimensions,
 } from 'react-native';
 import Head from './app/commonview/Head';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconButton from './app/commonview/HomeIcon';
 import Sale from './app/page/Sales/Sale';
 import Info from './app/page/MemberInfo/MemberListInfo';
+import VaccineInfo from './app/page/MemberInfo/VaccineInfo';
 class HealthTools extends Component {
     constructor(props) {
         super(props);
@@ -73,6 +73,19 @@ class HealthTools extends Component {
             })
         }
     }
+    _onVaccineInfo(){
+        let _this= this;
+        const {navigator} = _this.props;
+        if(navigator){
+            navigator.push({
+                name:'VaccineInfo',
+                component:VaccineInfo,
+                params:{
+                    headTitle:'我的疫苗',
+                }
+            })
+        }
+    }
     render() {
         return (
             <View style={styles.container}>
@@ -104,7 +117,7 @@ class HealthTools extends Component {
                     <IconButton text="宠物管理" iconName={'md-paw'} iconColor={'#5CACEE'}
                                 onPress={this._Pet.bind(this)}/>
                     <IconButton text="我的疫苗" iconName={'logo-steam'} iconColor={'#6666CC'}
-                                onPress={this._more.bind(this)}/>
+                                onPress={this._onVaccineInfo.bind(this)}/>
                 </View>
                 <View style={styles.iconViewStyle}>
                     <IconButton text="驱虫疫苗" iconName={'ios-pulse'} iconColor={'#9999CC'}
