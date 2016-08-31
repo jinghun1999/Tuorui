@@ -96,7 +96,8 @@ class MemberListInfo extends Component {
     render() {
         return (
             <View Style={styles.container}>
-                <Head title={this.props.headTitle} canAdd={true} canBack={true} edit="新增" onPress={this._onBack.bind(this)}
+                <Head title={this.props.headTitle} canAdd={true} canBack={true} edit="新增"
+                      onPress={this._onBack.bind(this)}
                       editInfo={this._addInfo.bind(this)}/>
                 <ListView dataSource={this.state.dataSource}
                           renderRow={this._onRenderRow.bind(this)}/>
