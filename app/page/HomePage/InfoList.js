@@ -4,29 +4,29 @@
 'use strict';
 import React, {Component} from 'react';
 import {
-    AppRegistry,
     StyleSheet,
     ListView,
     View,
-    ScrollView,
     Text,
     TouchableOpacity,
     TextInput,
+    ActivityIndicator,
+    RefreshControl,
 } from 'react-native';
 import Head from './../../commonview/Head';
 import IconView from 'react-native-vector-icons/MaterialIcons';
-var infoPath = 'http://120.24.89.243:20000/api/AppInfo/GetInformationByName';
+var infoPath = global.GLOBAL.APIAPP +'/AppInfo/GetInformationByName';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 import Icon from 'react-native-vector-icons/Ionicons';
-import SearchInfo from './SearchAnyInfo';
+import SearchInfo from './InfoSearch';
+import InfoDetail from './InfoDetail';
 class Information extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             pageIndex: 1,
-            pageSize: 20,
+            pageSize: 15,
             listInfoSource: new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2}),
-            total: 0,
             totalPage: 0,
             infoSearchTextInput: '',
             infoCache: [],
@@ -35,13 +35,16 @@ class Information extends React.Component {
     }
 
     componentDidMount() {
-        this._fetchData(this.state.infoSearchTextInput, this.state.pageIndex, this.state.pageSize);
+        let _this = this;
+        _this.timer = setTimeout(
+            () => {
+                _this._loadData();
+            }, 100
+        );
     }
-
-    componentWillReceiveProps() {
-        //alert(this.state.store);
+    componentWillUnmount() {
+        this.timer && clearTimeout(this.timer);
     }
-
     //返回方法
     _onBack() {
         const { navigator } = this.props;
@@ -49,57 +52,86 @@ class Information extends React.Component {
             navigator.pop();
         }
     }
-
-    _Search() {
-        let _this = this;
-        let searchName = _this.state.infoSearchTextInput;
-        _this.state.infoCache = [];
-        this._fetchData(searchName, 1, this.state.pageSize);
+    _loadData() {
+        /*从缓存中读取*/
+        var _this = this;
+        storage.load({
+            key: 'InfoList',
+            autoSync: false,
+            syncInBackground: false
+        }).then(ret => {
+            _this.setState({
+                infoCache: ret.InfoList,
+                infoLoaded: true,
+                isRefreshing: false,
+            });
+        }).catch(err => {
+            alert("error")
+            _this._fetchData(_this.state.pageSize, _this.state.pageIndex, false);
+            //_this._loadData();
+        });
     }
-
-    _fetchData(infoName, pageIndex, pageSize) {
+    _fetchData(pageSize, pageIndex, isNext) {
         let _this = this;
-        let fetchPath = infoPath + '?infoName=' + infoName + '&pageIndex=' + pageIndex + '&pageSize=' + pageSize;
-        _this.setState({isRefreshing: true});
+        let fetchPath = infoPath + '?infoName=&pageIndex=' + pageIndex + '&pageSize=' + pageSize;
         fetch(fetchPath)
             .then((response)=>response.text())
             .then((responseData)=> {
                 let dt = JSON.parse(responseData);
                 let _dataCache = _this.state.infoCache;
                 let _data = dt.Data.rows;
-                _data.forEach((_data)=> {
-                    _dataCache.push(_data);
-                })
+                if(isNext){
+                    _data.forEach((_data)=> {
+                        _dataCache.push(_data);
+                    });
+                }else{
+                    _dataCache = _data;
+                }
                 if (dt.Status) {
                     _this.setState({
-                        total: dt.total,
                         totalPage: dt.TotalPage,
                         infoCache: _dataCache,
-                        pageSize: dt.Data.Pager.PageSize,
-                        pageIndex: dt.Data.Pager.PageIndex,
+                        pageSize: pageSize,
+                        pageIndex: pageIndex,
                         infoLoaded: true,
-                    })
+                        isRefreshing: false,
+                    });
+                    if(!isNext){
+                        storage.save({
+                            key: 'InfoList',
+                            rawData: {
+                                InfoList: dt.Data.rows
+                            },
+                            expires: 1000 * 3600 * 24
+                        });
+                    }
                 }
-            })
-            .done();
+            }).done();
     }
 
     _ClickPress(info) {
-        let id = info.RequestID;
-        alert(id);
+        let _this = this;
+        const { navigator } = _this.props;
+        if (navigator) {
+            navigator.push({
+                name: 'InfoDetail',
+                component: InfoDetail,
+                params: {
+                    requestId: info.RequestID,
+                    title: info.InfoTitle,
+                }
+            })
+        }
     }
 
     _renderInfo(info) {
         return (
-            <TouchableOpacity style={{height:50,overflow:'hidden'}} onPress={()=>this._ClickPress(info)}>
+            <TouchableOpacity style={styles.rows} onPress={()=>this._ClickPress(info)}>
                 <View style={{flex:1,flexDirection:'row'}}>
-                    <IconView name={'local-post-office'} size={20} color={'#ADD8E6'}
-                              style={{marginLeft:10,justifyContent:'center',alignSelf:'center'}}/>
-                    {/*<Image resource={Info.ImagePath}/>*/}
-                    <Text
-                        style={{flex:1,marginLeft:10,justifyContent:'center',alignSelf:'center'}}>{info.InfoTitle}</Text>
+                    {/*<IconView name={'local-post-office'} size={20} color={'#ADD8E6'} style={styles.icon}/>*/}
+                    <Text style={styles.rowTitle}>{info.InfoTitle}</Text>
                     <IconView name={'chevron-right'} size={20} color={'#888'}
-                              style={{justifyContent:'center',alignSelf:'center'}}/>
+                              style={styles.arrow}/>
                 </View>
             </TouchableOpacity>
         )
@@ -107,9 +139,7 @@ class Information extends React.Component {
 
     _onEndReached() {
         let _this = this;
-        let _pageIndex = _this.state.pageIndex + 1;
-        let _infoInput = _this.state.infoSearchTextInput;
-        _this._fetchData(_infoInput, _this.state.pageSize, _pageIndex);
+        _this._fetchData(_this.state.pageSize, _this.state.pageIndex + 1, true);
     }
 
     _renderLoadingView() {
@@ -124,7 +154,7 @@ class Information extends React.Component {
     }
 
     _onPressSearch() {
-        let _this =this;
+        let _this = this;
         const {navigator} = _this.props;
         if(navigator){
             navigator.push({
@@ -136,7 +166,23 @@ class Information extends React.Component {
             })
         }
     }
-
+    renderFooter() {
+        return (
+            <View style={{height: 120}}>
+                <ActivityIndicator />
+            </View>
+        );
+    }
+    _onRefresh() {
+        let _this = this;
+        _this.setState({isRefreshing: true});
+        setTimeout(() => {
+            _this._fetchData(_this.state.pageSize, 1, false);
+            _this.setState({
+                isRefreshing: false,
+            });
+        }, 500);
+    }
     render() {
         if (!this.state.infoLoaded) {
             return this._renderLoadingView();
@@ -158,9 +204,21 @@ class Information extends React.Component {
                     <ListView dataSource={this.state.listInfoSource.cloneWithRows(this.state.infoCache)}
                               renderRow={this._renderInfo.bind(this)}
                               onEndReached={this._onEndReached.bind(this)}
-                              initialListSize={this.state.total}
-                              pageSize={this.state.total}
+                              initialListSize={15}
+                              pageSize={10}
                               enableEmptySections={true}
+                              renderFooter={this.renderFooter}
+                              refreshControl={
+                                  <RefreshControl
+                                    refreshing={this.state.isRefreshing}
+                                    onRefresh={this._onRefresh.bind(this)}
+                                    tintColor="#ff0000"
+                                    title="Loading..."
+                                    titleColor="#00ff00"
+                                    colors={['#ff0000', '#00ff00', '#0000ff']}
+                                    progressBackgroundColor="#fff"
+                                  />
+                                }
                     />
                 </View>
             )
@@ -177,7 +235,7 @@ const styles = StyleSheet.create({
     touchStyle: {
         margin: 5,
         flexDirection: 'row',
-        height: 40,
+        height: 30,
         borderColor: '#666',
         borderWidth: StyleSheet.hairlineWidth,
         borderRadius: 10,
@@ -197,6 +255,27 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         marginRight: 5,
     },
-
+    icon:{
+        marginLeft:10,
+        justifyContent:'center',
+        alignSelf:'center'
+    },
+    rows: {
+        height: 50,
+        overflow: 'hidden',
+        backgroundColor: '#fff',
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderBottomColor: '#ccc'
+    },
+    rowTitle: {
+        flex:1,
+        marginLeft:10,
+        justifyContent:'center',
+        alignSelf:'center'
+    },
+    arrow:{
+        justifyContent:'center',
+        alignSelf:'center'
+    }
 });
 module.exports = Information;

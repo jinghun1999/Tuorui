@@ -24,16 +24,19 @@ class SearchBar extends Component {
                 <TouchableOpacity style={styles.buttonStyle} onPress={this.props.onBack}>
                 <Icon name={'ios-arrow-back'} size={25} color={'#666'}/>
                 </TouchableOpacity>
-                <View style={styles.searchStyle}>
+                <View style={styles.inputContainer}>
                     <View style={styles.iconStyle}>
                         <Icon name={'ios-search'} size={20} color={'#666'} />
                     </View>
-                    <TextInput value={this.props.value}
-                               onChangeText={this.props.onChangeText}
-                               keyboardType={this.props.keyboardType}
-                               placeholder={this.props.value}
-                               underlineColorAndroid={'transparent'}
-                               style={{flex:1, height:30}}/>
+                    <View style={{flex: 1, height: 40}}>
+                        <TextInput value={this.props.value}
+                                   onChangeText={this.props.onChangeText}
+                                   keyboardType={this.props.keyboardType}
+                                   placeholder={this.props.value}
+                                   underlineColorAndroid={'transparent'}
+                                   autoFocus={false}
+                                   style={{}}/>
+                    </View>
                 </View>
                 <TouchableOpacity style={styles.buttonStyle} onPress={this.props.onPress}>
                     <Text>搜索</Text>
@@ -50,7 +53,7 @@ const styles = StyleSheet.create({
         paddingBottom:5,
         borderBottomColor: '#ccc'
     },
-    searchStyle: {
+    inputContainer: {
         flex: 1,
         flexDirection: 'row',
         marginTop: 5,
