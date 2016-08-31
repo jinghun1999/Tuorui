@@ -12,10 +12,10 @@ import {
     TextInput,
     ActivityIndicator,
     RefreshControl,
-} from 'react-native';
+    } from 'react-native';
 import Head from './../../commonview/Head';
 import IconView from 'react-native-vector-icons/MaterialIcons';
-var infoPath = global.GLOBAL.APIAPP +'/AppInfo/GetInformationByName';
+var infoPath = global.GLOBAL.APIAPP + '/AppInfo/GetInformationByName';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 import Icon from 'react-native-vector-icons/Ionicons';
 import SearchInfo from './InfoSearch';
@@ -42,9 +42,11 @@ class Information extends React.Component {
             }, 100
         );
     }
+
     componentWillUnmount() {
         this.timer && clearTimeout(this.timer);
     }
+
     //返回方法
     _onBack() {
         const { navigator } = this.props;
@@ -52,6 +54,7 @@ class Information extends React.Component {
             navigator.pop();
         }
     }
+
     _loadData() {
         /*从缓存中读取*/
         var _this = this;
@@ -61,7 +64,7 @@ class Information extends React.Component {
             syncInBackground: false
         }).then(ret => {
             _this.setState({
-                infoCache: ret.InfoList,
+                //infoCache: ret.InfoList,
                 infoLoaded: true,
                 isRefreshing: false,
             });
@@ -71,6 +74,7 @@ class Information extends React.Component {
             //_this._loadData();
         });
     }
+
     _fetchData(pageSize, pageIndex, isNext) {
         let _this = this;
         let fetchPath = infoPath + '?infoName=&pageIndex=' + pageIndex + '&pageSize=' + pageSize;
@@ -80,11 +84,11 @@ class Information extends React.Component {
                 let dt = JSON.parse(responseData);
                 let _dataCache = _this.state.infoCache;
                 let _data = dt.Data.rows;
-                if(isNext){
+                if (isNext) {
                     _data.forEach((_data)=> {
                         _dataCache.push(_data);
                     });
-                }else{
+                } else {
                     _dataCache = _data;
                 }
                 if (dt.Status) {
@@ -96,7 +100,7 @@ class Information extends React.Component {
                         infoLoaded: true,
                         isRefreshing: false,
                     });
-                    if(!isNext){
+                    if (!isNext) {
                         storage.save({
                             key: 'InfoList',
                             rawData: {
@@ -127,12 +131,10 @@ class Information extends React.Component {
     _renderInfo(info) {
         return (
             <TouchableOpacity style={styles.rows} onPress={()=>this._ClickPress(info)}>
-                <View style={{flex:1,flexDirection:'row'}}>
-                    {/*<IconView name={'local-post-office'} size={20} color={'#ADD8E6'} style={styles.icon}/>*/}
-                    <Text style={styles.rowTitle}>{info.InfoTitle}</Text>
-                    <IconView name={'chevron-right'} size={20} color={'#888'}
-                              style={styles.arrow}/>
-                </View>
+                {/*<IconView name={'local-post-office'} size={20} color={'#ADD8E6'} style={styles.icon}/>*/}
+                <Text style={styles.rowTitle}>{info.InfoTitle}</Text>
+                <IconView name={'chevron-right'} size={20} color={'#888'}
+                          style={styles.arrow}/>
             </TouchableOpacity>
         )
     }
@@ -156,16 +158,15 @@ class Information extends React.Component {
     _onPressSearch() {
         let _this = this;
         const {navigator} = _this.props;
-        if(navigator){
+        if (navigator) {
             navigator.push({
-                name:'SearchInfo',
-                component:SearchInfo,
-                param:{
-
-                }
+                name: 'SearchInfo',
+                component: SearchInfo,
+                param: {}
             })
         }
     }
+
     renderFooter() {
         return (
             <View style={{height: 120}}>
@@ -173,6 +174,7 @@ class Information extends React.Component {
             </View>
         );
     }
+
     _onRefresh() {
         let _this = this;
         _this.setState({isRefreshing: true});
@@ -183,6 +185,7 @@ class Information extends React.Component {
             });
         }, 500);
     }
+
     render() {
         if (!this.state.infoLoaded) {
             return this._renderLoadingView();
@@ -190,17 +193,16 @@ class Information extends React.Component {
             return (
                 <View style={styles.container}>
                     <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
-                    <View style={styles.touchStyle}>
-                        <TouchableOpacity style={{flexDirection:'row',flex:1,}} onPress={this._onPressSearch.bind(this)}>
-                            <View style={styles.iconStyle}>
-                                <Icon name={'ios-search'} size={20} color={'#666'}/>
-                            </View>
-                            <Text style={{flex:1,}}/>
-                            <View style={styles.textStyle}>
-                                <Text>搜索</Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
+                    <TouchableOpacity style={styles.touchStyle}
+                                      onPress={this._onPressSearch.bind(this)}>
+                        <View style={styles.iconStyle}>
+                            <Icon name={'ios-search'} size={20} color={'#666'}/>
+                        </View>
+                        <Text style={{flex:1,}}/>
+                        <View style={styles.textStyle}>
+                            <Text>搜索</Text>
+                        </View>
+                    </TouchableOpacity>
                     <ListView dataSource={this.state.listInfoSource.cloneWithRows(this.state.infoCache)}
                               renderRow={this._renderInfo.bind(this)}
                               onEndReached={this._onEndReached.bind(this)}
@@ -219,7 +221,7 @@ class Information extends React.Component {
                                     progressBackgroundColor="#fff"
                                   />
                                 }
-                    />
+                        />
                 </View>
             )
         }
@@ -233,6 +235,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     touchStyle: {
+
         margin: 5,
         flexDirection: 'row',
         height: 30,
@@ -255,12 +258,14 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         marginRight: 5,
     },
-    icon:{
-        marginLeft:10,
-        justifyContent:'center',
-        alignSelf:'center'
+    icon: {
+        marginLeft: 10,
+        justifyContent: 'center',
+        alignSelf: 'center'
     },
     rows: {
+        flex:1,
+        flexDirection:'row',
         height: 50,
         overflow: 'hidden',
         backgroundColor: '#fff',
@@ -268,14 +273,14 @@ const styles = StyleSheet.create({
         borderBottomColor: '#ccc'
     },
     rowTitle: {
-        flex:1,
-        marginLeft:10,
-        justifyContent:'center',
-        alignSelf:'center'
+        flex: 1,
+        marginLeft: 10,
+        justifyContent: 'center',
+        alignSelf: 'center'
     },
-    arrow:{
-        justifyContent:'center',
-        alignSelf:'center'
+    arrow: {
+        justifyContent: 'center',
+        alignSelf: 'center'
     }
 });
 module.exports = Information;
