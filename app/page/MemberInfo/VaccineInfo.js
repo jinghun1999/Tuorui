@@ -97,6 +97,7 @@ class VaccineInfo extends Component {
             <View style={styles.container}>
                 <Head title={this.props.headTitle}
                       canBack={true}
+
                       onPress={this._onBack.bind(this)}
                 />
                 <ScrollView key={'scrollView'}
@@ -111,25 +112,25 @@ class VaccineInfo extends Component {
                             <FormInput value={this.props.memberName}
                                        title="会员姓名"
                                        style={{height:30,}}
-                                       enabled={this.state.enable}
+                                       enabled={this.state.enabled}
                                        onChangeText={(text)=>{this.setState({ memberName: text })}}
                             />
                             <FormInput value={this.props.memberPhone}
                                        title="手机号码"
                                        style={{height:30,}}
-                                       enabled={this.state.enable}
+                                       enabled={this.state.enabled}
                                        onChangeText={(text)=>{this.setState({ memberPhone: text })}}
                             />
                             <FormInput value={this.props.petSource.petName}
                                        title="宠物昵称"
                                        style={{height:30,}}
-                                       enabled={this.state.enable}
+                                       enabled={this.state.enabled}
                                        onChangeText={(text)=>{this.setState({ petName: text })}}
                             />
                             <FormInput value={this.props.petSource.petCaseNum}
                                        title="病历编号"
                                        style={{height:30,}}
-                                       enabled={this.state.enable}
+                                       enabled={this.state.enabled}
                                        onChangeText={(text)=>{this.setState({ petCaseNum: text })}}
                             />
                         </View>
@@ -143,11 +144,10 @@ class VaccineInfo extends Component {
                         <View style={{width:80,justifyContent:'center', marginLeft:10,}}>
                             <Text style={{color:'#666'}}>宠物性别</Text>
                         </View>
-
                             <Picker
                                 selectedValue={this.props.petSource.petSex}
                                 mode="dropdown"
-                                enabled={this.state.enable}
+                                enabled={this.state.enabled}
                                 style={{backgroundColor:'#fff',height:45,flex:1,justifyContent:'center'}}
                                 onValueChange={(sex) => this.setState({petSex: sex})}>
                                 <Picker.Item label="雌性" value="1"/>
@@ -163,7 +163,7 @@ class VaccineInfo extends Component {
                         <Picker
                             selectedValue={this.props.petSource.petType}
                             mode="dropdown"
-                            enabled={this.state.enable}
+                            enabled={this.state.enabled}
                             style={{backgroundColor:'#fff',height:45,flex:1,justifyContent:'center'}}
                             onValueChange={(type) => this.setState({petType: type})}>
                             <Picker.Item label="小型犬" value="small"/>

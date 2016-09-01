@@ -42,7 +42,18 @@ class PetDetails extends Component {
             navigator.pop();
         }
     }
+    componentDidMount() {
+        var _this = this;
+        var isAdd =_this.props.isAdd;
+        if(isAdd){
+            _this.setState({
+                enable: true,
+                edit:'保存',
+            })
+        }
 
+
+    }
     //进行创建时间日期选择器
     async showPicker(stateKey, options) {
         var openState = this.state.enable;
@@ -130,7 +141,7 @@ class PetDetails extends Component {
                     </View>
                     <View style={styles.borderStyle}>
                         <FormPicker title="出生日期"
-                                    tips={this.props.petSource.birthDate}
+                                    tips={this.props.petSource.birthDate==null?this.state.birthText:this.props.petSource.birthDate}
                                     onPress={this.showPicker.bind(this, 'birth', {date: this.state.birthDate})}
                         />
                     </View>
@@ -145,6 +156,7 @@ class PetDetails extends Component {
                                 enabled={this.state.enable}
                                 style={{backgroundColor:'#fff',height:40}}
                                 onValueChange={(lang) => this.setState({sterilizationState: lang})}>
+                                <Picker.Item label="请选择" value="0"/>
                                 <Picker.Item label="未绝育" value="1"/>
                                 <Picker.Item label="已绝育" value="2"/>
                             </Picker>
@@ -161,6 +173,7 @@ class PetDetails extends Component {
                                 enabled={this.state.enable}
                                 style={{backgroundColor:'#fff',height:40}}
                                 onValueChange={(sex) => this.setState({petSex: sex})}>
+                                <Picker.Item label="请选择" value="0"/>
                                 <Picker.Item label="雌性" value="1"/>
                                 <Picker.Item label="雄性" value="2"/>
                                 <Picker.Item label="其它" value="3"/>
@@ -178,6 +191,7 @@ class PetDetails extends Component {
                                 enabled={this.state.enable}
                                 style={{backgroundColor:'#fff',height:40}}
                                 onValueChange={(color) => this.setState({petColor: color})}>
+                                <Picker.Item label="请选择" value="0"/>
                                 <Picker.Item label="黄色" value="yellow"/>
                                 <Picker.Item label="白色" value="white"/>
                                 <Picker.Item label="黑色" value="black"/>
@@ -196,6 +210,7 @@ class PetDetails extends Component {
                                 enabled={this.state.enable}
                                 style={{backgroundColor:'#fff',height:40}}
                                 onValueChange={(type) => this.setState({petType: type})}>
+                                <Picker.Item label="请选择" value="0"/>
                                 <Picker.Item label="小型犬" value="small"/>
                                 <Picker.Item label="中型犬" value="middle"/>
                                 <Picker.Item label="大型犬" value="big"/>
@@ -214,6 +229,7 @@ class PetDetails extends Component {
                                 enabled={this.state.enable}
                                 style={{backgroundColor:'#fff',height:40}}
                                 onValueChange={(state) => this.setState({petState: state})}>
+                                <Picker.Item label="请选择" value="0"/>
                                 <Picker.Item label="在世" value="alive"/>
                                 <Picker.Item label="离世" value="die"/>
                             </Picker>
