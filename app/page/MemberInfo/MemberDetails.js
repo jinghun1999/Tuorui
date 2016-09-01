@@ -27,10 +27,66 @@ class MemberDetails extends Component {
         var now = new Date();
         var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         var petData = {
-            'data': [{'id': 1, 'petName': '宠物A', 'imagePath': './../../../image/pet.jpg',},
-                {'id': 2, 'petName': '宠物B', 'imagePath': './../../../image/pet.jpg',},
-                {'id': 3, 'petName': '宠物C', 'imagePath': './../../../image/pet.jpg',},
-                {'id': 4, 'petName': '宠物D', 'imagePath': './../../../image/pet.jpg',},
+            'memberName':'张三',
+            'memberPhone':'13838383338',
+            'data': [
+                {
+                    'petId': 1,
+                    'petName': '小金',
+                    'variety':'金毛',
+                    'petCaseNum':'20160831001',
+                    'birthDate':'2016-08-18',
+                    'sterilizationState':'1',
+                    'petSex':'2',
+                    'petColor':'gold',
+                    'petType':'middle',
+                    'petState':'alive',
+                    'image':'./../../../image/pet.jpg',
+                    'reMarks':'没有更多备注了',
+
+                },
+                {
+                    'petId': 2,
+                    'petName': '娃娃',
+                    'variety':'吉娃娃',
+                    'petCaseNum':'20160831001',
+                    'birthDate':'2008-08-18',
+                    'sterilizationState':'1',
+                    'petSex':'2',
+                    'petColor':'white',
+                    'petType':'small',
+                    'petState':'alive',
+                    'image':'./../../../image/pet.jpg',
+                    'reMarks':'没有更多备注了',
+                },
+                {
+                    'petId': 3,
+                    'petName': '家虎',
+                    'variety':'藏獒',
+                    'petCaseNum':'20160831001',
+                    'birthDate':'1988-08-18',
+                    'sterilizationState':'1',
+                    'petSex':'1',
+                    'petColor':'black',
+                    'petType':'big',
+                    'petState':'alive',
+                    'image':'./../../../image/pet.jpg',
+                    'reMarks':'没有更多备注了',
+                },
+                {
+                    'petId': 4,
+                    'petName': '茱莉',
+                    'variety':'茶杯犬',
+                    'petCaseNum':'20160831001',
+                    'birthDate':'2010-08-01',
+                    'sterilizationState':'1',
+                    'petSex':'2',
+                    'petColor':'yellow',
+                    'petType':'small',
+                    'petState':'alive',
+                    'image':'./../../../image/pet.jpg',
+                    'reMarks':'没有更多备注了',
+                }
             ]
         };
         this.state = {
@@ -79,6 +135,21 @@ class MemberDetails extends Component {
 
     _onAddPet() {
         alert('add Pet');
+        let _this=this;
+        const {navigator}=_this.props;
+        if(navigator){
+            navigator.push({
+                name: 'PetDetails',
+                component: PetDetails,
+                params: {
+                    headTitle: '宠物详情',
+                    isAdd:true,
+                    memberName: _this.props.name,
+                    memberPhone:_this.props.phone,
+                    petSource: [],
+                }
+            })
+        }
     }
 
     _editInfo(g) {
@@ -100,7 +171,7 @@ class MemberDetails extends Component {
 
     }
 
-    _onPetDetails(g) {
+    _onPetDetails(pet) {
         let _this = this;
         const {navigator} = _this.props;
         if (navigator) {
@@ -109,24 +180,22 @@ class MemberDetails extends Component {
                 component: PetDetails,
                 params: {
                     headTitle: '宠物详情',
-                    memberName: _this.props.memberName,
-                    petInfo: {
-                        petName: g.petName,
-                        petId: g.id,
-                        sterilizationState: false,
-                    }
+                    isAdd:false,
+                    memberName: _this.props.name,
+                    memberPhone:_this.props.phone,
+                    petSource: pet,
                 }
             })
         }
     }
 
-    _onRenderRow(g) {
+    _onRenderRow(pet) {
         return (
-            <TouchableOpacity style={styles.pickerStyle} onPress={()=>this._onPetDetails(g)}>
+            <TouchableOpacity style={styles.pickerStyle} onPress={()=>this._onPetDetails(pet)}>
                 <Image source={require('./../../../image/pet.jpg')}
                        style={{width:50,height:50,marginLeft:10,}}
                 />
-                <Text style={{flex:1,marginLeft:10}}>{g.petName}</Text>
+                <Text style={{flex:1,marginLeft:10}}>{pet.petName}</Text>
                 <Icon name={'ios-arrow-forward'} size={15} color={'#666'} style={{marginRight:10}}/>
             </TouchableOpacity>
         )

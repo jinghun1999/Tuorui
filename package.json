@@ -15,6 +15,7 @@
     "react-native-checkbox": "^1.0.15",
     "react-native-loader": "^1.1.0",
     "react-native-loading-w": "^1.0.0",
+    "react-native-root-modal": "^1.0.4",
     "react-native-scrollable-tab-view": "^0.5.3",
     "react-native-storage": "^0.1.2",
     "react-native-store": "^0.4.1",
