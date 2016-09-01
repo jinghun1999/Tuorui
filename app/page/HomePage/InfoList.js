@@ -12,6 +12,7 @@ import {
     TextInput,
     ActivityIndicator,
     RefreshControl,
+    InteractionManager
     } from 'react-native';
 import Head from './../../commonview/Head';
 import IconView from 'react-native-vector-icons/MaterialIcons';
@@ -36,11 +37,13 @@ class Information extends React.Component {
 
     componentDidMount() {
         let _this = this;
-        _this.timer = setTimeout(
-            () => {
-                _this._loadData();
-            }, 100
-        );
+
+            _this.timer = setTimeout(
+                () => {
+                    _this._loadData();
+                }, 100
+            );
+
     }
 
     componentWillUnmount() {
@@ -58,20 +61,22 @@ class Information extends React.Component {
     _loadData() {
         /*从缓存中读取*/
         var _this = this;
-        storage.load({
-            key: 'InfoList',
-            autoSync: false,
-            syncInBackground: false
-        }).then(ret => {
-            _this.setState({
-                //infoCache: ret.InfoList,
-                infoLoaded: true,
-                isRefreshing: false,
+        InteractionManager.runAfterInteractions(() => {
+            storage.load({
+                key: 'InfoList',
+                autoSync: false,
+                syncInBackground: false
+            }).then(ret => {
+                _this.setState({
+                    infoCache: ret.InfoList,
+                    infoLoaded: true,
+                    isRefreshing: false,
+                });
+            }).catch(err => {
+                alert("暂无缓存数据");
+                _this._fetchData(_this.state.pageSize, _this.state.pageIndex, false);
+                //_this._loadData();
             });
-        }).catch(err => {
-            alert("暂无缓存数据");
-            _this._fetchData(_this.state.pageSize, _this.state.pageIndex, false);
-            //_this._loadData();
         });
     }
 
@@ -149,7 +154,8 @@ class Information extends React.Component {
             <View style={styles.container}>
                 <Head title={this.props.headTitle}/>
                 <View style={{flexDirection:'column', justifyContent: 'center',alignItems: 'center',}}>
-                    <Bars size={10} color="#1CAFF6"/>
+                    <Text>数据加载中...</Text>
+                    {/*<Bars size={10} color="#1CAFF6"/>*/}
                 </View>
             </View>
         );

@@ -10,8 +10,7 @@ import NetUtil from './app/net/NetUitl';
 import ScrollableTabView  from 'react-native-scrollable-tab-view';
 import Head from './app/commonview/Head';
 
-class HealthSQ extends Component {
-
+class BBS extends Component {
     constructor(props) {
         super(props);
     }
@@ -67,4 +66,4 @@ const styles = StyleSheet.create({
         backgroundColor: '#00ff00',
     },
 });
-module.exports = HealthSQ;
+module.exports = BBS;

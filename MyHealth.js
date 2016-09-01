@@ -15,7 +15,7 @@ import{
 } from 'react-native';
 import Head from './app/commonview/Head';
 import IconView from './app/commonview/ComIconView';
-import TopScreen from './TopScreen';
+import TopScreen from './HomePage';
 import DrugHandBook from './app/page/HomePage/DrugHandBook';
 class MyHealth extends Component {
     constructor(props) {

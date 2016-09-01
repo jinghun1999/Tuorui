@@ -13,7 +13,7 @@ import {
     RefreshControl,
     } from 'react-native';
 import ViewPager from 'react-native-viewpager';
-import Icon from 'react-native-vector-icons/Ionicons';
+//import Icon from 'react-native-vector-icons/Ionicons';
 //import GoodsAdd from './app/page/Sales/AddGood';
 import Head from './app/commonview/Head';
 import Sale from './app/page/Sales/Sale';
@@ -21,13 +21,12 @@ import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
 var fetchPath = global.GLOBAL.APIAPP + '/AppInfo/GetHomeInfo';
-import IconView from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import HomeIcon from './app/commonview/HomeIcon';
 import DrugHandBook from './app/page/HomePage/DrugHandBook';
 import InfoDetail from './app/page/HomePage/InfoDetail';
 import Information from './app/page/HomePage/InfoList';
 import Contact from './app/page/HomePage/Contact';
-var _navigator; //全局navigator对象
 let IMGS = [
     require('./image/job1.jpg'),
     require('./image/job2.jpg'),
@@ -129,13 +128,12 @@ class TopScreen extends Component {
         let _pageIndex = _this.state.pageIndex + 1;
         let _fetchPath = fetchPath + "?pid=&PageIndex=" + _pageIndex + "&PageSize=" + _this.state.pageSize;
         fetch(_fetchPath).then((responses) => responses.text()).then((resData) => {
-            let dataTable = JSON.parse(resData);
+            let dt = JSON.parse(resData);
             let _dataCache = _this.state.dataCache;
-            let _data = dataTable.Data.rows;
-            _data.forEach((_data)=> {
+            dt.Data.rows.forEach((_data)=> {
                 _dataCache.push(_data);
-            })
-            if (dataTable.Status) {
+            });
+            if (dt.Status) {
                 _this.setState({
                     pageIndex: _pageIndex,
                     isRefreshing: false,
@@ -145,8 +143,9 @@ class TopScreen extends Component {
         }).done();
     }
 
-    _salesPress() {
+    _toolsPress() {
         var _this = this;
+        Errorr('error..');
         const { navigator } = _this.props;
         if (navigator) {
             navigator.push({
@@ -156,7 +155,7 @@ class TopScreen extends Component {
                 params: {
                     id: _this.state.id,
                 }
-            })
+            });
         }
     }
 
@@ -167,17 +166,17 @@ class TopScreen extends Component {
     _ClickPress(Info) {
         let _this = this;
         //_this.requestAnimationFrame(()=> {
-            const { navigator } = _this.props;
-            if (navigator) {
-                navigator.push({
-                    name: 'InfoDetail',
-                    component: InfoDetail,
-                    params: {
-                        requestId: Info.RequestID,
-                        title: Info.InfoTitle,
-                    }
-                })
-            }
+        const { navigator } = _this.props;
+        if (navigator) {
+            navigator.push({
+                name: 'InfoDetail',
+                component: InfoDetail,
+                params: {
+                    requestId: Info.RequestID,
+                    title: Info.InfoTitle,
+                }
+            })
+        }
         //});
     }
 
@@ -254,13 +253,10 @@ class TopScreen extends Component {
     renderInfo(Info) {
         return (
             <TouchableOpacity style={styles.rows} onPress={()=>this._ClickPress(Info)}>
-                <IconView name={'local-post-office'} size={20} color={'#ADD8E6'}
-                          style={{marginLeft:10,justifyContent:'center',alignSelf:'center'}}/>
+                <Icon name={'local-post-office'} size={20} color={'#ADD8E6'} style={styles.rowIcon}/>
                 {/*<Image resource={Info.ImagePath}/>*/}
-                <Text
-                    style={{flex:1,marginLeft:10,justifyContent:'center',alignSelf:'center'}}>{Info.InfoTitle}</Text>
-                <IconView name={'chevron-right'} size={20} color={'#888'}
-                          style={{justifyContent:'center',alignSelf:'center'}}/>
+                <Text style={styles.rowText}>{Info.InfoTitle}</Text>
+                <Icon name={'chevron-right'} size={20} color={'#888'} style={styles.rowRight}/>
             </TouchableOpacity>
         )
     }
@@ -308,7 +304,7 @@ class TopScreen extends Component {
                     <ListView
                         renderHeader={()=>
                               <View>
-                                <ViewPager style={{height:300}}
+                                <ViewPager style={{height:200}}
                                         renderPage={this._renderViewPage}
                                         dataSource={this.state.imageSource}
                                         isLoop={true}
@@ -327,7 +323,7 @@ class TopScreen extends Component {
                                     <HomeIcon text="资讯" iconName={'ios-list-box'} iconColor={'#66CCFF'}
                                               onPress={this._informationClick.bind(this)}/>
                                     <HomeIcon text="工具" iconName={'ios-build'} iconColor={'#FFAEB9'}
-                                              onPress={this._salesPress.bind(this)}/>
+                                              onPress={this._toolsPress.bind(this)}/>
                                 </View>
                               </View>}
                         renderFooter={this.renderFooter}
@@ -335,8 +331,8 @@ class TopScreen extends Component {
                         renderRow={this.renderInfo.bind(this)}
                         onEndReached={this._onEndReached.bind(this)}
                         onEndReachedThreshold={100}
-                        initialListSize={this.state.total}
-                        pageSize={this.state.total}
+                        initialListSize={this.state.pageSize}
+                        pageSize={this.state.pageSize}
                         enableEmptySections={true}
                         refreshControl={
                                   <RefreshControl
@@ -362,7 +358,7 @@ const styles = StyleSheet.create({
     },
     page: {
         width: deviceWidth,
-        height: 200,
+        height: 150,
         resizeMode: 'stretch'
     },
     rows: {
@@ -373,7 +369,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderBottomWidth: StyleSheet.hairlineWidth,
         borderBottomColor: '#ccc'
-    }
+    },
+    rowIcon: {marginLeft: 10, justifyContent: 'center', alignSelf: 'center'},
+    rowText: {flex: 1, marginLeft: 10, justifyContent: 'center', alignSelf: 'center'},
+    rowRight: {justifyContent: 'center', alignSelf: 'center'},
 });
 
 module.exports = TopScreen;

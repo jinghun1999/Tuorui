@@ -21,15 +21,15 @@ import {
 import TabNavigator from 'react-native-tab-navigator';
 import MyHealth from './MyHealth';
 import HealthTools from './HealthTools';
-import HealthSQ  from './HealthSQ';
-import MyAccount  from './MyAccount';
+import BBS  from './BBS';
+import UC from './UC';
 
 //import Login from './app/page/Login';
 import Global from './app/util/Global';
 import Util from './app/util/Util';
 import NetUitl from './app/net/NetUitl';
 import Head from './app/commonview/Head';
-import TopScreen from './TopScreen';
+import TopScreen from './HomePage';
 //import NButton from './app/commonview/NButton';
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -49,13 +49,13 @@ class MainPage extends React.Component {
         this._renderTabItem = this._renderTabItem.bind(this);
         this._navigator = this.props.navigator;
         //get login info
+        /*
         storage.load({
             key: 'loginState',
             autoSync: true,
             syncInBackground: true
-        }).then(ret => {
-        }).catch(err => {
-        })
+            }).then(ret => {}).catch(err => {
+        });*/
     }
 
     _renderTabItem(ico, tag, childView) {
@@ -85,10 +85,10 @@ class MainPage extends React.Component {
                 renderView = <HealthTools navigator={this._navigator} />;
                 break;
             case MY_HEALTH_COMMUNITY:
-                renderView = <HealthSQ />;
+                renderView = <BBS navigator={this._navigator} />;
                 break;
             case MY_HEALTH_ACCOUNT:
-                renderView = <MyAccount navigator={this._navigator} />;
+                renderView = <UC navigator={this._navigator} />;
                 break;
             default:
                 break;

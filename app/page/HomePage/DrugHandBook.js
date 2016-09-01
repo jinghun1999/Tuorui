@@ -13,13 +13,12 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import Head from './../../commonview/Head';
-import Global from '../../util/Global';
 import JsonUtil from '../../util/JsonUitl';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import DrugDetails from './DrugDetails';
-var fetchPath = 'http://120.24.89.243:20000/api/AppInfo/GetClass';
-var DetailsUrl = 'http://120.24.89.243:20000/App/home';
+var fetchPath = global.GLOBAL.APIAPP + '/AppInfo/GetClass';
+var DetailsUrl = global.GLOBAL.WEB + '/App/home';
 class DrugHandBook extends React.Component {
     constructor(props) {
         super(props);

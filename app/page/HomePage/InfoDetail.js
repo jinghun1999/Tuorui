@@ -12,7 +12,8 @@ import {
     Text,
     WebView,
     Dimensions,
-    TouchableOpacity
+    TouchableOpacity,
+    InteractionManager,
     } from 'react-native';
 import Head from './../../commonview/Head';
 import Global from './../../util/Global';
