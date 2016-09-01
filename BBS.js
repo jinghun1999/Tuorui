@@ -6,7 +6,7 @@ import{
     WebView,
     View
     } from 'react-native';
-import NetUtil from './app/net/NetUitl';
+import NetUtil from './app/util/NetUtil';
 import ScrollableTabView  from 'react-native-scrollable-tab-view';
 import Head from './app/commonview/Head';
 

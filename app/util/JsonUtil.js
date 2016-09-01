@@ -2,10 +2,7 @@
 import React, {
     Component
     } from 'react';
-/**
- *JsonUitl的实现
- */
-class JsonUitl extends React.Component {
+class JsonUtil extends React.Component {
 
     /**
      *
@@ -60,4 +57,4 @@ class JsonUitl extends React.Component {
     }
 }
 
-module.exports = JsonUitl;
+module.exports = JsonUtil;

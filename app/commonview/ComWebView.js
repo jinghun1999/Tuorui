@@ -11,7 +11,7 @@ import {
     Image,
     View,
 } from 'react-native';
-import NetUtil from './../net/NetUitl';
+import NetUtil from './../util/NetUtil';
 class ComWebView extends React.Component {
     render(){
         return(

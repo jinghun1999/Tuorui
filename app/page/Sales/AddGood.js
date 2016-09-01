@@ -16,18 +16,17 @@ import {
     BackAndroid,
     ScrollView
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+
 import Util from '../../util/Util';
-import Global from '../../util/Global';
-import NetUitl from '../../net/NetUitl';
-import JsonUitl from '../../util/JsonUitl';
-import Head from './../../commonview/Head';
+import NetUtil from '../../util/NetUtil';
+import Head from '../../commonview/Head';
 import NButton from '../../commonview/NButton';
-import FormPicker from './../../commonview/FormPicker';
-import FormInput from './../../commonview/FormInput';
+import FormPicker from '../../commonview/FormPicker';
+import FormInput from '../../commonview/FormInput';
 import ScanQr from '../../commonview/ScanQr';
 import ChooseGoods from './ChooseGood'
-var base64 = require('base-64');
+
+import Icon from 'react-native-vector-icons/Ionicons';
 const scanIcon = (<Icon name={'md-barcode'} size={40} color={'#63B8FF'}/>);
 const addIcon = (<Icon name={'md-add'} size={40} color={'#63B8FF'}/>);
 class GoodsAdd extends Component {
@@ -55,7 +54,7 @@ class GoodsAdd extends Component {
     }
 
     _onPressQRCode() {
-        var _this = this;
+        let _this = this;
         const { navigator } = this.props;
         if (navigator) {
             this.props.navigator.push({
@@ -72,30 +71,30 @@ class GoodsAdd extends Component {
     }
 
     _getGood() {
-        var _this = this;
+        let _this = this;
         if (_this.state.kw == null || _this.state.kw.length == 0) {
             ToastAndroid.show('未获得条码/编号', ToastAndroid.SHORT);
             return false;
         }
         storage.load({
-            key: 'loginState',
+            key: 'USER',
             autoSync: true,
             syncInBackground: true
         }).then(ret => {
-            var postjson = {
+            let postjson = {
                 WarehouseID: _this.state.storeId,
                 CateNo: null,
                 InputTxt: _this.state.kw && _this.state.kw.length > 0 ? _this.state.kw : null,
-                BusiTypeCodes: [],
+                BusiTypeCodes: [1,2,3,7,8,9,12],
                 pageSize: 1,
                 pageIndex: 1
             };
-            var header = {
+            let header = {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': 'Basic ' + base64.encode(encodeURIComponent(ret.personname) + ':' + base64.encode(ret.password) + ':' + Global.ENTCODE + ":" + ret.token)
+                'Authorization': 'Mobile ' + Util.base64Encode(ret.user.Mobile + ':' + Util.base64Encode(ret.pwd) + ':' + (ret.user.Hospitals[0]!=null ? ret.user.Hospitals[0].Registration : '') + ":" + ret.user.Token)
             };
-            NetUitl.postJson(Global.GETGOODS, postjson, header, function (data) {
+            NetUtil.postJson(global.GLOBAL.GETGOODS, postjson, header, function (data) {
                 if (data.Sign && data.Message && data.Message.length > 0) {
                     var good = data.Message[0];
                     good.GoodCount = 1;

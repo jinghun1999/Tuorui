@@ -15,7 +15,7 @@ import {
     } from 'react-native';
 import Head from './../../commonview/Head';
 import Global from '../../util/Global';
-import JsonUtil from '../../util/JsonUitl';
+import JsonUtil from '../../util/JsonUtil';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 //import DrugDetails from './DrugDetails';

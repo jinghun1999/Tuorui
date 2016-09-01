@@ -2,12 +2,12 @@
 import React, {
     Component,
     } from 'react';
-import Util from '../util/Util';
-import Global from '../util/Global';
-class NetUitl extends React.Component {
+import Util from './Util';
+import Global from './Global';
+class NetUtil extends React.Component {
 
     static postJson(url, data, head, callback) {
-        if(!head){
+        if (!head) {
             head = {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -22,13 +22,19 @@ class NetUitl extends React.Component {
         fetch(url, fetchOptions)
             .then((response) => response.text())
             .then((responseText) => {
-                callback(JSON.parse(responseText));
+                let result = {};
+                try{
+                    result = JSON.parse(responseText);
+                }catch(e){
+                    result = {Sign: false, Message: '【解析JSON失败】' + responseText};
+                }
+                callback(result);
             }).done();
     }
 
     //get请求
     static get(url, head, callback) {
-        if(!head){
+        if (!head) {
             head = {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -41,17 +47,24 @@ class NetUitl extends React.Component {
         fetch(url, fetchOptions)
             .then((response) => response.text())
             .then((responseText) => {
-                callback(JSON.parse(responseText));
+                let result = {};
+                try{
+                    result = JSON.parse(responseText);
+                }catch(e){
+                    result = {Sign: false, Message: '【解析JSON失败】' + responseText};
+                }
+                callback(result);
             }).done();
     }
+
     /*get请求
-    static get(url, callback) {
-        fetch(url)
-            .then((response) => response.text())
-            .then((responseText) => {
-                callback(JSON.parse(responseText));
-            }).done();
-    }*/
+     static get(url, callback) {
+     fetch(url)
+     .then((response) => response.text())
+     .then((responseText) => {
+     callback(JSON.parse(responseText));
+     }).done();
+     }*/
 
     log(obj) {
         var description = "";
@@ -76,4 +89,4 @@ class NetUitl extends React.Component {
 
 }
 
-module.exports = NetUitl;
+module.exports = NetUtil;

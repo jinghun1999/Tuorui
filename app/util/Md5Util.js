@@ -7,7 +7,7 @@ import React, {
 /**
 *Md5加密的实现
 */
-class Md5Uitl extends React.Component {
+class Md5Util extends React.Component {
 
   static md5(data){
     var md5 = require('md5');
@@ -15,4 +15,4 @@ class Md5Uitl extends React.Component {
   }
 }
 
-module.exports = Md5Uitl;
+module.exports = Md5Util;

@@ -17,13 +17,11 @@ import {
     ScrollView,
     } from 'react-native';
 import Util from '../../util/Util';
-import Global from '../../util/Global';
-import NetUitl from '../../net/NetUitl';
-import JsonUitl from '../../util/JsonUitl';
-import Head from './../../commonview/Head';
-import Icon from '../../../node_modules/react-native-vector-icons/FontAwesome';
+import NetUtil from '../../util/NetUtil';
+import Head from '../../commonview/Head';
+
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
-var base64 = require('base-64');
 class ChooseStore extends Component {
     constructor(props) {
         super(props);
@@ -59,30 +57,30 @@ class ChooseStore extends Component {
     }
 
     fetchData() {
-        var _this = this;
-        var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+        let _this = this;
+        let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         storage.load({
-            key: 'loginState',
-            autoSync: true,
-            syncInBackground: true
+            key: 'USER',
+            autoSync: false,
+            syncInBackground: false
         }).then(ret => {
-            var postjson = {
+            let postjson = {
                 items: [],
                 sorts: []
             };
-            var header = {
+            let header = {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': 'Basic ' + base64.encode(encodeURIComponent(ret.personname) + ':' + base64.encode(ret.password) + ':' + Global.ENTCODE + ":" + ret.token)
+                'Authorization': 'Mobile ' + Util.base64Encode(ret.user.Mobile + ':' + Util.base64Encode(ret.pwd) + ':' + (ret.user.Hospitals[0]!=null ? ret.user.Hospitals[0].Registration : '') + ":" + ret.user.Token)
             };
-            NetUitl.postJson(Global.GETSTORES, postjson, header, function (data) {
+            NetUtil.postJson(global.GLOBAL.GETSTORES, postjson, header, function (data) {
                 if (data.Sign && data.Message) {
                     _this.setState({
                         storeDataSource: ds.cloneWithRows(data.Message),
                         loaded: true,
                     });
                 } else {
-                    alert("获取数据错误！" + data.Message);
+                    alert("获取数据错误：" + data.Message);
                     _this.setState({
                         storeDataSource: ds.cloneWithRows([]),
                         loaded: true,

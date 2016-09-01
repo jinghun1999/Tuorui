@@ -27,7 +27,7 @@ import UC from './UC';
 //import Login from './app/page/Login';
 import Global from './app/util/Global';
 import Util from './app/util/Util';
-import NetUitl from './app/net/NetUitl';
+import NetUitl from './app/util/NetUtil';
 import Head from './app/commonview/Head';
 import TopScreen from './HomePage';
 //import NButton from './app/commonview/NButton';

@@ -4,33 +4,29 @@
 'use strict';
 import React, {Component} from 'react';
 import {
-    AppRegistry,
     StyleSheet,
     Text,
     View,
     Dimensions,
     ToastAndroid,
     TouchableOpacity,
-    TouchableHighlight,
-    TextInput,
     DatePickerAndroid,
-    Navigator,
     ScrollView,
     ListView,
     Image,
-} from 'react-native';
-import Global from './../../util/Global';
-import Head from './../../commonview/Head';
-import NButton from './../../commonview/NButton';
+    Alert,
+    } from 'react-native';
+import Util from '../../util/Util';
+import NetUtil from '../../util/NetUtil';
+import Head from '../../commonview/Head';
+import NButton from '../../commonview/NButton';
 import AddGood from './AddGood';
 import ChooseGuest from './ChooseGuest';
 import ChooseStore from './ChooseStore';
-import NetUitl from './../../net/NetUitl';
-import JsonUitl from './../../util/JsonUitl';
-import Icon from '../../../node_modules/react-native-vector-icons/FontAwesome';
-import FormPicker from './../../commonview/FormPicker';
-import FormInput from './../../commonview/FormInput';
-var base64 = require('base-64');
+import FormPicker from '../../commonview/FormPicker';
+import FormInput from '../../commonview/FormInput';
+
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 export default class Sale extends React.Component {
     constructor(props) {
@@ -93,7 +89,7 @@ export default class Sale extends React.Component {
             navigator.push({
                 name: 'ChooseStore',
                 component: ChooseStore,
-                tabBarShow:false,
+                tabBarShow: false,
                 params: {
                     getResult: function (g) {
                         _this.setState({
@@ -106,7 +102,7 @@ export default class Sale extends React.Component {
     }
 
     chooseGood() {
-        var _this = this;
+        let _this = this;
         if (_this.state.Store.ID == null) {
             ToastAndroid.show('请先选择仓库', ToastAndroid.SHORT);
             return false;
@@ -118,7 +114,7 @@ export default class Sale extends React.Component {
                 component: AddGood,
                 params: {
                     storeId: _this.state.Store.ID,
-                    tabBarShow:false,
+                    tabBarShow: false,
                     getResult: function (good) {
                         //如已经添加了此商品，则更新数量和金额，否则添加到集合
                         var _goods = _this.state.SelectedGoods, _exists = false;
@@ -138,7 +134,7 @@ export default class Sale extends React.Component {
                         _this.setState({
                             SelectedGoods: _goods,
                             goodAmountInput: _goods.RealPay.toString(),
-                            goodDiscountInput:_goods.DisCount.toString(),
+                            goodDiscountInput: _goods.DisCount.toString(),
                         });
                     }
                 }
@@ -147,7 +143,7 @@ export default class Sale extends React.Component {
     }
 
     SaveInfo() {
-        var _this = this;
+        let _this = this;
         if (_this.state.Store.ID == null) {
             ToastAndroid.show("请选择仓库", ToastAndroid.SHORT);
             return false;
@@ -157,17 +153,17 @@ export default class Sale extends React.Component {
         } else if (_this.state.SelectedGoods.items.length == 0) {
             ToastAndroid.show("请选择商品", ToastAndroid.SHORT);
             return false;
-        } else if(!_this.state.SelectedGoods.RealPay || isNaN(_this.state.SelectedGoods.RealPay)){
+        } else if (!_this.state.SelectedGoods.RealPay || isNaN(_this.state.SelectedGoods.RealPay)) {
             ToastAndroid.show("请输入付款金额", ToastAndroid.SHORT);
             return false;
         }
         storage.load({
-            key: 'loginState',
+            key: 'USER',
             autoSync: true,
             syncInBackground: true
         }).then(ret => {
-            var items = [];
-            var _goods = _this.state.SelectedGoods.items;
+            let items = [];
+            let _goods = _this.state.SelectedGoods.items;
             for (let i = 0; i < _goods.length; i++) {
                 var item = {
                     BarCode: null,
@@ -198,16 +194,16 @@ export default class Sale extends React.Component {
                 };
                 items.push(item);
             }
-            var postjson = {
+            let postjson = {
                 gest: _this.state.Guest,
                 sellItemList: items,
             }
-            var header = {
+            let header = {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': 'Basic ' + base64.encode(encodeURIComponent(ret.personname) + ':' + base64.encode(ret.password) + ':' + Global.ENTCODE + ":" + ret.token)
+                'Authorization': 'Mobile ' + Util.base64Encode(ret.user.Mobile + ':' + Util.base64Encode(ret.pwd) + ':' + (ret.user.Hospitals[0] != null ? ret.user.Hospitals[0].Registration : '') + ":" + ret.user.Token)
             };
-            NetUitl.postJson(Global.SAVESALES, postjson, header, function (data) {
+            NetUtil.postJson(Global.SAVESALES, postjson, header, function (data) {
                 if (data.Sign && data.Message) {
                     ToastAndroid.show("保存成功", ToastAndroid.SHORT);
                     _this._onBack();
@@ -245,7 +241,15 @@ export default class Sale extends React.Component {
     }
 
     pressRow(good) {
-        alert(good.ItemName);
+        Alert.alert(
+            '删除提醒',
+            '确定要移除' + good.ItemName + '吗？',
+            [
+                {text: '取消', onPress: () => console.log('Cancel Pressed!')},
+                {text: '确定', onPress: () => console.log('OK Pressed!')},
+            ]
+        );
+        //alert(good.ItemName);
     }
 
     renderGood(good, sectionID, rowID) {
@@ -254,7 +258,7 @@ export default class Sale extends React.Component {
                 style={{ flexDirection:'row',marginLeft:15, marginRight:15, paddingTop:10, paddingBottom:10, borderBottomWidth:StyleSheet.hairlineWidth, borderBottomColor:'#ccc'}}
                 onPress={()=>this.pressRow(good)}>
                 <Image style={styles.goodHead}
-                       source={{uri:'http://www.easyicon.net/api/resizeApi.php?id=1171058&size=64', scale:3}}/>
+                       source={require('../../img/shopping_81px.png')}/>
                 <View style={{flex:1}}>
                     <Text style={{fontSize:14, fontWeight:'bold'}}>{good.ItemName}</Text>
                     <View style={{flexDirection:'row'}}>
@@ -319,7 +323,7 @@ export default class Sale extends React.Component {
                                     })
                                 }
                             }}
-                            />
+                                />
                             <View style={{width:20, justifyContent:'center'}}>
                                 <Text>%</Text>
                             </View>
@@ -364,9 +368,6 @@ const styles = StyleSheet.create({
             width: 34,
             height: 34,
             marginRight: 10,
-            borderWidth: 1,
-            borderColor: '#ccc',
-            borderRadius: 17,
         },
         pickerBox: {
             backgroundColor: '#fff',

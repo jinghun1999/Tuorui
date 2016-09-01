@@ -19,8 +19,8 @@ import {
     } from 'react-native';
 import Util from '../util/Util';
 import Global from '../util/Global';
-import NetUitl from '../net/NetUitl';
-import JsonUitl from '../util/JsonUitl';
+import NetUitl from '../util/NetUtil';
+import JsonUitl from '../util/JsonUtil';
 //import SecondPageComponent from './SecondPageComponent';
 import MainPage from '../../Index';
 var base64 = require('base-64');
@@ -44,10 +44,9 @@ class Login extends Component {
 
         var _this = this;
         const { navigator } = _this.props;
-        let url = Global.LOGIN + "?identity=" + _this.state.user + "&password=" + _this.state.pwd + "&type=m";
-        //var header = {'Authorization': 'Anonymous ' + base64.encode(Global.ENTCODE)};
+        let url = global.GLOBAL.LOGIN + "?identity=" + _this.state.user + "&password=" + _this.state.pwd + "&type=m";
         try {
-            storage.save({
+            /*storage.save({
                 key: 'loginState',  //注意:请不要在key中使用_下划线符号!
                 rawData: {
                     phone: '18307722503',
@@ -64,21 +63,19 @@ class Login extends Component {
                     component: MainPage,
                     params: {}
                 });
-            }
-            /*
+            }*/
+
             NetUitl.get(url, false, function (data) {
                 if (data.Sign && data.Message) {
-                    alert("登录成功" + data.Message.Token);
+                    alert("登录成功,Token:" + data.Message.Token);
                     storage.save({
-                        key: 'loginState',  //注意:请不要在key中使用_下划线符号!
+                        key: 'USER',  //注意:请不要在key中使用_下划线符号!
                         rawData: {
-                            phone: data.Message.Mobile,
-                            name: data.Message.FullName,
-                            token: data.Message.Token
+                            user: data.Message,
+                            pwd: _this.state.pwd,
                         },
                         expires: 1000 * 3600 * 24
                     });
-                    _this.setState({ok: 1});
                     if (navigator) {
                         navigator.pop();
                         navigator.push({
@@ -90,7 +87,7 @@ class Login extends Component {
                 } else {
                     alert(data.Exception);
                 }
-            });*/
+            });
         } catch (e) {
             alert("登陆失败，错误信息：" + e);
         }

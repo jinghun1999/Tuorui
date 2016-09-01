@@ -17,11 +17,10 @@ import {
     ScrollView,
     } from 'react-native';
 import Util from '../../util/Util';
-import Global from '../../util/Global';
-import NetUitl from '../../net/NetUitl';
-import JsonUitl from '../../util/JsonUitl';
-import Head from './../../commonview/Head';
-import Icon from '../../../node_modules/react-native-vector-icons/FontAwesome';
+import NetUtil from '../../util/NetUtil';
+import Head from '../../commonview/Head';
+
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 var base64 = require('base-64');
 class Goods extends Component {
@@ -70,34 +69,34 @@ class Goods extends Component {
     }
 
     fetchData() {
-        var _this = this;
-        var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+        let _this = this;
+        let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         storage.load({
-            key: 'loginState',
+            key: 'USER',
             autoSync: true,
             syncInBackground: true
         }).then(ret => {
-            var postjson = {
+            let postjson = {
                 WarehouseID: _this.state.storeId,
                 CateNo: null,
                 InputTxt: _this.state.kw && _this.state.kw.length > 0 ? _this.state.kw : null,
-                BusiTypeCodes: [],
+                BusiTypeCodes: [1,2,3,7,8,9,12],
                 pageSize: 10000,
                 pageIndex: 1
             };
-            var header = {
+            let header = {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': 'Basic ' + base64.encode(encodeURIComponent(ret.personname) + ':' + base64.encode(ret.password) + ':' + Global.ENTCODE + ":" + ret.token)
+                'Authorization': 'Mobile ' + Util.base64Encode(ret.user.Mobile + ':' + Util.base64Encode(ret.pwd) + ':' + (ret.user.Hospitals[0]!=null ? ret.user.Hospitals[0].Registration : '') + ":" + ret.user.Token)
             };
-            NetUitl.postJson(Global.GETGOODS, postjson, header, function (data) {
-                if (data.Sign && data.Message) {
+            NetUtil.postJson(global.GLOBAL.GETGOODS, postjson, header, function (data) {
+                if (data.Sign && data.Message != null) {
                     _this.setState({
                         goodsDataSource: ds.cloneWithRows(data.Message),
                         loaded: true,
                     });
                 } else {
-                    alert("获取数据错误！" + data.Message);
+                    alert("获取数据失败：" + data.Message);
                     _this.setState({
                         goodsDataSource: ds.cloneWithRows([]),
                         loaded: true,
@@ -127,7 +126,7 @@ class Goods extends Component {
                 onPress={()=>this.pressRow(good)}>
                 <Image
                     style={styles.goodHead}
-                    source={{uri:'http://www.easyicon.net/api/resizeApi.php?id=1171058&size=64', scale:3}}
+                    source={require('../../img/shopping_81px.png')}
                     />
                 <View style={{flex:1}}>
                     <Text style={{fontSize:14, fontWeight:'bold'}}>{good.ItemName} ({good.ItemStyle})</Text>
@@ -155,7 +154,10 @@ class Goods extends Component {
         } else {
             body = (
                 <ListView dataSource={this.state.goodsDataSource} enableEmptySections={true}
-                          renderRow={this.renderGood.bind(this)}/>
+                          renderRow={this.renderGood.bind(this)}
+                          initialListSize={10}
+                          pageSize={10}
+                    />
             )
         }
         return (
@@ -235,9 +237,9 @@ const styles = StyleSheet.create({
         width: 34,
         height: 34,
         marginRight: 10,
-        borderWidth: 1,
+        /*borderWidth: 1,
         borderColor: '#ccc',
-        borderRadius: 17,
+        borderRadius: 17,*/
     },
 });
 

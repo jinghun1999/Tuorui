@@ -17,13 +17,12 @@ import {
     ScrollView,
     } from 'react-native';
 import Util from '../../util/Util';
-import Global from '../../util/Global';
-import NetUitl from '../../net/NetUitl';
-import JsonUitl from '../../util/JsonUitl';
-import Head from './../../commonview/Head';
-import Icon from '../../../node_modules/react-native-vector-icons/FontAwesome';
+import NetUtil from '../../util/NetUtil';
+import Head from '../../commonview/Head';
+
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
-var base64 = require('base-64');
+
 class ChooseGuest extends Component {
     constructor(props) {
         super(props);
@@ -52,7 +51,7 @@ class ChooseGuest extends Component {
     }
 
     componentDidMount() {
-        var _this = this;
+        let _this = this;
         _this.timer = setTimeout(
             () => {
                 _this.fetchData();
@@ -63,38 +62,38 @@ class ChooseGuest extends Component {
         this.timer && clearTimeout(this.timer);
     }
     fetchData(key) {
-        var thiz = this;
-        var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+        let _this = this;
+        let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         storage.load({
-            key: 'loginState',
+            key: 'USER',
             autoSync: true,
             syncInBackground: true
         }).then(ret => {
-            var postjson = {
+            let postjson = {
                 items: [],
                 sorts: []
             };
-            var header = {
+            let header = {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': 'Basic ' + base64.encode(encodeURIComponent(ret.personname) + ':' + base64.encode(ret.password) + ':' + Global.ENTCODE + ":" + ret.token)
+                'Authorization': 'Mobile ' + Util.base64Encode(ret.user.Mobile + ':' + Util.base64Encode(ret.pwd) + ':' + (ret.user.Hospitals[0]!=null ? ret.user.Hospitals[0].Registration : '') + ":" + ret.user.Token)
             };
-            NetUitl.postJson(Global.GETGUEST, postjson, header, function (data) {
+            NetUtil.postJson(global.GLOBAL.GETGUEST, postjson, header, function (data) {
                 if (data.Sign && data.Message) {
-                    thiz.setState({
+                    _this.setState({
                         guestDataSource: ds.cloneWithRows(data.Message),
                         loaded: true,
                     });
                 } else {
-                    alert("获取数据错误！" + data.Message);
-                    thiz.setState({
+                    alert("获取数据失败：" + data.Message);
+                    _this.setState({
                         guestDataSource: ds.cloneWithRows([]),
                         loaded: true,
                     });
                 }
             });
         }).catch(err => {
-            thiz.setState({
+            _this.setState({
                 guestDataSource: ds.cloneWithRows([]),
                 loaded: true,
             });

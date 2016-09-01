@@ -13,16 +13,18 @@ import {
     Image,
     View
     } from 'react-native';
-import HomePage from './MainPage';
+import MainPage from './MainPage';
 import Login from './app/page/Login';
 class Index extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            loading: true
-        }; 
+            loading: true,
+        };
     }
-
+    shouldComponentUpdate(){
+        return true;
+    }
     componentWillMount() {
         this._initState();
     }
@@ -31,18 +33,16 @@ class Index extends React.Component {
     }
     _initState(){
         var _this = this;
-        //storage.remove({
-        //    key: 'loginState'
-        //});
+        /*storage.remove({
+            key: 'USER'
+        });*/
         storage.load({
-            key: 'loginState',
+            key: 'USER',
             autoSync: false,
             syncInBackground: false
         }).then(ret => {
             _this.setState({
-                user: ret.phone,
-                name: ret.name,
-                token: ret.token,
+                user: ret.user,
                 loading: false,
             });
         }).catch(err => {
@@ -55,9 +55,9 @@ class Index extends React.Component {
     render() {
         var defaultName = 'Login';
         var defaultComponent = Login;
-        if (this.state.token && this.state.token.length > 0) {
-            defaultName = 'HomePage';
-            defaultComponent = HomePage;
+        if (this.state.user && this.state.user.Token && this.state.user.Token.length > 0) {
+            defaultName = 'MainPage';
+            defaultComponent = MainPage;
         }
         if(this.state.loading){
             return (
@@ -71,15 +71,18 @@ class Index extends React.Component {
                 <Navigator
                     initialRoute={{ name: defaultName, component: defaultComponent, id: 'main' }}
                     configureScene={(route) => {
-                    let gestureType = Navigator.SceneConfigs.HorizontalSwipeJump;
-                    gestureType.gestures.jumpForward=null;
-                    gestureType.gestures.jumpBack=null;
-                    return gestureType; } }
+                            let gestureType = Navigator.SceneConfigs.HorizontalSwipeJump;
+                            gestureType.gestures.jumpForward = null;
+                            gestureType.gestures.jumpBack = null;
+                            return gestureType;
+                        }
+                    }
                     renderScene={(route, navigator) => {
-                    this._navigator = navigator;
-                    let Component = route.component;
-                    return <Component {...route.params} navigator={navigator} tabBarShow={route.id==='main'} />
-                }}/>
+                        this._navigator = navigator;
+                        let Component = route.component;
+                        return <Component {...route.params} navigator={navigator} tabBarShow={route.id==='main'} />
+                    }
+                }/>
             );
         }
     }

@@ -13,7 +13,7 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import Head from './../../commonview/Head';
-import JsonUtil from '../../util/JsonUitl';
+import JsonUtil from '../../util/JsonUtil';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import DrugDetails from './DrugDetails';
