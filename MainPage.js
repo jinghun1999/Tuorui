@@ -20,7 +20,7 @@ import {
     } from 'react-native';
 import TabNavigator from 'react-native-tab-navigator';
 import MyHealth from './MyHealth';
-import HealthTools from './HealthTools';
+import App from './App';
 import BBS  from './BBS';
 import UC from './UC';
 import Head from './app/commonview/Head';
@@ -72,10 +72,10 @@ class MainPage extends React.Component {
                 renderView = <HomePage navigator={this._navigator}/>;
                 break;
             case TAB_BBS:
-                renderView = <HealthTools navigator={this._navigator} />;
+                renderView = <BBS navigator={this._navigator} />;
                 break;
             case TAB_APP:
-                renderView = <BBS navigator={this._navigator} />;
+                renderView = <App navigator={this._navigator} />;
                 break;
             case TAB_UC:
                 renderView = <UC navigator={this._navigator} />;
@@ -94,8 +94,8 @@ class MainPage extends React.Component {
                               sceneStyle={{paddingBottom: 0}}
                               tabBarStyle={tabBarShow ? styles.tabNav : styles.tabNavHide}>
                     {this._renderTabItem('ios-home', TAB_HOMEPAGE, this._createChildView(TAB_HOMEPAGE))}
-                    {this._renderTabItem('ios-film', TAB_BBS, this._createChildView(TAB_BBS))}
-                    {this._renderTabItem('ios-color-fill', TAB_APP, this._createChildView(TAB_APP))}
+                    {this._renderTabItem('ios-chatbubbles', TAB_BBS, this._createChildView(TAB_BBS))}
+                    {this._renderTabItem('ios-easel', TAB_APP, this._createChildView(TAB_APP))}
                     {this._renderTabItem('ios-person', TAB_UC, this._createChildView(TAB_UC))}
                 </TabNavigator>
             </View>

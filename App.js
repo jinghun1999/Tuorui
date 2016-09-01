@@ -18,7 +18,7 @@ import IconButton from './app/commonview/HomeIcon';
 import Sale from './app/page/Sales/Sale';
 import Info from './app/page/MemberInfo/MemberListInfo';
 import PetListInfo from './app/page/MemberInfo/PetListInfo';
-class HealthTools extends Component {
+class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -258,4 +258,4 @@ const styles = StyleSheet.create({
     },
 });
 
-module.exports = HealthTools;
+module.exports = App;
