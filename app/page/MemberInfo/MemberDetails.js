@@ -47,8 +47,8 @@ class MemberDetails extends Component {
 
     //进行创建时间日期选择器
     async showPicker(stateKey, options) {
-        var openState=this.state.enable;
-        if(openState==true){
+        var openState = this.state.enable;
+        if (openState == true) {
             try {
                 var newState = {};
                 const {action, year, month, day} = await DatePickerAndroid.open(options);
@@ -63,7 +63,7 @@ class MemberDetails extends Component {
             } catch (o) {
                 alert('控件异常。');
             }
-        }else{
+        } else {
             return false;
         }
 
@@ -84,16 +84,16 @@ class MemberDetails extends Component {
     _editInfo(g) {
         let _this = this;
         let edit = _this.state.edit;
-        if(edit =='编辑'){
+        if (edit == '编辑') {
             _this.setState({
                 enable: true,
                 edit: '保存',
             })
-        }else{
+        } else {
             alert('保存成功');
             _this.setState({
-                enable:false,
-                edit:'编辑',
+                enable: false,
+                edit: '编辑',
             })
         }
 
@@ -103,17 +103,17 @@ class MemberDetails extends Component {
     _onPetDetails(g) {
         let _this = this;
         const {navigator} = _this.props;
-        if(navigator){
+        if (navigator) {
             navigator.push({
-                name:'PetDetails',
-                component:PetDetails,
-                params:{
-                    headTitle:'宠物详情',
-                    memberName:_this.props.memberName,
-                    petInfo:{
+                name: 'PetDetails',
+                component: PetDetails,
+                params: {
+                    headTitle: '宠物详情',
+                    memberName: _this.props.memberName,
+                    petInfo: {
                         petName: g.petName,
                         petId: g.id,
-                        sterilizationState:false,
+                        sterilizationState: false,
                     }
                 }
             })
@@ -157,80 +157,78 @@ class MemberDetails extends Component {
                 <Head title={this.props.headTitle} canAdd={true} canBack={true} edit={this.state.edit}
                       onPress={this._onBack.bind(this)}
                       editInfo={this._editInfo.bind(this)}/>
-                <FormPicker title="登记日期" tips={this.state.registrationText}
-                            onPress={this.showPicker.bind(this, 'registration', {date: this.state.registrationDate})}/>
-                <FormInput value={this.props.name}
-                           title="姓名"
-                           style={styles.pickerStyle}
-                           enabled={this.state.enable}
-                           onChangeText={(text)=>{this.setState({ memberName: text })}}
-                />
-                <FormPicker title="生日" tips={this.state.birthText}
-                            style={styles.pickerStyle}
-                            onPress={this.showPicker.bind(this, 'birth', {date: this.state.birthDate})}/>
+                <ScrollView key={'scrollView'}
+                            horizontal={false}
+                            showsVerticalScrollIndicator={true}
+                            scrollEnabled={true}>
+                    <FormPicker title="登记日期" tips={this.state.registrationText}
+                                onPress={this.showPicker.bind(this, 'registration', {date: this.state.registrationDate})}/>
+                    <FormInput value={this.props.name}
+                               title="姓名"
+                               style={styles.pickerStyle}
+                               enabled={this.state.enable}
+                               onChangeText={(text)=>{this.setState({ memberName: text })}}
+                    />
+                    <FormPicker title="生日" tips={this.state.birthText}
+                                style={styles.pickerStyle}
+                                onPress={this.showPicker.bind(this, 'birth', {date: this.state.birthDate})}/>
 
-                <FormInput value={this.props.phone}
-                           title="电话"
-                           style={styles.pickerStyle}
-                           enabled={this.state.enable}
-                           keyboardType={'numeric'}
-                           onChangeText={(text)=>{this.setState({ memberPhone: text })}}
-                />
-                {picker}
-                <FormInput value={this.props.phone}
-                           title="邮箱"
-                           style={styles.pickerStyle}
-                           enabled={this.state.enable}
-                           onChangeText={(text)=>{this.setState({ memberMail: text })}}
-                />
-                <FormInput value={this.props.level}
-                           title="等级"
-                           enabled={false}
-                           placeholder={this.state.memberLevel}
-                           onChangeText={(text)=>{this.setState({ memberLevel: text })}}
-                />
-                <FormInput value={this.props.name}
-                           title="账户金额"
-                           enabled={false}
-                           placeholder={this.state.memberMoney}
-                           onChangeText={(text)=>{this.setState({ memberMoney: text })}}
-                />
-                <FormInput value={this.props.name}
-                           title="积分"
-                           enabled={false}
-                           placeholder={this.state.memberPoint}
-                           onChangeText={(text)=>{this.setState({ memberPoint: text })}}
-                />
-                <FormInput value={this.props.name}
-                           title="地址"
-                           enabled={this.state.enable}
-                           onChangeText={(text)=>{this.setState({ memberAddress: text })}}
-                />
-                <FormInput value={this.props.name}
-                           title="备注"
-                           enabled={this.state.enable}
-                           onChangeText={(text)=>{this.setState({ memberRemark: text })}}
-                />
-                <View style={styles.petViewStyle}>
-                    <Text style={{flex:1,marginLeft:10}}>宠物信息</Text>
-                    <TouchableOpacity onPress={this._onAddPet.bind(this)} style={{width:50,}}>
-                        <Text style={{marginRight:10,color:'#0000CD'}}>新增</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={{flex:1,height:100}}>
-                    <ScrollView key={'scrollView'}
-                                horizontal={false}
-                                showsVerticalScrollIndicator={true}
-                                scrollEnabled={true}>
+                    <FormInput value={this.props.phone}
+                               title="电话"
+                               style={styles.pickerStyle}
+                               enabled={this.state.enable}
+                               keyboardType={'numeric'}
+                               onChangeText={(text)=>{this.setState({ memberPhone: text })}}
+                    />
+                    {picker}
+                    <FormInput value={this.props.phone}
+                               title="邮箱"
+                               style={styles.pickerStyle}
+                               enabled={this.state.enable}
+                               onChangeText={(text)=>{this.setState({ memberMail: text })}}
+                    />
+                    <FormInput value={this.props.level}
+                               title="等级"
+                               enabled={false}
+                               placeholder={this.state.memberLevel}
+                               onChangeText={(text)=>{this.setState({ memberLevel: text })}}
+                    />
+                    <FormInput value={this.props.name}
+                               title="账户金额"
+                               enabled={false}
+                               placeholder={this.state.memberMoney}
+                               onChangeText={(text)=>{this.setState({ memberMoney: text })}}
+                    />
+                    <FormInput value={this.props.name}
+                               title="积分"
+                               enabled={false}
+                               placeholder={this.state.memberPoint}
+                               onChangeText={(text)=>{this.setState({ memberPoint: text })}}
+                    />
+                    <FormInput value={this.props.name}
+                               title="地址"
+                               enabled={this.state.enable}
+                               onChangeText={(text)=>{this.setState({ memberAddress: text })}}
+                    />
+                    <FormInput value={this.props.name}
+                               title="备注"
+                               enabled={this.state.enable}
+                               onChangeText={(text)=>{this.setState({ memberRemark: text })}}
+                    />
+                    <View style={styles.petViewStyle}>
+                        <Text style={{flex:1,marginLeft:10}}>宠物信息</Text>
+                        <TouchableOpacity onPress={this._onAddPet.bind(this)} style={{width:50,}}>
+                            <Text style={{marginRight:10,color:'#0000CD'}}>新增</Text>
+                        </TouchableOpacity>
+                    </View>
                         {listBody}
-                    </ScrollView>
-                </View>
+                </ScrollView>
             </View>
         )
     }
 }
 const styles = StyleSheet.create({
-    container: {},
+    container: {flex: 1,},
     pickerBoxStyle: {flex: 1,},
     pickerStyle: {
         flexDirection: 'row',

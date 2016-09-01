@@ -25,14 +25,12 @@ class PetDetails extends Component {
     constructor(props) {
         super(props);
         var now = new Date();
-        var sterilizationState = this.props.petInfo.sterilizationState;
         this.state = {
             edit: '编辑',
             enable: false,
             birthText: now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate(),
             birthDate: now,
             petNameText: null,
-            sterilizationState: sterilizationState,
             image: null,
         }
     };
@@ -94,52 +92,45 @@ class PetDetails extends Component {
                 <Head title={this.props.headTitle} canAdd={true} canBack={true} edit={this.state.edit}
                       onPress={this._onBack.bind(this)}
                       editInfo={this._editInfo.bind(this)}/>
-                <View style={styles.basicStyle}>
-                    <View style={styles.basicContentStyle}>
-                        <View style={styles.borderStyle}>
-                            <FormInput value={this.props.memberName}
-                                       title="会员名称"
-                                       enabled={false}
-                            />
-                        </View>
-                        <View style={styles.borderStyle}>
-                            <FormInput value={this.props.petInfo.petName}
-                                       title="编号"
-                                       enabled={this.state.enable}
-                                       onChangeText={(text)=>{this.setState({ petIdText: text })}}
-                            />
-                        </View>
-                        <View style={styles.borderStyle}>
-                            <FormInput value={this.props.petInfo.petCaseNum}
-                                       title="病历号"
-                                       enabled={this.state.enable}
-                                       onChangeText={(text)=>{this.setState({ petCaseNum: text })}}
-                            />
-                        </View>
-                        <View style={styles.borderStyle}>
-                            <FormInput value={this.props.petInfo.petName}
-                                       title="宠物昵称"
-                                       enabled={this.state.enable}
-                                       onChangeText={(text)=>{this.setState({ petNameText: text })}}
-                            />
-                        </View>
-                    </View>
-                    <View style={styles.imageStyle}>
-                        <TouchableOpacity onPress={()=>this._onChooseImage(true)}>
-                        <Image source={require('./../../../image/pet.jpg')}
-                               style={{width:100,height:100,}}
+                <View style={styles.contentStyle}>
+                    <View style={{flex:1}}>
+                        <FormInput value={this.props.memberName}
+                                   title="会员姓名"
+                                   style={{height:30,}}
+                                   enabled={false}
+                                   onChangeText={(text)=>{this.setState({ nameText: text })}}
                         />
-                            {this.state.image ?
-                                <Image style={{width: 100, height: 100, resizeMode: 'contain'}}
-                                       source={this.state.image} /> : null}
-                            </TouchableOpacity>
+                        <FormInput value={this.props.memberPhone}
+                                   title="手机号码"
+                                   style={{height:30,}}
+                                   enabled={false}
+                                   onChangeText={(text)=>{this.setState({ phoneText: text })}}
+                        />
+                        <FormInput value={this.props.petSource.petName}
+                                   title="宠物昵称"
+                                   style={{height:30,}}
+                                   enabled={this.state.enable}
+                                   onChangeText={(text)=>{this.setState({ nikeText: text })}}
+                        />
+                        <FormInput value={this.props.petSource.petCaseNum}
+                                   title="病历编号"
+                                   style={{height:30,}}
+                                   enabled={this.state.enable}
+                                   onChangeText={(text)=>{this.setState({ caseText: text })}}
+                        />
+                    </View>
+                    <View style={{borderColor:'#ccc',margin:5,borderWidth:StyleSheet.hairlineWidth}}>
+                        <Image source={require('../../../image/pet.jpg')}
+                               style={{width:150,height:200}}
+                        />
                     </View>
                 </View>
                 <View style={{flexDirection:'column',}}>
                     <View style={{height:15,backgroundColor:'#ccc'}}>
                     </View>
                     <View style={styles.borderStyle}>
-                        <FormPicker title="出生日期" tips={this.state.birthText}
+                        <FormPicker title="出生日期"
+                                    tips={this.props.petSource.birthDate}
                                     onPress={this.showPicker.bind(this, 'birth', {date: this.state.birthDate})}
                         />
                     </View>
@@ -149,7 +140,7 @@ class PetDetails extends Component {
                         </View>
                         <View style={{flex:1,}}>
                             <Picker
-                                selectedValue={this.state.sterilizationState}
+                                selectedValue={this.props.petSource.sterilizationState}
                                 mode="dropdown"
                                 enabled={this.state.enable}
                                 style={{backgroundColor:'#fff',height:40}}
@@ -165,14 +156,14 @@ class PetDetails extends Component {
                         </View>
                         <View style={{flex:1,}}>
                             <Picker
-                                selectedValue={this.state.petSex}
+                                selectedValue={this.props.petSource.petSex}
                                 mode="dropdown"
                                 enabled={this.state.enable}
                                 style={{backgroundColor:'#fff',height:40}}
                                 onValueChange={(sex) => this.setState({petSex: sex})}>
-                                <Picker.Item label="雌性" value="雌性"/>
-                                <Picker.Item label="雄性" value="雄性"/>
-                                <Picker.Item label="其它" value="其它"/>
+                                <Picker.Item label="雌性" value="1"/>
+                                <Picker.Item label="雄性" value="2"/>
+                                <Picker.Item label="其它" value="3"/>
                             </Picker>
                         </View>
                     </View>
@@ -182,7 +173,7 @@ class PetDetails extends Component {
                         </View>
                         <View style={{flex:1,}}>
                             <Picker
-                                selectedValue={this.state.petColor}
+                                selectedValue={this.props.petSource.petColor}
                                 mode="dropdown"
                                 enabled={this.state.enable}
                                 style={{backgroundColor:'#fff',height:40}}
@@ -200,11 +191,11 @@ class PetDetails extends Component {
                         </View>
                         <View style={{flex:1,}}>
                             <Picker
-                                selectedValue={this.state.petColor}
+                                selectedValue={this.props.petSource.petType}
                                 mode="dropdown"
                                 enabled={this.state.enable}
                                 style={{backgroundColor:'#fff',height:40}}
-                                onValueChange={(color) => this.setState({petColor: color})}>
+                                onValueChange={(type) => this.setState({petType: type})}>
                                 <Picker.Item label="小型犬" value="small"/>
                                 <Picker.Item label="中型犬" value="middle"/>
                                 <Picker.Item label="大型犬" value="big"/>
@@ -218,11 +209,11 @@ class PetDetails extends Component {
                         </View>
                         <View style={{flex:1,}}>
                             <Picker
-                                selectedValue={this.state.petState}
+                                selectedValue={this.props.petSource.petState}
                                 mode="dropdown"
                                 enabled={this.state.enable}
                                 style={{backgroundColor:'#fff',height:40}}
-                                onValueChange={(color) => this.setState({petState: color})}>
+                                onValueChange={(state) => this.setState({petState: state})}>
                                 <Picker.Item label="在世" value="alive"/>
                                 <Picker.Item label="离世" value="die"/>
                             </Picker>
@@ -231,7 +222,7 @@ class PetDetails extends Component {
                     <View style={{height:15,backgroundColor:'#ccc'}}>
                     </View>
                     <View style={styles.borderStyle}>
-                        <FormInput value={this.props.petInfo.reMarks}
+                        <FormInput value={this.props.petSource.reMarks}
                                    title="备注"
                                    enabled={this.state.enable}
                                    onChangeText={(text)=>{this.setState({ reMarks: text })}}
@@ -265,6 +256,11 @@ const styles = StyleSheet.create({
         borderWidth: StyleSheet.hairlineWidth,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    contentStyle: {
+        flexDirection: 'row',
+        borderBottomColor: '#ccc',
+        borderBottomWidth: StyleSheet.hairlineWidth,
     },
 })
 module.exports = PetDetails

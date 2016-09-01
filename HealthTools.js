@@ -17,7 +17,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import IconButton from './app/commonview/HomeIcon';
 import Sale from './app/page/Sales/Sale';
 import Info from './app/page/MemberInfo/MemberListInfo';
-import VaccineInfo from './app/page/MemberInfo/VaccineInfo';
+import PetListInfo from './app/page/MemberInfo/PetListInfo';
 class HealthTools extends Component {
     constructor(props) {
         super(props);
@@ -78,8 +78,8 @@ class HealthTools extends Component {
         const {navigator} = _this.props;
         if(navigator){
             navigator.push({
-                name:'VaccineInfo',
-                component:VaccineInfo,
+                name:'PetListInfo',
+                component:PetListInfo,
                 params:{
                     headTitle:'我的疫苗',
                 }
