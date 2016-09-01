@@ -23,9 +23,9 @@ class NetUtil extends React.Component {
             .then((response) => response.text())
             .then((responseText) => {
                 let result = {};
-                try{
+                try {
                     result = JSON.parse(responseText);
-                }catch(e){
+                } catch (e) {
                     result = {Sign: false, Message: '【解析JSON失败】' + responseText};
                 }
                 callback(result);
@@ -44,17 +44,21 @@ class NetUtil extends React.Component {
             method: 'GET',
             headers: head
         };
-        fetch(url, fetchOptions)
-            .then((response) => response.text())
-            .then((responseText) => {
-                let result = {};
-                try{
-                    result = JSON.parse(responseText);
-                }catch(e){
-                    result = {Sign: false, Message: '【解析JSON失败】' + responseText};
-                }
-                callback(result);
-            }).done();
+        try {
+            fetch(url, fetchOptions)
+                .then((response) => response.text())
+                .then((responseText) => {
+                    let result = {};
+                    try {
+                        result = JSON.parse(responseText);
+                    } catch (e) {
+                        result = {Sign: false, Message: '【解析JSON失败】' + responseText};
+                    }
+                    callback(result);
+                }).done();
+        } catch(e){
+            return e;
+        }
     }
 
     /*get请求

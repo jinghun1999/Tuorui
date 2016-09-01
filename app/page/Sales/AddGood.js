@@ -94,7 +94,7 @@ class GoodsAdd extends Component {
                 'Content-Type': 'application/json',
                 'Authorization': 'Mobile ' + Util.base64Encode(ret.user.Mobile + ':' + Util.base64Encode(ret.pwd) + ':' + (ret.user.Hospitals[0]!=null ? ret.user.Hospitals[0].Registration : '') + ":" + ret.user.Token)
             };
-            NetUtil.postJson(global.GLOBAL.GETGOODS, postjson, header, function (data) {
+            NetUtil.postJson(CONSTAPI.GETGOODS, postjson, header, function (data) {
                 if (data.Sign && data.Message && data.Message.length > 0) {
                     var good = data.Message[0];
                     good.GoodCount = 1;

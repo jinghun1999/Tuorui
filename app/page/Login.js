@@ -15,24 +15,20 @@ import {
     View,
     ToastAndroid,
     TextInput,
-    TouchableOpacity,
+    Alert
     } from 'react-native';
 import Util from '../util/Util';
-import Global from '../util/Global';
-import NetUitl from '../util/NetUtil';
-import JsonUitl from '../util/JsonUtil';
-//import SecondPageComponent from './SecondPageComponent';
+import NetUtil from '../util/NetUtil';
 import MainPage from '../../Index';
-var base64 = require('base-64');
-var NButton = require('../commonview/NButton');
-//import Example from 'react-native-camera/Example/Example';
+import NButton from '../commonview/NButton';
+
 class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {};
     }
 
-    _pressButton() {
+    _Login() {
         if (!this.state.user || this.state.user.length == 0) {
             ToastAndroid.show("请输入用户名", ToastAndroid.SHORT);
             return;
@@ -44,30 +40,10 @@ class Login extends Component {
 
         var _this = this;
         const { navigator } = _this.props;
-        let url = global.GLOBAL.LOGIN + "?identity=" + _this.state.user + "&password=" + _this.state.pwd + "&type=m";
         try {
-            /*storage.save({
-                key: 'loginState',  //注意:请不要在key中使用_下划线符号!
-                rawData: {
-                    phone: '18307722503',
-                    name: 'tomchow',
-                    token: '081000001000120102012'
-                },
-                expires: 1000 * 3600 * 24
-            });
-            _this.setState({ok: 1});
-            if (navigator) {
-                navigator.pop();
-                navigator.push({
-                    name: 'MainPage',
-                    component: MainPage,
-                    params: {}
-                });
-            }*/
-
-            NetUitl.get(url, false, function (data) {
+            NetUtil.get(CONSTAPI.LOGIN + "?identity=" + _this.state.user + "&password=" + _this.state.pwd + "&type=m", false, function (data) {
                 if (data.Sign && data.Message) {
-                    alert("登录成功,Token:" + data.Message.Token);
+                    Alert.alert('登录成功', "Token:" + data.Message.Token);
                     storage.save({
                         key: 'USER',  //注意:请不要在key中使用_下划线符号!
                         rawData: {
@@ -85,11 +61,11 @@ class Login extends Component {
                         });
                     }
                 } else {
-                    alert(data.Exception);
+                    Alert.alert('登陆失败', data.Exception);
                 }
             });
         } catch (e) {
-            alert("登陆失败，错误信息：" + e);
+            Alert.alert('登陆失败', "错误信息：" + e);
         }
     }
 
@@ -130,9 +106,8 @@ class Login extends Component {
                     <NButton
                         underlayColor='#4169e1'
                         style={styles.style_view_button}
-                        onPress={this._pressButton.bind(this)}
-                        text='登录'>
-                    </NButton>
+                        onPress={this._Login.bind(this)}
+                        text='登录' />
                 </View>
 
                 <View style={{flex:1,flexDirection:'row',alignItems: 'flex-end',bottom:10}}>

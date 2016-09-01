@@ -23,27 +23,21 @@ import MyHealth from './MyHealth';
 import HealthTools from './HealthTools';
 import BBS  from './BBS';
 import UC from './UC';
-
-//import Login from './app/page/Login';
-import Global from './app/util/Global';
-import Util from './app/util/Util';
-import NetUitl from './app/util/NetUtil';
 import Head from './app/commonview/Head';
-import TopScreen from './HomePage';
-//import NButton from './app/commonview/NButton';
+import HomePage from './HomePage';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const MY_HEALTH = '首页';
-const MY_HEALTH_CONSULT = '知识库';
-const MY_HEALTH_COMMUNITY = '健康社区';
-const MY_HEALTH_TOOLS = '应用服务';
-const MY_HEALTH_ACCOUNT = '我的';
+const TAB_HOMEPAGE = '首页';
+const TAB_KNOWLEDGE = '知识库';
+const TAB_BBS = '健康社区';
+const TAB_APP = '应用服务';
+const TAB_UC = '我的';
 var _navigator;
 class MainPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedTab: MY_HEALTH,
+            selectedTab: TAB_HOMEPAGE,
             tabBarShow: true
         };
         this._renderTabItem = this._renderTabItem.bind(this);
@@ -74,20 +68,16 @@ class MainPage extends React.Component {
     _createChildView(tag) {
         let renderView;
         switch (tag) {
-            //case MY_HEALTH_CONSULT:
-            //    renderView = <TopScreen navigator={this._navigator}/>;
-            //    break;
-            case MY_HEALTH:
-                //renderView = <MyHealth navigator={this._navigator} />;
-                renderView = <TopScreen navigator={this._navigator}/>;
+            case TAB_HOMEPAGE:
+                renderView = <HomePage navigator={this._navigator}/>;
                 break;
-            case MY_HEALTH_TOOLS:
+            case TAB_BBS:
                 renderView = <HealthTools navigator={this._navigator} />;
                 break;
-            case MY_HEALTH_COMMUNITY:
+            case TAB_APP:
                 renderView = <BBS navigator={this._navigator} />;
                 break;
-            case MY_HEALTH_ACCOUNT:
+            case TAB_UC:
                 renderView = <UC navigator={this._navigator} />;
                 break;
             default:
@@ -103,10 +93,10 @@ class MainPage extends React.Component {
                 <TabNavigator hidesTabTouch={true}
                               sceneStyle={{paddingBottom: 0}}
                               tabBarStyle={tabBarShow ? styles.tabNav : styles.tabNavHide}>
-                    {this._renderTabItem('ios-home', MY_HEALTH, this._createChildView(MY_HEALTH))}
-                    {this._renderTabItem('ios-film', MY_HEALTH_COMMUNITY, this._createChildView(MY_HEALTH_COMMUNITY))}
-                    {this._renderTabItem('ios-color-fill', MY_HEALTH_TOOLS, this._createChildView(MY_HEALTH_TOOLS))}
-                    {this._renderTabItem('ios-person', MY_HEALTH_ACCOUNT, this._createChildView(MY_HEALTH_ACCOUNT))}
+                    {this._renderTabItem('ios-home', TAB_HOMEPAGE, this._createChildView(TAB_HOMEPAGE))}
+                    {this._renderTabItem('ios-film', TAB_BBS, this._createChildView(TAB_BBS))}
+                    {this._renderTabItem('ios-color-fill', TAB_APP, this._createChildView(TAB_APP))}
+                    {this._renderTabItem('ios-person', TAB_UC, this._createChildView(TAB_UC))}
                 </TabNavigator>
             </View>
         );

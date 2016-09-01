@@ -1,3 +1,6 @@
+/**
+ * Modified by Chow on 2016-09-01.
+ */
 'use strict';
 import React, {Component} from 'react';
 import {
@@ -11,28 +14,29 @@ import {
     ScrollView,
     ActivityIndicator,
     RefreshControl,
+    ToastAndroid
     } from 'react-native';
-import ViewPager from 'react-native-viewpager';
-//import Icon from 'react-native-vector-icons/Ionicons';
-//import GoodsAdd from './app/page/Sales/AddGood';
+import NetUtil from './app/util/NetUtil';
 import Head from './app/commonview/Head';
 import Sale from './app/page/Sales/Sale';
-import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
-var deviceWidth = Dimensions.get('window').width;
-var deviceHeight = Dimensions.get('window').height;
-var fetchPath = global.GLOBAL.APIAPP + '/AppInfo/GetHomeInfo';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import HomeIcon from './app/commonview/HomeIcon';
-import DrugHandBook from './app/page/HomePage/DrugHandBook';
+import NetWorkTool from './app/util/NetWorkTool'
+import InfoClass from './app/page/HomePage/InfoClass';
 import InfoDetail from './app/page/HomePage/InfoDetail';
 import Information from './app/page/HomePage/InfoList';
 import Contact from './app/page/HomePage/Contact';
+
+import ViewPager from 'react-native-viewpager';
+import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import HomeIcon from './app/commonview/HomeIcon';
+var deviceWidth = Dimensions.get('window').width;
+var deviceHeight = Dimensions.get('window').height;
 let IMGS = [
     require('./image/job1.jpg'),
     require('./image/job2.jpg'),
     require('./image/job3.jpg'),
 ];
-
+const infolistApi = CONSTAPI.APIAPP + '/AppInfo/GetHomeInfo';
 /****************MainTopSceen*****************/
 class TopScreen extends Component {
     constructor(props) {
@@ -48,18 +52,30 @@ class TopScreen extends Component {
             isRefreshing: false,
             dataCache: []
         };
+        NetWorkTool.checkNetworkState((isConnected)=> {
+            if (!isConnected) {
+                ToastAndroid.show(NetWorkTool.NOT_NETWORK, ToastAndroid.SHORT);
+            }
+        });
+    }
+
+    handleMethod(isConnected) {
+        console.log('test', (isConnected ? 'online' : 'offline'));
     }
 
     //组件刷新前调用，类似componentWillMount
     componentWillUpdate() {
-    }
 
+    }
     //更新后的hook
     componentDidUpdate() {
     }
-
+    componentWillMount() {
+        NetWorkTool.removeEventListener(NetWorkTool.TAG_NETWORK_CHANGE,this.handleMethod);
+    }
     //销毁期，用于清理一些无用的内容，如：点击事件Listener
     componentWillUnmount() {
+        NetWorkTool.removeEventListener(NetWorkTool.TAG_NETWORK_CHANGE,this.handleMethod);
         this.timer && clearTimeout(this.timer);
     }
 
@@ -95,52 +111,50 @@ class TopScreen extends Component {
     _fetchData(pageSize, pageIndex) {
         let _this = this;
         _this.setState({isRefreshing: true})
-        fetch(fetchPath + "?pid=&PageSize=" + pageSize + "&PageIndex=" + pageIndex)
-            .then((response) => response.text())
-            .then((responseData) => {
-                let dt = JSON.parse(responseData);
-                if (dt.Status) {
-                    _this.setState({
-                        total: dt.Data.total,
-                        totalPage: dt.Data.TotalPage,
-                        infoLoaded: true,
-                        pageIndex: pageIndex,
-                        pageSize: pageSize,
-                        isRefreshing: false,
-                        dataCache: dt.Data.rows,
-                    });
-                    storage.save({
-                        key: 'IndexInfoList',
-                        rawData: {
-                            IndexInfoList: dt.Data.rows
-                        },
-                        expires: 1000 * 3600 * 24
-                    });
-                }
-                else {
-                    alert("get data error")
-                }
-            }).done();
+        NetUtil.get(infolistApi + "?pid=&PageSize=" + pageSize + "&PageIndex=" + pageIndex, false, function (result) {
+            if (result.Status) {
+                _this.setState({
+                    total: result.Data.total,
+                    totalPage: result.Data.TotalPage,
+                    infoLoaded: true,
+                    pageIndex: pageIndex,
+                    pageSize: pageSize,
+                    isRefreshing: false,
+                    dataCache: result.Data.rows,
+                });
+                storage.save({
+                    key: 'IndexInfoList',
+                    rawData: {
+                        IndexInfoList: result.Data.rows
+                    },
+                    expires: 1000 * 3600 * 24
+                });
+            }
+            else {
+                alert("get data error")
+            }
+        });
     }
 
     _onEndReached() {
         let _this = this;
         let _pageIndex = _this.state.pageIndex + 1;
-        let _fetchPath = fetchPath + "?pid=&PageIndex=" + _pageIndex + "&PageSize=" + _this.state.pageSize;
-        fetch(_fetchPath).then((responses) => responses.text()).then((resData) => {
-            let dt = JSON.parse(resData);
+        let msg = NetUtil.get(infolistApi + "?pid=&PageIndex=" + _pageIndex + "&PageSize=" + _this.state.pageSize, false, function (result) {
             let _dataCache = _this.state.dataCache;
-            dt.Data.rows.forEach((_data)=> {
-                _dataCache.push(_data);
+            result.Data.rows.forEach((d)=> {
+                _dataCache.push(d);
             });
-            if (dt.Status) {
+            if (result.Status) {
                 _this.setState({
                     pageIndex: _pageIndex,
                     isRefreshing: false,
                     dataCache: _dataCache,
                 });
             }
-        }).done();
+        });
+        if (msg != null) {
+            alert(msg);
+        }
     }
 
     _toolsPress() {
@@ -199,8 +213,8 @@ class TopScreen extends Component {
         const { navigator } = _this.props;
         if (navigator) {
             navigator.push({
-                name: 'DrugHandBook',
-                component: DrugHandBook,
+                name: 'InfoClass',
+                component: InfoClass,
                 params: {
                     headTitle: '药品信息'
                 }
@@ -213,8 +227,8 @@ class TopScreen extends Component {
         const { navigator } = _this.props;
         if (navigator) {
             navigator.push({
-                name: 'DrugHandBook',
-                component: DrugHandBook,
+                name: 'InfoClass',
+                component: InfoClass,
                 params: {
                     headTitle: '检验手册'
                 }
@@ -227,8 +241,8 @@ class TopScreen extends Component {
         const { navigator } = _this.props;
         if (navigator) {
             navigator.push({
-                name: 'DrugHandBook',
-                component: DrugHandBook,
+                name: 'InfoClass',
+                component: InfoClass,
                 params: {
                     headTitle: '诊断手册'
                 }
@@ -241,8 +255,8 @@ class TopScreen extends Component {
         const { navigator } = _this.props;
         if (navigator) {
             navigator.push({
-                name: 'DrugHandBook',
-                component: DrugHandBook,
+                name: 'InfoClass',
+                component: InfoClass,
                 params: {
                     headTitle: '文献库'
                 }

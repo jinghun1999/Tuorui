@@ -73,7 +73,7 @@ class ChooseStore extends Component {
                 'Content-Type': 'application/json',
                 'Authorization': 'Mobile ' + Util.base64Encode(ret.user.Mobile + ':' + Util.base64Encode(ret.pwd) + ':' + (ret.user.Hospitals[0]!=null ? ret.user.Hospitals[0].Registration : '') + ":" + ret.user.Token)
             };
-            NetUtil.postJson(global.GLOBAL.GETSTORES, postjson, header, function (data) {
+            NetUtil.postJson(CONSTAPI.GETSTORES, postjson, header, function (data) {
                 if (data.Sign && data.Message) {
                     _this.setState({
                         storeDataSource: ds.cloneWithRows(data.Message),

@@ -9,33 +9,48 @@ import {
     StyleSheet,
     Text,
     Navigator,
-
     Image,
+    ToastAndroid,
     View
     } from 'react-native';
 import MainPage from './MainPage';
 import Login from './app/page/Login';
+import NetWorkTool from './app/util/NetWorkTool'
 class Index extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             loading: true,
         };
+        NetWorkTool.checkNetworkState((isConnected)=> {
+            if (!isConnected) {
+                ToastAndroid.show(NetWorkTool.NOT_NETWORK, ToastAndroid.SHORT);
+            }
+        });
+        NetWorkTool.removeEventListener(NetWorkTool.TAG_NETWORK_CHANGE, this.handleNetConnect);
     }
-    shouldComponentUpdate(){
+
+    handleNetConnect(isConnected) {
+        console.log('test', (isConnected ? 'online' : 'offline'));
+    }
+
+    shouldComponentUpdate() {
         return true;
     }
+
     componentWillMount() {
         this._initState();
     }
-    componentWillUpdate(){
+
+    componentWillUpdate() {
         //this._initState();
     }
-    _initState(){
+
+    _initState() {
         var _this = this;
         /*storage.remove({
-            key: 'USER'
-        });*/
+         key: 'USER'
+         });*/
         storage.load({
             key: 'USER',
             autoSync: false,
@@ -52,6 +67,7 @@ class Index extends React.Component {
             });
         });
     }
+
     render() {
         var defaultName = 'Login';
         var defaultComponent = Login;
@@ -59,14 +75,14 @@ class Index extends React.Component {
             defaultName = 'MainPage';
             defaultComponent = MainPage;
         }
-        if(this.state.loading){
+        if (this.state.loading) {
             return (
                 <View>
                     <Text>Loading...</Text>
                 </View>
             );
         }
-        else{
+        else {
             return (
                 <Navigator
                     initialRoute={{ name: defaultName, component: defaultComponent, id: 'main' }}

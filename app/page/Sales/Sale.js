@@ -203,7 +203,7 @@ export default class Sale extends React.Component {
                 'Content-Type': 'application/json',
                 'Authorization': 'Mobile ' + Util.base64Encode(ret.user.Mobile + ':' + Util.base64Encode(ret.pwd) + ':' + (ret.user.Hospitals[0] != null ? ret.user.Hospitals[0].Registration : '') + ":" + ret.user.Token)
             };
-            NetUtil.postJson(Global.SAVESALES, postjson, header, function (data) {
+            NetUtil.postJson(CONSTAPI.SAVESALES, postjson, header, function (data) {
                 if (data.Sign && data.Message) {
                     ToastAndroid.show("保存成功", ToastAndroid.SHORT);
                     _this._onBack();

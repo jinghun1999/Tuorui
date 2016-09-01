@@ -28,8 +28,7 @@ var GLOBAL = {
     SAVESALES: API_Service + '/Store_DirectSell/DirectSellBillSave',
     GETGUEST: API_Service + '/gest/GetModelListWithSort',
     GETSTORES: API_Service + '/Warehouse/GetModelList',
-    ENTCODE: '2D24-D13F-45C3-3584-DF26-E2D5',
 };
 global.storage = storage;
-global.GLOBAL = GLOBAL;
+global.CONSTAPI = GLOBAL;
 module.exports = GLOBAL;
