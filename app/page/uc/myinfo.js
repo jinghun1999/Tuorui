@@ -10,24 +10,32 @@ import{
     Alert,
     Picker,
     ListView,
+    TextInput,
 } from 'react-native';
 import Head from '../../commonview/Head';
 import Icon from 'react-native-vector-icons/Ionicons';
-import Modal from 'react-native-root-modal';
 import AlertForm from '../../commonview/AlertInputForm';
 import FormPicker from '../../commonview/FormPicker';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
+import Modal from 'react-native-modalbox';
 class MyAccount extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             memberNumber: 123,
             memberNickName: '张三丰',
+            memberSex: 1,
             loaded: false,
             memberEmail: '123@qq.com',
             memberAddress: '徐汇区桂果园8号楼4楼',
-            memberSchool:'家里',
+            memberSchool: '家里',
             hospitalSource: null,
+            default: '默认',
+            isOpenName: false,
+            isOpenSex: false,
+            isOpenEmail: false,
+            isOpenAddress: false,
+            isOpenSchool:false,
         };
     }
 
@@ -44,11 +52,11 @@ class MyAccount extends React.Component {
         var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         var data = {
             'data': [
-                {'id': 1, 'name': '1号医院',},
-                {'id': 2, 'name': '2号医院',},
-                {'id': 3, 'name': '3号医院',},
-                {'id': 4, 'name': '4号医院',},
-                {'id': 5, 'name': '5号医院',},
+                {'id': 1, 'name': '1号医院', 'isBinding': true,},
+                {'id': 2, 'name': '宠物诊所', 'isBinding': false,},
+                {'id': 3, 'name': '口腔医院', 'isBinding': false,},
+                {'id': 4, 'name': '4号医院', 'isBinding': false,},
+                {'id': 5, 'name': '5号医院', 'isBinding': false,},
             ]
         };
         _this.setState({
@@ -75,19 +83,138 @@ class MyAccount extends React.Component {
     }
 
     _onRenderRow(h) {
+        var _isBinding = h.isBinding;
+        var body;
+        if (_isBinding) {
+            body = <View style={{marginLeft:10,width:40,height:20,borderRadius:5,backgroundColor:'#666'}}>
+                <Text style={{color:'#fff',textAlign:'center'}}>{this.state.default}</Text>
+            </View>
+        } else {
+            body = <View style={{width:0,height:0}}>
+                <Text>{this.state.default}</Text>
+            </View>
+        }
         return (
             <TouchableOpacity style={styles.headBox} onPress={()=>this.pressRow(h)}>
-                <View style={{marginLeft:10,}}>
-                    <Icon name={'ios-person'} size={20} color={'#ccc'}/>
+                <View style={{flex:1,flexDirection:'row',height:20}}>
+                    <Text style={{marginLeft:20,fontSize:14, fontWeight:'bold'}}>{h.name}</Text>
+                    {body}
                 </View>
-                <View style={{flex:1}}>
-                    <Text style={{fontSize:14, fontWeight:'bold'}}>{h.name}</Text>
-                </View>
-                <View style={{width:30,alignItems:'center', justifyContent:'center'}}>
-                    <Icon name={'ios-arrow-forward'} size={20} color={'#ccc'}/>
+                <View style={{width:20,alignItems:'center', justifyContent:'center'}}>
+                    <Icon name={'ios-arrow-forward'} size={15} color={'#ccc'}/>
                 </View>
             </TouchableOpacity>
         )
+    }
+
+    //修改姓名弹窗
+    _onNickName() {
+        this.setState({isOpenName: true});
+    }
+
+    closeModal() {
+        this.setState({isOpenName: false});
+    }
+
+    closeModalAndSave() {
+        let nikeName = this.state.nikeNameText, oldNikeName = this.state.memberNickName;
+        if (nikeName == null || nikeName == oldNikeName) {
+            this.setState({
+                isOpenName: false,
+            })
+        } else {
+            this.setState({
+                memberNickName: nikeName,
+                isOpenName: false,
+            })
+        }
+    }
+
+    //修改邮箱方法体
+    onEmail() {
+        this.setState({isOpenEmail: true});
+    }
+
+    closeEmailModal() {
+        this.setState({isOpenEmail: false});
+    }
+
+    closeEmailModalAndSave() {
+        let emailText = this.state.emailText, memberEmail = this.state.memberEmail;
+        if (emailText == null || emailText == memberEmail) {
+            this.setState({
+                isOpenEmail: false,
+            })
+        } else {
+            this.setState({
+                memberEmail: emailText,
+                isOpenEmail: false,
+            })
+        }
+    }
+
+    //修改性别方法体
+    _onMemberSex() {
+        this.setState({isOpenSex: true});
+    }
+
+    closeSexModal() {
+        this.setState({isOpenSex: false});
+    }
+
+    closeSexModalAndSave() {
+        let sexText = this.state.sexText, memberSex = this.state.memberSex;
+        if (sexText == null || sexText == memberSex) {
+            this.setState({
+                isOpenSex: false,
+            })
+        } else {
+            this.setState({
+                memberSex: sexText,
+                isOpenSex: false,
+            })
+        }
+    }
+
+    //修改地址方法体
+    onAddress() {
+        this.setState({isOpenAddress: true});
+    }
+    closeAddressModal() {
+        this.setState({isOpenAddress: false});
+    }
+    closeAddressModalAndSave() {
+        let addressText = this.state.addressText, memberAddress = this.state.memberAddress;
+        if (addressText == null || addressText == memberAddress) {
+            this.setState({
+                isOpenAddress: false,
+            })
+        } else {
+            this.setState({
+                memberAddress: memberAddress,
+                isOpenAddress: false,
+            })
+        }
+    }
+    //修改学校方法体
+    onSchool(){
+        this.setState({isOpenSchool: true});
+    }
+    closeSchoolModal() {
+        this.setState({isOpenSchool: false});
+    }
+    closeSchoolModalAndSave() {
+        let schoolText = this.state.schoolText, memberSchool = this.state.memberSchool;
+        if (schoolText == null || schoolText == memberSchool) {
+            this.setState({
+                isOpenSchool: false,
+            })
+        } else {
+            this.setState({
+                memberSchool: memberSchool,
+                isOpenSchool: false,
+            })
+        }
     }
 
     render() {
@@ -123,73 +250,47 @@ class MyAccount extends React.Component {
                                        style={styles.imageStyle}/>
                             </View>
                         </TouchableOpacity>
-                        <View style={styles.headBox}>
+                        <TouchableOpacity onPress={this._onNickName.bind(this)} style={styles.headBox}>
                             <View style={{width:100,}}>
                                 <Text style={{width:100,}}>姓名</Text>
                             </View>
                             <View style={styles.contentStyle}>
-                                <AlertForm name='请输入姓名'
-                                           title={this.state.memberNickName}
-                                           text={this.state.memberNickName}
-                                />
+                                <Text>{this.state.memberNickName}</Text>
                             </View>
-                        </View>
-                        <View style={styles.headBox}>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={this._onMemberSex.bind(this)} style={styles.headBox}>
                             <View style={{width:100,}}>
                                 <Text style={{width:100,}}>性别</Text>
                             </View>
-                            <View style={{flex:1,}}>
-                                <Picker selectedValue={this.state.sex}
-                                        mode="dialog"
-                                        enabled={true}
-                                        style={{height:40,backgroundColor:'#fff',}}
-                                        onValueChange={(sex) => this.setState({sex: sex})}>
-                                    <Picker.Item label="请选择" value="0"/>
-                                    <Picker.Item label="男" value="1"/>
-                                    <Picker.Item label="女" value="2"/>
-                                </Picker>
+                            <View style={styles.contentStyle}>
+                                <Text>{this.state.memberSex == 1 ? '男' : '女'}</Text>
                             </View>
-                        </View>
-                        <View style={styles.headBox}>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={this.onEmail.bind(this)} style={styles.headBox}>
                             <View style={{width:100,}}>
                                 <Text style={{width:100,}}>邮箱</Text>
                             </View>
-                            <View style={{flex:1,}}>
-                                <View style={styles.contentStyle}>
-                                    <AlertForm name='请输入邮箱'
-                                               title={this.state.memberEmail}
-                                               text={this.state.memberEmail}
-                                    />
-                                </View>
+                            <View style={styles.contentStyle}>
+                                <Text>{this.state.memberEmail}</Text>
                             </View>
-                        </View>
-                        <View style={styles.headBox}>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={this.onAddress.bind(this)} style={styles.headBox}>
                             <View style={{width:100,}}>
                                 <Text style={{width:100,}}>地址</Text>
                             </View>
-                            <View style={{flex:1,}}>
-                                <View style={styles.contentStyle}>
-                                    <AlertForm name='请输入地址'
-                                               title={this.state.memberAddress}
-                                               text={this.state.memberAddress}
-                                    />
-                                </View>
+                            <View style={styles.contentStyle}>
+                                <Text>{this.state.memberAddress}</Text>
                             </View>
-                        </View>
-                        <View style={styles.headBox}>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={this.onSchool.bind(this)} style={styles.headBox}>
                             <View style={{width:100,}}>
                                 <Text style={{width:100,}}>毕业学校</Text>
                             </View>
-                            <View style={{flex:1,}}>
-                                <View style={styles.contentStyle}>
-                                    <AlertForm name='请输入毕业学校'
-                                               title={this.state.memberSchool}
-                                               text={this.state.memberSchool}
-                                    />
-                                </View>
+                            <View style={styles.contentStyle}>
+                                <Text>{this.state.memberSchool}</Text>
                             </View>
-                        </View>
-                        <View style={{height:30, justifyContent:'center',backgroundColor:'#ccc', paddingLeft:10}}>
+                        </TouchableOpacity>
+                        <View style={{height:30, justifyContent:'center', paddingLeft:10}}>
                             <Text>我的医院</Text>
                         </View>
                         <View>
@@ -197,6 +298,162 @@ class MyAccount extends React.Component {
                         </View>
                     </View>
                 </ScrollView>
+                <Modal isOpen={this.state.isOpenName}
+                       onClosed={this.closeModal.bind(this)}
+                       style={styles.modal}
+                       position={"bottom"}>
+                    <View style={styles.modalViewStyle}>
+                        <Text style={{fontSize:16}}>请输入姓名</Text>
+                        <View style={styles.textInputStyle}>
+                            <TextInput placeholder={this.state.memberNickName}
+                                       editable={true}
+                                       underlineColorAndroid={'transparent'}
+                                       keyboardType={'default'}
+                                       style={{height: 35,flex:1,}}
+                                       onChangeText={(text)=>{
+                                             this.setState({
+                                                nikeNameText:text,
+                                             })
+                                       }}
+                            />
+                        </View>
+                        <View style={styles.modalButtonViewStyle}>
+                            <TouchableOpacity onPress={this.closeModal.bind(this)}
+                                              style={[styles.modalButtonStyle,{backgroundColor:'#BEBEBE'}]}>
+                                <Text style={{color:'white',textAlign:'center'}}>取消</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={this.closeModalAndSave.bind(this)}
+                                              style={[styles.modalButtonStyle,{backgroundColor:'#1E90FF'}]}>
+                                <Text style={{color:'white',textAlign:'center'}}>确定</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
+
+                <Modal isOpen={this.state.isOpenEmail}
+                       onClosed={this.closeEmailModal.bind(this)}
+                       style={styles.modal}
+                       position={"bottom"}>
+                    <View style={styles.modalViewStyle}>
+                        <Text style={{fontSize:16}}>请输入邮箱</Text>
+                        <View style={styles.textInputStyle}>
+                            <TextInput placeholder={this.state.memberEmail}
+                                       editable={true}
+                                       underlineColorAndroid={'transparent'}
+                                       keyboardType={'default'}
+                                       style={{height: 35,flex:1,}}
+                                       onChangeText={(text)=>{
+                                             this.setState({
+                                                emailText:text,
+                                             })
+                                       }}
+                            />
+                        </View>
+                        <View style={styles.modalButtonViewStyle}>
+                            <TouchableOpacity onPress={this.closeEmailModal.bind(this)}
+                                              style={[styles.modalButtonStyle,{backgroundColor:'#BEBEBE'}]}>
+                                <Text style={{color:'white',textAlign:'center'}}>取消</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={this.closeEmailModalAndSave.bind(this)}
+                                              style={[styles.modalButtonStyle,{backgroundColor:'#1E90FF'}]}>
+                                <Text style={{color:'white',textAlign:'center'}}>确定</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
+
+                <Modal isOpen={this.state.isOpenSex}
+                       onClosed={this.closeSexModal.bind(this)}
+                       style={styles.modal}
+                       position={"bottom"}>
+                    <View style={styles.modalViewStyle}>
+                        <Text style={{fontSize:16}}>请选择性别</Text>
+                        <View style={{height:40,width:100,marginTop:10,
+                        borderColor:'#ccc',borderWidth:StyleSheet.hairlineWidth,}}>
+                            <Picker mode='dropdown'
+                                    selectedValue={this.state.sexText==null?this.state.memberSex:this.state.sexText}
+                                    style={{backgroundColor:'#fff',justifyContent:'center'}}
+                                    onValueChange={(sex) => this.setState({sexText: sex})}>
+                                <Picker.Item label="男" value="1"/>
+                                <Picker.Item label="女" value="2"/>
+                            </Picker>
+                        </View>
+                        <View style={styles.modalButtonViewStyle}>
+                            <TouchableOpacity onPress={this.closeSexModal.bind(this)}
+                                              style={[styles.modalButtonStyle,{backgroundColor:'#BEBEBE'}]}>
+                                <Text style={{color:'white',textAlign:'center'}}>取消</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={this.closeSexModalAndSave.bind(this)}
+                                              style={[styles.modalButtonStyle,{backgroundColor:'#1E90FF'}]}>
+                                <Text style={{color:'white',textAlign:'center'}}>确定</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
+
+                <Modal isOpen={this.state.isOpenAddress}
+                       onClosed={this.closeAddressModal.bind(this)}
+                       style={styles.modal}
+                       position={"bottom"}>
+                    <View style={styles.modalViewStyle}>
+                        <Text style={{fontSize:16}}>请输入地址</Text>
+                        <View style={styles.textInputStyle}>
+                            <TextInput placeholder={this.state.memberAddress}
+                                       editable={true}
+                                       underlineColorAndroid={'transparent'}
+                                       keyboardType={'default'}
+                                       style={{height: 35,flex:1,}}
+                                       onChangeText={(text)=>{
+                                             this.setState({
+                                                addressText:text,
+                                             })
+                                       }}
+                            />
+                        </View>
+                        <View style={styles.modalButtonViewStyle}>
+                            <TouchableOpacity onPress={this.closeAddressModal.bind(this)}
+                                              style={[styles.modalButtonStyle,{backgroundColor:'#BEBEBE'}]}>
+                                <Text style={{color:'white',textAlign:'center'}}>取消</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={this.closeAddressModalAndSave.bind(this)}
+                                              style={[styles.modalButtonStyle,{backgroundColor:'#1E90FF'}]}>
+                                <Text style={{color:'white',textAlign:'center'}}>确定</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
+
+                <Modal isOpen={this.state.isOpenSchool}
+                       onClosed={this.closeSchoolModal.bind(this)}
+                       style={styles.modal}
+                       position={"bottom"}>
+                    <View style={styles.modalViewStyle}>
+                        <Text style={{fontSize:16}}>请输入学校</Text>
+                        <View style={styles.textInputStyle}>
+                            <TextInput placeholder={this.state.memberAddress}
+                                       editable={true}
+                                       underlineColorAndroid={'transparent'}
+                                       keyboardType={'default'}
+                                       style={{height: 35,flex:1,}}
+                                       onChangeText={(text)=>{
+                                             this.setState({
+                                                schoolText:text,
+                                             })
+                                       }}
+                            />
+                        </View>
+                        <View style={styles.modalButtonViewStyle}>
+                            <TouchableOpacity onPress={this.closeSchoolModal.bind(this)}
+                                              style={[styles.modalButtonStyle,{backgroundColor:'#BEBEBE'}]}>
+                                <Text style={{color:'white',textAlign:'center'}}>取消</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={this.closeSchoolModalAndSave.bind(this)}
+                                              style={[styles.modalButtonStyle,{backgroundColor:'#1E90FF'}]}>
+                                <Text style={{color:'white',textAlign:'center'}}>确定</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
             </View>
         );
     }
@@ -230,17 +487,63 @@ const styles = StyleSheet.create({
         width: 30,
         borderRadius: 20,
     },
-    title: {},
+    modal: {
+        height: 200,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#efefef',
+        borderRadius: 5,
+    },
+    btn: {
+        margin: 10,
+        backgroundColor: "#3B5998",
+        padding: 10
+    },
+    btnModal: {
+        position: "absolute",
+        top: 0,
+        right: 0,
+        width: 50,
+        height: 50,
+        backgroundColor: "transparent",
+    },
     contentStyle: {
         flex: 1,
         alignItems: 'flex-end',
         justifyContent: 'flex-end',
         marginRight: 20,
-        height: 40,
+        height: 30,
     },
     loadingBox: {
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    modalViewStyle: {
+        height: 150,
+        width: 300,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#efefef',
+    },
+    textInputStyle: {
+        flexDirection: 'row',
+        margin: 10,
+        backgroundColor: '#fff',
+        borderRadius: 5,
+        height: 40,
+        borderWidth: StyleSheet.hairlineWidth,
+        borderColor: '#666',
+    },
+    modalButtonViewStyle: {
+        flexDirection: 'row',
+        height: 30,
+        justifyContent: 'flex-end',
+        alignSelf: 'flex-end',
+    },
+    modalButtonStyle: {
+        margin: 5,
+        width: 40,
+        borderRadius: 5,
     },
 });
 
