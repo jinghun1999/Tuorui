@@ -24,6 +24,7 @@ import InfoClass from './app/page/HomePage/InfoClass';
 import InfoDetail from './app/page/HomePage/InfoDetail';
 import Information from './app/page/HomePage/InfoList';
 import Contact from './app/page/HomePage/Contact';
+import ToolsHome from './app/page/tools/ToolsHome';
 
 import ViewPager from 'react-native-viewpager';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
@@ -31,7 +32,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import HomeIcon from './app/commonview/HomeIcon';
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
-let IMGS = [
+const IMAGES= [
     require('./image/job1.jpg'),
     require('./image/job2.jpg'),
     require('./image/job3.jpg'),
@@ -42,7 +43,7 @@ class TopScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            imageSource: new ViewPager.DataSource({pageHasChanged: (p1, p2)=>p1 !== p2}).cloneWithPages(IMGS),
+            imageSource: new ViewPager.DataSource({pageHasChanged: (p1, p2)=>p1 !== p2}).cloneWithPages(IMAGES),
             informationSource: new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2}),
             infoLoaded: false,
             pageIndex: 1,
@@ -159,13 +160,13 @@ class TopScreen extends Component {
 
     _toolsPress() {
         var _this = this;
-        Errorr('error..');
+        //Errorr('error..');
         const { navigator } = _this.props;
         if (navigator) {
             navigator.push({
-                name: 'Sale',
                 id: 'page',
-                component: Sale,
+                name: 'ToolsHome',
+                component: ToolsHome,
                 params: {
                     id: _this.state.id,
                 }

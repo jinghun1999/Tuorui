@@ -37,15 +37,12 @@ class Information extends React.Component {
 
     componentDidMount() {
         let _this = this;
-
         _this.timer = setTimeout(
             () => {
                 _this._loadData();
             }, 100
         );
-
     }
-
     componentWillUnmount() {
         this.timer && clearTimeout(this.timer);
     }

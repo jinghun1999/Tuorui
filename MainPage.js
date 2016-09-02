@@ -18,15 +18,15 @@ import {
     BackAndroid,
     View
     } from 'react-native';
-import TabNavigator from 'react-native-tab-navigator';
-import MyHealth from './MyHealth';
-import App from './App';
-import BBS  from './BBS';
-import UC from './UC';
+
 import Head from './app/commonview/Head';
 import HomePage from './HomePage';
-import Icon from 'react-native-vector-icons/Ionicons';
+import BBS  from './BBS';
+import App from './App';
+import UC from './UC';
 
+import TabNavigator from 'react-native-tab-navigator';
+import Icon from 'react-native-vector-icons/Ionicons';
 const TAB_HOMEPAGE = '首页';
 const TAB_KNOWLEDGE = '知识库';
 const TAB_BBS = '健康社区';
@@ -42,23 +42,30 @@ class MainPage extends React.Component {
         };
         this._renderTabItem = this._renderTabItem.bind(this);
         this._navigator = this.props.navigator;
-        //get login info
-        /*
-        storage.load({
-            key: 'loginState',
-            autoSync: true,
-            syncInBackground: true
-            }).then(ret => {}).catch(err => {
-        });*/
+    }
+
+    componentDidMount() {
+        var nav = this._navigator;
+        BackAndroid.addEventListener('hardwareBackPress', function () {
+            if (nav && nav.getCurrentRoutes().length > 1) {
+                nav.pop();
+                return true;
+            }
+            return false;
+        });
+    }
+
+    componentWillUnmount() {
+        BackAndroid.removeEventListener('hardwareBackPress');
     }
 
     _renderTabItem(ico, tag, childView) {
         return (
             <TabNavigator.Item
                 selected={this.state.selectedTab === tag}
-                renderIcon={() => <View style={styles.tabIcon}><Icon name={ico} size={35} color={'#b2b2b2'}/></View>}
+                renderIcon={() => <View style={styles.tabIcon}><Icon name={ico} size={32} color={'#b2b2b2'}/></View>}
                 title={tag}
-                renderSelectedIcon={() => <View style={styles.tabIcon}><Icon name={ico} size={35} color={'#63B8FF'}/></View>}
+                renderSelectedIcon={() => <View style={styles.tabIcon}><Icon name={ico} size={32} color={'#63B8FF'}/></View>}
                 onPress={() => this.setState({ selectedTab: tag })}>
                 {childView}
             </TabNavigator.Item>
@@ -87,7 +94,7 @@ class MainPage extends React.Component {
     }
 
     render() {
-        let {tabBarShow} = this.props;
+        let { tabBarShow } = this.props;
         return (
             <View style={{flex: 1}}>
                 <TabNavigator hidesTabTouch={true}
@@ -95,25 +102,11 @@ class MainPage extends React.Component {
                               tabBarStyle={tabBarShow ? styles.tabNav : styles.tabNavHide}>
                     {this._renderTabItem('ios-home', TAB_HOMEPAGE, this._createChildView(TAB_HOMEPAGE))}
                     {this._renderTabItem('ios-chatbubbles', TAB_BBS, this._createChildView(TAB_BBS))}
-                    {this._renderTabItem('ios-easel', TAB_APP, this._createChildView(TAB_APP))}
+                    {this._renderTabItem('ios-laptop', TAB_APP, this._createChildView(TAB_APP))}
                     {this._renderTabItem('ios-person', TAB_UC, this._createChildView(TAB_UC))}
                 </TabNavigator>
             </View>
         );
-    }
-    componentDidMount() {
-        var nav = this._navigator;
-        BackAndroid.addEventListener('hardwareBackPress', function () {
-            if (nav && nav.getCurrentRoutes().length > 1) {
-                nav.pop();
-                return true;
-            }
-            return false;
-        });
-    }
-
-    componentWillUnmount() {
-        BackAndroid.removeEventListener('hardwareBackPress');
     }
 }
 
@@ -123,7 +116,7 @@ const styles = StyleSheet.create({
         flex: 1
     },
     tabNav: {
-        height: 60,
+        height: 45,
         backgroundColor: '#FFF',
         alignItems: 'center',
         borderTopWidth: StyleSheet.hairlineWidth,
@@ -136,14 +129,11 @@ const styles = StyleSheet.create({
         height: 0,
         overflow: 'hidden'
     },
-    tab: {
-        height: 60,
-        backgroundColor: '#303030',
-        alignItems: 'center',
-    },
+
     tabIcon: {
         flex:1,
-        height: 30,
+        height: 25,
+        alignItems: 'center',
         //resizeMode: 'stretch',
         marginTop: 0.5
     },

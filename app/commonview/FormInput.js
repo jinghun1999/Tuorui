@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     inputBox: {
         flex: 1,
         borderRadius: 5,
-        borderWidth: 1,
+        borderWidth: StyleSheet.hairlineWidth,
         borderColor: '#ccc',
         backgroundColor: '#FFFFFF',
         marginRight: 10,
