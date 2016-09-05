@@ -17,11 +17,11 @@ import{
 import Head from './app/commonview/Head';
 import IconButton from './app/commonview/HomeIcon';
 import Sale from './app/page/Sales/Sale';
-import Info from './app/page/MemberInfo/MemberListInfo';
-import PetListInfo from './app/page/MemberInfo/PetListInfo';
+import Info from './app/page/Member/MemberListInfo';
+import PetListInfo from './app/page/Member/PetListInfo';
 import Loading from './app/commonview/Loading';
-import AppointListInfo from './app/page/AppointInfo/AppointListInfo';
-import BeautyServices from './app/page/BeautyServicesInfo/BeautyServices';
+import AppointListInfo from './app/page/Appoint/AppointListInfo';
+import BeautyServices from './app/page/Beauty/BeautyServices';
 import Icon from 'react-native-vector-icons/Ionicons';
 class App extends Component {
     constructor(props) {

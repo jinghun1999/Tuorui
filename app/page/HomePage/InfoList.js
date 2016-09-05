@@ -221,7 +221,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     touchStyle: {
-
         margin: 5,
         flexDirection: 'row',
         height: 30,
