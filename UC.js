@@ -13,6 +13,7 @@ import Head from './app/commonview/Head';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ComIconView from './app/commonview/ComIconView';
 import MyInfo from './app/page/uc/myinfo';
+import NButton from './app/commonview/NButton';
 class UC extends React.Component {
     constructor(props) {
         super(props);
@@ -35,6 +36,9 @@ class UC extends React.Component {
                 params: {}
             })
         }
+    }
+    Logout(){
+        alert('注销ok');
     }
     render() {
         return (
@@ -62,7 +66,7 @@ class UC extends React.Component {
                             <Text style={styles.fontStyle}>关注：{this.state.memberNumber}</Text>
                         </View>
                     </View>
-                    <View style={{backgroundColor:'#fff', marginTop:15}}>
+                    <View style={{backgroundColor:'#fff', marginTop:15, marginBottom:30}}>
                         <ComIconView text="我的信息" icon={'ios-contact'} color={'#00BBFF'}
                                      onPress={this._myInfo.bind(this)}/>
                         <ComIconView text="邀请朋友" icon={'md-contacts'} color={'#FF3333'}
@@ -77,7 +81,9 @@ class UC extends React.Component {
                                      onPress={this._more.bind(this)}/>
                         <ComIconView text="设置" icon={'ios-settings'} color={'#BBBB00'}
                                      onPress={this._more.bind(this)}/>
-                        <View style={{height:80}}></View>
+                        <View style={{height:20}}></View>
+                        <NButton onPress={this.Logout.bind(this)} backgroundColor={'#FF6666'} text="注 销"/>
+                        <View style={{height:50}}></View>
                     </View>
                 </ScrollView>
             </View>
