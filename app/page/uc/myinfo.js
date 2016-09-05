@@ -328,6 +328,7 @@ class MyAccount extends React.Component {
                         <View style={styles.textInputStyle}>
                             <TextInput placeholder={this.state.memberNickName}
                                        editable={true}
+                                       autoFocus={true}
                                        underlineColorAndroid={'transparent'}
                                        keyboardType={'default'}
                                        style={{height: 35,flex:1,}}
@@ -360,6 +361,7 @@ class MyAccount extends React.Component {
                         <View style={styles.textInputStyle}>
                             <TextInput placeholder={this.state.memberEmail}
                                        editable={true}
+                                       autoFocus={true}
                                        underlineColorAndroid={'transparent'}
                                        keyboardType={'default'}
                                        style={{height: 35,flex:1,}}
@@ -421,6 +423,7 @@ class MyAccount extends React.Component {
                         <View style={styles.textInputStyle}>
                             <TextInput placeholder={this.state.memberAddress}
                                        editable={true}
+                                       autoFocus={true}
                                        underlineColorAndroid={'transparent'}
                                        keyboardType={'default'}
                                        style={{height: 35,flex:1,}}
@@ -453,6 +456,7 @@ class MyAccount extends React.Component {
                         <View style={styles.textInputStyle}>
                             <TextInput placeholder={this.state.memberAddress}
                                        editable={true}
+                                       autoFocus={true}
                                        underlineColorAndroid={'transparent'}
                                        keyboardType={'default'}
                                        style={{height: 35,flex:1,}}

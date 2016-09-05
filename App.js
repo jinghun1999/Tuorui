@@ -20,7 +20,7 @@ import Sale from './app/page/Sales/Sale';
 import Info from './app/page/MemberInfo/MemberListInfo';
 import PetListInfo from './app/page/MemberInfo/PetListInfo';
 import Loading from './app/commonview/Loading';
-
+import BespeakListInfo from './app/page/BespeakInfo/BespeakListInfo';
 import Icon from 'react-native-vector-icons/Ionicons';
 class App extends Component {
     constructor(props) {
@@ -108,7 +108,7 @@ class App extends Component {
     }
 
     _more() {
-        alertt('没有更多了')
+        alert('没有更多了')
     }
 
     _salesPress() {
@@ -139,7 +139,19 @@ class App extends Component {
             })
         }
     }
-
+    _onBespeak(){
+        let _this = this;
+        const {navigator} = _this.props;
+        if(navigator){
+            navigator.push({
+                name:'BespeakListInfo',
+                component:BespeakListInfo,
+                params:{
+                    headTitle:'我的预约',
+                }
+            })
+        }
+    }
     setHospital(hos) {
         this.setState({
             hospital: hos,
@@ -219,7 +231,7 @@ class App extends Component {
                     </View>
                     <View style={styles.iconViewStyle}>
                         <IconButton text="我的预约" iconName={'ios-clock'} iconColor={'#9999CC'}
-                                    onPress={this._more.bind(this)}/>
+                                    onPress={this._onBespeak.bind(this)}/>
                         <IconButton text="商品销售" iconName={'ios-cart'} iconColor={'#DEB887'}
                                     onPress={this._salesPress.bind(this)}/>
                         <IconButton text="拓瑞检测" iconName={'ios-paper'} iconColor={'#666699'}
