@@ -3,8 +3,8 @@ import React, { Component, } from 'react';
 import { AsyncStorage } from 'react-native';
 /*https://github.com/sunnylqm/react-native-storage/blob/master/README-CHN.md*/
 import Storage from 'react-native-storage';
-let API_Service = 'http://192.168.1.10:16000/service/api';
-let API_Auth = 'http://192.168.1.10:16000/auth/api';
+let API_Service = 'http://petservice.tuoruimed.com/service/api';
+let API_Auth = 'http://petservice.tuoruimed.com/auth/api';
 let WEB_HOST = 'http://120.24.89.243/trweb';
 let API_APP = 'http://120.24.89.243:20000/api';
 var storage = new Storage({
