@@ -61,7 +61,7 @@ class Index extends React.Component {
                 loading: false,
             });
         }).catch(err => {
-            alert('error:' + err);
+            alert('error:' + err.name);
             _this.setState({
                 loading: false,
             });

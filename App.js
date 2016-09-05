@@ -74,7 +74,7 @@ class App extends Component {
             });
         }).catch(err => {
             _this.setState({hosloaded: true,});
-            alert('您还没有选择默认医院' + err);
+            alert('您还没有选择默认医院' + err.message);
         });
     }
 
@@ -148,8 +148,7 @@ class App extends Component {
             key: 'HOSPITAL',
             rawData: {
                 hospital: hos,
-            },
-            expires: 1000 * 3600 * 24
+            }
         });
     }
 

@@ -11,7 +11,7 @@ import{
     Picker,
     ListView,
     TextInput,
-} from 'react-native';
+    } from 'react-native';
 import Head from '../../commonview/Head';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AlertForm from '../../commonview/AlertInputForm';
@@ -35,7 +35,7 @@ class MyAccount extends React.Component {
             isOpenSex: false,
             isOpenEmail: false,
             isOpenAddress: false,
-            isOpenSchool:false,
+            isOpenSchool: false,
         };
     }
 
@@ -47,29 +47,49 @@ class MyAccount extends React.Component {
         }
     }
 
-    _fetchData() {
-        var _this = this;
-        var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-        var data = {
-            'data': [
-                {'id': 1, 'name': '1号医院', 'isBinding': true,},
-                {'id': 2, 'name': '宠物诊所', 'isBinding': false,},
-                {'id': 3, 'name': '口腔医院', 'isBinding': false,},
-                {'id': 4, 'name': '4号医院', 'isBinding': false,},
-                {'id': 5, 'name': '5号医院', 'isBinding': false,},
-            ]
-        };
-        _this.setState({
-            hospitalSource: ds.cloneWithRows(data.data),
-            loaded: true,
-        })
+    _loadData() {
+        /*从缓存中读取*/
+        let _this = this;
+        let hosds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+        /*storage.getBatchData([
+         {key: 'USER', autoSync: false, syncInBackground: false},
+         {key: 'HOSPITAL', autoSync: false, syncInBackground: false},
+         ]).then(results => {
+
+         })*/
+        storage.load({key: 'USER', autoSync: false, syncInBackground: false}).then(ret => {
+            let hos = ret.user.Hospitals;
+            hos.forEach(v =>
+                    v.IsBind = true
+            );
+            _this.setState({
+                user: ret.user,
+                infoLoaded: true,
+                isRefreshing: false,
+                userloaded: true,
+                hospitalSource: hosds.cloneWithRows(hos),
+                loaded: true,
+            });
+        }).catch(err => {
+            _this.setState({userloaded: true,});
+            alert('请登录' + err);
+        });
+        storage.load({key: 'HOSPITAL', autoSync: false, syncInBackground: false}).then(ret => {
+            _this.setState({
+                hospital: ret.hospital,
+                hosloaded: true,
+            });
+        }).catch(err => {
+            _this.setState({hosloaded: true,});
+            alert('您还没有选择默认医院' + err.message);
+        });
     }
 
     componentDidMount() {
         var _this = this;
         _this.timer = setTimeout(
             () => {
-                _this._fetchData();
+                _this._loadData();
             }, 500
         )
     }
@@ -79,28 +99,23 @@ class MyAccount extends React.Component {
     }
 
     pressRow(h) {
-        alert('绑定成功' + h.name);
+        Alert.alert('设置提示', '设置默认医院成功');
     }
 
     _onRenderRow(h) {
-        var _isBinding = h.isBinding;
-        var body;
-        if (_isBinding) {
-            body = <View style={{marginLeft:10,width:40,height:20,borderRadius:5,backgroundColor:'#666'}}>
-                <Text style={{color:'#fff',textAlign:'center'}}>{this.state.default}</Text>
-            </View>
-        } else {
-            body = <View style={{width:0,height:0}}>
-                <Text>{this.state.default}</Text>
+        let d = null;
+        if (h.IsBind) {
+            d = <View style={{marginLeft:10, width:40, height:18, borderRadius:5, backgroundColor:'#FF9900'}}>
+                <Text style={{color:'#fff', textAlign:'center'}}>默认</Text>
             </View>
         }
         return (
             <TouchableOpacity style={styles.headBox} onPress={()=>this.pressRow(h)}>
-                <View style={{flex:1,flexDirection:'row',height:20}}>
-                    <Text style={{marginLeft:20,fontSize:14, fontWeight:'bold'}}>{h.name}</Text>
-                    {body}
+                <View style={{flex:1, flexDirection:'row', height:20}}>
+                    <Text style={{marginLeft:20,fontSize:14, fontWeight:'bold'}}>{h.FULLName}</Text>
+                    {d}
                 </View>
-                <View style={{width:20,alignItems:'center', justifyContent:'center'}}>
+                <View style={{width:20, alignItems:'center', justifyContent:'center'}}>
                     <Icon name={'ios-arrow-forward'} size={15} color={'#ccc'}/>
                 </View>
             </TouchableOpacity>
@@ -180,9 +195,11 @@ class MyAccount extends React.Component {
     onAddress() {
         this.setState({isOpenAddress: true});
     }
+
     closeAddressModal() {
         this.setState({isOpenAddress: false});
     }
+
     closeAddressModalAndSave() {
         let addressText = this.state.addressText, memberAddress = this.state.memberAddress;
         if (addressText == null || addressText == memberAddress) {
@@ -196,13 +213,16 @@ class MyAccount extends React.Component {
             })
         }
     }
+
     //修改学校方法体
-    onSchool(){
+    onSchool() {
         this.setState({isOpenSchool: true});
     }
+
     closeSchoolModal() {
         this.setState({isOpenSchool: false});
     }
+
     closeSchoolModalAndSave() {
         let schoolText = this.state.schoolText, memberSchool = this.state.memberSchool;
         if (schoolText == null || schoolText == memberSchool) {
@@ -218,19 +238,17 @@ class MyAccount extends React.Component {
     }
 
     render() {
-        var body;
-        if (!this.state.loaded) {
-            body = (
-                <View style={styles.loadingBox}>
-                    <Bars size={10} color="#1CAFF6"/>
-                </View>
-            )
-        } else {
+        var body = (
+            <View style={styles.loadingBox}>
+                <Bars size={10} color="#1CAFF6"/>
+            </View>
+        );
+        if (this.state.loaded) {
             body = (
                 <ListView dataSource={this.state.hospitalSource}
                           renderRow={this._onRenderRow.bind(this)}
                           enableEmptySections={true}
-                />
+                    />
             )
         }
         return (
@@ -282,7 +300,8 @@ class MyAccount extends React.Component {
                                 <Text>{this.state.memberAddress}</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={this.onSchool.bind(this)} style={styles.headBox}>
+                        <TouchableOpacity onPress={this.onSchool.bind(this)}
+                                          style={[styles.headBox,{borderBottomWidth:0}]}>
                             <View style={{width:100,}}>
                                 <Text style={{width:100,}}>毕业学校</Text>
                             </View>
@@ -290,9 +309,11 @@ class MyAccount extends React.Component {
                                 <Text>{this.state.memberSchool}</Text>
                             </View>
                         </TouchableOpacity>
-                        <View style={{height:30, justifyContent:'center', paddingLeft:10}}>
-                            <Text>我的医院</Text>
-                        </View>
+                    </View>
+                    <View style={{height:30, justifyContent:'center', paddingLeft:10}}>
+                        <Text>我的医院</Text>
+                    </View>
+                    <View style={styles.basicBox}>
                         <View>
                             {body}
                         </View>
@@ -315,7 +336,7 @@ class MyAccount extends React.Component {
                                                 nikeNameText:text,
                                              })
                                        }}
-                            />
+                                />
                         </View>
                         <View style={styles.modalButtonViewStyle}>
                             <TouchableOpacity onPress={this.closeModal.bind(this)}
@@ -347,7 +368,7 @@ class MyAccount extends React.Component {
                                                 emailText:text,
                                              })
                                        }}
-                            />
+                                />
                         </View>
                         <View style={styles.modalButtonViewStyle}>
                             <TouchableOpacity onPress={this.closeEmailModal.bind(this)}
@@ -408,7 +429,7 @@ class MyAccount extends React.Component {
                                                 addressText:text,
                                              })
                                        }}
-                            />
+                                />
                         </View>
                         <View style={styles.modalButtonViewStyle}>
                             <TouchableOpacity onPress={this.closeAddressModal.bind(this)}
@@ -440,7 +461,7 @@ class MyAccount extends React.Component {
                                                 schoolText:text,
                                              })
                                        }}
-                            />
+                                />
                         </View>
                         <View style={styles.modalButtonViewStyle}>
                             <TouchableOpacity onPress={this.closeSchoolModal.bind(this)}
@@ -510,7 +531,7 @@ const styles = StyleSheet.create({
     contentStyle: {
         flex: 1,
         alignItems: 'flex-end',
-        justifyContent: 'flex-end',
+        justifyContent: 'center',
         marginRight: 20,
         height: 30,
     },

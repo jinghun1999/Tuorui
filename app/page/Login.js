@@ -49,8 +49,7 @@ class Login extends Component {
                         rawData: {
                             user: data.Message,
                             pwd: _this.state.pwd,
-                        },
-                        expires: 1000 * 3600 * 24
+                        }
                     });
                     if (navigator) {
                         navigator.pop();

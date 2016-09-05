@@ -69,7 +69,7 @@ class BBS extends Component {
 
 const styles = StyleSheet.create({
     webView_style: {
-        backgroundColor: '#00ff00',
+
     },
 });
 module.exports = BBS;

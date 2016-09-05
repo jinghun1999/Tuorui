@@ -18,6 +18,7 @@ import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
 import SearchInfo from './InfoSearch';
 import InfoDetail from './InfoDetail';
+import Loading from '../../commonview/Loading';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
@@ -31,7 +32,7 @@ class Information extends React.Component {
             totalPage: 0,
             infoSearchTextInput: '',
             infoCache: [],
-            infoLoaded: false,
+            loaded: false,
         }
     }
 
@@ -43,6 +44,7 @@ class Information extends React.Component {
             }, 100
         );
     }
+
     componentWillUnmount() {
         this.timer && clearTimeout(this.timer);
     }
@@ -60,17 +62,17 @@ class Information extends React.Component {
         var _this = this;
         InteractionManager.runAfterInteractions(() => {
             storage.load({
-                key: 'InfoList',
+                key: 'INFORMATION',
                 autoSync: false,
                 syncInBackground: false
             }).then(ret => {
                 _this.setState({
                     infoCache: ret.InfoList,
-                    infoLoaded: true,
+                    loaded: true,
                     isRefreshing: false,
                 });
             }).catch(err => {
-                //alert("暂无缓存数据");
+                alert(err.message);
                 _this._fetchData(_this.state.pageIndex, false);
             });
         });
@@ -79,8 +81,8 @@ class Information extends React.Component {
     _fetchData(pageIndex, isNext) {
         let _this = this;
         let fetchUri = CONSTAPI.APIAPP + '/AppInfo/GetInformationByName?infoName=&pageIndex=' + pageIndex + '&pageSize=' + _this.state.pageSize;
-        NetUtil.get(fetchUri, false, function(result) {
-            if(result==null){
+        NetUtil.get(fetchUri, false, function (result) {
+            if (result == null) {
                 alert("null");
                 return false;
             }
@@ -98,19 +100,18 @@ class Information extends React.Component {
                     totalPage: result.TotalPage,
                     infoCache: _dataCache,
                     pageIndex: pageIndex,
-                    infoLoaded: true,
-                    isRefreshing: false,
+                    loaded: true,
                 });
                 if (!isNext) {
                     storage.save({
-                        key: 'InfoList',
+                        key: 'INFORMATION',
                         rawData: {
                             InfoList: _data
-                        },
-                        expires: 1000 * 3600 * 24
+                        }
                     });
                 }
             }
+            _this.setState({isRefreshing: false,});
         });
     }
 
@@ -145,23 +146,10 @@ class Information extends React.Component {
         }
     }
 
-    renderFooter() {
-        return (
-            <View style={{height: 120}}>
-                <ActivityIndicator />
-            </View>
-        );
-    }
-
     _onRefresh() {
         let _this = this;
         _this.setState({isRefreshing: true});
-        setTimeout(() => {
-            _this._fetchData(1, false);
-            _this.setState({
-                isRefreshing: false,
-            });
-        }, 500);
+        _this._fetchData(1, false);
     }
 
     _renderInfo(info) {
@@ -174,42 +162,33 @@ class Information extends React.Component {
         )
     }
 
-    _renderLoadingView() {
-        return (
-            <View style={styles.container}>
-                <Head title={this.props.headTitle}/>
-                <View style={{flexDirection:'column', justifyContent: 'center',alignItems: 'center',}}>
-                    <Text>数据加载中...</Text>
-                    {/*<Bars size={10} color="#1CAFF6"/>*/}
-                </View>
-            </View>
-        );
-    }
-
     render() {
-        if (!this.state.infoLoaded) {
-            return this._renderLoadingView();
-        } else {
-            return (
-                <View style={styles.container}>
-                    <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
-                    <TouchableOpacity style={styles.touchStyle}
-                                      onPress={this._onPressSearch.bind(this)}>
-                        <View style={styles.iconStyle}>
-                            <Ionicons name={'ios-search'} size={20} color={'#666'}/>
-                        </View>
-                        <Text style={{flex:1,}}/>
-                        <View style={styles.textStyle}>
-                            <Text>搜索</Text>
-                        </View>
-                    </TouchableOpacity>
+        let body = (<Loading type={'text'}/>);
+        if (this.state.loaded) {
+            body = (
+                <View style={{flex:1}}>
                     <ListView dataSource={this.state.listInfoSource.cloneWithRows(this.state.infoCache)}
                               renderRow={this._renderInfo.bind(this)}
                               onEndReached={this._onEndReached.bind(this)}
                               initialListSize={15}
                               pageSize={10}
                               enableEmptySections={true}
-                              renderFooter={this.renderFooter}
+                              renderFooter={()=>
+                                <View style={{height: 120}}>
+                                    <ActivityIndicator />
+                                </View>
+                              }
+                              renderHeader={()=>
+                                <TouchableOpacity style={styles.touchStyle} onPress={this._onPressSearch.bind(this)}>
+                                    <View style={styles.iconStyle}>
+                                        <Ionicons name={'ios-search'} size={20} color={'#666'}/>
+                                    </View>
+                                    <Text style={{flex:1,}}/>
+                                    <View style={styles.textStyle}>
+                                        <Text>搜索</Text>
+                                    </View>
+                                </TouchableOpacity>
+                              }
                               refreshControl={
                                   <RefreshControl
                                     refreshing={this.state.isRefreshing}
@@ -223,8 +202,14 @@ class Information extends React.Component {
                                 }
                         />
                 </View>
-            )
+            );
         }
+        return (
+            <View style={styles.container}>
+                <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
+                {body}
+            </View>
+        );
     }
 }
 

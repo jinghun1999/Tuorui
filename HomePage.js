@@ -25,6 +25,7 @@ import InfoDetail from './app/page/HomePage/InfoDetail';
 import Information from './app/page/HomePage/InfoList';
 import Contact from './app/page/HomePage/Contact';
 import ToolsHome from './app/page/tools/ToolsHome';
+import Loading from './app/commonview/Loading';
 
 import ViewPager from 'react-native-viewpager';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
@@ -280,9 +281,7 @@ class TopScreen extends Component {
         return (
             <View style={styles.container}>
                 <Head title='首页'/>
-                <View style={{flexDirection:'column', justifyContent: 'center',alignItems: 'center',}}>
-                    <Bars size={10} color="#1CAFF6"/>
-                </View>
+                <Loading />
             </View>
         );
     }

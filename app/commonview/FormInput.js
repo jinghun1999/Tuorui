@@ -37,13 +37,13 @@ const styles = StyleSheet.create({
     },
     inputTitle: {
         width: 80,
-        height: 50,
+        height: 45,
         justifyContent: 'center',
         marginLeft: 10,
     },
     inputBox: {
         flex: 1,
-        borderRadius: 5,
+        borderRadius: 3,
         borderWidth: StyleSheet.hairlineWidth,
         borderColor: '#ccc',
         backgroundColor: '#FFFFFF',

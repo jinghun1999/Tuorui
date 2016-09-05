@@ -12,29 +12,29 @@ import{
     View,
     ListView,
     TouchableOpacity,
-} from 'react-native';
+    } from 'react-native';
+import Util from '../../util/Util';
+import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
 import AddMemberInfo from './AddMemberInfo';
 import MyHomeIcon from '../../commonview/ComIconView';
+import Loading from '../../commonview/Loading';
 import MemberDetails from './MemberDetails';
+
 import Icon from 'react-native-vector-icons/Ionicons';
 class MemberListInfo extends Component {
     constructor(props) {
         super(props);
         var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-        var data = {
-            'data': [{'id': 1, 'name': '张三', 'phone': '13838383338', 'memberLevel': '白金会员'},
-                {'id': 2, 'name': '李四', 'phone': '14141414441', 'memberLevel': '普通会员'},
-                {'id': 3, 'name': '王五', 'phone': '16866888886', 'memberLevel': '铂金会员'},
-            ]
-        };
         this.state = {
-            dataSource: ds.cloneWithRows(data.data),
-            memberInfo: {},
+            ds: ds,
+            dataSource: [],
+            memberloaded: false,
         }
-    };
+    }
 
     componentWillMount() {
+        this.fetchData();
     }
 
     _onBack() {
@@ -43,6 +43,68 @@ class MemberListInfo extends Component {
         if (navigator) {
             navigator.pop();
         }
+    }
+
+    fetchData() {
+        let _this = this;
+        storage.load({
+            key: 'USER',
+            autoSync: true,
+            syncInBackground: true
+        }).then(ret => {
+                let postjson = {
+                    "items": [{
+                        "Childrens": null,
+                        "Field": "isVIP",
+                        "Title": null,
+                        "Operator": {"Name": "=", "Title": "等于", "Expression": null},
+                        "DataType": 0,
+                        "Value": "SM00054",
+                        "Conn": 0
+                    }, {
+                        "Childrens": null,
+                        "Field": "IsDeleted",
+                        "Title": null,
+                        "Operator": {"Name": "=", "Title": "等于", "Expression": null},
+                        "DataType": 0,
+                        "Value": "0",
+                        "Conn": 1
+                    }],
+                    "sorts": [{
+                        "Field": "ModifiedOn",
+                        "Title": null,
+                        "Sort": {"Name": "Desc", "Title": "降序"},
+                        "Conn": 0
+                    }]
+                };
+                let header = {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Mobile ' + Util.base64Encode(ret.user.Mobile + ':' + Util.base64Encode(ret.pwd) + ':' + (ret.user.Hospitals[0] != null ? ret.user.Hospitals[0].Registration : '') + ":" + ret.user.Token)
+                };
+                NetUtil.postJson(CONSTAPI.HOST + '/Gest/GetModelListWithSort', postjson, header, function (data) {
+                    if (data.Sign && data.Message != null) {
+                        _this.setState({
+                            dataSource: data.Message,
+                            memberloaded: true,
+                        });
+                    } else {
+                        alert("获取数据失败：" + data.Message);
+                        _this.setState({
+                            dataSource: [],
+                            memberloaded: true,
+                        });
+                    }
+                });
+            }
+        ).catch(err => {
+                _this.setState({
+                    dataSource: [],
+                    memberloaded: true,
+                });
+                alert('error:' + err.message);
+            }
+        );
     }
 
     _addInfo() {
@@ -80,13 +142,15 @@ class MemberListInfo extends Component {
     _onRenderRow(g) {
         return (
             <TouchableOpacity style={styles.touchStyle} onPress={()=>this._memberShipDetails(g)}>
-                <Icon name={'ios-person'} size={30} color={'#00BBFF'}/>
-                <View style={{flex:1,marginLeft:10,}}>
-                    <Text>{g.name}</Text>
-                    <View style={{flex:1,flexDirection:'row',marginTop:5,}}>
-                        <Text>手机: {g.phone}</Text>
-                        <Text style={{marginLeft:50}}>等级: {g.memberLevel}</Text>
+                <Icon name={'ios-person'} size={50} color={'#00BBFF'}/>
+                <View style={{flex:1, marginLeft:15,}}>
+                    <View style={{flexDirection:'row'}}>
+                        <Text style={{fontWeight:'bold', fontSize:16, marginRight:10}}>{g.GestName}</Text>
+                        <Text>手机: {g.MobilePhone}</Text>
                     </View>
+
+                        <Text style={{}}>地址: {g.GestAddress}</Text>
+
                 </View>
                 <Icon name={'ios-arrow-forward'} size={15} color={'#666'}/>
             </TouchableOpacity>
@@ -94,13 +158,21 @@ class MemberListInfo extends Component {
     }
 
     render() {
+        let body = (
+            <Loading />
+        );
+        if(this.state.memberloaded){
+            body = (
+                <ListView dataSource={this.state.ds.cloneWithRows(this.state.dataSource)}
+                          renderRow={this._onRenderRow.bind(this)}/>
+            );
+        }
         return (
             <View Style={styles.container}>
                 <Head title={this.props.headTitle} canAdd={true} canBack={true} edit="新增"
                       onPress={this._onBack.bind(this)}
                       editInfo={this._addInfo.bind(this)}/>
-                <ListView dataSource={this.state.dataSource}
-                          renderRow={this._onRenderRow.bind(this)}/>
+                {body}
             </View>
         )
 
@@ -117,7 +189,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignSelf: 'center',
         alignItems: 'center',
-        margin: 10,
+        paddingLeft:10,
+        paddingRight:10,
     },
 });
 module.exports = MemberListInfo;

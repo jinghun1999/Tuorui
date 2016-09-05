@@ -7,6 +7,7 @@ import React, {Component} from 'react';
 import {
     StyleSheet,
     View,
+    Text,
     } from 'react-native';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 class Loading extends React.Component {
@@ -14,10 +15,15 @@ class Loading extends React.Component {
         super(props);
         this.state = {}
     }
+
     render() {
+        let body = <Bars size={10} color="#1CAFF6"/>
+        if (this.props.type == 'text') {
+            body = <Text>ヽ(≧Д≦)ノ 努力加载中...</Text>
+        }
         return (
-            <View style={{flexDirection:'column', justifyContent: 'center', alignItems: 'center',}}>
-                <Bars size={10} color="#1CAFF6"/>
+            <View style={{flexDirection:'column', justifyContent: 'center', marginTop:5, alignItems: 'center',}}>
+                {body}
             </View>
         );
     }
