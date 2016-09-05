@@ -20,7 +20,7 @@ import Sale from './app/page/Sales/Sale';
 import Info from './app/page/MemberInfo/MemberListInfo';
 import PetListInfo from './app/page/MemberInfo/PetListInfo';
 import Loading from './app/commonview/Loading';
-import BespeakListInfo from './app/page/BespeakInfo/BespeakListInfo';
+import AppointListInfo from './app/page/AppointInfo/AppointListInfo';
 import Icon from 'react-native-vector-icons/Ionicons';
 class App extends Component {
     constructor(props) {
@@ -144,8 +144,8 @@ class App extends Component {
         const {navigator} = _this.props;
         if(navigator){
             navigator.push({
-                name:'BespeakListInfo',
-                component:BespeakListInfo,
+                name:'AppointListInfo',
+                component:AppointListInfo,
                 params:{
                     headTitle:'我的预约',
                 }
