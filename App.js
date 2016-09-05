@@ -21,6 +21,7 @@ import Info from './app/page/MemberInfo/MemberListInfo';
 import PetListInfo from './app/page/MemberInfo/PetListInfo';
 import Loading from './app/commonview/Loading';
 import AppointListInfo from './app/page/AppointInfo/AppointListInfo';
+import BeautyServices from './app/page/BeautyServicesInfo/BeautyServices';
 import Icon from 'react-native-vector-icons/Ionicons';
 class App extends Component {
     constructor(props) {
@@ -152,6 +153,19 @@ class App extends Component {
             })
         }
     }
+    _onBeautyServicesInfo(){
+        let _this = this;
+        const {navigator} = _this.props;
+        if(navigator){
+            navigator.push({
+                name:'BeautyServices',
+                component:BeautyServices,
+                params:{
+                    headTitle:'美容服务',
+                }
+            })
+        }
+    }
     setHospital(hos) {
         this.setState({
             hospital: hos,
@@ -227,7 +241,7 @@ class App extends Component {
                         <IconButton text="疫苗接种" iconName={'ios-medkit'} iconColor={'#6666CC'}
                                     onPress={this._onVaccineInfo.bind(this)}/>
                         <IconButton text="美容服务" iconName={'ios-color-palette'} iconColor={'#66CCFF'}
-                                    onPress={this._more.bind(this)}/>
+                                    onPress={this._onBeautyServicesInfo.bind(this)}/>
                     </View>
                     <View style={styles.iconViewStyle}>
                         <IconButton text="我的预约" iconName={'ios-clock'} iconColor={'#9999CC'}
