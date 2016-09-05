@@ -13,6 +13,7 @@ import Head from './app/commonview/Head';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ComIconView from './app/commonview/ComIconView';
 import MyInfo from './app/page/uc/myinfo';
+import IndexPage from './Index';
 import NButton from './app/commonview/NButton';
 class UC extends React.Component {
     constructor(props) {
@@ -38,7 +39,26 @@ class UC extends React.Component {
         }
     }
     Logout(){
-        alert('注销ok');
+        let _this = this;
+        Alert.alert(
+            '注销提示',
+            '您确定要注销登陆吗？',
+            [
+                {text: '取消', onPress: () => console.log('Cancel Pressed!')},
+                {text: '确定', onPress: () => {
+                    storage.remove({key:'USER'});
+                    const { navigator } = _this.props;
+                    if (navigator) {
+                        navigator.pop();
+                        navigator.push({
+                            name: 'IndexPage',
+                            component: IndexPage,
+                            params: {}
+                        })
+                    }
+                }},
+            ]
+        )
     }
     render() {
         return (

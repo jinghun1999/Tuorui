@@ -14,7 +14,7 @@ import{
     } from 'react-native';
 import Head from '../../commonview/Head';
 import Icon from 'react-native-vector-icons/Ionicons';
-import AlertForm from '../../commonview/AlertInputForm';
+//import AlertForm from '../../commonview/AlertInputForm';
 import FormPicker from '../../commonview/FormPicker';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 import Modal from 'react-native-modalbox';
