@@ -7,7 +7,8 @@ import{
     TouchableOpacity,
     ScrollView,
     View,
-    Alert
+    Alert,
+    InteractionManager,
     } from 'react-native';
 import Head from './app/commonview/Head';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -19,16 +20,17 @@ class UC extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            memberNumber: 123,
+            user: {},
         };
     }
 
     _more() {
         //alert('no more');
         //alertA('a')
-        Alert.alert('提醒','功能未启用');
+        Alert.alert('提醒', '功能未启用');
     }
-    _myInfo(){
+
+    _myInfo() {
         const { navigator } = this.props;
         if (navigator) {
             navigator.push({
@@ -38,28 +40,47 @@ class UC extends React.Component {
             })
         }
     }
-    Logout(){
+
+    fetchData() {
+        let _this = this;
+        storage.load({
+            key: 'USER',
+            autoSync: true,
+            syncInBackground: true
+        }).then(ret => {
+            _this.setState({
+                user: ret.user,
+            });
+        }).catch(err => {
+            alert('error:' + err.message);
+        });
+    }
+
+    Logout() {
         let _this = this;
         Alert.alert(
             '注销提示',
             '您确定要注销登陆吗？',
             [
                 {text: '取消', onPress: () => console.log('Cancel Pressed!')},
-                {text: '确定', onPress: () => {
-                    storage.remove({key:'USER'});
+                {
+                    text: '确定', onPress: () => {
+                    storage.remove({key: 'USER'});
                     const { navigator } = _this.props;
                     if (navigator) {
-                        navigator.pop();
-                        navigator.push({
+                        //navigator.pop();
+                        navigator.replace({
                             name: 'IndexPage',
                             component: IndexPage,
                             params: {}
-                        })
+                        });
                     }
-                }},
+                }
+                },
             ]
         )
     }
+
     render() {
         return (
             <View style={styles.container}>
@@ -70,20 +91,21 @@ class UC extends React.Component {
                     <View style={styles.basicBox}>
                         <Image source={require('./image/Head_physician_128px.png')} style={styles.imageStyle}/>
                         <View style={styles.basicText}>
-                            <Text style={{fontSize:18, fontWeight:'bold', color:'#fff'}}>李东海</Text>
+                            <Text
+                                style={{fontSize:18, fontWeight:'bold', color:'#fff'}}>{this.state.user.FullName}</Text>
                             <Text style={{marginTop:5, color:'#fff'}}>
                                 <Icon name={'ios-phone-portrait'} size={14} color={'yellow'}/>
-                                18307722403
+                                {this.state.user.Mobile}
                             </Text>
                         </View>
                     </View>
                     <View style={styles.fanBox}>
                         <View style={styles.fontViewStyle}>
-                            <Text style={styles.fontStyle}>粉丝：{this.state.memberNumber}</Text>
+                            <Text style={styles.fontStyle}>粉丝：{this.state.user.Sex}</Text>
                         </View>
                         <View
                             style={[styles.fontViewStyle,{borderLeftWidth:StyleSheet.hairlineWidth, borderLeftColor:'#ccc'}]}>
-                            <Text style={styles.fontStyle}>关注：{this.state.memberNumber}</Text>
+                            <Text style={styles.fontStyle}>关注：{this.state.user.Sex}</Text>
                         </View>
                     </View>
                     <View style={{backgroundColor:'#fff', marginTop:15, marginBottom:30}}>
@@ -110,6 +132,12 @@ class UC extends React.Component {
         );
     }
 
+    componentWillMount() {
+        InteractionManager.runAfterInteractions(() => {
+            this.fetchData();
+        });
+    }
+
     //用了render方法后，组件加载成功并被成功渲染出来以后所执行的hook函数，一般会将网络请求等加载数据的操作，放在这个函数里进行，来保证不会出现UI上的错误
     componentDidMount() {
 
@@ -121,7 +149,7 @@ class UC extends React.Component {
 
     //一般用于优化，可以返回false或true来控制是否进行渲染
     //shouldComponentUpdate() {
-        //return true;
+    //return true;
     //}
 
     //组件刷新前调用，类似componentWillMount
@@ -130,9 +158,6 @@ class UC extends React.Component {
 
     //更新后的hook
     componentDidUpdate() {
-    }
-
-    componentWillMount() {
     }
 
     //销毁期，用于清理一些无用的内容，如：点击事件Listener

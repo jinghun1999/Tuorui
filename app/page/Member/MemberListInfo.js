@@ -52,29 +52,31 @@ class MemberListInfo extends Component {
             syncInBackground: true
         }).then(ret => {
                 let postjson = {
-                    "items": [{
-                        "Childrens": null,
-                        "Field": "isVIP",
-                        "Title": null,
-                        "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                        "DataType": 0,
-                        "Value": "SM00054",
-                        "Conn": 0
+                    items: [{
+                        Childrens: null,
+                        Field: "isVIP",
+                        Title: null,
+                        Operator: {"Name": "=", "Title": "等于", "Expression": null},
+                        DataType: 0,
+                        Value: "SM00054",
+                        Conn: 0
                     }, {
-                        "Childrens": null,
-                        "Field": "IsDeleted",
-                        "Title": null,
-                        "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                        "DataType": 0,
-                        "Value": "0",
-                        "Conn": 1
+                        Childrens: null,
+                        Field: "IsDeleted",
+                        Title: null,
+                        Operator: {"Name": "=", "Title": "等于", "Expression": null},
+                        DataType: 0,
+                        Value: "0",
+                        Conn: 1
                     }],
-                    "sorts": [{
-                        "Field": "ModifiedOn",
-                        "Title": null,
-                        "Sort": {"Name": "Desc", "Title": "降序"},
-                        "Conn": 0
-                    }]
+                    sorts: [{
+                        Field: "ModifiedOn",
+                        Title: null,
+                        Sort: {"Name": "Desc", "Title": "降序"},
+                        Conn: 0
+                    }],
+                    index: 1,
+                    pageSize: 5
                 };
                 let header = {
                     'Accept': 'application/json',

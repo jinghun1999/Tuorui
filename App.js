@@ -252,9 +252,9 @@ class App extends Component {
                                     onPress={this._more.bind(this)}/>
                     </View>
                     <View style={styles.iconViewStyle}>
-                        <IconButton text="数据报表" iconName={'ios-podium'} iconColor={'#6666FF'}
+                        <IconButton text="我的设备" iconName={'md-phone-landscape'} iconColor={'#FF9999'}
                                     onPress={this._more.bind(this)}/>
-                        <IconButton text="more" iconName={'ios-more'} iconColor={'#FF9999'}
+                        <IconButton text="数据报表" iconName={'ios-podium'} iconColor={'#6666FF'}
                                     onPress={this._more.bind(this)}/>
                         <View style={{flex:1}}></View>
                     </View>
