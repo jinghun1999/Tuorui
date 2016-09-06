@@ -123,7 +123,7 @@ class MyInspect extends Component {
                         <Text style={{textAlign:'center'}}>{Inspect.CreatedOn}</Text>
                     </View>
                 </View>
-                <Icon name={'ios-arrow-forward'} size={15} color={'#666'}/>
+                {/*<Icon name={'ios-arrow-forward'} size={15} color={'#666'} />*/}
             </TouchableOpacity>
         )
     }
