@@ -168,7 +168,19 @@ class App extends Component {
             })
         }
     }
-
+    _MyInspect() {
+        const {navigator} = this.props;
+        if (navigator) {
+            navigator.push({
+                name: 'MemberPetClass',
+                component: MyInspect,
+                params: {
+                    headTitle: '我的送检',
+                    id: 2,
+                }
+            })
+        }
+    }
     _onReport() {
         let _this = this;
         const {navigator} = _this.props;
@@ -266,7 +278,7 @@ class App extends Component {
                         <IconButton text="商品销售" iconName={'ios-cart'} iconColor={'#DEB887'}
                                     onPress={this._salesPress.bind(this)}/>
                         <IconButton text="拓瑞检测" iconName={'ios-paper'} iconColor={'#666699'}
-                                    onPress={this._more.bind(this)}/>
+                                    onPress={this._MyInspect.bind(this)}/>
                     </View>
                     <View style={styles.iconViewStyle}>
                         <IconButton text="我的设备" iconName={'md-phone-landscape'} iconColor={'#FF9999'}
