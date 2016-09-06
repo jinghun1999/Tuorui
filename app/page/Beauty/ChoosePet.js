@@ -48,11 +48,10 @@ class ChoosePet extends Component {
     }
 
     _pressRow(pet){
-        let _this =this;
-        if (_this.props.getResult) {
-            _this.props.getResult(pet);
+        if (this.props.getResult) {
+            this.props.getResult(pet);
         }
-        _this._onBack();
+        this._onBack();
     }
     _renderPet(pet){
         return(
