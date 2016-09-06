@@ -22,6 +22,8 @@ import PetListInfo from './app/page/Member/PetListInfo';
 import Loading from './app/commonview/Loading';
 import AppointListInfo from './app/page/Appoint/AppointListInfo';
 import BeautyServices from './app/page/Beauty/BeautyServices';
+import ReportIndex from './app/page/Report/ReportIndex';
+
 import Icon from 'react-native-vector-icons/Ionicons';
 class App extends Component {
     constructor(props) {
@@ -138,32 +140,49 @@ class App extends Component {
             })
         }
     }
-    _onBespeak(){
+
+    _onBespeak() {
         let _this = this;
         const {navigator} = _this.props;
-        if(navigator){
+        if (navigator) {
             navigator.push({
-                name:'AppointListInfo',
-                component:AppointListInfo,
-                params:{
-                    headTitle:'我的预约',
+                name: 'AppointListInfo',
+                component: AppointListInfo,
+                params: {
+                    headTitle: '我的预约',
                 }
             })
         }
     }
-    _onBeautyServicesInfo(){
+
+    _onBeautyServicesInfo() {
         let _this = this;
         const {navigator} = _this.props;
-        if(navigator){
+        if (navigator) {
             navigator.push({
-                name:'BeautyServices',
-                component:BeautyServices,
-                params:{
-                    headTitle:'美容服务',
+                name: 'BeautyServices',
+                component: BeautyServices,
+                params: {
+                    headTitle: '美容服务',
                 }
             })
         }
     }
+
+    _onReport() {
+        let _this = this;
+        const {navigator} = _this.props;
+        if (navigator) {
+            navigator.push({
+                name: 'ReportIndex',
+                component: ReportIndex,
+                params: {
+                    headTitle: '数据报表',
+                }
+            })
+        }
+    }
+
     setHospital(hos) {
         this.setState({
             hospital: hos,
@@ -202,7 +221,7 @@ class App extends Component {
                 <Text style={styles.rowTitle}>您的手机还未绑定任何医院！</Text>
             </View>
         );
-        if(!this.state.userloaded || !this.state.hosloaded){
+        if (!this.state.userloaded || !this.state.hosloaded) {
             body = (<Loading />);
         }
         else if (this.state.hospital.ID != null && this.state.hospital.ID != '') {
@@ -253,7 +272,7 @@ class App extends Component {
                         <IconButton text="我的设备" iconName={'md-phone-landscape'} iconColor={'#FF9999'}
                                     onPress={this._more.bind(this)}/>
                         <IconButton text="数据报表" iconName={'ios-podium'} iconColor={'#6666FF'}
-                                    onPress={this._more.bind(this)}/>
+                                    onPress={this._onReport.bind(this)}/>
                         <View style={{flex:1}}></View>
                     </View>
                 </View>);
@@ -263,7 +282,7 @@ class App extends Component {
                     <View style={{height:30, justifyContent:'center'}}>
                         <Text>您当前还没有默认医院，请先选择默认医院</Text>
                     </View>
-                    {this.state.hospitals.length>0?null:noTips}
+                    {this.state.hospitals.length > 0 ? null : noTips}
                     <ListView dataSource={this.state.listSource.cloneWithRows(this.state.hospitals)}
                               renderRow={this._renderHos.bind(this)}
                               initialListSize={15}
