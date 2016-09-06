@@ -220,7 +220,7 @@ class PetDetails extends Component {
                     </View>
                     <View style={styles.optionBox}>
                         <View style={styles.optionTxt}>
-                            <Text style={{color:'#666'}}>宠物类型</Text>
+                            <Text style={{color:'#666'}}>宠物种类</Text>
                         </View>
                         <View style={styles.optionValue}>
                             <Picker

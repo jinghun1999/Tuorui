@@ -44,6 +44,7 @@ class PetListInfo extends Component {
         var _this = this;
         var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         var data = {
+            'memberId':'VIP0000000050',
             'memberName':'张三',
             'memberPhone':'13838383338',
             'data': [
