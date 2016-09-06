@@ -94,6 +94,22 @@ class MyInspect extends Component {
     }
 
     _onRenderRow(Inspect) {
+        let stutas='';
+        switch (Inspect.State)
+        {
+            case "已接收":
+                stutas=(<Text style={{fontWeight: 'bold',textAlign: 'center',fontSize: 16, color: '#FFFFFF',backgroundColor: '#FFB90F',width: 90,height: 25}}>{Inspect.State}</Text>);
+                break;
+            case "检测中":
+                stutas=(<Text style={{fontWeight: 'bold',textAlign: 'center',fontSize: 16, color: '#FFFFFF',backgroundColor: '#00EE00',width: 90,height: 25}}>{Inspect.State}</Text>);
+                break;
+            case "已完成":
+                stutas=(<Text style={{fontWeight: 'bold',textAlign: 'center',fontSize: 16, color: '#FFFFFF',backgroundColor: '#8F8F8F',width: 90,height: 25}}>{Inspect.State}</Text>);
+                break;
+            default:
+                stutas=(<Text style={{fontWeight: 'bold',textAlign: 'center',fontSize: 16, color: '#FFFFFF',backgroundColor: '#FFB90F',width: 90,height: 25}}>{Inspect.State}</Text>);
+                break;
+        }
         return (
             <TouchableOpacity style={styles.touchStyle}>
                 <View style={{flex:1, marginLeft:15,flexDirection:'row'}}>
@@ -103,7 +119,7 @@ class MyInspect extends Component {
                         <Text>样本: {Inspect.StyleBook}</Text>
                     </View>
                     <View style={{justifyContent:'center',marginRight:15}}>
-                        <Text style={styles.State}>{Inspect.State}</Text>
+                        {stutas}
                         <Text style={{textAlign:'center'}}>{Inspect.CreatedOn}</Text>
                     </View>
                 </View>
@@ -149,13 +165,5 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         paddingRight: 10,
     },
-    State: {
-        fontWeight: 'bold',
-        textAlign: 'center',
-        fontSize: 16, color: '#FFFFFF',
-        backgroundColor: '#FFB90F',
-        width: 90,
-        height: 25
-    }
 });
 module.exports = MyInspect;
