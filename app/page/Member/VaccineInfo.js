@@ -46,7 +46,8 @@ class VaccineInfo extends Component {
     _renderRowVaccine(vaccine) {
         return (
             <TouchableOpacity
-                style={{flexDirection:'row',marginLeft:15, marginRight:15, paddingTop:10, paddingBottom:10, borderBottomWidth:StyleSheet.hairlineWidth, borderBottomColor:'#ccc'}}
+                style={{flexDirection:'row',marginLeft:15, marginRight:15, paddingTop:10, paddingBottom:10,
+                borderBottomWidth:StyleSheet.hairlineWidth, borderBottomColor:'#ccc'}}
                 onPress={()=>this.pressRow(vaccine)}>
                 <View style={{flex:1}}>
                     <Text style={{fontSize:14, fontWeight:'bold'}}>名称: {vaccine.name}</Text>
@@ -95,11 +96,7 @@ class VaccineInfo extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Head title={this.props.headTitle}
-                      canBack={true}
-
-                      onPress={this._onBack.bind(this)}
-                />
+                <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
                 <ScrollView key={'scrollView'}
                             horizontal={false}
                             showsVerticalScrollIndicator={true}
