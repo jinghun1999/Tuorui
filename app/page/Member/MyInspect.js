@@ -97,14 +97,14 @@ class MyInspect extends Component {
         return (
             <TouchableOpacity style={styles.touchStyle}>
                 <View style={{flex:1, marginLeft:15,flexDirection:'row'}}>
-                    <View style={{flex:1,flexDirection:'column'}}>
-                        <Text style={{fontWeight:'bold', fontSize:16, marginRight:10}}>{Inspect.BillNo}</Text>
+                    <View style={{flex:1}}>
+                        <Text style={{fontWeight:'bold', fontSize:16}}>{Inspect.BillNo}</Text>
                         <Text>检测项目: {Inspect.ItemName}</Text>
                         <Text>样本: {Inspect.StyleBook}</Text>
                     </View>
-                    <View style={{flexDirection:'column'}}>
-                        <Text style={{fontWeight:'bold', fontSize:16,color:'#FFFFFF',backgroundColor:'#FFB90F',alignItems: ''}}>{Inspect.State}</Text>
-                        <Text>{Inspect.CreatedOn}</Text>
+                    <View style={{justifyContent:'center',marginRight:15}}>
+                        <Text style={styles.State}>{Inspect.State}</Text>
+                        <Text style={{textAlign:'center'}}>{Inspect.CreatedOn}</Text>
                     </View>
                 </View>
                 <Icon name={'ios-arrow-forward'} size={15} color={'#666'}/>
@@ -126,7 +126,7 @@ class MyInspect extends Component {
         }
         return (
             <View style={styles.container}>
-                <Head title={this.props.headTitle} canAdd={true} canBack={true} edit="新增"
+                <Head title={this.props.headTitle} canAdd={true} canBack={true}
                       onPress={this._onBack.bind(this)}/>
                 {body}
             </View>
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     touchStyle: {
         flex: 1,
         flexDirection: 'row',
-        height: 50,
+        height: 75,
         borderBottomColor: '#ccc',
         borderBottomWidth: StyleSheet.hairlineWidth,
         justifyContent: 'center',
@@ -149,5 +149,13 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         paddingRight: 10,
     },
+    State: {
+        fontWeight: 'bold',
+        textAlign: 'center',
+        fontSize: 16, color: '#FFFFFF',
+        backgroundColor: '#FFB90F',
+        width: 90,
+        height: 25
+    }
 });
 module.exports = MyInspect;
