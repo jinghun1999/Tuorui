@@ -18,6 +18,7 @@ import Head from './app/commonview/Head';
 import IconButton from './app/commonview/HomeIcon';
 import Sale from './app/page/Sales/Sale';
 import Info from './app/page/Member/MemberListInfo';
+import MyInspect from './app/page/Member/MyInspect';
 import PetListInfo from './app/page/Member/PetListInfo';
 import Loading from './app/commonview/Loading';
 import AppointListInfo from './app/page/Appoint/AppointListInfo';
