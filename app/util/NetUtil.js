@@ -6,16 +6,23 @@ import Util from './Util';
 import Global from './Global';
 class NetUtil extends React.Component {
 
-    static postJson(url, data, head, callback) {
-        if (!head) {
-            head = {
+    static postJson(url, data, header, callback) {
+        if (!header) {
+            header = {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             };
+        } else {
+            if (!header.hasOwnProperty('Accept')) {
+                header['Accept'] = 'application/json';
+            }
+            if (!header.hasOwnProperty('Content-Type')) {
+                header['Content-Type'] = 'application/json';
+            }
         }
         var fetchOptions = {
             method: 'POST',
-            headers: head,
+            headers: header,
             body: JSON.stringify(data)
         };
 
@@ -33,16 +40,23 @@ class NetUtil extends React.Component {
     }
 
     //get请求
-    static get(url, head, callback) {
-        if (!head) {
-            head = {
+    static get(url, header, callback) {
+        if (!header) {
+            header = {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             };
+        } else {
+            if (!header.hasOwnProperty('Accept')) {
+                header['Accept'] = 'application/json';
+            }
+            if (!header.hasOwnProperty('Content-Type')) {
+                header['Content-Type'] = 'application/json';
+            }
         }
         var fetchOptions = {
             method: 'GET',
-            headers: head
+            headers: header
         };
         try {
             fetch(url, fetchOptions)
@@ -56,7 +70,7 @@ class NetUtil extends React.Component {
                     }
                     callback(result);
                 }).done();
-        } catch(e){
+        } catch (e) {
             return e;
         }
     }
@@ -91,6 +105,9 @@ class NetUtil extends React.Component {
         return ul;
     }
 
+    static headerAuthorization(mobile, pwd, hospitalcode, token) {
+        return 'Mobile ' + Util.base64Encode(mobile + ':' + Util.base64Encode(pwd) + ':' + hospitalcode + ":" + token);
+    }
 }
 
 module.exports = NetUtil;

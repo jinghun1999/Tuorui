@@ -9,6 +9,7 @@ import{
     View,
     ListView,
     TouchableOpacity,
+    ActivityIndicator,
     InteractionManager
     } from 'react-native';
 import Util from '../../util/Util';
@@ -26,13 +27,16 @@ class MemberListInfo extends Component {
         this.state = {
             ds: ds,
             dataSource: [],
-            memberloaded: false,
+            pageSize: 15,
+            pageIndex: 1,
+            recordCount: 0,
+            memberLoaded: false,
         }
     }
 
     componentWillMount() {
         InteractionManager.runAfterInteractions(() => {
-            this.fetchData();
+            this.fetchData(1, false);
         });
     }
 
@@ -44,14 +48,22 @@ class MemberListInfo extends Component {
         }
     }
 
-    fetchData() {
+    _onEndReached() {
+        this.fetchData(this.state.pageIndex + 1, true);
+    }
+
+    fetchData(page, isnext) {
         let _this = this;
-        storage.load({
+        storage.getBatchData([{
             key: 'USER',
-            autoSync: true,
-            syncInBackground: true
-        }).then(ret => {
-                let postjson = {
+            autoSync: false,
+            syncInBackground: false,
+        }, {
+            key: 'HOSPITAL',
+            autoSync: false,
+            syncInBackground: false,
+        }]).then(rets => {
+                let postdata = {
                     items: [{
                         Childrens: null,
                         Field: "isVIP",
@@ -75,33 +87,69 @@ class MemberListInfo extends Component {
                         Sort: {"Name": "Desc", "Title": "降序"},
                         Conn: 0
                     }],
-                    index: 1,
-                    pageSize: 5
+                    index: page,
+                    pageSize: _this.state.pageSize
                 };
+                //let hospitalcode = 'aa15-740d-4e6d-a6ca-0ebf-81f1';
                 let header = {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Mobile ' + Util.base64Encode(ret.user.Mobile + ':' + Util.base64Encode(ret.pwd) + ':' + (ret.user.Hospitals[0] != null ? ret.user.Hospitals[0].Registration : '') + ":" + ret.user.Token)
+                    'Authorization': NetUtil.headerAuthorization(rets[0].user.Mobile, rets[0].pwd, rets[1].hospital.Registration, rets[0].user.Token)
                 };
-                NetUtil.postJson(CONSTAPI.HOST + '/Gest/GetModelListWithSort', postjson, header, function (data) {
+                NetUtil.postJson(CONSTAPI.HOST + '/Gest/GetPageRecord', postdata, header, function (data) {
                     if (data.Sign && data.Message != null) {
+                        let dataSource = _this.state.dataSource;
+                        if (isnext) {
+                            data.Message.forEach((d)=> {
+                                dataSource.push(d);
+                            });
+                        } else {
+                            dataSource = data.Message;
+                        }
                         _this.setState({
-                            dataSource: data.Message,
-                            memberloaded: true,
+                            dataSource: dataSource,
+                            memberLoaded: true,
+                            pageIndex: page,
                         });
                     } else {
                         alert("获取数据失败：" + data.Message);
                         _this.setState({
-                            dataSource: [],
                             memberloaded: true,
                         });
                     }
                 });
+                /*get recordCount from the api*/
+                postdata = [{
+                    "Childrens": null,
+                    "Field": "isVIP",
+                    "Title": null,
+                    "Operator": {"Name": "=", "Title": "等于", "Expression": null},
+                    "DataType": 0,
+                    "Value": "SM00054",
+                    "Conn": 0
+                }, {
+                    "Childrens": null,
+                    "Field": "IsDeleted",
+                    "Title": null,
+                    "Operator": {"Name": "=", "Title": "等于", "Expression": null},
+                    "DataType": 0,
+                    "Value": "0",
+                    "Conn": 1
+                }];
+                if (!isnext) {
+                    NetUtil.postJson(CONSTAPI.HOST + '/Gest/GetRecordCount', postdata, header, function (data) {
+                        if (data.Sign && data.Message != null) {
+                            _this.setState({
+                                recordCount: data.Message,
+                            });
+                        } else {
+                            alert("获取记录数失败：" + data.Message);
+                        }
+                    });
+                }
             }
         ).catch(err => {
                 _this.setState({
                     dataSource: [],
-                    memberloaded: true,
+                    memberLoaded: true,
                 });
                 alert('error:' + err.message);
             }
@@ -156,15 +204,34 @@ class MemberListInfo extends Component {
         )
     }
 
+    _renderFooter() {
+        //计算总页数，如果最后一页，则返回没有数据啦~
+        let totalPage = this.state.recordCount / this.state.pageSize;
+        if (this.state.pageIndex >= totalPage) {
+            return (
+                <View style={{height: 40, justifyContent:'center', alignItems:'center'}}>
+                    <Text>没有更多数据了~</Text>
+                </View>
+            )
+        }
+        return (
+            <View style={{height: 120}}>
+                <ActivityIndicator />
+            </View>
+        );
+    }
+
     render() {
         let body = (<Loading type={'text'}/>);
-        if (this.state.memberloaded) {
+        if (this.state.memberLoaded) {
             body = (
                 <ListView dataSource={this.state.ds.cloneWithRows(this.state.dataSource)}
                           renderRow={this._onRenderRow.bind(this)}
-                          initialListSize={10}
-                          pageSize={10}
+                          initialListSize={15}
+                          pageSize={15}
+                          onEndReached={this._onEndReached.bind(this)}
                           enableEmptySections={true}
+                          renderFooter={this._renderFooter.bind(this)}
                     />
             )
         }

@@ -33,8 +33,6 @@ class App extends Component {
             user: null,
             userloaded: false,
             hosloaded: false,
-            memberName: '天津拓瑞宠物医院',
-            memberAddress: '天津市滨海新区大同路120号',
             memberNumber: '*',
             memberPetNumber: '*'
         }
