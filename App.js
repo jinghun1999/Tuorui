@@ -24,6 +24,7 @@ import Loading from './app/commonview/Loading';
 import AppointListInfo from './app/page/Appoint/AppointListInfo';
 import BeautyServices from './app/page/Beauty/BeautyServices';
 import ReportIndex from './app/page/Report/ReportIndex';
+import MyEquipment from './app/page/Equipment/MyEquipment';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 class App extends Component {
@@ -177,11 +178,24 @@ class App extends Component {
                 component: MyInspect,
                 params: {
                     headTitle: '我的送检',
-                    id: 2,
                 }
             })
         }
     }
+
+    _MyEquipment() {
+        const {navigator} = this.props;
+        if (navigator) {
+            navigator.push({
+                name: 'MemberPetClass',
+                component: MyEquipment,
+                params: {
+                    headTitle: '我的设备',
+                }
+            })
+        }
+    }
+
     _onReport() {
         const {navigator} = this.props;
         if (navigator) {
@@ -282,7 +296,7 @@ class App extends Component {
                     </View>
                     <View style={styles.iconViewStyle}>
                         <IconButton text="我的设备" iconName={'md-phone-landscape'} iconColor={'#FF9999'}
-                                    onPress={this._more.bind(this)}/>
+                                    onPress={this._MyEquipment.bind(this)}/>
                         <IconButton text="数据报表" iconName={'ios-podium'} iconColor={'#6666FF'}
                                     onPress={this._onReport.bind(this)}/>
                         <View style={{flex:1}}></View>
