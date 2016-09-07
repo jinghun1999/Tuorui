@@ -112,7 +112,7 @@ class MemberListInfo extends Component {
                     } else {
                         alert("获取数据失败：" + data.Message);
                         _this.setState({
-                            memberloaded: true,
+                            memberLoaded: true,
                         });
                     }
                 });

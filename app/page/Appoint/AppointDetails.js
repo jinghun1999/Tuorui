@@ -60,7 +60,7 @@ class AppointDetails extends React.Component {
                 </View>
                 <View style={styles.inputViewStyle}>
                     <Text style={{width:100,}}>预约人</Text>
-                    <TextInput value={this.props.appointInfo.memberName}
+                    <TextInput value={this.props.appointInfo.PersonName}
                                editable={this.state.enable}
                                underlineColorAndroid={'transparent'}
                                keyboardType={'default'}
@@ -69,7 +69,7 @@ class AppointDetails extends React.Component {
                 </View>
                 <View style={styles.inputViewStyle}>
                     <Text style={{width:100,}}>预约手机</Text>
-                    <TextInput value={this.props.appointInfo.memberPhone}
+                    <TextInput value={this.props.appointInfo.MobilePhone}
                                editable={this.state.enable}
                                underlineColorAndroid={'transparent'}
                                keyboardType={'default'}
