@@ -33,20 +33,20 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import HomeIcon from './app/commonview/HomeIcon';
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
-const IMAGES= [
+const IMAGES = [
     require('./image/job1.jpg'),
     require('./image/job2.jpg'),
     require('./image/job3.jpg'),
 ];
 const infolistApi = CONSTAPI.APIAPP + '/AppInfo/GetHomeInfo';
-/****************MainTopSceen*****************/
+
 class TopScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
             imageSource: new ViewPager.DataSource({pageHasChanged: (p1, p2)=>p1 !== p2}).cloneWithPages(IMAGES),
             informationSource: new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2}),
-            infoLoaded: false,
+            loaded: false,
             pageIndex: 1,
             pageSize: 10,
             total: 0,
@@ -65,19 +65,12 @@ class TopScreen extends Component {
         console.log('test', (isConnected ? 'online' : 'offline'));
     }
 
-    //组件刷新前调用，类似componentWillMount
-    componentWillUpdate() {
-
-    }
-    //更新后的hook
-    componentDidUpdate() {
-    }
     componentWillMount() {
-        NetWorkTool.removeEventListener(NetWorkTool.TAG_NETWORK_CHANGE,this.handleMethod);
+        NetWorkTool.removeEventListener(NetWorkTool.TAG_NETWORK_CHANGE, this.handleMethod);
     }
-    //销毁期，用于清理一些无用的内容，如：点击事件Listener
+
     componentWillUnmount() {
-        NetWorkTool.removeEventListener(NetWorkTool.TAG_NETWORK_CHANGE,this.handleMethod);
+        NetWorkTool.removeEventListener(NetWorkTool.TAG_NETWORK_CHANGE, this.handleMethod);
         this.timer && clearTimeout(this.timer);
     }
 
@@ -86,7 +79,7 @@ class TopScreen extends Component {
         _this.timer = setTimeout(
             () => {
                 _this._loadData();
-            }, 500
+            }, 1
         );
     }
 
@@ -100,36 +93,39 @@ class TopScreen extends Component {
         }).then(ret => {
             _this.setState({
                 dataCache: ret.IndexInfoList,
-                infoLoaded: true,
+                loaded: true,
                 isRefreshing: false,
             });
         }).catch(err => {
-            /*缓存中不存在，则读取api*/
-            _this._fetchData(this.state.pageSize, this.state.pageIndex);
-            //_this._loadData();
+            _this._fetchData(1);
         });
     }
 
-    _fetchData(pageSize, pageIndex) {
+    _fetchData(page) {
         let _this = this;
-        _this.setState({isRefreshing: true})
-        NetUtil.get(infolistApi + "?pid=&PageSize=" + pageSize + "&PageIndex=" + pageIndex, false, function (result) {
-            if (result.Status) {
+        NetUtil.get(infolistApi + "?pid=&PageSize=" + this.state.pageSize + "&PageIndex=" + page, false, function (result) {
+            if (result.Status && result.Data) {
+                let _dataCache = _this.state.dataCache;
+                if (page > 1) {
+                    result.Data.rows.forEach((d)=> {
+                        _dataCache.push(d);
+                    });
+                } else {
+                    _dataCache = result.Data.rows;
+                    storage.save({
+                        key: 'IndexInfoList',
+                        rawData: {
+                            IndexInfoList: _dataCache
+                        }
+                    });
+                }
                 _this.setState({
                     total: result.Data.total,
                     totalPage: result.Data.TotalPage,
-                    infoLoaded: true,
-                    pageIndex: pageIndex,
-                    pageSize: pageSize,
+                    loaded: true,
+                    pageIndex: page,
                     isRefreshing: false,
-                    dataCache: result.Data.rows,
-                });
-                storage.save({
-                    key: 'IndexInfoList',
-                    rawData: {
-                        IndexInfoList: result.Data.rows
-                    },
-                    expires: 1000 * 3600 * 24
+                    dataCache: _dataCache,
                 });
             }
             else {
@@ -139,29 +135,22 @@ class TopScreen extends Component {
     }
 
     _onEndReached() {
-        let _this = this;
-        let _pageIndex = _this.state.pageIndex + 1;
-        let msg = NetUtil.get(infolistApi + "?pid=&PageIndex=" + _pageIndex + "&PageSize=" + _this.state.pageSize, false, function (result) {
-            let _dataCache = _this.state.dataCache;
-            result.Data.rows.forEach((d)=> {
-                _dataCache.push(d);
+        let _pageIndex = this.state.pageIndex + 1;
+        this._fetchData(_pageIndex);
+    }
+
+    _onRefresh() {
+        this.setState({isRefreshing: true});
+        setTimeout(() => {
+            this._fetchData(1);
+            this.setState({
+                isRefreshing: false,
             });
-            if (result.Status) {
-                _this.setState({
-                    pageIndex: _pageIndex,
-                    isRefreshing: false,
-                    dataCache: _dataCache,
-                });
-            }
-        });
-        if (msg != null) {
-            alert(msg);
-        }
+        }, 1);
     }
 
     _toolsPress() {
         var _this = this;
-        //Errorr('error..');
         const { navigator } = _this.props;
         if (navigator) {
             navigator.push({
@@ -181,7 +170,6 @@ class TopScreen extends Component {
 
     _ClickPress(Info) {
         let _this = this;
-        //_this.requestAnimationFrame(()=> {
         const { navigator } = _this.props;
         if (navigator) {
             navigator.push({
@@ -193,7 +181,6 @@ class TopScreen extends Component {
                 }
             })
         }
-        //});
     }
 
     _informationClick() {
@@ -287,9 +274,13 @@ class TopScreen extends Component {
     }
 
     renderFooter() {
-        //if(this.state.nomore) {
-        //    return null;
-        //}
+        if (this.state.pageIndex >= this.state.totalPage) {
+            return (
+                <View style={{height: 40, justifyContent:'center', alignItems:'center'}}>
+                    <Text>没有更多数据了~</Text>
+                </View>
+            );
+        }
         return (
             <View style={{height: 120}}>
                 <ActivityIndicator />
@@ -297,19 +288,8 @@ class TopScreen extends Component {
         );
     }
 
-    _onRefresh() {
-        this.setState({isRefreshing: true});
-        setTimeout(() => {
-            // prepend 10 items
-            this._fetchData(this.state.pageSize, 1);
-            this.setState({
-                isRefreshing: false,
-            });
-        }, 500);
-    }
-
     render() {
-        if (!this.state.infoLoaded) {
+        if (!this.state.loaded) {
             return this.renderLoadingView();
         } else {
             return (
@@ -340,7 +320,7 @@ class TopScreen extends Component {
                                               onPress={this._toolsPress.bind(this)}/>
                                 </View>
                               </View>}
-                        renderFooter={this.renderFooter}
+                        renderFooter={this.renderFooter.bind(this)}
                         dataSource={this.state.informationSource.cloneWithRows(this.state.dataCache)}
                         renderRow={this.renderInfo.bind(this)}
                         onEndReached={this._onEndReached.bind(this)}

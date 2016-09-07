@@ -170,8 +170,7 @@ class App extends Component {
     }
 
     _onReport() {
-        let _this = this;
-        const {navigator} = _this.props;
+        const {navigator} = this.props;
         if (navigator) {
             navigator.push({
                 name: 'ReportIndex',
