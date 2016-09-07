@@ -150,6 +150,7 @@ class PetDetails extends Component {
                                 selectedValue={this.props.petSource.BirthStatus}
                                 mode="dropdown"
                                 enabled={this.state.enable}
+                                style={{height: 39, borderWidth:0, backgroundColor:'#fff',flex:1,justifyContent:'center',}}
                                 onValueChange={(lang) => this.setState({sterilizationState: lang})}>
                                 <Picker.Item label="请选择" value="0"/>
                                 <Picker.Item label="未绝育" value="未绝育"/>
@@ -166,6 +167,7 @@ class PetDetails extends Component {
                                 selectedValue={this.props.petSource.PetSex}
                                 mode="dropdown"
                                 enabled={this.state.enable}
+                                style={{height: 39, borderWidth:0, backgroundColor:'#fff',flex:1,justifyContent:'center',}}
                                 onValueChange={(sex) => this.setState({petSex: sex})}>
                                 <Picker.Item label="请选择" value="0"/>
                                 <Picker.Item label="雌性" value="雌性"/>
@@ -183,6 +185,7 @@ class PetDetails extends Component {
                                 selectedValue={this.props.petSource.PetSkinColor}
                                 mode="dropdown"
                                 enabled={this.state.enable}
+                                style={{height: 39, borderWidth:0, backgroundColor:'#fff',flex:1,justifyContent:'center',}}
                                 onValueChange={(color) => this.setState({petColor: color})}>
                                 <Picker.Item label="请选择" value="0"/>
                                 <Picker.Item label="黄色" value="yellow"/>
@@ -201,6 +204,7 @@ class PetDetails extends Component {
                                 selectedValue={this.props.petSource.PetRace.toString()}
                                 mode="dropdown"
                                 enabled={this.state.enable}
+                                style={{height: 39, borderWidth:0, backgroundColor:'#fff',flex:1,justifyContent:'center',}}
                                 onValueChange={(type) => this.setState({petType: type})}>
                                 <Picker.Item label="请选择" value="0"/>
                                 <Picker.Item label="小型犬" value="小型犬"/>
@@ -219,6 +223,7 @@ class PetDetails extends Component {
                                 selectedValue={this.props.petSource.PetBreed.toString()}
                                 mode="dropdown"
                                 enabled={this.state.enable}
+                                style={{height: 39, borderWidth:0, backgroundColor:'#fff',flex:1,justifyContent:'center',}}
                                 onValueChange={(type) => this.setState({petType: type})}>
                                 <Picker.Item label="请选择" value="0"/>
                                 <Picker.Item label="柴犬" value="柴犬"/>
@@ -242,6 +247,7 @@ class PetDetails extends Component {
                                 selectedValue={this.props.petSource.PetStatus}
                                 mode="dropdown"
                                 enabled={this.state.enable}
+                                style={{height: 39, borderWidth:0, backgroundColor:'#fff',flex:1,justifyContent:'center',}}
                                 onValueChange={(state) => this.setState({petState: state})}>
                                 <Picker.Item label="请选择" value="0"/>
                                 <Picker.Item label="在世" value="SM00052"/>

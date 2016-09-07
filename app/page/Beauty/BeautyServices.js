@@ -57,13 +57,13 @@ class BeautyServices extends React.Component {
                     getResult: function (beauty) {
                         var _beauty = _this.state.beautySource, _exists = false;
                         _beauty && _beauty.forEach((item, index, array) => {
-                            if (item.barCode == beauty.barCode) {
+                            if (item.BarCode == beauty.BarCode) {
                                 _exists = true;
                             }
                         })
                         if (!_exists) {
                             _beauty.push(beauty);
-                            _this.state.totalAmount+=beauty.salePrice;
+                            _this.state.totalAmount+=beauty.RecipePrice;
                             _this.state.totalNum+=1;
                         }
                         _this.setState({
@@ -76,7 +76,7 @@ class BeautyServices extends React.Component {
     }
 
     _onBeautyDetails(beauty) {
-        alert(beauty.name);
+        alert(beauty.ItemName);
     }
 
     _onRenderRow(beauty) {
@@ -86,10 +86,10 @@ class BeautyServices extends React.Component {
                 borderBottomWidth:StyleSheet.hairlineWidth, borderBottomColor:'#ccc'}}
                 onPress={()=>this._onBeautyDetails(beauty)}>
                 <View style={{flex:1}}>
-                    <Text style={{fontSize:14, fontWeight:'bold'}}>名称: {beauty.name}</Text>
+                    <Text style={{fontSize:14, fontWeight:'bold'}}>名称: {beauty.ItemName}</Text>
                     <View style={{flexDirection:'row'}}>
-                        <Text style={{flex: 1,}}>单位: {beauty.saleUnit}</Text>
-                        <Text style={{flex: 1,}}>单价: {beauty.salePrice}</Text>
+                        <Text style={{flex: 1,}}>单位: {beauty.RecipeUnit=='DM0000000056'?'次':''}</Text>
+                        <Text style={{flex: 1,}}>单价: ￥{beauty.RecipePrice}</Text>
                     </View>
                 </View>
                 <View style={{width:20,alignItems:'center', justifyContent:'center'}}>
@@ -144,7 +144,7 @@ class BeautyServices extends React.Component {
                     </View>
                     <View style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>会员名称</Text>
-                        <TextInput value={'张三'}
+                        <TextInput value={this.props.memberName}
                                    editable={this.state.enable}
                                    underlineColorAndroid={'transparent'}
                                    keyboardType={'default'}
@@ -171,7 +171,7 @@ class BeautyServices extends React.Component {
                         <Picker selectedValue={this.state.petSource.petSex}
                                 mode="dropdown"
                                 enabled={this.state.enable}
-                                style={{height: 35, borderWidth:0, flex:1,}}
+                                style={{height: 35, borderWidth:0, flex:1,backgroundColor:'#fff'}}
                                 onValueChange={(sex) => this.setState({petSex: sex})}>
                             <Picker.Item label="请选择" value='0'/>
                             <Picker.Item label="雄性" value='1'/>
@@ -193,7 +193,7 @@ class BeautyServices extends React.Component {
                             selectedValue={this.state.petSource.petType}
                             mode="dropdown"
                             enabled={this.state.enable}
-                            style={{height: 35, borderWidth:0, flex:1}}
+                            style={{height: 35, borderWidth:0, flex:1,backgroundColor:'#fff'}}
                             onValueChange={(type) => this.setState({petType: type})}>
                             <Picker.Item label="请选择" value="0"/>
                             <Picker.Item label="小型犬" value="small"/>
@@ -208,7 +208,7 @@ class BeautyServices extends React.Component {
                             selectedValue={this.state.petSource.variety}
                             mode="dropdown"
                             enabled={this.state.enable}
-                            style={{height: 35, borderWidth:0, flex:1}}
+                            style={{height: 35, borderWidth:0, flex:1,backgroundColor:'#fff'}}
                             onValueChange={(variety) => this.setState({variety: variety})}>
                             <Picker.Item label="请选择" value="0"/>
                             <Picker.Item label="金毛" value="金毛"/>
@@ -225,7 +225,7 @@ class BeautyServices extends React.Component {
                             selectedValue={this.state.petSource.petState}
                             mode="dropdown"
                             enabled={this.state.enable}
-                            style={{height: 35, borderWidth:0, flex:1}}
+                            style={{height: 35, borderWidth:0, flex:1,backgroundColor:'#fff'}}
                             onValueChange={(state) => this.setState({petState: state})}>
                             <Picker.Item label="请选择" value="0"/>
                             <Picker.Item label="在世" value="alive"/>
@@ -249,7 +249,7 @@ class BeautyServices extends React.Component {
                         <Picker selectedValue={'2'}
                                 mode="dropdown"
                                 enabled={true}
-                                style={{height: 35, borderWidth:0, flex:1}}
+                                style={{height: 35, borderWidth:0, flex:1,backgroundColor:'#fff'}}
                                 onValueChange={(name) => this.setState({serviceName: name})}>
                             <Picker.Item label="请选择" value='0'/>
                             <Picker.Item label="1号服务师" value='1'/>
@@ -264,7 +264,7 @@ class BeautyServices extends React.Component {
                         <Picker selectedValue={'3'}
                                 mode="dropdown"
                                 enabled={true}
-                                style={{height: 35, borderWidth:0, flex:1}}
+                                style={{height: 35, borderWidth:0, flex:1,backgroundColor:'#fff'}}
                                 onValueChange={(name) => this.setState({assistantName: name})}>
                             <Picker.Item label="请选择" value='0'/>
                             <Picker.Item label="1号助理" value='1'/>
@@ -309,7 +309,6 @@ class BeautyServices extends React.Component {
                                   renderRow={this._onRenderRow.bind(this)}
                         />
                     </View>
-
                 </ScrollView>
             </View>
         )
@@ -336,19 +335,5 @@ const styles = StyleSheet.create({
         borderBottomColor: '#ccc',
         borderBottomWidth: StyleSheet.hairlineWidth,
     },
-    modal: {
-        height: 200,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#efefef',
-        borderRadius: 5,
-    },
-    modalViewStyle:{
-        height: 150,
-        width: 300,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#efefef',
-    }
 })
 module.exports = BeautyServices
