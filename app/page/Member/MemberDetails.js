@@ -32,7 +32,7 @@ class MemberDetails extends Component {
             enable: false,
             registrationDate: now,
             birthDate: now,
-            memberPhone: null,
+            memberId:'438e09fc-0ef4-4209-8daa-078e22bd9b46',
             edit: '编辑',
             memberLoaded: false,
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
@@ -41,77 +41,14 @@ class MemberDetails extends Component {
 
     componentDidMount() {
         var _this = this;
-        _this._fetchData(1, false);
+        _this._fetchData(_this.state.memberId,1, false);
     }
 
     componentWillUnmount() {
 
     }
 
-    _fetchData(page, isnext) {
-        var petData = {
-            'memberName': '张三',
-            'memberPhone': '13838383338',
-            'data': [
-                {
-                    'petId': 1,
-                    'petName': '小金',
-                    'variety': '金毛',
-                    'petCaseNum': '20160831001',
-                    'birthDate': '2016-08-18',
-                    'sterilizationState': '1',
-                    'petSex': '2',
-                    'petColor': 'gold',
-                    'petType': 'middle',
-                    'petState': 'alive',
-                    'image': './../../../image/pet.jpg',
-                    'reMarks': '没有更多备注了',
-
-                },
-                {
-                    'petId': 2,
-                    'petName': '娃娃',
-                    'variety': '吉娃娃',
-                    'petCaseNum': '20160831001',
-                    'birthDate': '2008-08-18',
-                    'sterilizationState': '1',
-                    'petSex': '2',
-                    'petColor': 'white',
-                    'petType': 'small',
-                    'petState': 'alive',
-                    'image': './../../../image/pet.jpg',
-                    'reMarks': '没有更多备注了',
-                },
-                {
-                    'petId': 3,
-                    'petName': '家虎',
-                    'variety': '藏獒',
-                    'petCaseNum': '20160831001',
-                    'birthDate': '1988-08-18',
-                    'sterilizationState': '1',
-                    'petSex': '1',
-                    'petColor': 'black',
-                    'petType': 'big',
-                    'petState': 'alive',
-                    'image': './../../../image/pet.jpg',
-                    'reMarks': '没有更多备注了',
-                },
-                {
-                    'petId': 4,
-                    'petName': '茱莉',
-                    'variety': '茶杯犬',
-                    'petCaseNum': '20160831001',
-                    'birthDate': '2010-08-01',
-                    'sterilizationState': '1',
-                    'petSex': '2',
-                    'petColor': 'yellow',
-                    'petType': 'small',
-                    'petState': 'alive',
-                    'image': './../../../image/pet.jpg',
-                    'reMarks': '没有更多备注了',
-                }
-            ]
-        };
+    _fetchData(memberId,page, isnext) {
         //http://petservice.tuoruimed.com/service/Api/GestAndPet/GetModelList
         let _this = this;
         storage.getBatchData([{
@@ -123,33 +60,21 @@ class MemberDetails extends Component {
             autoSync: false,
             syncInBackground: false,
         }]).then(rets => {
-            let postdata = {
-                items: [{
-                    Childrens: null,
-                    Field: "isVIP",
-                    Title: null,
-                    Operator: {"Name": "=", "Title": "等于", "Expression": null},
-                    DataType: 0,
-                    Value: "SM00054",
-                    Conn: 0
-                }, {
-                    Childrens: null,
-                    Field: "IsDeleted",
-                    Title: null,
-                    Operator: {"Name": "=", "Title": "等于", "Expression": null},
-                    DataType: 0,
-                    Value: "0",
-                    Conn: 1
-                }],
-                sorts: [{
-                    Field: "ModifiedOn",
-                    Title: null,
-                    Sort: {"Name": "Desc", "Title": "降序"},
-                    Conn: 0
-                }],
-                index: page,
-                pageSize: _this.state.pageSize
-            };
+            let postdata = [
+                {
+                    "Childrens": null,
+                    "Field": "GestID",
+                    "Title": null,
+                    "Operator": {
+                        "Name": "=",
+                        "Title": "等于",
+                        "Expression": null
+                    },
+                    "DataType": 0,
+                    "Value": memberId,
+                    "Conn": 0
+                }
+            ];
             //let hospitalcode = 'aa15-740d-4e6d-a6ca-0ebf-81f1';
             let header = {
                 'Authorization': NetUtil.headerAuthorization(rets[0].user.Mobile, rets[0].pwd, rets[1].hospital.Registration, rets[0].user.Token)

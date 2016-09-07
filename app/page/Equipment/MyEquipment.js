@@ -6,31 +6,30 @@ import{
     StyleSheet,
     Text,
     View,
-    ListView,
-    TouchableOpacity,
-    InteractionManager
 } from 'react-native';
 import Head from '../../commonview/Head';
 import Loading from '../../commonview/Loading';
 import IconButton from '../../commonview/HomeIcon';
 import InspectQuery from './InspectQuery';
-import Icon from 'react-native-vector-icons/Ionicons';
 class MyEquipment extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isHasData: true
+            isHasData: true,
+            equipmentNo:'H0118FE34F3982A'
         }
     }
 
     _InspectQuery(){
+        var _this=this;
         const {navigator} = this.props;
         if (navigator) {
             navigator.push({
                 name: 'InspectQuery',
-                component: MyEquipment,
+                component: InspectQuery,
                 params: {
-                    headTitle: '我的设备',
+                    headTitle: '检测结果查询',
+                    equipmentNo:_this.state.equipmentNo
                 }
             })
         }
@@ -48,7 +47,10 @@ class MyEquipment extends Component {
         let body = (<Loading type={'text'}/>);
         if (this.state.isHasData) {
             body =(
-                <View style={{flex:1,alignItems:'center',marginTop:20}}>
+                <View style={{flex:1,alignItems:'center',marginTop:0}}>
+                    <View style={{alignItems:'center',justifyContent:'center',backgroundColor:'#FFFAFA',height:50}}>
+                        <Text>当前设备:{this.state.equipmentNo}</Text>
+                    </View>
                     <View style={{flexDirection:'row',width:200,height:100}}>
                         <IconButton text="激活设备" iconName={'md-people'} iconColor={'#FFB6C1'}/>
                         <IconButton text="检测查询" iconName={'ios-paper'} iconColor={'#6666CC'} onPress={this._InspectQuery.bind(this)}/>
@@ -74,13 +76,6 @@ class MyEquipment extends Component {
             <View style={{flex:1}}>
                 <Head title={this.props.headTitle} canAdd={false} canBack={true}
                       onPress={this._onBack.bind(this)}/>
-                <View style={{alignItems:'center',justifyContent:'center',backgroundColor:'#009ACD',height:200}}>
-                    <View style={{backgroundColor: "orange",justifyContent: 'center',alignItems: 'center',width: 50,height: 50,borderRadius: 25,}}>
-                        <Icon name={'ios-color-palette'} size={40} color={'white'}/>
-                    </View>
-                    <Text>Jerry</Text>
-                    <Text>当前设备:H0118FE34F3982A</Text>
-                </View>
                 {body}
             </View>
         )

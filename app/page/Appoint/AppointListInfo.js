@@ -12,6 +12,8 @@ import {
     ListView,
     TouchableOpacity,
 }from 'react-native';
+import Util from '../../util/Util';
+import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
 import Loading from '../../commonview/Loading';
 import Icon from '../../../node_modules/react-native-vector-icons/FontAwesome';
@@ -20,8 +22,9 @@ class AppointListInfo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            dataSource: null,
+            dataSource: [],
             loaded: false,
+            ds:new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
         }
     }
 
@@ -29,7 +32,7 @@ class AppointListInfo extends React.Component {
         var _this = this;
         _this.timer = setTimeout(
             () => {
-                _this._onFetchData();
+                _this._onFetchData(1,false);
             }, 500
         )
     }
@@ -38,35 +41,80 @@ class AppointListInfo extends React.Component {
         this.timer && clearTimeout(this.timer);
     }
 
-    _onFetchData() {
-        //获取数据
+    _onFetchData(page,isNext) {
+        //获取数据http://petservice.tuoruimed.com/service/Api/Persons/GetModelList
         let _this = this;
-        let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-        var data = {
-            'data': [{
-                'memberName': '张三',
-                'memberPhone': '18866886668',
-                'appointTime': '2016-09-05',
-                'petName': '家虎',
-                'petAge': '3',
-                'registerTime': '2016-09-01',
-                'appointState': '1',
-            },
-                {
-                    'memberName': '张三',
-                    'memberPhone': '18866886668',
-                    'appointTime': '2016-09-07',
-                    'petName': '茱莉',
-                    'petAge': '2',
-                    'registerTime': '2016-09-02',
-                    'appointState': '2',
-                },
-            ]
-        };
-        _this.setState({
-            dataSource: ds.cloneWithRows(data.data),
-            loaded: true,
-        })
+        storage.getBatchData([{
+            key: 'USER',
+            autoSync: false,
+            syncInBackground: false,
+        }, {
+            key: 'HOSPITAL',
+            autoSync: false,
+            syncInBackground: false,
+        }]).then(rets => {
+                let postdata = {
+                    items: [{
+                        Childrens: null,
+                        Field: "isVIP",
+                        Title: null,
+                        Operator: {"Name": "=", "Title": "等于", "Expression": null},
+                        DataType: 0,
+                        Value: "SM00054",
+                        Conn: 0
+                    }, {
+                        Childrens: null,
+                        Field: "IsDeleted",
+                        Title: null,
+                        Operator: {"Name": "=", "Title": "等于", "Expression": null},
+                        DataType: 0,
+                        Value: "0",
+                        Conn: 1
+                    }],
+                    sorts: [{
+                        Field: "ModifiedOn",
+                        Title: null,
+                        Sort: {"Name": "Desc", "Title": "降序"},
+                        Conn: 0
+                    }],
+                    index: page,
+                    pageSize: _this.state.pageSize
+                };
+                //let hospitalcode = 'aa15-740d-4e6d-a6ca-0ebf-81f1';
+                let header = {
+                    'Authorization': NetUtil.headerAuthorization(rets[0].user.Mobile, rets[0].pwd, rets[1].hospital.Registration, rets[0].user.Token)
+                };
+                NetUtil.postJson(CONSTAPI.HOST + '/Persons/GetModelList', postdata, header, function (data) {
+                    if (data.Sign && data.Message != null) {
+                        let dataSource = _this.state.dataSource;
+                        if (isNext) {
+                            data.Message.forEach((d)=> {
+                                dataSource.push(d);
+                            });
+                        } else {
+                            dataSource = data.Message;
+                        }
+                        _this.setState({
+                            dataSource: dataSource,
+                            loaded: true,
+                            pageIndex: page,
+                        });
+                    } else {
+                        alert("获取数据失败：" + data.Message);
+                        _this.setState({
+                            loaded: true,
+                        });
+                    }
+                });
+            }
+        ).catch(err => {
+                _this.setState({
+                    dataSource: [],
+                    memberLoaded: true,
+                });
+                alert('error:' + err.message);
+            }
+        );
     }
 
     _onBack() {
@@ -109,9 +157,9 @@ class AppointListInfo extends React.Component {
             borderBottomWidth:StyleSheet.hairlineWidth, borderBottomColor:'#ccc'}}
                               onPress={()=>this._onAppointDetails(a)}>
                 <View style={{flex:1,}}>
-                        <Text style={{fontSize:14, fontWeight:'bold'}}>{a.petName}</Text>
+                        <Text style={{fontSize:14, fontWeight:'bold'}}>{a.PersonName}</Text>
                     <View style={{flexDirection:'row',marginTop:10}}>
-                        <Text style={{flex: 1,}}>登记日期:{a.registerTime}</Text>
+                        <Text style={{flex: 1,}}>手机: {a.MobilePhone}</Text>
                         <Text style={{flex:1,}}>预约会诊时间:{a.appointTime}</Text>
                     </View>
                 </View>
@@ -125,11 +173,11 @@ class AppointListInfo extends React.Component {
 
     render() {
         let body = (
-            <Loading />
+            <Loading type="text"/>
         );
         if (this.state.loaded) {
             body = (
-                <ListView dataSource={this.state.dataSource}
+                <ListView dataSource={this.state.ds.cloneWithRows(this.state.dataSource)}
                           enableEmptySections={true}
                           renderRow={this._onRenderRow.bind(this)}
                 />
