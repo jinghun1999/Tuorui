@@ -12,118 +12,173 @@ import{
     View,
     Picker,
     ListView,
-    Dimensions,
+    TextInput,
     DatePickerAndroid,
     TouchableOpacity,
 } from 'react-native';
+import Util from '../../util/Util';
+import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
-import FormInput from '../../commonview/FormInput';
-import FormPicker from '../../commonview/FormPicker';
 import Icon from 'react-native-vector-icons/Ionicons';
 import PetDetails from './PetDetails';
+import Loading from '../../commonview/Loading';
+import DatePicker from 'react-native-datepicker';
 class MemberDetails extends Component {
     constructor(props) {
         super(props);
         var now = new Date();
-        var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+        this.state = {
+            petSource: [],
+            enable: false,
+            registrationDate: now,
+            birthDate: now,
+            memberPhone: null,
+            edit: '编辑',
+            memberLoaded: false,
+            ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
+        }
+    };
+
+    componentDidMount() {
+        var _this = this;
+        _this._fetchData(1, false);
+    }
+
+    componentWillUnmount() {
+
+    }
+
+    _fetchData(page, isnext) {
         var petData = {
-            'memberName':'张三',
-            'memberPhone':'13838383338',
+            'memberName': '张三',
+            'memberPhone': '13838383338',
             'data': [
                 {
                     'petId': 1,
                     'petName': '小金',
-                    'variety':'金毛',
-                    'petCaseNum':'20160831001',
-                    'birthDate':'2016-08-18',
-                    'sterilizationState':'1',
-                    'petSex':'2',
-                    'petColor':'gold',
-                    'petType':'middle',
-                    'petState':'alive',
-                    'image':'./../../../image/pet.jpg',
-                    'reMarks':'没有更多备注了',
+                    'variety': '金毛',
+                    'petCaseNum': '20160831001',
+                    'birthDate': '2016-08-18',
+                    'sterilizationState': '1',
+                    'petSex': '2',
+                    'petColor': 'gold',
+                    'petType': 'middle',
+                    'petState': 'alive',
+                    'image': './../../../image/pet.jpg',
+                    'reMarks': '没有更多备注了',
 
                 },
                 {
                     'petId': 2,
                     'petName': '娃娃',
-                    'variety':'吉娃娃',
-                    'petCaseNum':'20160831001',
-                    'birthDate':'2008-08-18',
-                    'sterilizationState':'1',
-                    'petSex':'2',
-                    'petColor':'white',
-                    'petType':'small',
-                    'petState':'alive',
-                    'image':'./../../../image/pet.jpg',
-                    'reMarks':'没有更多备注了',
+                    'variety': '吉娃娃',
+                    'petCaseNum': '20160831001',
+                    'birthDate': '2008-08-18',
+                    'sterilizationState': '1',
+                    'petSex': '2',
+                    'petColor': 'white',
+                    'petType': 'small',
+                    'petState': 'alive',
+                    'image': './../../../image/pet.jpg',
+                    'reMarks': '没有更多备注了',
                 },
                 {
                     'petId': 3,
                     'petName': '家虎',
-                    'variety':'藏獒',
-                    'petCaseNum':'20160831001',
-                    'birthDate':'1988-08-18',
-                    'sterilizationState':'1',
-                    'petSex':'1',
-                    'petColor':'black',
-                    'petType':'big',
-                    'petState':'alive',
-                    'image':'./../../../image/pet.jpg',
-                    'reMarks':'没有更多备注了',
+                    'variety': '藏獒',
+                    'petCaseNum': '20160831001',
+                    'birthDate': '1988-08-18',
+                    'sterilizationState': '1',
+                    'petSex': '1',
+                    'petColor': 'black',
+                    'petType': 'big',
+                    'petState': 'alive',
+                    'image': './../../../image/pet.jpg',
+                    'reMarks': '没有更多备注了',
                 },
                 {
                     'petId': 4,
                     'petName': '茱莉',
-                    'variety':'茶杯犬',
-                    'petCaseNum':'20160831001',
-                    'birthDate':'2010-08-01',
-                    'sterilizationState':'1',
-                    'petSex':'2',
-                    'petColor':'yellow',
-                    'petType':'small',
-                    'petState':'alive',
-                    'image':'./../../../image/pet.jpg',
-                    'reMarks':'没有更多备注了',
+                    'variety': '茶杯犬',
+                    'petCaseNum': '20160831001',
+                    'birthDate': '2010-08-01',
+                    'sterilizationState': '1',
+                    'petSex': '2',
+                    'petColor': 'yellow',
+                    'petType': 'small',
+                    'petState': 'alive',
+                    'image': './../../../image/pet.jpg',
+                    'reMarks': '没有更多备注了',
                 }
             ]
         };
-        this.state = {
-            petSource: ds.cloneWithRows(petData.data),
-            enable: false,
-            registrationText: now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate(),
-            registrationDate: now,
-            birthText: now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate(),
-            birthDate: now,
-            memberPhone: null,
-            edit: '编辑',
-        }
-    };
-
-    //进行创建时间日期选择器
-    async showPicker(stateKey, options) {
-        var openState = this.state.enable;
-        if (openState == true) {
-            try {
-                var newState = {};
-                const {action, year, month, day} = await DatePickerAndroid.open(options);
-                if (action === DatePickerAndroid.dismissedAction) {
-                    newState[stateKey + 'Text'] = 'dismissed';
+        //http://petservice.tuoruimed.com/service/Api/GestAndPet/GetModelList
+        let _this = this;
+        storage.getBatchData([{
+            key: 'USER',
+            autoSync: false,
+            syncInBackground: false,
+        }, {
+            key: 'HOSPITAL',
+            autoSync: false,
+            syncInBackground: false,
+        }]).then(rets => {
+            let postdata = {
+                items: [{
+                    Childrens: null,
+                    Field: "isVIP",
+                    Title: null,
+                    Operator: {"Name": "=", "Title": "等于", "Expression": null},
+                    DataType: 0,
+                    Value: "SM00054",
+                    Conn: 0
+                }, {
+                    Childrens: null,
+                    Field: "IsDeleted",
+                    Title: null,
+                    Operator: {"Name": "=", "Title": "等于", "Expression": null},
+                    DataType: 0,
+                    Value: "0",
+                    Conn: 1
+                }],
+                sorts: [{
+                    Field: "ModifiedOn",
+                    Title: null,
+                    Sort: {"Name": "Desc", "Title": "降序"},
+                    Conn: 0
+                }],
+                index: page,
+                pageSize: _this.state.pageSize
+            };
+            //let hospitalcode = 'aa15-740d-4e6d-a6ca-0ebf-81f1';
+            let header = {
+                'Authorization': NetUtil.headerAuthorization(rets[0].user.Mobile, rets[0].pwd, rets[1].hospital.Registration, rets[0].user.Token)
+            };
+            NetUtil.postJson(CONSTAPI.HOST + '/GestAndPet/GetModelList', postdata, header, function (data) {
+                if (data.Sign && data.Message != null) {
+                    let dataSource = _this.state.dataSource;
+                    if (isnext) {
+                        data.Message.forEach((d)=> {
+                            dataSource.push(d);
+                        });
+                    } else {
+                        dataSource = data.Message;
+                    }
+                    _this.setState({
+                        petSource: dataSource,
+                        memberLoaded: true,
+                        pageIndex: page,
+                    });
                 } else {
-                    var date = new Date(year, month, day);
-                    newState[stateKey + 'Text'] = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
-                    newState[stateKey + 'Date'] = date;
+                    alert("获取数据失败：" + data.Message);
+                    _this.setState({
+                        memberloaded: true,
+                    });
                 }
-                this.setState(newState);
-            } catch (o) {
-                alert('控件异常。');
-            }
-        } else {
-            return false;
-        }
-
+            });
+        })
     }
+
 
     _onBack() {
         let _this = this;
@@ -135,17 +190,17 @@ class MemberDetails extends Component {
 
     _onAddPet() {
         alert('add Pet');
-        let _this=this;
+        let _this = this;
         const {navigator}=_this.props;
-        if(navigator){
+        if (navigator) {
             navigator.push({
                 name: 'PetDetails',
                 component: PetDetails,
                 params: {
                     headTitle: '宠物详情',
-                    isAdd:true,
+                    isAdd: true,
                     memberName: _this.props.name,
-                    memberPhone:_this.props.phone,
+                    memberPhone: _this.props.phone,
                     petSource: [],
                 }
             })
@@ -180,9 +235,7 @@ class MemberDetails extends Component {
                 component: PetDetails,
                 params: {
                     headTitle: '宠物详情',
-                    isAdd:false,
-                    memberName: _this.props.name,
-                    memberPhone:_this.props.phone,
+                    isAdd: false,
                     petSource: pet,
                 }
             })
@@ -191,36 +244,27 @@ class MemberDetails extends Component {
 
     _onRenderRow(pet) {
         return (
-            <TouchableOpacity style={styles.pickerStyle} onPress={()=>this._onPetDetails(pet)}>
+            <TouchableOpacity style={{flexDirection:'row',flex:1,height:45,justifyContent:'center',alignItems:'center',
+            borderBottomColor:'#ccc',borderBottomWidth:StyleSheet.hairlineWidth,}}
+                              onPress={()=>this._onPetDetails(pet)}>
                 <Image source={require('./../../../image/pet.jpg')}
-                       style={{width:50,height:50,marginLeft:10,}}
+                       style={{width:40,height:35,marginLeft:10,justifyContent:'center'}}
                 />
-                <Text style={{flex:1,marginLeft:10}}>{pet.petName}</Text>
+                <Text style={{flex:1,marginLeft:10,fontSize:16}}>{pet.PetName}</Text>
                 <Icon name={'ios-arrow-forward'} size={15} color={'#666'} style={{marginRight:10}}/>
             </TouchableOpacity>
         )
     }
 
     render() {
-        var picker = <View style={styles.pickerStyle}>
-            <View style={{width:100,justifyContent:'center', marginLeft:10,}}>
-                <Text style={{color:'#666'}}>性别</Text>
-            </View>
-            <Picker
-                selectedValue={this.state.memberSex}
-                mode="dropdown"
-                style={{flex:1,marginRight: 10,backgroundColor:'#fff',}}
-                onValueChange={(lang) => this.setState({memberSex: lang})}>
-                <Picker.Item label="男" value="男"/>
-                <Picker.Item label="女" value="女"/>
-            </Picker>
-        </View>
-        var listBody = <View style={styles.pickerStyle}>
-            <ListView dataSource={this.state.petSource}
-                      renderRow={this._onRenderRow.bind(this)}
-                      enableEmptySections={true}
-            />
-        </View>
+        var listBody = <Loading type="text"/>
+        if (this.state.memberLoaded) {
+            listBody = (
+                <ListView dataSource={this.state.ds.cloneWithRows(this.state.petSource)}
+                          renderRow={this._onRenderRow.bind(this)}
+                          enableEmptySections={true}
+                />)
+        }
         return (
             <View style={styles.container}>
                 <Head title={this.props.headTitle} canAdd={true} canBack={true} edit={this.state.edit}
@@ -230,74 +274,183 @@ class MemberDetails extends Component {
                             horizontal={false}
                             showsVerticalScrollIndicator={true}
                             scrollEnabled={true}>
-                    <FormPicker title="登记日期" tips={this.state.registrationText}
-                                onPress={this.showPicker.bind(this, 'registration', {date: this.state.registrationDate})}/>
-                    <FormInput value={this.props.name}
-                               title="姓名"
-                               style={styles.pickerStyle}
-                               enabled={this.state.enable}
-                               onChangeText={(text)=>{this.setState({ memberName: text })}}
-                    />
-                    <FormPicker title="生日" tips={this.state.birthText}
-                                style={styles.pickerStyle}
-                                onPress={this.showPicker.bind(this, 'birth', {date: this.state.birthDate})}/>
+                    <View style={styles.optionBox}>
+                        <View style={styles.optionTxt}>
+                            <Text style={{color:'#666'}}>登记日期</Text>
+                        </View>
+                        <View style={styles.optionValue}>
+                            <DatePicker
+                                date={this.props.memberInfo.CreatedOn}
+                                mode="date"
+                                placeholder="选择日期"
+                                format="YYYY-MM-DD"
+                                minDate="1980-01-01"
+                                maxDate="2020-01-01"
+                                confirmBtnText="Confirm"
+                                cancelBtnText="Cancel"
+                                showIcon={false}
+                                enabled={this.state.enable}
+                                customStyles={{
+                                    dateIcon: {
+                                      position: 'absolute',
+                                      right: 0,
+                                      top: 4,
+                                      marginLeft: 0
+                                    },
+                                    dateInput: {
+                                      marginRight: 36,
+                                      borderWidth:StyleSheet.hairlineWidth,
+                                    },
+                                  }}
+                                onDateChange={(date) => {this.setState({registrationDate: date})}}/>
+                        </View>
+                    </View>
+                    <View style={styles.optionBox}>
+                        <View style={styles.optionTxt}>
+                            <Text style={{color:'#666'}}>姓名</Text>
+                        </View>
+                        <View style={styles.optionValue}>
+                            <TextInput value={this.props.memberInfo.GestName}
+                                       editable={this.state.enable}
+                                       underlineColorAndroid={'transparent'}
+                                       keyboardType={'default'}
+                                       style={{height: 45, borderWidth:0, flex:1}}
+                                       onChangeText={(text)=>{this.setState({ memberName: text })}}
+                            />
 
-                    <FormInput value={this.props.phone}
-                               title="电话"
-                               style={styles.pickerStyle}
-                               enabled={this.state.enable}
-                               keyboardType={'numeric'}
-                               onChangeText={(text)=>{this.setState({ memberPhone: text })}}
-                    />
-                    {picker}
-                    <FormInput value={this.props.phone}
-                               title="邮箱"
-                               style={styles.pickerStyle}
-                               enabled={this.state.enable}
-                               onChangeText={(text)=>{this.setState({ memberMail: text })}}
-                    />
-                    <FormInput value={this.props.level}
-                               title="等级"
-                               enabled={false}
-                               placeholder={this.state.memberLevel}
-                               onChangeText={(text)=>{this.setState({ memberLevel: text })}}
-                    />
-                    <FormInput value={this.props.name}
-                               title="账户金额"
-                               enabled={false}
-                               placeholder={this.state.memberMoney}
-                               onChangeText={(text)=>{this.setState({ memberMoney: text })}}
-                    />
-                    <FormInput value={this.props.name}
-                               title="积分"
-                               enabled={false}
-                               placeholder={this.state.memberPoint}
-                               onChangeText={(text)=>{this.setState({ memberPoint: text })}}
-                    />
-                    <FormInput value={this.props.name}
-                               title="地址"
-                               enabled={this.state.enable}
-                               onChangeText={(text)=>{this.setState({ memberAddress: text })}}
-                    />
-                    <FormInput value={this.props.name}
-                               title="备注"
-                               enabled={this.state.enable}
-                               onChangeText={(text)=>{this.setState({ memberRemark: text })}}
-                    />
+                        </View>
+                    </View>
+                    <View style={styles.optionBox}>
+                        <View style={styles.optionTxt}>
+                            <Text style={{color:'#666'}}>生日</Text>
+                        </View>
+                        <View style={styles.optionValue}>
+                            <DatePicker
+                                date={this.props.memberInfo.GestBirthday}
+                                mode="date"
+                                placeholder="选择日期"
+                                format="YYYY-MM-DD"
+                                minDate="1900-01-01"
+                                maxDate="2020-01-01"
+                                confirmBtnText="Confirm"
+                                cancelBtnText="Cancel"
+                                showIcon={false}
+                                enabled={this.state.enable}
+                                customStyles={{
+                                    dateIcon: {
+                                      position: 'absolute',
+                                      right: 0,
+                                      top: 4,
+                                      marginLeft: 0
+                                    },
+                                    dateInput: {
+                                      marginRight: 36,
+                                      borderWidth:StyleSheet.hairlineWidth,
+                                    },
+                                  }}
+                                onDateChange={(date) => {this.setState({birthDate: date})}}/>
+                        </View>
+                    </View>
+                    <View style={styles.optionBox}>
+                        <View style={styles.optionTxt}>
+                            <Text style={{color:'#666'}}>电话</Text>
+                        </View>
+                        <View style={styles.optionValue}>
+                            <TextInput value={this.props.memberInfo.MobilePhone}
+                                       editable={this.state.enable}
+                                       underlineColorAndroid={'transparent'}
+                                       keyboardType={'default'}
+                                       style={{height: 45, borderWidth:0, flex:1}}
+                                       onChangeText={(text)=>{this.setState({ memberPhone: text })}}
+                            />
+                        </View>
+                    </View>
+                    <View style={styles.optionBox}>
+                        <View style={styles.optionTxt}>
+                            <Text style={{color:'#666'}}>性别</Text>
+                        </View>
+                        <View style={styles.optionValue}>
+                            <Picker
+                                selectedValue={this.props.memberInfo.GestSex}
+                                mode="dropdown"
+                                enabled={this.state.enable}
+                                style={{flex:1,marginRight: 10,backgroundColor:'#fff',}}
+                                onValueChange={(lang) => this.setState({memberSex: lang})}>
+                                <Picker.Item label="男" value="DM00001"/>
+                                <Picker.Item label="女" value="DM00002"/>
+                            </Picker>
+                        </View>
+                    </View>
+                    {/*<FormInput value={this.props.phone}
+                     title="邮箱"
+                     style={styles.pickerStyle}
+                     enabled={this.state.enable}
+                     onChangeText={(text)=>{this.setState({ memberMail: text })}}
+                     />
+                     <FormInput value={this.props.level}
+                     title="等级"
+                     enabled={false}
+                     placeholder={this.state.memberLevel}
+                     onChangeText={(text)=>{this.setState({ memberLevel: text })}}
+                     />
+                     <FormInput value={this.props.name}
+                     title="账户金额"
+                     enabled={false}
+                     placeholder={this.state.memberMoney}
+                     onChangeText={(text)=>{this.setState({ memberMoney: text })}}
+                     />
+                     <FormInput value={this.props.name}
+                     title="积分"
+                     enabled={false}
+                     placeholder={this.state.memberPoint}
+                     onChangeText={(text)=>{this.setState({ memberPoint: text })}}
+                     />*/}
+                    <View style={styles.optionBox}>
+                        <View style={styles.optionTxt}>
+                            <Text style={{color:'#666'}}>地址</Text>
+                        </View>
+                        <View style={styles.optionValue}>
+                            <TextInput value={this.props.memberInfo.GestAddress}
+                                       editable={this.state.enable}
+                                       underlineColorAndroid={'transparent'}
+                                       keyboardType={'default'}
+                                       style={{height: 45, borderWidth:0, flex:1}}
+                                       onChangeText={(text)=>{this.setState({ memberAddress: text })}}
+                            />
+                        </View>
+                    </View>
+                    <View style={styles.optionBox}>
+                        <View style={styles.optionTxt}>
+                            <Text style={{color:'#666'}}>备注</Text>
+                        </View>
+                        <View style={styles.optionValue}>
+                            <TextInput value={this.props.memberInfo.Remark}
+                                       editable={this.state.enable}
+                                       underlineColorAndroid={'transparent'}
+                                       keyboardType={'default'}
+                                       style={{height: 45, borderWidth:0, flex:1}}
+                                       onChangeText={(text)=>{this.setState({ memberRemark: text })}}
+                            />
+                        </View>
+                    </View>
                     <View style={styles.petViewStyle}>
-                        <Text style={{flex:1,marginLeft:10}}>宠物信息</Text>
+                        <Text style={{flex:1,marginLeft:10,color:'#fff'}}>宠物信息</Text>
                         <TouchableOpacity onPress={this._onAddPet.bind(this)} style={{width:50,}}>
-                            <Text style={{marginRight:10,color:'#0000CD'}}>新增</Text>
+                            <Text style={{marginRight:10,textAlign:'center',color:'#0000CD'}}>新增</Text>
                         </TouchableOpacity>
                     </View>
+                    <View>
                         {listBody}
+                    </View>
                 </ScrollView>
             </View>
         )
     }
 }
 const styles = StyleSheet.create({
-    container: {flex: 1,},
+    container: {
+        flex: 1,
+    },
     pickerBoxStyle: {flex: 1,},
     pickerStyle: {
         flexDirection: 'row',
@@ -309,12 +462,28 @@ const styles = StyleSheet.create({
     },
     petViewStyle: {
         height: 20,
-        backgroundColor: '#BEBEBE',
+        backgroundColor: '#ccc',
         flexDirection: 'row'
     },
     imageStyle: {
         height: 20,
         width: 20,
+    },
+    optionBox: {
+        height: 50,
+        flexDirection: 'row',
+        backgroundColor: '#fff',
+        borderBottomColor: '#ccc',
+        borderBottomWidth: StyleSheet.hairlineWidth,
+    },
+    optionTxt: {
+        width: 100,
+        justifyContent: 'center',
+        marginLeft: 10,
+    },
+    optionValue: {
+        flex: 1,
+        justifyContent: 'center',
     },
 })
 module.exports = MemberDetails;

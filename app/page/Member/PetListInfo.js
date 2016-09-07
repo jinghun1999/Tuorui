@@ -16,7 +16,7 @@ import{
 } from 'react-native';
 import Head from '../../commonview/Head';
 import Icon from '../../../node_modules/react-native-vector-icons/FontAwesome';
-import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
+import Loading from '../../commonview/Loading';
 import VaccineInfo from './VaccineInfo';
 class PetListInfo extends Component {
     constructor(props) {
@@ -158,14 +158,8 @@ class PetListInfo extends Component {
         )
     }
     render() {
-        var body;
-        if (!this.state.loaded) {
-            body = (
-                <View style={styles.loadingBox}>
-                    <Bars size={10} color="#1CAFF6"/>
-                </View>
-            )
-        } else {
+        var body = <Loading type="text" />;
+        if (this.state.loaded) {
             body = (
                 <ListView dataSource={this.state.petDataSource} enableEmptySections={true}
                           renderRow={this._renderVaccine.bind(this)}/>

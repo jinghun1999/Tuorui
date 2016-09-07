@@ -11,7 +11,7 @@ import{
     TouchableOpacity,
     ActivityIndicator,
     InteractionManager
-    } from 'react-native';
+} from 'react-native';
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
@@ -179,10 +179,7 @@ class MemberListInfo extends Component {
                 component: MemberDetails,
                 params: {
                     headTitle: '会员详情',
-                    memberInfo: _this.state.memberInfo,
-                    name: g.name,
-                    phone: g.phone,
-                    level: g.memberLevel,
+                    memberInfo: g,
                 }
             })
         }
@@ -195,9 +192,11 @@ class MemberListInfo extends Component {
                 <View style={{flex:1, marginLeft:15,}}>
                     <View style={{flexDirection:'row'}}>
                         <Text style={{fontWeight:'bold', fontSize:16, marginRight:10}}>{g.GestName}</Text>
-                        <Text>手机: {g.MobilePhone}</Text>
                     </View>
-                    <Text style={{}}>地址: {g.GestAddress}</Text>
+                    <View style={{flexDirection:'row'}}>
+                        <Text style={{width:150}}>手机: {g.MobilePhone}</Text>
+                        <Text style={{flex:1}}>地址: {g.GestAddress}</Text>
+                    </View>
                 </View>
                 <Icon name={'ios-arrow-forward'} size={15} color={'#666'}/>
             </TouchableOpacity>
@@ -232,7 +231,7 @@ class MemberListInfo extends Component {
                           onEndReached={this._onEndReached.bind(this)}
                           enableEmptySections={true}
                           renderFooter={this._renderFooter.bind(this)}
-                    />
+                />
             )
         }
         return (

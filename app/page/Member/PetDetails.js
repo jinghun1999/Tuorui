@@ -53,32 +53,6 @@ class PetDetails extends Component {
             })
         }
     }
-
-    //进行创建时间日期选择器
-    async showPicker(stateKey, options) {
-        let openState = this.state.enable;
-        if (openState == true) {
-            try {
-                var newState = {};
-                const {action, year, month, day} = await DatePickerAndroid.open(options);
-                if (action === DatePickerAndroid.dismissedAction) {
-                    //newState[stateKey + 'Text'] = datetext;
-                } else {
-                    let date = new Date(year, month, day);
-                    let datetext = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
-                    newState[stateKey + 'Text'] = datetext;
-                    newState[stateKey + 'Date'] = date;
-                }
-                this.setState(newState);
-            } catch (o) {
-                alert('控件异常。');
-            }
-        } else {
-            return false;
-        }
-    }
-
-
     _editInfo() {
         let _this = this;
         let edit = _this.state.edit;
@@ -123,13 +97,13 @@ class PetDetails extends Component {
                                    enabled={false}
                                    onChangeText={(text)=>{this.setState({ phoneText: text })}}
                             />*/}
-                        <FormInput value={this.props.petSource.petName}
+                        <FormInput value={this.props.petSource.PetName}
                                    title="宠物昵称"
                                    style={{height:30,}}
                                    enabled={this.state.enable}
                                    onChangeText={(text)=>{this.setState({ nikeText: text })}}
                             />
-                        <FormInput value={this.props.petSource.petCaseNum}
+                        <FormInput value={this.props.petSource.SickFileCode}
                                    title="病历编号"
                                    style={{height:30, borderBottomWidth:0,}}
                                    enabled={this.state.enable}
@@ -142,7 +116,7 @@ class PetDetails extends Component {
                         </View>
                         <View style={styles.optionValue}>
                             <DatePicker
-                                date={this.state.birthDate}
+                                date={this.props.petSource.PetBirthday}
                                 mode="date"
                                 placeholder="选择日期"
                                 format="YYYY-MM-DD"
@@ -173,13 +147,13 @@ class PetDetails extends Component {
                         </View>
                         <View style={styles.optionValue}>
                             <Picker
-                                selectedValue={this.props.petSource.sterilizationState}
+                                selectedValue={this.props.petSource.BirthStatus}
                                 mode="dropdown"
                                 enabled={this.state.enable}
                                 onValueChange={(lang) => this.setState({sterilizationState: lang})}>
                                 <Picker.Item label="请选择" value="0"/>
-                                <Picker.Item label="未绝育" value="1"/>
-                                <Picker.Item label="已绝育" value="2"/>
+                                <Picker.Item label="未绝育" value="未绝育"/>
+                                <Picker.Item label="已绝育" value="已绝育"/>
                             </Picker>
                         </View>
                     </View>
@@ -189,14 +163,14 @@ class PetDetails extends Component {
                         </View>
                         <View style={styles.optionValue}>
                             <Picker
-                                selectedValue={this.props.petSource.petSex}
+                                selectedValue={this.props.petSource.PetSex}
                                 mode="dropdown"
                                 enabled={this.state.enable}
                                 onValueChange={(sex) => this.setState({petSex: sex})}>
                                 <Picker.Item label="请选择" value="0"/>
-                                <Picker.Item label="雌性" value="1"/>
-                                <Picker.Item label="雄性" value="2"/>
-                                <Picker.Item label="其它" value="3"/>
+                                <Picker.Item label="雌性" value="雌性"/>
+                                <Picker.Item label="雄性" value="雄性"/>
+                                <Picker.Item label="其它" value="其它"/>
                             </Picker>
                         </View>
                     </View>
@@ -206,7 +180,7 @@ class PetDetails extends Component {
                         </View>
                         <View style={styles.optionValue}>
                             <Picker
-                                selectedValue={this.props.petSource.petColor}
+                                selectedValue={this.props.petSource.PetSkinColor}
                                 mode="dropdown"
                                 enabled={this.state.enable}
                                 onValueChange={(color) => this.setState({petColor: color})}>
@@ -214,7 +188,7 @@ class PetDetails extends Component {
                                 <Picker.Item label="黄色" value="yellow"/>
                                 <Picker.Item label="白色" value="white"/>
                                 <Picker.Item label="黑色" value="black"/>
-                                <Picker.Item label="金色" value="gold"/>
+                                <Picker.Item label="金色" value="DM00005"/>
                             </Picker>
                         </View>
                     </View>
@@ -224,15 +198,38 @@ class PetDetails extends Component {
                         </View>
                         <View style={styles.optionValue}>
                             <Picker
-                                selectedValue={this.props.petSource.petType}
+                                selectedValue={this.props.petSource.PetRace.toString()}
                                 mode="dropdown"
                                 enabled={this.state.enable}
                                 onValueChange={(type) => this.setState({petType: type})}>
                                 <Picker.Item label="请选择" value="0"/>
-                                <Picker.Item label="小型犬" value="small"/>
-                                <Picker.Item label="中型犬" value="middle"/>
-                                <Picker.Item label="大型犬" value="big"/>
-                                <Picker.Item label="其他" value="other"/>
+                                <Picker.Item label="小型犬" value="小型犬"/>
+                                <Picker.Item label="中型犬" value="中型犬"/>
+                                <Picker.Item label="大型犬" value="大型犬"/>
+                                <Picker.Item label="其他" value="其他"/>
+                            </Picker>
+                        </View>
+                    </View>
+                    <View style={styles.optionBox}>
+                        <View style={styles.optionTxt}>
+                            <Text style={{color:'#666'}}>宠物品种</Text>
+                        </View>
+                        <View style={styles.optionValue}>
+                            <Picker
+                                selectedValue={this.props.petSource.PetBreed.toString()}
+                                mode="dropdown"
+                                enabled={this.state.enable}
+                                onValueChange={(type) => this.setState({petType: type})}>
+                                <Picker.Item label="请选择" value="0"/>
+                                <Picker.Item label="柴犬" value="柴犬"/>
+                                <Picker.Item label="中国沙皮犬" value="中国沙皮犬"/>
+                                <Picker.Item label="拉布拉多犬" value="拉布拉多犬"/>
+                                <Picker.Item label="腊肠" value="腊肠"/>
+                                <Picker.Item label="喜乐蒂" value="喜乐蒂"/>
+                                <Picker.Item label="萨摩耶" value="萨摩耶"/>
+                                <Picker.Item label="松狮" value="松狮"/>
+                                <Picker.Item label="哈士奇" value="哈士奇"/>
+                                <Picker.Item label="其他" value="其他"/>
                             </Picker>
                         </View>
                     </View>
@@ -242,18 +239,18 @@ class PetDetails extends Component {
                         </View>
                         <View style={styles.optionValue}>
                             <Picker
-                                selectedValue={this.props.petSource.petState}
+                                selectedValue={this.props.petSource.PetStatus}
                                 mode="dropdown"
                                 enabled={this.state.enable}
                                 onValueChange={(state) => this.setState({petState: state})}>
                                 <Picker.Item label="请选择" value="0"/>
-                                <Picker.Item label="在世" value="alive"/>
+                                <Picker.Item label="在世" value="SM00052"/>
                                 <Picker.Item label="离世" value="die"/>
                             </Picker>
                         </View>
                     </View>
                     <View style={{marginTop:15, backgroundColor:'#fff'}}>
-                    <FormInput value={this.props.petSource.reMarks}
+                    <FormInput value={this.props.petSource.ReMarks}
                                title="备注"
                                enabled={this.state.enable}
                                onChangeText={(text)=>{this.setState({ reMarks: text })}}
