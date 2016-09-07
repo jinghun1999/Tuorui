@@ -57,25 +57,29 @@ class ReportIndex extends React.Component {
                     <Text style={{color:'#CC3333'}}>宠物医院数据统计</Text>
                 </View>
                 <View style={{flexDirection:'column'}}>
-                    <TouchableHighlight style={[styles.touch, {backgroundColor:'#CC0033'}]}
+                    <TouchableHighlight style={styles.touch}
                                         onPress={this._onPress.bind(this, Income, 'Income', '营业收入统计')}
-                                        underlayColor={'#f1592a'}>
-                        <View>
-                            <Text style={styles.touchText}>营业收入统计</Text>
+                                        underlayColor={'#CCCC99'}>
+                        <View style={{flexDirection:'row', alignItems:'center'}}>
+                            <Icon name={'ios-open'} size={40} color={'#CC0033'}/>
+                            <Text style={[styles.touchText, {color:'#CC0033'}]}>营业收入统计</Text>
                         </View>
                     </TouchableHighlight>
-                    <TouchableHighlight style={[styles.touch, {backgroundColor:'#0099CC'}]}
+                    <TouchableHighlight style={styles.touch}
                                         onPress={this._onPress.bind(this, StockCapital, 'StockCapital', '库存资产统计')}
-                                        underlayColor={'#f1592a'}>
-                        <View>
-                            <Text style={styles.touchText}>库存资产统计</Text>
+                                        underlayColor={'#CCCC99'}>
+                        <View style={{flexDirection:'row', alignItems:'center'}}>
+                            <Icon name={'ios-filing'} size={40} color={'#0099CC'}/>
+                            <Text style={[styles.touchText, {color:'#0099CC'}]}>库存资产统计</Text>
                         </View>
                     </TouchableHighlight>
-                    <TouchableHighlight style={[styles.touch, {backgroundColor:'#FF9999'}]}
+                    <TouchableHighlight style={styles.touch}
                                         onPress={this._onPress.bind(this, GoodSales, 'GoodSales', '商品销售统计')}
-                                        underlayColor={'#f1592a'}>
-                        <View>
-                            <Text style={styles.touchText}>商品销售统计</Text>
+                                        underlayColor={'#CCCC99'}>
+
+                        <View style={{flexDirection:'row', alignItems:'center'}}>
+                            <Icon name={'ios-cart'} size={40} color={'#FF9999'}/>
+                            <Text style={[styles.touchText, {color:'#FF9999'}]}>商品销售统计</Text>
                         </View>
                     </TouchableHighlight>
                 </View>
@@ -88,18 +92,20 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'column',
+        backgroundColor: '#e7e7e7',
     },
     touch: {
         flex: 1,
         height: 50,
-        justifyContent: 'center',
+        justifyContent:'center',
         marginTop: 5,
         padding: 10,
-        backgroundColor: '#333399'
+        backgroundColor: '#fff'
     },
     touchText: {
         color: '#fff',
         fontSize: 18,
+        marginLeft:20,
     }
 });
 

@@ -72,13 +72,25 @@ class StockCapital extends React.Component {
                     'Authorization': NetUtil.headerAuthorization(rets[0].user.Mobile, rets[0].pwd, rets[1].hospital.Registration, rets[0].user.Token)
                 };
                 NetUtil.postJson(CONSTAPI.HOST + '/ItemCount/GetModelList', postdata, header, function (data) {
-                    if (data.Sign && data.Message != null) {
+                    let dt = data.Message;
+                    let _count = 0, _val = 0.00, _cb = 0.00, _lr = 0.00;
+                    dt.forEach((d)=> {
+                        _count += d.ItemCountNum;
+                        _val += d.ItemCountNum * d.SellPrice;
+                        _cb += d.ItemCountNum * d.InputPrice;
+                        _lr += d.ItemCountNum * d.SellPrice - d.ItemCountNum * d.InputPrice;
+                    });
+                    if (data.Sign && dt != null) {
                         _this.setState({
-                            dataSource: data.Message,
+                            dataSource: dt,
                             loaded: true,
+                            totalCount: _count,
+                            totalVal: _val,
+                            totalCB: _cb,
+                            totalLR: _lr,
                         });
                     } else {
-                        alert("获取数据失败：" + data.Message);
+                        alert("获取数据失败：" + dt);
                         _this.setState({
                             loaded: true,
                         });
@@ -103,23 +115,25 @@ class StockCapital extends React.Component {
         return (
             <View style={{backgroundColor:'#e7e7e7'}}>
                 <View style={styles.hd}>
-                    <Text style={{color:'#0099CC'}}>{'宠物医院'}</Text>
+                    <Text style={{color:'#0099CC'}}>资产汇总</Text>
                 </View>
                 <View style={styles.outerRow}>
                     <View style={styles.sumRow}>
-                        <Text style={styles.sumValue}>1200</Text>
+                        <Text style={styles.sumValue}>{this.state.totalCount}</Text>
                         <Text style={styles.sumTitle}>资产数量</Text>
                     </View>
-                    <View style={styles.sumRow}>
-                        <Text style={styles.sumValue}>1200</Text>
+                    <View style={[styles.sumRow,{borderRightWidth:0,}]}>
+                        <Text style={styles.sumValue}>¥{this.state.totalVal}</Text>
                         <Text style={styles.sumTitle}>资产价值</Text>
                     </View>
+                </View>
+                <View style={[styles.outerRow,{borderBottomWidth:0}]}>
                     <View style={styles.sumRow}>
-                        <Text style={styles.sumValue}>1200</Text>
+                        <Text style={styles.sumValue}>¥{this.state.totalCB}</Text>
                         <Text style={styles.sumTitle}>资产成本</Text>
                     </View>
                     <View style={[styles.sumRow,{borderRightWidth:0}]}>
-                        <Text style={styles.sumValue}>1200034.32</Text>
+                        <Text style={styles.sumValue}>¥{this.state.totalLR}</Text>
                         <Text style={styles.sumTitle}>资产利润</Text>
                     </View>
                 </View>
@@ -136,13 +150,13 @@ class StockCapital extends React.Component {
                 <Text style={styles.itemName}>{obj.ItemName}</Text>
                 <View style={{flexDirection:'column', flex:1, marginLeft:15,}}>
                     <Text style={styles.barcode}>
-                        {obj.BarCode}
-                        <Text style={{marginLeft:10, fontSize:12, color:'#fff', backgroundColor:'#ccc'}}>{obj.ItemStyle}</Text>
+                        <Text style={{marginRight:5,paddingLeft:5, fontSize:12, color:'#fff', backgroundColor:'#ccc'}}>{obj.ItemStyle}</Text>
+                        <Text>{obj.BarCode}</Text>
                     </Text>
                     <View style={{flexDirection:'row'}}>
                         <Text>售价:¥{obj.SellPrice}</Text>
-                        <Text style={{marginLeft:20,}}>进价:¥{obj.InputPrice}</Text>
-                        <Text style={{marginLeft:20,}}>库存:{obj.ItemCountNum}</Text>
+                        <Text style={{marginLeft:8,}}>进价:¥{obj.InputPrice}</Text>
+                        <Text style={{marginLeft:8,}}>库存:{obj.ItemCountNum}</Text>
                     </View>
                 </View>
             </View>
@@ -189,17 +203,20 @@ const styles = StyleSheet.create({
     },
     outerRow: {
         flexDirection: 'row',
+        borderBottomColor: '#ccc',
+        borderBottomWidth: StyleSheet.hairlineWidth,
     },
     sumRow: {
         flex: 1,
         flexDirection: 'column',
-        height: 120,
+        height: 80,
         justifyContent: 'center',
         alignItems: 'center',
         padding: 10,
         backgroundColor: '#fff',
+
         borderRightWidth: StyleSheet.hairlineWidth,
-        borderRightColor: '#333',
+        borderRightColor: '#ccc',
     },
     sumTitle: {
         color: '#CCCC99',
@@ -226,7 +243,7 @@ const styles = StyleSheet.create({
         padding: 2
     },
     barcode: {
-        flex:1,
+        flex: 1,
         fontSize: 16,
         color: '#0099CC',
         fontWeight: 'bold',

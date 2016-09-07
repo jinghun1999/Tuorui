@@ -92,13 +92,19 @@ class Income extends React.Component {
                     'Authorization': NetUtil.headerAuthorization(rets[0].user.Mobile, rets[0].pwd, rets[1].hospital.Registration, rets[0].user.Token)
                 };
                 NetUtil.postJson(CONSTAPI.HOST + '/HasPaidTotal/GetModelList', postdata, header, function (data) {
-                    if (data.Sign && data.Message != null) {
+                    let ds = data.Message;
+                    let saleCount = 0, saleAmount = 0.00, saleCB = 0.00, yhCB = 0.00, otherCB = 0.00, lr = 0.00;
+                    if (data.Sign && ds != null) {
+                        ds.forEach((d)=> {
+                            saleCount += d.TotalNum;
+                        });
                         _this.setState({
-                            dataSource: data.Message,
+                            dataSource: ds,
                             loaded: true,
+                            saleCount: saleCount,
                         });
                     } else {
-                        alert("获取数据失败：" + data.Message);
+                        alert("获取数据失败：" + ds);
                         _this.setState({
                             loaded: true,
                         });
@@ -123,32 +129,34 @@ class Income extends React.Component {
         return (
             <View style={{backgroundColor:'#e7e7e7'}}>
                 <View style={styles.hd}>
-                    <Text style={{color:'#CC0033'}}>营收明细</Text>
+                    <Text style={{color:'#CC0033'}}>营收汇总</Text>
                 </View>
                 <View style={styles.outerRow}>
                     <View style={styles.sumRow}>
-                        <Text style={styles.sumValue}>1200</Text>
+                        <Text style={styles.sumValue}>{this.state.saleCount}</Text>
                         <Text style={styles.sumTitle}>销售数量</Text>
-                    </View>
-                    <View style={styles.sumRow}>
-                        <Text style={styles.sumValue}>1200</Text>
-                        <Text style={styles.sumTitle}>销售额</Text>
                     </View>
                     <View style={[styles.sumRow,{borderRightWidth:0}]}>
                         <Text style={styles.sumValue}>1200</Text>
-                        <Text style={styles.sumTitle}>销售成本</Text>
+                        <Text style={styles.sumTitle}>销售额</Text>
                     </View>
                 </View>
                 <View style={styles.outerRow}>
-                    <View style={[styles.sumRow,{borderBottomWidth:0}]}>
+                    <View style={styles.sumRow}>
+                        <Text style={styles.sumValue}>1200</Text>
+                        <Text style={styles.sumTitle}>销售成本</Text>
+                    </View>
+                    <View style={[styles.sumRow,{borderRightWidth:0}]}>
                         <Text style={styles.sumValue}>1200034.32</Text>
                         <Text style={styles.sumTitle}>优惠成本</Text>
                     </View>
-                    <View style={[styles.sumRow,{borderBottomWidth:0}]}>
+                </View>
+                <View style={[styles.outerRow,{borderBottomWidth:0,}]}>
+                    <View style={styles.sumRow}>
                         <Text style={styles.sumValue}>1200</Text>
                         <Text style={styles.sumTitle}>其他成本</Text>
                     </View>
-                    <View style={[styles.sumRow,{borderBottomWidth:0, borderRightWidth:0}]}>
+                    <View style={[styles.sumRow,{borderRightWidth:0}]}>
                         <Text style={styles.sumValue}>1200</Text>
                         <Text style={styles.sumTitle}>利润</Text>
                     </View>
@@ -165,67 +173,53 @@ class Income extends React.Component {
             <View style={styles.row}>
                 <Text style={styles.itemName}>{obj.ItemName}</Text>
                 <Text style={styles.guestName}>{obj.GestName}</Text>
-                <Text style={{marginLeft:20,}}>实价:{obj.InfactPrice}</Text>
-                <Text style={{marginLeft:20,}}>优惠:{obj.DisCountMoney}</Text>
-                <Text style={{marginLeft:20,}}>数量:{obj.TotalNum}</Text>
+                <Text>实价:¥{obj.InfactPrice}</Text>
+                <Text style={{marginLeft:8,}}>优惠:¥{obj.DisCountMoney}</Text>
+                <Text style={{marginLeft:8,}}>数量:{obj.TotalNum}</Text>
             </View>
         );
     }
 
     render() {
         let searchBox = (<View style={{flexDirection:'row', alignItems:'center', backgroundColor:'#fff'}}>
-            <Text style={{marginLeft:10}}>从</Text>
-            <DatePicker
-                date={this.state.dateFrom}
-                mode="date"
-                placeholder="选择日期"
-                format="YYYY-MM-DD"
-                minDate="2010-01-01"
-                maxDate="2020-01-01"
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                showIcon={true}
-                customStyles={{
-                    dateIcon: {
-                      position: 'absolute',
-                      right: 0,
-                      top: 4,
-                      height:30,
-                      marginLeft: 0
-                    },
+                <Text style={{marginLeft:10}}>从</Text>
+                <DatePicker
+                    date={this.state.dateFrom}
+                    mode="date"
+                    placeholder="选择日期"
+                    format="YYYY-MM-DD"
+                    minDate="2010-01-01"
+                    maxDate="2020-01-01"
+                    confirmBtnText="Confirm"
+                    cancelBtnText="Cancel"
+                    showIcon={false}
+                    style={{width:80}}
+                    customStyles={{
                     dateInput: {
-                      marginRight: 36,
                       height:30,
                       borderWidth:StyleSheet.hairlineWidth,
                     },
                   }}
-                onDateChange={(date) => {this.setState({dateFrom: date})}}/>
-            <Text>到</Text>
-            <DatePicker
-                date={this.state.dateTo}
-                mode="date"
-                placeholder="选择日期"
-                format="YYYY-MM-DD"
-                minDate="2010-01-01"
-                maxDate="2020-01-01"
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                showIcon={true}
-                customStyles={{
-                    dateIcon: {
-                      position: 'absolute',
-                      right: 0,
-                      top: 4,
-                      height:30,
-                      marginLeft: 0
-                    },
+                    onDateChange={(date) => {this.setState({dateFrom: date})}}/>
+                <Text>到</Text>
+                <DatePicker
+                    date={this.state.dateTo}
+                    mode="date"
+                    placeholder="选择日期"
+                    format="YYYY-MM-DD"
+                    minDate="2010-01-01"
+                    maxDate="2020-01-01"
+                    confirmBtnText="Confirm"
+                    cancelBtnText="Cancel"
+                    showIcon={false}
+                    style={{width:80}}
+                    customStyles={{
                     dateInput: {
-                      marginRight: 36,
                       height:30,
                       borderWidth:StyleSheet.hairlineWidth,
                     },
                   }}
-                onDateChange={(date) => {this.setState({dateTo: date})}}/>
+                    onDateChange={(date) => {this.setState({dateTo: date})}}/>
             <TouchableHighlight
                 underlayColor='#4169e1'
                 style={styles.searchBtn}
@@ -274,19 +268,20 @@ const styles = StyleSheet.create({
     },
     outerRow: {
         flexDirection: 'row',
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderBottomColor: '#ccc',
     },
     sumRow: {
         flex: 1,
         flexDirection: 'column',
-        height: 120,
+        height: 80,
         justifyContent: 'center',
         alignItems: 'center',
         padding: 10,
         backgroundColor: '#fff',
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: '#333',
+
         borderRightWidth: StyleSheet.hairlineWidth,
-        borderRightColor: '#333',
+        borderRightColor: '#ccc',
     },
     sumTitle: {
         color: '#CCCC99',
@@ -317,7 +312,7 @@ const styles = StyleSheet.create({
         color: '#CC0033',
         fontWeight: 'bold',
         width: 50,
-        marginLeft: 20,
+        marginLeft: 5,
     },
     searchBtn: {
         height: 30,
