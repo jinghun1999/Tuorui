@@ -34,6 +34,9 @@ class AppointDetails extends React.Component {
         return (
             <View style={styles.container}>
                 <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
+                <View style={styles.titleStyle}>
+                    <Text style={{color:'#fff',marginLeft:10,fontSize:16,}}>宠物信息</Text>
+                </View>
                 <View style={styles.inputViewStyle}>
                     <Text style={{width:100,}}>宠物名称</Text>
                     <TextInput value={this.props.appointInfo.petName}
@@ -51,6 +54,9 @@ class AppointDetails extends React.Component {
                                keyboardType={'default'}
                                style={{height: 40, borderWidth:0, flex:1}}
                     />
+                </View>
+                <View style={styles.titleStyle}>
+                    <Text style={{color:'#fff',marginLeft:10,fontSize:16,}}>预约信息</Text>
                 </View>
                 <View style={styles.inputViewStyle}>
                     <Text style={{width:100,}}>预约人</Text>
@@ -116,6 +122,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderBottomColor: '#ccc',
         borderBottomWidth: StyleSheet.hairlineWidth,
+    },
+    titleStyle: {
+        height: 20,
+        margin: 2,
+        flexDirection: 'row',
+        backgroundColor: '#ccc',
     },
 })
 module.exports = AppointDetails;
