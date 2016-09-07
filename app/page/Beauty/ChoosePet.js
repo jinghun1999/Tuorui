@@ -76,21 +76,21 @@ class ChoosePet extends Component {
         var data = {
             'data': [
                 {   'petId': 1,'petName': '小金','variety':'金毛','petCaseNum':'20160831001','birthDate':'2016-08-18',
-                    'sterilizationState':1,'petSex':'雌性','petColor':'gold','petType':'middle','petState':'alive',
+                    'sterilizationState':1,'petSex':'2','petColor':'gold','petType':'middle','petState':'alive',
                     'image':'./../../../image/pet.jpg','reMarks':'没有更多备注了'},
                 {
                     'petId': 2,'petName': '娃娃','variety':'吉娃娃','petCaseNum':'20160831001','birthDate':'2008-08-18',
-                    'sterilizationState':1,'petSex':'雌性','petColor':'white','petType':'small','petState':'alive',
+                    'sterilizationState':1,'petSex':'1','petColor':'white','petType':'small','petState':'alive',
                     'image':'./../../../image/pet.jpg','reMarks':'没有更多备注了',
                 },
                 {
                     'petId': 3,'petName': '家虎','variety':'藏獒','petCaseNum':'20160831001','birthDate':'1988-08-18',
-                    'sterilizationState':1,'petSex':'雄性','petColor':'black','petType':'big','petState':'alive',
+                    'sterilizationState':1,'petSex':'1','petColor':'black','petType':'big','petState':'alive',
                     'image':'./../../../image/pet.jpg','reMarks':'没有更多备注了',
                 },
                 {
                     'petId': 4,'petName': '茱莉','variety':'茶杯犬','petCaseNum':'20160831001','birthDate':'2010-08-01',
-                    'sterilizationState':1,'petSex':'雌性','petColor':'yellow','petType':'small','petState':'alive',
+                    'sterilizationState':1,'petSex':'2','petColor':'yellow','petType':'small','petState':'alive',
                     'image':'./../../../image/pet.jpg','reMarks':'没有更多备注了',
                 },
             ]

@@ -34,7 +34,6 @@ class BeautyServices extends React.Component {
             isOpen:false,
             totalNum:0,
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
-            petName:'ssss',
         }
     }
 
@@ -107,19 +106,26 @@ class BeautyServices extends React.Component {
             navigator.push({
                 name:'ChoosePet',
                 component:ChoosePet,
-                params:{headTitle:'选择宠物'},
-                getResult: function (pet){
-                    _this.setState({
-                        petSource: pet,
-                    })
-                }
+                params:{
+                    headTitle:'选择宠物',
+                    getResult: function (pet){
+                            _this.setState({
+                                petSource: pet,
+                            })
+                    }
+                },
             })
         }
+    }
+    _onEditInfo(pet){
+        alert('save');
     }
     render() {
         return (
             <View style={styles.container}>
-                <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
+                <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}
+                      canAdd={true} edit="保存" editInfo={this._onEditInfo.bind(this)}
+                />
                 <ScrollView key={'scrollView'}
                             horizontal={false}
                             showsVerticalScrollIndicator={true}
@@ -147,7 +153,7 @@ class BeautyServices extends React.Component {
                     </View>
                     <View style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>宠物名称</Text>
-                        <TextInput value={this.state.petName}
+                        <TextInput value={this.state.petSource.petName}
                                    editable={this.state.enable}
                                    underlineColorAndroid={'transparent'}
                                    keyboardType={'default'}
@@ -162,7 +168,7 @@ class BeautyServices extends React.Component {
                     </View>
                     <View style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>性别</Text>
-                        <Picker selectedValue={this.state.petSource.petSex==null?0:this.state.petSource.petSex}
+                        <Picker selectedValue={this.state.petSource.petSex}
                                 mode="dropdown"
                                 enabled={this.state.enable}
                                 style={{height: 35, borderWidth:0, flex:1,}}
@@ -184,7 +190,7 @@ class BeautyServices extends React.Component {
                     <View style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>宠物种类</Text>
                         <Picker
-                            selectedValue={this.state.petSource.petType==null?0:this.state.petSource.petType}
+                            selectedValue={this.state.petSource.petType}
                             mode="dropdown"
                             enabled={this.state.enable}
                             style={{height: 35, borderWidth:0, flex:1}}
@@ -199,7 +205,7 @@ class BeautyServices extends React.Component {
                     <View style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>宠物品种</Text>
                         <Picker
-                            selectedValue={this.state.petSource.variety==null?0:this.state.petSource.variety}
+                            selectedValue={this.state.petSource.variety}
                             mode="dropdown"
                             enabled={this.state.enable}
                             style={{height: 35, borderWidth:0, flex:1}}
@@ -209,12 +215,14 @@ class BeautyServices extends React.Component {
                             <Picker.Item label="美国短毛猫" value="美国短毛猫"/>
                             <Picker.Item label="柴犬" value="柴犬"/>
                             <Picker.Item label="吉娃娃" value="吉娃娃"/>
+                            <Picker.Item label="藏獒" value="藏獒"/>
+                            <Picker.Item label="茶杯犬" value="茶杯犬"/>
                         </Picker>
                     </View>
                     <View style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>绝育状态</Text>
                         <Picker
-                            selectedValue={this.state.petSource.petState==null?0:this.state.petSource.petState}
+                            selectedValue={this.state.petSource.petState}
                             mode="dropdown"
                             enabled={this.state.enable}
                             style={{height: 35, borderWidth:0, flex:1}}
@@ -301,6 +309,7 @@ class BeautyServices extends React.Component {
                                   renderRow={this._onRenderRow.bind(this)}
                         />
                     </View>
+
                 </ScrollView>
             </View>
         )
