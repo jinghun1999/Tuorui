@@ -26,7 +26,7 @@ class DrugDetails extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            url: Global.WEB + '/wx/home#/InfoDetail/' + this.props.requestId,
+            url: Global.WEB + '/App/New/NewDetail?RequestID=' + this.props.requestId,
             loaded: false,
             title: Util.cutString(this.props.title, 24, '...'),
             isCollect: false,
