@@ -118,7 +118,7 @@ class MyInspect extends Component {
                         <Text>检测项目: {Inspect.ItemName}</Text>
                         <Text>样本: {Inspect.StyleBook}</Text>
                     </View>
-                    <View style={{justifyContent:'center',marginRight:15}}>
+                    <View style={{justifyContent:'center',alignItems:'center',marginRight:15}}>
                         {stutas}
                         <Text style={{textAlign:'center'}}>{Inspect.CreatedOn}</Text>
                     </View>

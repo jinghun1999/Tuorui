@@ -11,7 +11,8 @@ import {
     View,
     ToastAndroid,
     TextInput,
-    Alert
+    Alert,
+    TouchableHighlight
 } from 'react-native';
 import NButton from '../commonview/NButton';
 import Head from '../commonview/Head';
@@ -30,41 +31,73 @@ class Register extends Component {
             navigator.pop();
         }
     }
+    _register() {
+        let _this = this;
+        if (!_this.state.phoneNumber || _this.state.phoneNumber.length == 0) {
+            ToastAndroid.show("请输入用户名", ToastAndroid.SHORT);
+            return;
+        }
+        if (!_this.state.verifycode || _this.state.verifycode.leaf == 0) {
+            ToastAndroid.show("请输入验证码", ToastAndroid.SHORT);
+            return;
+        }
+        if (!_this.state.pwd || _this.state.pwd.length == 0) {
+            ToastAndroid.show("请输入密码", ToastAndroid.SHORT);
+            return;
+        }
+    }
+
     render() {
         return (
-            <View style={{backgroundColor:'#f4f4f4',flex:1}}>
-                <Head title={this.props.headTitle} canAdd={true} canBack={true}
+            <View style={{backgroundColor: '#f4f4f4', flex: 1}}>
+                <Head title={'用户注册'} canAdd={true} canBack={true}
                       onPress={this._onBack.bind(this)}/>
                 <TextInput
-                    style={styles.style_user_input}
+                    style={styles._input}
                     placeholder='手机号'
                     numberOfLines={1}
                     underlineColorAndroid={'transparent'}
-                    onChangeText={(text) => this.setState({user: text})}
+                    onChangeText={(text) => this.setState({phoneNumber: text})}
                     textAlignVertical='center'
                     textAlign='center'/>
-                <View style={{flexDirection:'row',height:1,backgroundColor:'#f4f4f4', marginTop:20}}/>
+                <View style={{flexDirection: 'row', backgroundColor: '#f4f4f4', marginTop: 10}}>
+                    <TextInput
+                        style={styles.verifycode_input}
+                        placeholder='验证码'
+                        numberOfLines={1}
+                        underlineColorAndroid={'transparent'}
+                        onChangeText={(text) => this.setState({verifycode: text})}
+                        secureTextEntry={true}
+                        textAlignVertical='center'
+                        textAlign='center'
+                    />
+                    <View style={{flex:3,paddingLeft:10}}>
+                        <TouchableHighlight style={styles.button} underlayColor="#B5B5B5">
+                            <Text style={styles.buttonText}>获取验证码</Text>
+                        </TouchableHighlight>
+                    </View>
+                </View>
                 <TextInput
-                    style={styles.style_authcode_input}
-                    placeholder='验证码'
+                    style={styles._input}
+                    placeholder='密码'
                     numberOfLines={1}
                     underlineColorAndroid={'transparent'}
                     onChangeText={(text) => this.setState({pwd: text})}
                     secureTextEntry={true}
                     textAlignVertical='center'
                     textAlign='center'
-                    ref='authcode'
-                    onFocus={() => {this.refs.authcode.focus()}}
+                    ref='pwd'
+                    onFocus={() => {
+                        this.refs.pwd.focus()
+                    }}
                 />
-                <NButton
-                    underlayColor='#4169e1'
-                    style={styles.style_authcode_button}
-                    text='获取验证码' />
                 <View>
                     <NButton
                         underlayColor='#4169e1'
-                        style={styles.style_view_button}
-                        text='注册' />
+                        style={styles.register_button}
+                        text='注册'
+                        onPress={this._register.bind(this)}
+                    />
                 </View>
             </View>
         );
@@ -72,16 +105,17 @@ class Register extends Component {
 }
 
 const styles = StyleSheet.create({
-    style_user_input: {
+    _input: {
         backgroundColor: '#fff',
         marginTop: 10,
         height: 45,
     },
-    style_authcode_input: {
+    verifycode_input: {
+        flex:7,
         backgroundColor: '#fff',
-        height: 45,
+        height:45
     },
-    style_view_commit: {
+    register_button: {
         marginTop: 15,
         marginLeft: 10,
         marginRight: 10,
@@ -92,39 +126,18 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    style_view_button: {
-        marginTop: 15,
-        marginLeft: 10,
-        marginRight: 10,
+    button: {
         backgroundColor: '#63B8FF',
-        borderColor: '#5bc0de',
-        height: 45,
-        borderRadius: 5,
+        borderColor:'#5bc0de',
+        height:45,
+        borderRadius:5,
         justifyContent: 'center',
         alignItems: 'center',
     },
-    style_authcode_button: {
-        marginLeft: 20,
-        backgroundColor: '#63B8FF',
-        borderColor: '#5bc0de',
-        borderRadius: 5,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    style_view_unlogin: {
-        fontSize: 15,
-        color: '#63B8FF',
-        marginLeft: 10,
-    },
-    style_view_register: {
-        fontSize: 15,
-        color: '#63B8FF',
-        marginRight: 10,
-        alignItems: 'flex-end',
-        flex: 1,
-        flexDirection: 'row',
-        textAlign: 'right',
-    },
+    buttonText: {
+        color:'#fff',
+        fontSize:16,
+    }
 });
 
 export default Register

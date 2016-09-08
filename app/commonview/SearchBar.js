@@ -19,11 +19,18 @@ class SearchBar extends Component {
     }
 
     render() {
-        return (
-            <View style={styles.container}>
+        let back = null;
+        let canBack = this.props.canBack || this.props.canBack == undefined;
+        if (canBack) {
+            back = (
                 <TouchableOpacity style={styles.buttonStyle} onPress={this.props.onBack}>
                     <Icon name={'ios-arrow-back'} size={25} color={'#666'}/>
                 </TouchableOpacity>
+            )
+        }
+        return (
+            <View style={styles.container}>
+                {back}
                 <View style={styles.inputContainer}>
                     <View style={styles.iconStyle}>
                         <Icon name={'ios-search'} size={30} color={'#666'}/>
@@ -63,6 +70,8 @@ const styles = StyleSheet.create({
         height: 40,
         borderWidth: StyleSheet.hairlineWidth,
         borderRadius: 4,
+        marginLeft: 5,
+        marginRight: 5,
     },
     buttonStyle: {
         height: 45,

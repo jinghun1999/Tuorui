@@ -177,7 +177,7 @@ class App extends Component {
                                     onPress={this._onPress.bind(this, MyInspect, 'MyInspect', '拓瑞检测')}/>
                     </View>
                     <View style={styles.iconViewStyle}>
-                        <IconButton text="我的设备" iconName={'md-phone-landscape'} iconColor={'#FF9999'}
+                        <IconButton text="我的设备" iconName={'md-phone-landscape'} iconColor={'#336666'}
                                     onPress={this._onPress.bind(this, InspectQuery, 'InspectQuery', '我的设备')}/>
                         <IconButton text="数据报表" iconName={'ios-podium'} iconColor={'#6666FF'}
                                     onPress={this._onPress.bind(this, ReportIndex, 'ReportIndex', '数据报表')}/>
