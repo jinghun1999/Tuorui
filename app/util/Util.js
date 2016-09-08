@@ -56,6 +56,15 @@ class Util extends React.Component {
     static base64Encode(str) {
         return base64.encode(str);
     }
+
+    static GetDateStr(adddays) {
+        var dd = new Date();
+        dd.setDate(dd.getDate() + adddays);//adddays
+        var y = dd.getFullYear();
+        var m = dd.getMonth() + 1;//获取当前月份的日期
+        var d = dd.getDate();
+        return y + "-" + m + "-" + d;
+    }
 }
 
 module.exports = Util;
