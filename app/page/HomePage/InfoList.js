@@ -8,6 +8,7 @@ import {
     ListView,
     View,
     Text,
+    Alert,
     TouchableOpacity,
     TextInput,
     ActivityIndicator,
@@ -16,16 +17,18 @@ import {
     } from 'react-native';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
-import SearchInfo from './InfoSearch';
+import InfoSearch from './InfoSearch';
 import InfoDetail from './InfoDetail';
+import SearchBar from './../../commonview/SearchBar';
 import Loading from '../../commonview/Loading';
 
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 class Information extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            kw: '',
             pageIndex: 1,
             pageSize: 15,
             listInfoSource: new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2}),
@@ -37,16 +40,13 @@ class Information extends React.Component {
     }
 
     componentDidMount() {
-        let _this = this;
-        _this.timer = setTimeout(
-            () => {
-                _this._loadData();
-            }, 100
-        );
+        InteractionManager.runAfterInteractions(() => {
+            this._loadData();
+        });
     }
 
     componentWillUnmount() {
-        this.timer && clearTimeout(this.timer);
+
     }
 
     //返回方法
@@ -60,30 +60,28 @@ class Information extends React.Component {
     _loadData() {
         /*从缓存中读取*/
         var _this = this;
-        InteractionManager.runAfterInteractions(() => {
-            storage.load({
-                key: 'INFORMATION',
-                autoSync: false,
-                syncInBackground: false
-            }).then(ret => {
-                _this.setState({
-                    infoCache: ret.InfoList,
-                    loaded: true,
-                    isRefreshing: false,
-                });
-            }).catch(err => {
-                alert(err.message);
-                _this._fetchData(_this.state.pageIndex, false);
+        storage.load({
+            key: 'INFORMATION',
+            autoSync: false,
+            syncInBackground: false
+        }).then(ret => {
+            _this.setState({
+                infoCache: ret.InfoList,
+                loaded: true,
+                isRefreshing: false,
             });
+        }).catch(err => {
+            alert(err.message);
+            _this._fetchData(_this.state.pageIndex, false);
         });
     }
 
     _fetchData(pageIndex, isNext) {
         let _this = this;
-        let fetchUri = CONSTAPI.APIAPP + '/AppInfo/GetInformationByName?infoName=&pageIndex=' + pageIndex + '&pageSize=' + _this.state.pageSize;
+        let fetchUri = CONSTAPI.APIAPP + '/AppInfo/GetInformationByName?infoName=' + _this.state.kw + '&pageIndex=' + pageIndex + '&pageSize=' + _this.state.pageSize;
         NetUtil.get(fetchUri, false, function (result) {
             if (result == null) {
-                alert("null");
+                alert("null result...");
                 return false;
             }
             let _dataCache = _this.state.infoCache;
@@ -97,7 +95,7 @@ class Information extends React.Component {
             }
             if (result.Status) {
                 _this.setState({
-                    totalPage: result.TotalPage,
+                    totalPage: result.Data.TotalPage,
                     infoCache: _dataCache,
                     pageIndex: pageIndex,
                     loaded: true,
@@ -110,13 +108,17 @@ class Information extends React.Component {
                         }
                     });
                 }
+            } else {
+                Alert.alert('提示', '数据获取失败' + result.Data)
             }
             _this.setState({isRefreshing: false,});
         });
     }
 
     _onEndReached() {
-        this._fetchData(this.state.pageIndex + 1, true);
+        if (this.state.pageIndex < this.state.totalPage) {
+            this._fetchData(this.state.pageIndex + 1, true);
+        }
     }
 
     _rowPress(info) {
@@ -139,8 +141,8 @@ class Information extends React.Component {
         const {navigator} = _this.props;
         if (navigator) {
             navigator.push({
-                name: 'SearchInfo',
-                component: SearchInfo,
+                name: 'InfoSearch',
+                component: InfoSearch,
                 param: {}
             })
         }
@@ -155,11 +157,29 @@ class Information extends React.Component {
     _renderInfo(info) {
         return (
             <TouchableOpacity style={styles.rows} onPress={()=>this._rowPress(info)}>
-                {/*<Ionicons name={'local-post-office'} size={20} color={'#ADD8E6'} style={styles.icon}/>*/}
+                {/*<Icon name={'local-post-office'} size={20} color={'#ADD8E6'} style={styles.icon}/>*/}
                 <Text style={styles.rowTitle}>{info.InfoTitle}</Text>
-                <Ionicons name={'ios-arrow-forward'} size={20} color={'#888'} style={styles.arrow}/>
+                <Icon name={'ios-arrow-forward'} size={20} color={'#888'} style={styles.arrow}/>
             </TouchableOpacity>
         )
+    }
+
+    renderFooter() {
+        if (this.state.pageIndex >= this.state.totalPage) {
+            return (
+                <View style={{height: 40, justifyContent:'center', alignItems:'center'}}>
+                    <Text>没有更多数据了~</Text>
+                </View>
+            )
+        } else {
+            return (
+                <ActivityIndicator />
+            )
+        }
+    }
+
+    _onSearchPress() {
+        this._fetchData(1, false);
     }
 
     render() {
@@ -173,22 +193,7 @@ class Information extends React.Component {
                               initialListSize={15}
                               pageSize={10}
                               enableEmptySections={true}
-                              renderFooter={()=>
-                                <View style={{height: 120}}>
-                                    <ActivityIndicator />
-                                </View>
-                              }
-                              renderHeader={()=>
-                                <TouchableOpacity style={styles.touchStyle} onPress={this._onPressSearch.bind(this)}>
-                                    <View style={styles.iconStyle}>
-                                        <Ionicons name={'ios-search'} size={20} color={'#666'}/>
-                                    </View>
-                                    <Text style={{flex:1,}}/>
-                                    <View style={styles.textStyle}>
-                                        <Text>搜索</Text>
-                                    </View>
-                                </TouchableOpacity>
-                              }
+                              renderFooter={this.renderFooter.bind(this)}
                               refreshControl={
                                   <RefreshControl
                                     refreshing={this.state.isRefreshing}
@@ -206,7 +211,12 @@ class Information extends React.Component {
         }
         return (
             <View style={styles.container}>
-                <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
+                <SearchBar placeholder="请输入关键字"
+                           onChangeText={(text)=>{this.setState({kw: text})}}
+                           keyboardType={'default'}
+                           onBack={this._onBack.bind(this)}
+                           onPress={this._onSearchPress.bind(this)}
+                    />
                 {body}
             </View>
         );
