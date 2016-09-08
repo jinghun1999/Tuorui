@@ -163,6 +163,7 @@ class TopScreen extends Component {
             })
         }
     }
+
     _onPress(com, name, title, pid) {
         var _this = this;
         const { navigator } = _this.props;
@@ -181,7 +182,8 @@ class TopScreen extends Component {
     renderViewPage(data) {
         return (<Image source={data} style={styles.page}/>);
     }
-    renderInfo(Info){
+
+    renderInfo(Info) {
         return (
             <TouchableOpacity style={styles.rows} onPress={()=>this._infoClick(Info)}>
                 <Icon name={'local-post-office'} size={20} color={'#ADD8E6'} style={styles.rowIcon}/>
@@ -210,9 +212,7 @@ class TopScreen extends Component {
             );
         }
         return (
-            <View style={{height: 120}}>
-                <ActivityIndicator />
-            </View>
+            <ActivityIndicator />
         );
     }
 
@@ -246,6 +246,9 @@ class TopScreen extends Component {
                                               onPress={this._onPress.bind(this, InfoList, 'InfoList', '行业资讯', null)}/>
                                     <HomeIcon text="工具" iconName={'ios-build'} iconColor={'#FFAEB9'}
                                               onPress={this._onPress.bind(this, ToolsHome, 'ToolsHome', '健康工具', null)}/>
+                                </View>
+                                <View style={{padding:5, borderLeftWidth:5, borderLeftColor:'#99CCFF', backgroundColor:'#eef4ff'}}>
+                                    <Text style={{fontWeight:'bold', color:'#3e82ff'}}>最新资讯</Text>
                                 </View>
                               </View>}
                         renderFooter={this.renderFooter.bind(this)}

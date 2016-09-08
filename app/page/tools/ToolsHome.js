@@ -46,8 +46,8 @@ export default class ToolsHome extends React.Component {
                         <Image source={require('../../../image/tool_lxtz.png')}
                                style={styles.imageIcon}/>
                         <View style={styles.view2}>
-                            <Text style={styles.t0}>理想体重计算器</Text>
-                            <Text style={styles.t1}>理想体重指的是体重数值在正常范围内，构成比例...</Text>
+                            <Text style={styles.t0}>药物计算</Text>
+                            <Text style={styles.t1}>病患宠物需要的药物剂量计算器...</Text>
                         </View>
                         <Icon name={'chevron-right'} size={20} color={'#888'} style={styles.icoRight}/>
                     </View>
@@ -55,8 +55,8 @@ export default class ToolsHome extends React.Component {
                         <Image source={require('../../../image/tool_bmi.png')}
                                style={styles.imageIcon}/>
                         <View style={styles.view2}>
-                            <Text style={styles.t0}>体重指数BMI</Text>
-                            <Text style={styles.t1}>想知道您的体重是否超标吗？体重指数(BMI)能反应...</Text>
+                            <Text style={styles.t0}>营养计算</Text>
+                            <Text style={styles.t1}>计算动物体重是否超标，能量需求范围...</Text>
                         </View>
                         <Icon name={'chevron-right'} size={20} color={'#888'} style={styles.icoRight}/>
                     </View>
@@ -64,8 +64,8 @@ export default class ToolsHome extends React.Component {
                         <Image source={require('../../../image/tool_ytb.png')}
                                style={styles.imageIcon}/>
                         <View style={styles.view2}>
-                            <Text style={styles.t0}>腰臀比计算</Text>
-                            <Text style={styles.t1}>想知道您的体重是否超标吗？体重指数(BMI)能反应...</Text>
+                            <Text style={styles.t0}>单位换算</Text>
+                            <Text style={styles.t1}>体重、长度、体积、温度等常用单位换算...</Text>
                         </View>
                         <Icon name={'chevron-right'} size={20} color={'#888'} style={styles.icoRight}/>
                     </View>
@@ -73,8 +73,8 @@ export default class ToolsHome extends React.Component {
                         <Image source={require('../../../image/tool_nlxq.png')}
                                style={styles.imageIcon}/>
                         <View style={styles.view2}>
-                            <Text style={styles.t0}>每日能量需求</Text>
-                            <Text style={styles.t1}>想知道您一天究竟该摄入多少能量吗？根据您提供...</Text>
+                            <Text style={styles.t0}>急救计算</Text>
+                            <Text style={styles.t1}>紧急救助药物查询，误食食物如何用药...</Text>
                         </View>
                         <Icon name={'chevron-right'} size={20} color={'#888'} style={styles.icoRight}/>
                     </View>
@@ -82,8 +82,8 @@ export default class ToolsHome extends React.Component {
                         <Image source={require('../../../image/tool_yys.png')}
                                style={styles.imageIcon}/>
                         <View style={styles.view2}>
-                            <Text style={styles.t0}>营养素计算器</Text>
-                            <Text style={styles.t1}>每种食物均含有不同的营养素，想了解您摄入食物中...</Text>
+                            <Text style={styles.t0}>心脏指数计算</Text>
+                            <Text style={styles.t1}>心率及平均动脉压...</Text>
                         </View>
                         <Icon name={'chevron-right'} size={20} color={'#888'} style={styles.icoRight}/>
                     </View>
@@ -91,16 +91,16 @@ export default class ToolsHome extends React.Component {
                     <View style={styles.row}>
                         <Image source={require('../../../image/tool_j.png')} style={styles.imageIcon}/>
                         <View style={styles.view2}>
-                            <Text style={styles.t0}>减掉一公斤</Text>
-                            <Text style={styles.t1}>不同的运动锻炼方法，能量消耗的数量和方式也不相... </Text>
+                            <Text style={styles.t0}>输液计算</Text>
+                            <Text style={styles.t1}>宠物就诊输液各指标值反馈... </Text>
                         </View>
                         <Icon name={'chevron-right'} size={20} color={'#888'} style={styles.icoRight}/>
                     </View>
                     <View style={styles.row}>
                         <Image source={require('../../../image/tool_ydnh.png')} style={styles.imageIcon}/>
                         <View style={styles.view2}>
-                            <Text style={styles.t0}>运动能耗计算</Text>
-                            <Text style={styles.t1}>用食物重量图谱可以帮助你... </Text>
+                            <Text style={styles.t0}>血气计算</Text>
+                            <Text style={styles.t1}>酸碱平衡和阴离子间隙计算... </Text>
                         </View>
                         <Icon name={'chevron-right'} size={20} color={'#888'} style={styles.icoRight}/>
                     </View>

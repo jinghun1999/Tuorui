@@ -139,8 +139,8 @@ class InspectQuery extends Component {
             }
             else {
                 body = (
-                    <View style={styles.PromptContainer}>
-                        <View style={styles.PromptBody}>
+                    <View style={styles.noResultContainer}>
+                        <View style={styles.noResult}>
                             <Text>暂无筛选数据，请修改查询条件后重试！</Text>
                         </View>
                     </View>
@@ -196,15 +196,15 @@ class InspectQuery extends Component {
     }
 }
 const styles = StyleSheet.create({
-    PromptContainer: {
+    noResultContainer: {
         flex: 1,
         flexDirection: 'row',
     },
-    PromptBody: {
+    noResult: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#99CCFF',
+        backgroundColor: '#FFFFCC',
         margin: 10,
         height: 50,
         padding: 20,

@@ -10,7 +10,7 @@ import{
     View,
     TouchableOpacity,
     TextInput,
-} from 'react-native';
+    } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 class SearchBar extends Component {
     constructor(props) {
@@ -22,24 +22,23 @@ class SearchBar extends Component {
         return (
             <View style={styles.container}>
                 <TouchableOpacity style={styles.buttonStyle} onPress={this.props.onBack}>
-                <Icon name={'ios-arrow-back'} size={25} color={'#666'}/>
+                    <Icon name={'ios-arrow-back'} size={25} color={'#666'}/>
                 </TouchableOpacity>
                 <View style={styles.inputContainer}>
                     <View style={styles.iconStyle}>
-                        <Icon name={'ios-search'} size={20} color={'#666'} />
+                        <Icon name={'ios-search'} size={30} color={'#666'}/>
                     </View>
-                    <View style={{flex: 1, height: 40}}>
-                        <TextInput value={this.props.value}
-                                   onChangeText={this.props.onChangeText}
-                                   keyboardType={this.props.keyboardType}
-                                   placeholder={this.props.value}
-                                   underlineColorAndroid={'transparent'}
-                                   autoFocus={false}
-                                   style={{}}/>
-                    </View>
+                    <TextInput value={this.props.value}
+                               onChangeText={this.props.onChangeText}
+                               keyboardType={this.props.keyboardType}
+                               placeholder={this.props.placeholder}
+                               underlineColorAndroid={'transparent'}
+                               autoFocus={false}
+                               maxLength={20}
+                               style={{flex:1}}/>
                 </View>
                 <TouchableOpacity style={styles.buttonStyle} onPress={this.props.onPress}>
-                    <Text>搜索</Text>
+                    <Text style={{fontSize:16}}>搜索</Text>
                 </TouchableOpacity>
             </View>
         )
@@ -48,34 +47,35 @@ class SearchBar extends Component {
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        height: 40,
+        height: 45,
+        justifyContent: 'center',
+        alignItems: 'center',
         borderBottomWidth: StyleSheet.hairlineWidth,
-        paddingBottom:5,
+        paddingBottom: 5,
+        paddingTop: 5,
         borderBottomColor: '#ccc'
     },
     inputContainer: {
         flex: 1,
         flexDirection: 'row',
-        marginTop: 5,
         borderColor: '#666',
+        justifyContent: 'center',
+        height: 40,
         borderWidth: StyleSheet.hairlineWidth,
-        borderRadius: 10,
+        borderRadius: 4,
     },
     buttonStyle: {
-        height: 40,
+        height: 45,
         width: 50,
-        marginTop:5,
         justifyContent: 'center',
         alignItems: 'center',
-        alignSelf: 'center',
 
     },
     iconStyle: {
         height: 40,
-        width: 25,
+        width: 40,
         justifyContent: 'center',
         alignItems: 'center',
-        alignSelf: 'center',
     },
 
 })
