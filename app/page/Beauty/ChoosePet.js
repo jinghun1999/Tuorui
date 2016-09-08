@@ -13,6 +13,8 @@ import {
     ListView,
     ScrollView,
 } from 'react-native';
+import Util from '../../util/Util';
+import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
 import Icon from '../../../node_modules/react-native-vector-icons/FontAwesome';
 import Loading from '../../commonview/Loading';
@@ -22,7 +24,9 @@ class ChoosePet extends Component {
         this.state = {
             petDataSource: [],
             loaded: false,
-            kw: null,
+            kw: '',
+            pageIndex:1,
+            pageSize:15,
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
         };
     }
@@ -38,7 +42,7 @@ class ChoosePet extends Component {
         var _this = this;
         _this.timer = setTimeout(
             () => {
-                _this._fetchData();
+                _this._fetchData(_this.state.kw,1,false);
             }, 500
         )
     }
@@ -59,10 +63,14 @@ class ChoosePet extends Component {
                 style={{ flexDirection:'row',marginLeft:15, marginRight:15, paddingTop:10, paddingBottom:10, borderBottomWidth:StyleSheet.hairlineWidth, borderBottomColor:'#ccc'}}
                 onPress={()=>this._pressRow(pet)}>
                 <View style={{flex:1}}>
-                    <Text style={{fontSize:14, fontWeight:'bold'}}> {pet.petName}</Text>
+                    <Text style={{fontSize:14, fontWeight:'bold'}}> {pet.PetName}</Text>
                     <View style={{flexDirection:'row'}}>
-                        <Text style={{flex: 1,}}>编号: {pet.petId}</Text>
-                        <Text style={{flex: 1,}}>品种: {pet.variety}</Text>
+                        <Text style={{flex: 1,}}>宠物卡: {pet.PetCode}</Text>
+                        <Text style={{flex: 1,}}>品种: {pet.PetBreed}</Text>
+                    </View>
+                    <View style={{flexDirection:'row'}}>
+                        <Text style={{flex: 1,}}>会员名: {pet.GestName}</Text>
+                        <Text style={{flex: 1,}}>会员手机: {pet.MobilePhone}</Text>
                     </View>
                 </View>
                 <View style={{width:20,alignItems:'center', justifyContent:'center'}}>
@@ -71,42 +79,140 @@ class ChoosePet extends Component {
             </TouchableOpacity>
         )
     }
-    _fetchData(){
+    _fetchData(value,page,isNext){
         let _this =this;
-        var data = {
-            'data': [
-                {   'petId': 1,'petName': '小金','variety':'金毛','petCaseNum':'20160831001','birthDate':'2016-08-18',
-                    'sterilizationState':1,'petSex':'2','petColor':'gold','petType':'middle','petState':'alive',
-                    'image':'./../../../image/pet.jpg','reMarks':'没有更多备注了'},
-                {
-                    'petId': 2,'petName': '娃娃','variety':'吉娃娃','petCaseNum':'20160831001','birthDate':'2008-08-18',
-                    'sterilizationState':1,'petSex':'1','petColor':'white','petType':'small','petState':'alive',
-                    'image':'./../../../image/pet.jpg','reMarks':'没有更多备注了',
-                },
-                {
-                    'petId': 3,'petName': '家虎','variety':'藏獒','petCaseNum':'20160831001','birthDate':'1988-08-18',
-                    'sterilizationState':1,'petSex':'1','petColor':'black','petType':'big','petState':'alive',
-                    'image':'./../../../image/pet.jpg','reMarks':'没有更多备注了',
-                },
-                {
-                    'petId': 4,'petName': '茱莉','variety':'茶杯犬','petCaseNum':'20160831001','birthDate':'2010-08-01',
-                    'sterilizationState':1,'petSex':'2','petColor':'yellow','petType':'small','petState':'alive',
-                    'image':'./../../../image/pet.jpg','reMarks':'没有更多备注了',
-                },
-            ]
-        };
-        _this.setState({
-            petDataSource:data.data,
-            loaded: true,
-        })
+        //http://petservice.tuoruimed.com/service/Api/GestAndPet/GetPageRecord
+        storage.getBatchData([{
+            key: 'USER',
+            autoSync: false,
+            syncInBackground: false,
+        }, {
+            key: 'HOSPITAL',
+            autoSync: false,
+            syncInBackground: false,
+        }]).then(rets => {
+                let postdata = {
+                    "items": [{
+                        "Childrens": null,
+                        "Field": "PetStatus",
+                        "Title": null,
+                        "Operator": {"Name": "=", "Title": "等于", "Expression": null},
+                        "DataType": 0,
+                        "Value": "SM00052",
+                        "Conn": 0
+                        },{
+                        "Childrens": null,
+                        "Field": "GestStatus",
+                        "Title": null,
+                        "Operator": {"Name": "=", "Title": "等于", "Expression": null},
+                        "DataType": 0,
+                        "Value": "SM00001",
+                        "Conn": 1
+                        }, {
+                        "Childrens": null,
+                        "Field": "PetName",
+                        "Title": null,
+                        "Operator": {"Name": "like", "Title": "相似", "Expression": " @File like '%' + @Value + '%' "},
+                        "DataType": 0,
+                        "Value": value,
+                        "Conn": 1
+                        },
+                    ],
+                    "sorts": [{
+                        "Field": "CreatedOn",
+                        "Title": null,
+                        "Sort": {"Name": "Desc", "Title": "降序"},
+                        "Conn": 0
+                        }, {
+                        "Field": "CreatedOn",
+                        "Title": null,
+                        "Sort": {"Name": "Desc", "Title": "降序"},
+                        "Conn": 0
+                        }
+                    ],
+                    index: page,
+                    pageSize: _this.state.pageSize
+                };
+                //let hospitalcode = 'aa15-740d-4e6d-a6ca-0ebf-81f1';
+                let header = {
+                    'Authorization': NetUtil.headerAuthorization(rets[0].user.Mobile, rets[0].pwd, rets[1].hospital.Registration, rets[0].user.Token)
+                };
+                NetUtil.postJson(CONSTAPI.HOST + '/GestAndPet/GetPageRecord', postdata, header, function (data) {
+                    if (data.Sign && data.Message != null) {
+                        let dataSource = _this.state.dataSource;
+                        if (isNext) {
+                            data.Message.forEach((d)=> {
+                                dataSource.push(d);
+                            });
+                        } else {
+                            dataSource = data.Message;
+                        }
+                        _this.setState({
+                            petDataSource: dataSource,
+                            loaded: true,
+                            pageIndex: page,
+                        });
+                    } else {
+                        alert("获取数据失败：" + data.Message);
+                        _this.setState({
+                            loaded: true,
+                        });
+                    }
+                });
+                /*get recordCount from the api*/
+                postdata = [{
+                    "Childrens": null,
+                    "Field": "PetStatus",
+                    "Title": null,
+                    "Operator": {"Name": "=", "Title": "等于", "Expression": null},
+                    "DataType": 0,
+                    "Value": "SM00052",
+                    "Conn": 0
+                    }, {
+                    "Childrens": null,
+                    "Field": "GestStatus",
+                    "Title": null,
+                    "Operator": {"Name": "=", "Title": "等于", "Expression": null},
+                    "DataType": 0,
+                    "Value": "SM00001",
+                    "Conn": 1
+                    }, {
+                    "Childrens": null,
+                    "Field": "PetName",
+                    "Title": null,
+                    "Operator": {"Name": "like", "Title": "相似", "Expression": " @File like '%' + @Value + '%' "},
+                    "DataType": 0,
+                    "Value": value,
+                    "Conn": 1
+                }]
+                if (!isNext) {
+                    NetUtil.postJson(CONSTAPI.HOST + '/GestAndPet/GetRecordCount', postdata, header, function (data) {
+                        if (data.Sign && data.Message != null) {
+                            _this.setState({
+                                recordCount: data.Message,
+                            });
+                        } else {
+                            alert("获取记录数失败：" + data.Message);
+                        }
+                    });
+                }
+            }
+        ).catch(err => {
+                _this.setState({
+                    petDataSource: [],
+                    loaded: true,
+                });
+                alert('error:' + err.message);
+            }
+        )
     }
 
     search(txt) {
+        this._fetchData(txt,1,false);
         this.setState({
             kw: txt,
             loaded: false,
         });
-        this.fetchData();
     }
     render(){
         var body=<Loading />

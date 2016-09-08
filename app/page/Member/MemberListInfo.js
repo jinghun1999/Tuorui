@@ -153,7 +153,7 @@ class MemberListInfo extends Component {
                 });
                 alert('error:' + err.message);
             }
-        );
+        )
     }
 
     _addInfo() {

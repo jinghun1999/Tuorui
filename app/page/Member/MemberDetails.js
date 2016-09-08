@@ -32,7 +32,6 @@ class MemberDetails extends Component {
             enable: false,
             registrationDate: now,
             birthDate: now,
-            memberId:'438e09fc-0ef4-4209-8daa-078e22bd9b46',
             edit: '编辑',
             memberLoaded: false,
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
@@ -41,7 +40,8 @@ class MemberDetails extends Component {
 
     componentDidMount() {
         var _this = this;
-        _this._fetchData(_this.state.memberId,1, false);
+        let id = _this.props.memberInfo.ID;
+        _this._fetchData(id,1, false);
     }
 
     componentWillUnmount() {
@@ -184,11 +184,9 @@ class MemberDetails extends Component {
     render() {
         var listBody = <Loading type="text"/>
         if (this.state.memberLoaded) {
-            listBody = (
-                <ListView dataSource={this.state.ds.cloneWithRows(this.state.petSource)}
+            listBody = <ListView dataSource={this.state.ds.cloneWithRows(this.state.petSource)}
                           renderRow={this._onRenderRow.bind(this)}
-                          enableEmptySections={true}
-                />)
+                          enableEmptySections={true}/>
         }
         return (
             <View style={styles.container}>
@@ -299,7 +297,7 @@ class MemberDetails extends Component {
                                 selectedValue={this.props.memberInfo.GestSex}
                                 mode="dropdown"
                                 enabled={this.state.enable}
-                                style={{flex:1,marginRight: 10,backgroundColor:'#fff',}}
+                                style={{flex:1,height:45,backgroundColor:'#fff',}}
                                 onValueChange={(lang) => this.setState({memberSex: lang})}>
                                 <Picker.Item label="男" value="DM00001"/>
                                 <Picker.Item label="女" value="DM00002"/>
@@ -353,7 +351,7 @@ class MemberDetails extends Component {
                                        editable={this.state.enable}
                                        underlineColorAndroid={'transparent'}
                                        keyboardType={'default'}
-                                       style={{height: 45, borderWidth:0, flex:1}}
+                                       style={{flex:1,height:45,}}
                                        onChangeText={(text)=>{this.setState({ memberRemark: text })}}
                             />
                         </View>
@@ -376,23 +374,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
-    pickerBoxStyle: {flex: 1,},
-    pickerStyle: {
-        flexDirection: 'row',
-        backgroundColor: '#fff',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderBottomColor: '#ccc',
-        borderBottomWidth: StyleSheet.hairlineWidth,
-    },
     petViewStyle: {
         height: 20,
         backgroundColor: '#ccc',
         flexDirection: 'row'
-    },
-    imageStyle: {
-        height: 20,
-        width: 20,
     },
     optionBox: {
         height: 50,

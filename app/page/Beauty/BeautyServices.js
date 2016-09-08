@@ -11,8 +11,9 @@ import {
     TextInput,
     View,
     ListView,
-    Picker,
     TouchableOpacity,
+    ToastAndroid,
+    InteractionManager,
 }from 'react-native';
 import Head from '../../commonview/Head';
 import Loading from '../../commonview/Loading';
@@ -21,20 +22,29 @@ import ChooseBeautyServices from './ChooseBeautyServices';
 import Icon from '../../../node_modules/react-native-vector-icons/FontAwesome';
 import Modal from 'react-native-modalbox';
 import ChoosePet from './ChoosePet';
+import NetUtil from '../../util/NetUtil';
+import Picker from 'react-native-picker';
 class BeautyServices extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             enable: false,
             beautySource: [],
-            petSource:[{'petId': null,'petName': null,'variety':null,'petCaseNum':null,'birthDate':null,
-                'sterilizationState':null,'petSex':null,'petColor':null,'petType':null,'petState':null,
-                'image':null,'reMarks':null}],
-            totalAmount:0.00,
-            isOpen:false,
-            totalNum:0,
+            petSource: [{PetName: null, PetCode: null, PetBreed: null, GestName: null, MobilePhone: null,}],
+            totalAmount: 0.00,
+            isOpen: false,
+            totalNum: 0,
+            servicesID: null,
+            loaded: false,
+            serviceSource: [],
+            serviceName: '张艺弦',
+            pickerData: [],
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
         }
+    }
+
+    componentWillMount() {
+        this._onFetchServices();
     }
 
     _onBack() {
@@ -43,6 +53,53 @@ class BeautyServices extends React.Component {
         if (navigator) {
             navigator.pop();
         }
+    }
+
+    _onFetchServices() {
+        //http://petservice.tuoruimed.com/service/Api/BusinessInvoices/ServiceCode?
+        let _this = this;
+        storage.getBatchData([{
+            key: 'USER',
+            autoSync: false,
+            syncInBackground: false,
+        }, {
+            key: 'HOSPITAL',
+            autoSync: false,
+            syncInBackground: false,
+        }]).then(rets => {
+                let header = {
+                    'Authorization': NetUtil.headerAuthorization(rets[0].user.Mobile, rets[0].pwd, rets[1].hospital.Registration, rets[0].user.Token)
+                };
+                NetUtil.get(CONSTAPI.HOST + '/BusinessInvoices/ServiceCode?', header, function (data) {
+                    _this.setState({
+                        servicesID: data.Message,
+                    });
+                });
+                //http://petservice.tuoruimed.com/service/Api/Persons/GetPersonsByAppconfigID?appconfigID=82
+                NetUtil.get(CONSTAPI.HOST + '/Persons/GetPersonsByAppconfigID?appconfigID=82', header, function (data) {
+                        var serviceData = data.Message;
+                        var _data = [];
+                        serviceData.forEach((item, index, array)=> {
+                            _data.push(item.PersonName);
+                        })
+                        _this.setState({
+                            serviceSource: data.Message,
+                            loaded: true,
+                            ServicerNameData: _data,
+                        });
+                    }
+                )
+
+            }
+        ).catch(err => {
+                _this.setState({
+                    servicesID: '',
+                    serviceSource: [],
+                    loaded: true,
+                });
+                alert('error:' + err.message);
+            }
+        );
     }
 
     chooseBeauty() {
@@ -63,8 +120,8 @@ class BeautyServices extends React.Component {
                         })
                         if (!_exists) {
                             _beauty.push(beauty);
-                            _this.state.totalAmount+=beauty.RecipePrice;
-                            _this.state.totalNum+=1;
+                            _this.state.totalAmount += beauty.RecipePrice;
+                            _this.state.totalNum += 1;
                         }
                         _this.setState({
                             beautySource: _beauty,
@@ -88,7 +145,7 @@ class BeautyServices extends React.Component {
                 <View style={{flex:1}}>
                     <Text style={{fontSize:14, fontWeight:'bold'}}>名称: {beauty.ItemName}</Text>
                     <View style={{flexDirection:'row'}}>
-                        <Text style={{flex: 1,}}>单位: {beauty.RecipeUnit=='DM0000000056'?'次':''}</Text>
+                        <Text style={{flex: 1,}}>单位: {beauty.RecipeUnit == 'DM0000000056' ? '次' : ''}</Text>
                         <Text style={{flex: 1,}}>单价: ￥{beauty.RecipePrice}</Text>
                     </View>
                 </View>
@@ -99,28 +156,47 @@ class BeautyServices extends React.Component {
         )
     }
 
-    _onChoosePet(){
-        let _this =this;
+    _onChoosePet() {
+        let _this = this;
         const {navigator} =_this.props;
-        if(navigator){
+        if (navigator) {
             navigator.push({
-                name:'ChoosePet',
-                component:ChoosePet,
-                params:{
-                    headTitle:'选择宠物',
-                    getResult: function (pet){
-                            _this.setState({
-                                petSource: pet,
-                            })
+                name: 'ChoosePet',
+                component: ChoosePet,
+                params: {
+                    headTitle: '选择宠物',
+                    getResult: function (pet) {
+                        _this.setState({
+                            petSource: pet,
+                        })
                     }
                 },
             })
         }
     }
-    _onEditInfo(pet){
-        alert('save');
+
+    _onEditInfo() {
+        let _this = this;
+        if (_this.state.petSource.PetCode == null) {
+            ToastAndroid.show("请选择宠物", ToastAndroid.SHORT);
+            return false;
+        } else if(_this.state.serviceName == null){
+            ToastAndroid.show('请选择服务师',ToastAndroid.SHORT);
+            return false;
+        } else if(_this.state.beautySource.length == 0){
+            ToastAndroid.show('请选择美容项目',ToastAndroid.SHORT);
+            return false;
+        }
     }
+
+    _onChooseService() {
+        this.picker.toggle();
+    }
+
     render() {
+        if (!this.state.loaded) {
+            return <Loading type='text'/>
+        }
         return (
             <View style={styles.container}>
                 <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}
@@ -134,17 +210,8 @@ class BeautyServices extends React.Component {
                         <Text style={{color:'#fff',marginLeft:10,fontSize:16,}}>宠物信息</Text>
                     </View>
                     <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>会员编号</Text>
-                        <TextInput value={'123'}
-                                   editable={this.state.enable}
-                                   underlineColorAndroid={'transparent'}
-                                   keyboardType={'default'}
-                                   style={{height: 35, borderWidth:0, flex:1}}
-                        />
-                    </View>
-                    <View style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>会员名称</Text>
-                        <TextInput value={this.props.memberName}
+                        <TextInput value={this.state.petSource.GestName}
                                    editable={this.state.enable}
                                    underlineColorAndroid={'transparent'}
                                    keyboardType={'default'}
@@ -152,8 +219,17 @@ class BeautyServices extends React.Component {
                         />
                     </View>
                     <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>宠物名称</Text>
-                        <TextInput value={this.state.petSource.petName}
+                        <Text style={{width:100,}}>手机号码</Text>
+                        <TextInput value={this.state.petSource.MobilePhone}
+                                   editable={this.state.enable}
+                                   underlineColorAndroid={'transparent'}
+                                   keyboardType={'default'}
+                                   style={{height: 35, borderWidth:0, flex:1}}
+                        />
+                    </View>
+                    <View style={styles.inputViewStyle}>
+                        <Text style={{width:100,}}>宠物卡</Text>
+                        <TextInput value={this.state.petSource.PetCode}
                                    editable={this.state.enable}
                                    underlineColorAndroid={'transparent'}
                                    keyboardType={'default'}
@@ -167,20 +243,8 @@ class BeautyServices extends React.Component {
                         </TouchableOpacity>
                     </View>
                     <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>性别</Text>
-                        <Picker selectedValue={this.state.petSource.petSex}
-                                mode="dropdown"
-                                enabled={this.state.enable}
-                                style={{height: 35, borderWidth:0, flex:1,backgroundColor:'#fff'}}
-                                onValueChange={(sex) => this.setState({petSex: sex})}>
-                            <Picker.Item label="请选择" value='0'/>
-                            <Picker.Item label="雄性" value='1'/>
-                            <Picker.Item label="雌性" value='2'/>
-                        </Picker>
-                    </View>
-                    <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>宠物年龄</Text>
-                        <TextInput value={this.state.petSource.petAge==null?'':this.state.petSource.petAge}
+                        <Text style={{width:100,}}>宠物名称</Text>
+                        <TextInput value={this.state.petSource.PetName}
                                    editable={this.state.enable}
                                    underlineColorAndroid={'transparent'}
                                    keyboardType={'default'}
@@ -188,92 +252,30 @@ class BeautyServices extends React.Component {
                         />
                     </View>
                     <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>宠物种类</Text>
-                        <Picker
-                            selectedValue={this.state.petSource.petType}
-                            mode="dropdown"
-                            enabled={this.state.enable}
-                            style={{height: 35, borderWidth:0, flex:1,backgroundColor:'#fff'}}
-                            onValueChange={(type) => this.setState({petType: type})}>
-                            <Picker.Item label="请选择" value="0"/>
-                            <Picker.Item label="小型犬" value="small"/>
-                            <Picker.Item label="中型犬" value="middle"/>
-                            <Picker.Item label="大型犬" value="big"/>
-                            <Picker.Item label="其他" value="other"/>
-                        </Picker>
-                    </View>
-                    <View style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>宠物品种</Text>
-                        <Picker
-                            selectedValue={this.state.petSource.variety}
-                            mode="dropdown"
-                            enabled={this.state.enable}
-                            style={{height: 35, borderWidth:0, flex:1,backgroundColor:'#fff'}}
-                            onValueChange={(variety) => this.setState({variety: variety})}>
-                            <Picker.Item label="请选择" value="0"/>
-                            <Picker.Item label="金毛" value="金毛"/>
-                            <Picker.Item label="美国短毛猫" value="美国短毛猫"/>
-                            <Picker.Item label="柴犬" value="柴犬"/>
-                            <Picker.Item label="吉娃娃" value="吉娃娃"/>
-                            <Picker.Item label="藏獒" value="藏獒"/>
-                            <Picker.Item label="茶杯犬" value="茶杯犬"/>
-                        </Picker>
-                    </View>
-                    <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>绝育状态</Text>
-                        <Picker
-                            selectedValue={this.state.petSource.petState}
-                            mode="dropdown"
-                            enabled={this.state.enable}
-                            style={{height: 35, borderWidth:0, flex:1,backgroundColor:'#fff'}}
-                            onValueChange={(state) => this.setState({petState: state})}>
-                            <Picker.Item label="请选择" value="0"/>
-                            <Picker.Item label="在世" value="alive"/>
-                            <Picker.Item label="离世" value="die"/>
-                        </Picker>
+                        <TextInput value={this.state.petSource.PetBreed}
+                                   editable={this.state.enable}
+                                   underlineColorAndroid={'transparent'}
+                                   keyboardType={'default'}
+                                   style={{height: 35, borderWidth:0, flex:1}}
+                        />
                     </View>
                     <View style={styles.titleStyle}>
                         <Text style={{color:'#fff',marginLeft:10,fontSize:16,}}>服务信息</Text>
                     </View>
                     <View style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>服务单号</Text>
-                        <TextInput value={'123'}
+                        <TextInput value={this.state.servicesID}
                                    editable={this.state.enable}
                                    underlineColorAndroid={'transparent'}
                                    keyboardType={'default'}
                                    style={{height: 35, borderWidth:0, flex:1}}
                         />
                     </View>
-                    <View style={styles.inputViewStyle}>
+                    <TouchableOpacity onPress={this._onChooseService.bind(this)} style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>服务师</Text>
-                        <Picker selectedValue={'2'}
-                                mode="dropdown"
-                                enabled={true}
-                                style={{height: 35, borderWidth:0, flex:1,backgroundColor:'#fff'}}
-                                onValueChange={(name) => this.setState({serviceName: name})}>
-                            <Picker.Item label="请选择" value='0'/>
-                            <Picker.Item label="1号服务师" value='1'/>
-                            <Picker.Item label="2号服务师" value='2'/>
-                            <Picker.Item label="3号服务师" value='3'/>
-                            <Picker.Item label="4号服务师" value='4'/>
-                            <Picker.Item label="5号服务师" value='5'/>
-                        </Picker>
-                    </View>
-                    <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>服务助理</Text>
-                        <Picker selectedValue={'3'}
-                                mode="dropdown"
-                                enabled={true}
-                                style={{height: 35, borderWidth:0, flex:1,backgroundColor:'#fff'}}
-                                onValueChange={(name) => this.setState({assistantName: name})}>
-                            <Picker.Item label="请选择" value='0'/>
-                            <Picker.Item label="1号助理" value='1'/>
-                            <Picker.Item label="2号助理" value='2'/>
-                            <Picker.Item label="3号助理" value='3'/>
-                            <Picker.Item label="4号助理" value='4'/>
-                            <Picker.Item label="5号助理" value='5'/>
-                        </Picker>
-                    </View>
+                        <Text style={{flex:1}}>{this.state.serviceName}</Text>
+                    </TouchableOpacity>
                     <View style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>总项</Text>
                         <TextInput value={this.state.totalNum.toString()}
@@ -310,13 +312,28 @@ class BeautyServices extends React.Component {
                         />
                     </View>
                 </ScrollView>
+                <Picker
+                    style={{height: 300}}
+                    showDuration={300}
+                    showMask={true}
+                    pickerBtnText={'确认'}
+                    pickerCancelBtnText={'取消'}
+                    ref={picker => this.picker = picker}
+                    pickerData={this.state.ServicerNameData}
+                    selectedValue={this.state.serviceName}
+                    onPickerDone={(text)=>{
+                        this.setState({
+                            serviceName: text,
+                        })
+                    }}//when confirm your choice
+                />
             </View>
         )
     }
 }
 const styles = StyleSheet.create({
     container: {
-        flex:1,
+        flex: 1,
     },
     titleStyle: {
         height: 20,
@@ -329,7 +346,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginTop: 5,
         marginLeft: 10,
-        height: 36,
+        height: 40,
         justifyContent: 'center',
         alignItems: 'center',
         borderBottomColor: '#ccc',
