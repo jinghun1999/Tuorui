@@ -73,16 +73,6 @@ class GoodSales extends React.Component {
                 let querystr = 'startDate=' + _this.state.dateFrom + '&endDate=' + _this.state.dateTo + ' 23:59:59&itemName=' + _this.state.kw;
                 //GetCountItemSellDataTable
                 NetUtil.get(CONSTAPI.HOST + '/Report/GetCountItemSell?' + querystr, header, function (data) {
-                    /*
-                     <条码>CEX00097</条码>
-                     <商品名>强力多维</商品名>
-                     <规格>130g/支</规格>
-                     <生产商>宠儿香</生产商>
-                     <总数量>1.00</总数量>
-                     <单位>支</单位>
-                     <平均售价>78.00</平均售价>
-                     <总金额>78</总金额>
-                     */
                     let json = [
                         {
                             条码: '111111',

@@ -100,6 +100,8 @@ class Login extends Component {
                     secureTextEntry={true}
                     textAlignVertical='center'
                     textAlign='center'
+                    ref='pwd'
+                    onFocus={() => {this.refs.pwd.focus()}}
                     />
                 <View>
                     <NButton
