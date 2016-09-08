@@ -10,7 +10,7 @@ import{
     } from 'react-native';
 import NetUtil from './app/util/NetUtil';
 import Head from './app/commonview/Head';
-
+import Icon from 'react-native-vector-icons/Ionicons';
 //import ScrollableTabView  from 'react-native-scrollable-tab-view';
 
 class BBS extends Component {
@@ -21,46 +21,10 @@ class BBS extends Component {
     render() {
         return (
             <View style={{flex:1}}>
-                <Head title="健康社区"/>
-                {/*<ScrollableTabView>
-                 <WebView tabLabel="个人体重"
-                 style={styles.webView_style}
-                 source={{uri: NetUtil.url_healthmonitnorm("IA-003")}}
-                 startInLoadingState={true}
-                 domStorageEnabled={true}
-                 javaScriptEnabled={true}>
-                 </WebView>
-                 <WebView tabLabel="腰围尺寸"
-                 style={styles.webView_style}
-                 source={{uri: NetUtil.url_healthmonitnorm("IA-006")}}
-                 startInLoadingState={true}
-                 domStorageEnabled={true}
-                 javaScriptEnabled={true}>
-                 </WebView>
-                 <WebView tabLabel="BIM指数"
-                 style={styles.webView_style}
-                 source={{uri: NetUtil.url_healthmonitnorm("IA-005")}}
-                 startInLoadingState={true}
-                 domStorageEnabled={true}
-                 javaScriptEnabled={true}>
-                 </WebView>
-                 <WebView tabLabel="血压值"
-                 style={styles.webView_style}
-                 source={{uri: NetUtil.url_healthmonitnorm("IA-012")}}
-                 startInLoadingState={true}
-                 domStorageEnabled={true}
-                 javaScriptEnabled={true}>
-                 </WebView>
-                 <WebView tabLabel="心跳频率"
-                 style={styles.webView_style}
-                 source={{uri: NetUtil.url_healthmonitnorm("IA-000")}}
-                 startInLoadingState={true}
-                 domStorageEnabled={true}
-                 javaScriptEnabled={true}>
-                 </WebView>
-                 </ScrollableTabView>*/}
-                <View style={{justifyContent:'center', alignItems:'center'}}>
-                    <Text>功能开发中...</Text>
+                <Head title="社区首页"/>
+                <View style={styles.noResult}>
+                    <Icon name={'ios-people'} size={85} color={'#CC9933'}/>
+                    <Text style={{color:'#FF6600'}}>社区暂未开放，敬请期待</Text>
                 </View>
             </View>
         );
@@ -68,8 +32,14 @@ class BBS extends Component {
 }
 
 const styles = StyleSheet.create({
-    webView_style: {
-
+    noResult: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#FFFFCC',
+        margin: 10,
+        height: 50,
+        padding: 20,
     },
 });
 module.exports = BBS;
