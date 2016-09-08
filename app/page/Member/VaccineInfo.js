@@ -14,7 +14,7 @@ import{
     ListView,
     Picker,
     ScrollView,
-} from 'react-native';
+    } from 'react-native';
 import Head from '../../commonview/Head';
 import FormInput from '../../commonview/FormInput';
 import FormPicker from '../../commonview/FormPicker';
@@ -101,9 +101,9 @@ class VaccineInfo extends Component {
                             horizontal={false}
                             showsVerticalScrollIndicator={true}
                             scrollEnabled={true}>
-                <View style={styles.titleStyle}>
-                    <Text style={{color:'#fff',marginLeft:10,fontSize:16,}}>宠物信息</Text>
-                </View>
+                    <View style={styles.titleStyle}>
+                        <Text style={{color:'#fff',marginLeft:10,fontSize:16,}}>宠物信息</Text>
+                    </View>
                     <View style={styles.contentStyle}>
                         <View style={{flex:1}}>
                             <FormInput value={this.props.memberName}
@@ -111,48 +111,50 @@ class VaccineInfo extends Component {
                                        style={{height:30,}}
                                        enabled={this.state.enabled}
                                        onChangeText={(text)=>{this.setState({ memberName: text })}}
-                            />
+                                />
                             <FormInput value={this.props.memberPhone}
                                        title="手机号码"
                                        style={{height:30,}}
                                        enabled={this.state.enabled}
                                        onChangeText={(text)=>{this.setState({ memberPhone: text })}}
-                            />
+                                />
                             <FormInput value={this.props.petSource.petName}
                                        title="宠物昵称"
                                        style={{height:30,}}
                                        enabled={this.state.enabled}
                                        onChangeText={(text)=>{this.setState({ petName: text })}}
-                            />
+                                />
                             <FormInput value={this.props.petSource.petCaseNum}
                                        title="病历编号"
                                        style={{height:30,}}
                                        enabled={this.state.enabled}
                                        onChangeText={(text)=>{this.setState({ petCaseNum: text })}}
-                            />
+                                />
                         </View>
                         <View style={{borderColor:'#ccc',margin:5,borderWidth:StyleSheet.hairlineWidth}}>
                             <Image source={require('../../../image/pet.jpg')}
                                    style={{width:150,height:200}}
-                            />
+                                />
                         </View>
                     </View>
-                    <View style={[styles.borderStyle,{borderBottomColor:'#ccc',borderBottomWidth:StyleSheet.hairlineWidth}]}>
+                    <View
+                        style={[styles.borderStyle,{borderBottomColor:'#ccc',borderBottomWidth:StyleSheet.hairlineWidth}]}>
                         <View style={{width:80,justifyContent:'center', marginLeft:10,}}>
                             <Text style={{color:'#666'}}>宠物性别</Text>
                         </View>
-                            <Picker
-                                selectedValue={this.props.petSource.petSex}
-                                mode="dropdown"
-                                enabled={this.state.enabled}
-                                style={{backgroundColor:'#fff',height:45,flex:1,justifyContent:'center'}}
-                                onValueChange={(sex) => this.setState({petSex: sex})}>
-                                <Picker.Item label="雌性" value="1"/>
-                                <Picker.Item label="雄性" value="2"/>
-                                <Picker.Item label="其它" value="3"/>
-                            </Picker>
+                        <Picker
+                            selectedValue={this.props.petSource.petSex}
+                            mode="dropdown"
+                            enabled={this.state.enabled}
+                            style={{backgroundColor:'#fff',height:45,flex:1,justifyContent:'center'}}
+                            onValueChange={(sex) => this.setState({petSex: sex})}>
+                            <Picker.Item label="雌性" value="1"/>
+                            <Picker.Item label="雄性" value="2"/>
+                            <Picker.Item label="其它" value="3"/>
+                        </Picker>
                     </View>
-                    <View style={[styles.borderStyle,{borderBottomColor:'#ccc',borderBottomWidth:StyleSheet.hairlineWidth}]}>
+                    <View
+                        style={[styles.borderStyle,{borderBottomColor:'#ccc',borderBottomWidth:StyleSheet.hairlineWidth}]}>
                         <View style={{width:80,justifyContent:'center', marginLeft:10,}}>
                             <Text style={{color:'#666'}}>品种</Text>
                         </View>
@@ -176,12 +178,12 @@ class VaccineInfo extends Component {
                                 tips="选择/扫码"
                                 onPress={this.chooseVaccine.bind(this)}
                                 showbottom={true}
-                    />
+                        />
                     <View>
                         <ListView enableEmptySections={true}
                                   dataSource={this.state.ds.cloneWithRows(this.state.vaccine)}
                                   renderRow={this._renderRowVaccine.bind(this)}
-                        />
+                            />
                     </View>
                 </ScrollView>
             </View>
@@ -189,9 +191,8 @@ class VaccineInfo extends Component {
     }
 }
 const styles = StyleSheet.create({
-    container:
-    {
-        flex:1,
+    container: {
+        flex: 1,
     },
     titleStyle: {
         height: 20,

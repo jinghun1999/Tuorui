@@ -10,47 +10,45 @@ import {
     ScrollView,
     Text,
     TouchableOpacity,
+    InteractionManager,
     } from 'react-native';
 import Head from './../../commonview/Head';
 import NetUtil from '../../util/NetUtil';
+import Util from '../../util/Util';
 import DrugDetails from './DrugDetails';
+import Loading from '../../commonview/Loading';
 
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-const classuri = CONSTAPI.APIAPP + '/AppInfo/GetClass';
-const detailpage = CONSTAPI.WEB + '/App/home';
 class InfoClass extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            drugSource: new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2}),
+            ds: new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2}),
             drugHeaderSource: null,
             loaded: false,
             parentId: null,
-            data: null,
+            classSource:[],
         };
     }
 
     fetchData(parentId) {
         let _this = this;
-        NetUtil.get(classuri + "?parentId=" + parentId, false, function (data) {
+        NetUtil.get(CONSTAPI.APIAPP + "/AppInfo/GetClass?parentId=" + parentId, false, function (data) {
             _this.setState({
-                drugSource: _this.state.drugSource.cloneWithRows(data.Data),
-                data: data.Data,
-                drugHeaderSource: data.Pin,
+                classSource: data.Data,
+                //drugHeaderSource: data.Pin,
                 loaded: true,
             });
         });
     }
 
-    componentDidMount() {
+    componentWillMount() {
         var parentId = this.props.parentId;
-        this.timer = setTimeout(
-            () => {
-                this.fetchData(parentId);
-            }, 500
-        );
+        InteractionManager.runAfterInteractions(() => {
+            this.fetchData(parentId);
+        });
     }
 
     //返回方法
@@ -59,22 +57,6 @@ class InfoClass extends React.Component {
         if (navigator) {
             navigator.pop();
         }
-    }
-
-    componentWillUnmount() {
-        var _this = this;
-        _this.timer && clearTimeout(_this.timer);
-    }
-
-    renderLoadingView() {
-        return (
-            <View>
-                <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
-                <View style={{flexDirection:'column', justifyContent: 'center',alignItems: 'center',}}>
-                    <Bars size={10} color="#1CAFF6"/>
-                </View>
-            </View>
-        );
     }
 
     //加载数据后点击事件
@@ -105,7 +87,7 @@ class InfoClass extends React.Component {
                         requestId: g.ID,
                         parentId: g.ID,
                         headTitle: g.ClassName,
-                        url: detailpage,
+                        url: CONSTAPI.WEB + '/App/home',
                     }
                 })
             }
@@ -124,18 +106,22 @@ class InfoClass extends React.Component {
     }
 
     render() {
-        if (!this.state.loaded) {
-            return this.renderLoadingView();
-        } else {
-            return (
-                <View>
-                    <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
-                    <ListView dataSource={this.state.drugSource}
-                              renderRow={this._renderDrug.bind(this)}/>
-
-                </View>
+        let body = <Loading type={'text'}/>
+        if (this.state.loaded) {
+            body = (
+                <ListView dataSource={this.state.ds.cloneWithRows(this.state.classSource)}
+                          renderRow={this._renderDrug.bind(this)}
+                          initialListSize={10}
+                          pageSize={10}
+                          enableEmptySections={true}/>
             )
         }
+        return (
+            <View style={{flex:1}}>
+                <Head title={Util.cutString(this.props.headTitle, 20, '..')} canBack={true} onPress={this._onBack.bind(this)}/>
+                {body}
+            </View>
+        )
     }
 }
 const styles = StyleSheet.create({
