@@ -21,6 +21,7 @@ import Util from '../util/Util';
 import NetUtil from '../util/NetUtil';
 import MainPage from '../../Index';
 import NButton from '../commonview/NButton';
+import Register  from './Register';
 
 class Login extends Component {
     constructor(props) {
@@ -73,7 +74,14 @@ class Login extends Component {
     }
 
     _register() {
-        ToastAndroid.show("完善中", ToastAndroid.SHORT);
+        let _this= this;
+        const {navigator} = _this.props;
+        if(navigator){
+            navigator.push({
+                name:'Register',
+                component:Register
+            })
+        }
     }
 
     render() {
