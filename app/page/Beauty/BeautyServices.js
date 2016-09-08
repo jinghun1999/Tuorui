@@ -187,6 +187,65 @@ class BeautyServices extends React.Component {
             ToastAndroid.show('请选择美容项目',ToastAndroid.SHORT);
             return false;
         }
+        storage.load({
+            key: 'USER',
+            autoSync: true,
+            syncInBackground: true
+        }).then(ret => {
+            let items = [];
+            let _goods = _this.state.SelectedGoods.items;
+            for (let i = 0; i < _goods.length; i++) {
+                var item = {
+                    BarCode: null,
+                    BusiTypeCode: _goods[i].BusiTypeCode,
+                    CreatedBy: 'a',
+                    CreatedOn: '2016-12-12',
+                    ModifiedBy: 'a',
+                    ModifiedOn: '2016-12-12',
+                    DirectSellCode: null,
+                    DirectSellID: null,
+                    EntID: null,
+                    ID: null,
+                    IsBulk: '否',
+                    IsDeleted: null,
+                    ItemCode: _goods[i].ItemCode,
+                    ItemName: _goods[i].ItemName,
+                    ItemNum: _goods[i].Count,
+                    ItemStandard: _goods[i].ItemStandard,
+                    ManufacturerCode: null,
+                    ManufacturerName: null,
+                    PaidStatus: 'SM00040',
+                    PaidTime: null,
+                    SellContent: null,
+                    SellPrice: _goods[i].SellPrice,
+                    SellUnit: null,
+                    TotalCost: null,
+                    WarehouseID: _this.state.Store.WarehouseID
+                };
+                items.push(item);
+            }
+            let postjson = {
+                gest: _this.state.Guest,
+                sellItemList: items,
+            }
+            let header = {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Mobile ' + Util.base64Encode(ret.user.Mobile + ':' + Util.base64Encode(ret.pwd) + ':' + (ret.user.Hospitals[0] != null ? ret.user.Hospitals[0].Registration : '') + ":" + ret.user.Token)
+            };
+            ////save http://petservice.tuoruimed.com/service/Api/Service/AddList
+            NetUtil.postJson(CONSTAPI.HOST+'/Service/AddList', postjson, header, function (data) {
+                if (data.Sign && data.Message) {
+                    ToastAndroid.show("保存成功", ToastAndroid.SHORT);
+                    _this._onBack();
+                } else {
+                    ToastAndroid.show("获取数据错误" + data.Exception, ToastAndroid.SHORT);
+                }
+            });
+        }).catch(err => {
+            alert('error:' + err);
+        });
+
     }
 
     _onChooseService() {
@@ -195,7 +254,7 @@ class BeautyServices extends React.Component {
 
     render() {
         if (!this.state.loaded) {
-            return <Loading type='text'/>
+            return <Loading />
         }
         return (
             <View style={styles.container}>

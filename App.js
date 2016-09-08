@@ -23,7 +23,7 @@ import MyInspect from './app/page/Member/MyInspect';
 import PetListInfo from './app/page/Member/PetListInfo';
 import Loading from './app/commonview/Loading';
 import AppointListInfo from './app/page/Appoint/AppointListInfo';
-import BeautyServices from './app/page/Beauty/BeautyServices';
+import BeautyServices from './app/page/Beauty/BeautyListInfo';
 import ReportIndex from './app/page/Report/ReportIndex';
 import InspectQuery from './app/page/Equipment/InspectQuery';
 

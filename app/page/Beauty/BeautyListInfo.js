@@ -20,6 +20,7 @@ import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
 import BeautyServices from './BeautyServices';
 import Loading from '../../commonview/Loading';
+import Icon from '../../../node_modules/react-native-vector-icons/FontAwesome';
 class BeautyListInfo extends React.Component {
     constructor(props) {
         super(props);
@@ -34,15 +35,7 @@ class BeautyListInfo extends React.Component {
 
     componentDidMount() {
         var _this = this;
-        _this.timer = setTimeout(
-            () => {
-                _this._onFetchData(1, false);
-            }, 500
-        )
-    }
-
-    componentWillUnmount() {
-        this.timer && clearTimeout(this.timer);
+        _this._onFetchData(1, false);
     }
 
     _onFetchData(page, isNext) {
@@ -167,12 +160,11 @@ class BeautyListInfo extends React.Component {
                               onPress={()=>this._onBeautyDetails(beauty)}>
                 <View style={{flex:1,}}>
                     <Text style={{fontSize:14, fontWeight:'bold'}}>{beauty.GestName}</Text>
-                    <View style={{flexDirection:'row',marginTop:10}}>
+                    <View style={{flexDirection:'row',marginTop:3}}>
                         <Text style={{flex: 1,}}>会员编号: {beauty.GestCode}</Text>
                         <Text style={{flex: 1,}}>宠物名: {beauty.PetName}</Text>
                     </View>
                 </View>
-                {isStateBody}
                 <View style={{width:20,alignItems:'center', justifyContent:'center'}}>
                     <Text><Icon name={'angle-right'} size={20} color={'#ccc'}/></Text>
                 </View>
@@ -183,7 +175,7 @@ class BeautyListInfo extends React.Component {
     render() {
         var body = <Loading type="text"/>;
         if (this.state.loaded) {
-            body = <ListView ataSource={this.state.ds.cloneWithRows(this.state.dataSource)}
+            body = <ListView dataSource={this.state.ds.cloneWithRows(this.state.dataSource)}
                              enableEmptySections={true}
                              renderRow={this._onRenderRow.bind(this)}
             />
