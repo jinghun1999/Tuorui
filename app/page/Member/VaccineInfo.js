@@ -50,12 +50,10 @@ class VaccineInfo extends Component {
                 borderBottomWidth:StyleSheet.hairlineWidth, borderBottomColor:'#ccc'}}
                 onPress={()=>this.pressRow(vaccine)}>
                 <View style={{flex:1}}>
-                    <Text style={{fontSize:14, fontWeight:'bold'}}>名称: {vaccine.name}</Text>
+                    <Text style={{fontSize:14, fontWeight:'bold'}}>名称: {vaccine.ItemName}</Text>
                     <View style={{flexDirection:'row'}}>
-                        <Text style={{flex: 1,}}>单位: {vaccine.unit}</Text>
-                        <Text style={{flex: 1,}}>单价: {vaccine.price}</Text>
-                        <Text style={{flex: 1,}}>批号: {vaccine.batchNumber}</Text>
-                        <Text style={{flex: 1,}}>有效期: {vaccine.validityDate}</Text>
+                        <Text style={{flex: 1,}}>编号: {vaccine.ItemCode}</Text>
+                        <Text style={{flex: 1,}}>单价: ￥{vaccine.SellPrice}</Text>
                     </View>
                 </View>
                 <View style={{width:20,alignItems:'center', justifyContent:'center'}}>
@@ -77,7 +75,7 @@ class VaccineInfo extends Component {
                     getResult: function (vaccine) {
                         var _vaccine = _this.state.vaccine, _exists = false;
                         _vaccine && _vaccine.forEach((item, index, array) => {
-                            if (item.id == vaccine.id) {
+                            if (item.BarCode == vaccine.BarCode) {
                                 _exists = true;
                             }
                         })
