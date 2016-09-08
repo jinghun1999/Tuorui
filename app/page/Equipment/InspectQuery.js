@@ -93,32 +93,32 @@ class InspectQuery extends Component {
 
     _onRenderRow(obj) {
         let inspectBody = [];
-        obj.data.forEach((item)=> {
+        obj.data.forEach((item, i, a)=> {
             inspectBody.push(
-                <View style={{flexDirection: 'row', flex: 1}}>
-                    <View style={{alignItems:'center',width: 30, height: 25, marginLeft: 10,marginTop:10}}>
+                <View key={i} style={{flexDirection: 'row',marginTop:5, flex: 1}}>
+                    <View style={{alignItems:'center', justifyContent:'center',width: 30, height: 25, marginLeft: 10}}>
                         <Text>{item.item}.</Text>
                     </View>
                     <View
-                        style={{alignItems:'center',width: 160, height: 25, backgroundColor: '#FFAEB9', marginTop:10,borderRadius:5}}>
+                        style={{alignItems:'center', justifyContent:'center',width: 120, height: 25, backgroundColor: '#FFAEB9', borderRadius:2}}>
                         <Text>{item.itemname}</Text>
                     </View>
                     <View
-                        style={{alignItems:'center',width: 70, height: 25, backgroundColor: '#1E90FF', marginLeft: 10,marginTop:10,borderRadius:5}}>
+                        style={{alignItems:'center', justifyContent:'center',width: 70, height: 25, backgroundColor: '#99CCFF', marginLeft: 10,borderRadius:2}}>
                         <Text>{item.description}</Text>
                     </View>
                     <View
-                        style={{alignItems:'center',width: 100, height: 25, marginLeft: 10,marginTop:10,borderRadius:5}}>
+                        style={{ flex:1, height: 25,  justifyContent:'center',marginLeft: 10}}>
                         <Text>{item.expect}</Text>
                     </View>
                 </View>);
         });
         return (
-            <View style={{flex: 1, marginTop:20, paddingLeft:10}}>
-                <Text>检测时间 <Text style={{color:'#EE0000'}}>{obj.timeformat}</Text></Text>
-                {
-                    inspectBody
-                }
+            <View style={{flex: 1, paddingBottom:5,}}>
+                <View style={{backgroundColor:'#FFCC99',padding:5,}}>
+                    <Text>检测时间 <Text style={{color:'#EE0000'}}>{obj.timeformat}</Text></Text>
+                </View>
+                {inspectBody}
             </View>
         );
     }
@@ -127,7 +127,7 @@ class InspectQuery extends Component {
         let body = (<Loading type={'text'}/>);
         if (this.state.loaded) {
             if (this.state.dataSource.length > 0) {
-                body = (<View style={{backgroundColor: '#fff', flex: 1}}>
+                body = (<View style={{backgroundColor: '#fff', flex: 1, marginBottom:10}}>
                         <ListView dataSource={this.state.ds.cloneWithRows(this.state.dataSource)}
                                   renderRow={this._onRenderRow.bind(this)}
                                   initialListSize={5}
@@ -152,9 +152,9 @@ class InspectQuery extends Component {
                 <Head title={this.props.headTitle} canAdd={false} canBack={true}
                       onPress={this._onBack.bind(this)}/>
                 <View style={{backgroundColor:'#CCFFFF', padding:10, height:30, justifyContent:'center'}}>
-                    <Text>当前设备:<Text style={{fontWeight:'bold'}}>{this.state.deviceId}</Text></Text>
+                    <Text>您绑定的尿检仪设备号为<Text style={{fontWeight:'bold'}}>{this.state.deviceId}</Text></Text>
                 </View>
-                <View style={{marginTop:20,marginLeft:10,flexDirection:'row',alignItems:'center',paddingBottom:20}}>
+                <View style={{margin:10,flexDirection:'row',alignItems:'center', padding:10,}}>
                     <Text>从</Text>
                     <DatePicker
                         date={this.state.startDate}
