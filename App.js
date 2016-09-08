@@ -13,11 +13,12 @@ import{
     View,
     TouchableOpacity,
     ListView,
+    InteractionManager,
     } from 'react-native';
 import Head from './app/commonview/Head';
 import IconButton from './app/commonview/HomeIcon';
 import Sale from './app/page/Sales/Sale';
-import Info from './app/page/Member/MemberListInfo';
+import MemberListInfo from './app/page/Member/MemberListInfo';
 import MyInspect from './app/page/Member/MyInspect';
 import PetListInfo from './app/page/Member/PetListInfo';
 import Loading from './app/commonview/Loading';
@@ -37,26 +38,22 @@ class App extends Component {
             user: null,
             userloaded: false,
             hosloaded: false,
-            memberNumber: '*',
-            memberPetNumber: '*'
+            memberNumber: 0,
+            memberPetNumber: 0
         }
     }
 
-    componentDidMount() {
-        let _this = this;
-        _this.timer = setTimeout(
-            () => {
-                _this._loadData();
-            }, 1
-        );
+    componentWillMount() {
+        InteractionManager.runAfterInteractions(() => {
+            this._loadData();
+        });
     }
 
     componentWillUnmount() {
-        this.timer && clearTimeout(this.timer);
+
     }
 
     _loadData() {
-        /*从缓存中读取*/
         var _this = this;
         storage.load({key: 'USER', autoSync: false, syncInBackground: false}).then(ret => {
             _this.setState({
@@ -81,136 +78,19 @@ class App extends Component {
         });
     }
 
-    _memberInfo() {
+    _onPress(com, name, title) {
         var _this = this;
-        const {navigator} = _this.props;
+        const { navigator } = _this.props;
         if (navigator) {
             navigator.push({
-                name: 'MemberPetClass',
-                component: Info,
+                name: name,
+                component: com,
                 params: {
-                    headTitle: '会员信息',
-                    id: 1,
+                    headTitle: title
                 }
-            })
+            });
         }
     }
-
-    _Pet() {
-        const {navigator} = this.props;
-        if (navigator) {
-            navigator.push({
-                name: 'MemberPetClass',
-                component: Info,
-                params: {
-                    headTitle: '宠物信息',
-                    id: 2,
-                }
-            })
-        }
-    }
-
-    _more() {
-        alert('没有更多了')
-    }
-
-    _salesPress() {
-        const { navigator } = this.props;
-        var _this = this;
-        if (navigator) {
-            navigator.push({
-                id: 'page',
-                name: 'Sale',
-                component: Sale,
-                params: {
-                    id: _this.state.id,
-                }
-            })
-        }
-    }
-
-    _onVaccineInfo() {
-        let _this = this;
-        const {navigator} = _this.props;
-        if (navigator) {
-            navigator.push({
-                name: 'PetListInfo',
-                component: PetListInfo,
-                params: {
-                    headTitle: '疫苗接种',
-                }
-            })
-        }
-    }
-
-    _onBespeak() {
-        let _this = this;
-        const {navigator} = _this.props;
-        if (navigator) {
-            navigator.push({
-                name: 'AppointListInfo',
-                component: AppointListInfo,
-                params: {
-                    headTitle: '我的预约',
-                }
-            })
-        }
-    }
-
-    _onBeautyServicesInfo() {
-        let _this = this;
-        const {navigator} = _this.props;
-        if (navigator) {
-            navigator.push({
-                name: 'BeautyServices',
-                component: BeautyServices,
-                params: {
-                    headTitle: '美容服务',
-                }
-            })
-        }
-    }
-    _MyInspect() {
-        const {navigator} = this.props;
-        if (navigator) {
-            navigator.push({
-                name: 'MemberPetClass',
-                component: MyInspect,
-                params: {
-                    headTitle: '我的送检',
-                }
-            })
-        }
-    }
-
-    _InspectQuery(){
-        var _this=this;
-        const {navigator} = this.props;
-        if (navigator) {
-            navigator.push({
-                name: 'InspectQuery',
-                component: InspectQuery,
-                params: {
-                    headTitle: '检测结果查询',
-                    equipmentNo:'48430101010005b2'
-                }
-            })
-        }
-    }
-
-    _onReport() {
-        const {navigator} = this.props;
-        if (navigator) {
-            navigator.push({
-                name: 'ReportIndex',
-                component: ReportIndex,
-                params: {
-                    headTitle: '数据报表',
-                }
-            })
-        }
-    }
-
     setHospital(hos) {
         this.setState({
             hospital: hos,
@@ -250,7 +130,7 @@ class App extends Component {
             </View>
         );
         if (!this.state.userloaded || !this.state.hosloaded) {
-            body = (<Loading />);
+            body = (<Loading type={'text'}/>);
         }
         else if (this.state.hospital.ID != null && this.state.hospital.ID != '') {
             body = (
@@ -282,27 +162,28 @@ class App extends Component {
                     </View>
                     <View style={styles.iconViewStyle}>
                         <IconButton text="会员宠物" iconName={'md-people'} iconColor={'#FFB6C1'}
-                                    onPress={this._memberInfo.bind(this)}/>
+                                    onPress={this._onPress.bind(this, MemberListInfo, 'MemberListInfo', '会员信息')}/>
                         <IconButton text="疫苗接种" iconName={'ios-medkit'} iconColor={'#6666CC'}
-                                    onPress={this._onVaccineInfo.bind(this)}/>
+                                    onPress={this._onPress.bind(this, PetListInfo, 'PetListInfo', '疫苗接种')}/>
                         <IconButton text="美容服务" iconName={'ios-color-palette'} iconColor={'#66CCFF'}
-                                    onPress={this._onBeautyServicesInfo.bind(this)}/>
+                                    onPress={this._onPress.bind(this, BeautyServices, 'BeautyServices', '美容服务')}/>
                     </View>
                     <View style={styles.iconViewStyle}>
                         <IconButton text="我的预约" iconName={'ios-clock'} iconColor={'#9999CC'}
-                                    onPress={this._onBespeak.bind(this)}/>
+                                    onPress={this._onPress.bind(this, AppointListInfo, 'AppointListInfo', '我的预约')}/>
                         <IconButton text="商品销售" iconName={'ios-cart'} iconColor={'#DEB887'}
-                                    onPress={this._salesPress.bind(this)}/>
+                                    onPress={this._onPress.bind(this, Sale, 'Sale', '商品销售')}/>
                         <IconButton text="拓瑞检测" iconName={'ios-paper'} iconColor={'#666699'}
-                                    onPress={this._MyInspect.bind(this)}/>
+                                    onPress={this._onPress.bind(this, MyInspect, 'MyInspect', '拓瑞检测')}/>
                     </View>
                     <View style={styles.iconViewStyle}>
                         <IconButton text="我的设备" iconName={'md-phone-landscape'} iconColor={'#FF9999'}
-                                    onPress={this._InspectQuery.bind(this)}/>
+                                    onPress={this._onPress.bind(this, InspectQuery, 'InspectQuery', '我的设备')}/>
                         <IconButton text="数据报表" iconName={'ios-podium'} iconColor={'#6666FF'}
-                                    onPress={this._onReport.bind(this)}/>
+                                    onPress={this._onPress.bind(this, ReportIndex, 'ReportIndex', '数据报表')}/>
                         <View style={{flex:1}}></View>
                     </View>
+
                 </View>);
         } else {
             body = (
