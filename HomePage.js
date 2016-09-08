@@ -18,12 +18,12 @@ import {
     } from 'react-native';
 import NetUtil from './app/util/NetUtil';
 import Head from './app/commonview/Head';
-import Sale from './app/page/Sales/Sale';
+//import Sale from './app/page/Sales/Sale';
 import NetWorkTool from './app/util/NetWorkTool'
 import InfoClass from './app/page/HomePage/InfoClass';
 import InfoDetail from './app/page/HomePage/InfoDetail';
-import Information from './app/page/HomePage/InfoList';
-import Contact from './app/page/HomePage/Contact';
+import InfoList from './app/page/HomePage/InfoList';
+//import Contact from './app/page/HomePage/Contact';
 import ToolsHome from './app/page/tools/ToolsHome';
 import Loading from './app/commonview/Loading';
 
@@ -135,8 +135,7 @@ class TopScreen extends Component {
     }
 
     _onEndReached() {
-        let _pageIndex = this.state.pageIndex + 1;
-        this._fetchData(_pageIndex);
+        this._fetchData(this.state.pageIndex + 1);
     }
 
     _onRefresh() {
@@ -149,30 +148,12 @@ class TopScreen extends Component {
         }, 1);
     }
 
-    _toolsPress() {
-        var _this = this;
-        const { navigator } = _this.props;
-        if (navigator) {
-            navigator.push({
-                id: 'page',
-                name: 'ToolsHome',
-                component: ToolsHome,
-                params: {
-                    id: _this.state.id,
-                }
-            });
-        }
-    }
-
-    _renderViewPage(data) {
-        return (<Image source={data} style={styles.page}/>);
-    }
-
-    _ClickPress(Info) {
+    _infoClick(Info) {
         let _this = this;
         const { navigator } = _this.props;
         if (navigator) {
             navigator.push({
+                id: 'page',
                 name: 'InfoDetail',
                 component: InfoDetail,
                 params: {
@@ -182,80 +163,27 @@ class TopScreen extends Component {
             })
         }
     }
-
-    _informationClick() {
-        var _this = this;
-        const {navigator} = _this.props;
-        if (navigator) {
-            navigator.push({
-                name: 'Information',
-                component: Information,
-                params: {
-                    headTitle: '资讯'
-                }
-            });
-        }
-    }
-
-    _drugPress() {
+    _onPress(com, name, title, pid) {
         var _this = this;
         const { navigator } = _this.props;
         if (navigator) {
             navigator.push({
-                name: 'InfoClass',
-                component: InfoClass,
+                name: name,
+                component: com,
                 params: {
-                    headTitle: '药品信息'
+                    headTitle: title,
+                    parentId: pid
                 }
             });
         }
     }
 
-    _laboratoryPress() {
-        var _this = this;
-        const { navigator } = _this.props;
-        if (navigator) {
-            navigator.push({
-                name: 'InfoClass',
-                component: InfoClass,
-                params: {
-                    headTitle: '检验手册'
-                }
-            });
-        }
+    renderViewPage(data) {
+        return (<Image source={data} style={styles.page}/>);
     }
-
-    _DiagnosisPress() {
-        var _this = this;
-        const { navigator } = _this.props;
-        if (navigator) {
-            navigator.push({
-                name: 'InfoClass',
-                component: InfoClass,
-                params: {
-                    headTitle: '诊断手册'
-                }
-            });
-        }
-    }
-
-    _onPressDoc() {
-        var _this = this;
-        const { navigator } = _this.props;
-        if (navigator) {
-            navigator.push({
-                name: 'InfoClass',
-                component: InfoClass,
-                params: {
-                    headTitle: '文献库'
-                }
-            });
-        }
-    }
-
-    renderInfo(Info) {
+    renderInfo(Info){
         return (
-            <TouchableOpacity style={styles.rows} onPress={()=>this._ClickPress(Info)}>
+            <TouchableOpacity style={styles.rows} onPress={()=>this._infoClick(Info)}>
                 <Icon name={'local-post-office'} size={20} color={'#ADD8E6'} style={styles.rowIcon}/>
                 {/*<Image resource={Info.ImagePath}/>*/}
                 <Text style={styles.rowText}>{Info.InfoTitle}</Text>
@@ -299,25 +227,25 @@ class TopScreen extends Component {
                         renderHeader={()=>
                               <View>
                                 <ViewPager style={{height:200}}
-                                        renderPage={this._renderViewPage}
+                                        renderPage={this.renderViewPage}
                                         dataSource={this.state.imageSource}
                                         isLoop={true}
                                         autoPlay={true}/>
                                 <View style={{flexDirection:'row'}}>
                                     <HomeIcon text="药品" iconName={'ios-git-network'} iconColor={'#33CC99'}
-                                              onPress={this._drugPress.bind(this)}/>
+                                              onPress={this._onPress.bind(this, InfoClass, 'InfoClass', '药品手册', '5738f12b-3fb7-4fbd-9975-3475251f62d6')}/>
                                     <HomeIcon text="检验" iconName={'ios-water'} iconColor={'#6699CC'}
-                                              onPress={this._laboratoryPress.bind(this)}/>
+                                              onPress={this._onPress.bind(this, InfoClass, 'InfoClass', '检验手册', '2efb2463-029c-4960-9964-7a3670a6fe7f')}/>
                                     <HomeIcon text="诊断" iconName={'ios-medkit'} iconColor={'#9999CC'}
-                                              onPress={this._DiagnosisPress.bind(this)}/>
+                                              onPress={this._onPress.bind(this, InfoClass, 'InfoClass', '诊断手册', 'a2f0ae74-9085-466f-a7b6-ac67fa316a8a')}/>
                                 </View>
                                 <View style={{flexDirection:'row'}}>
                                     <HomeIcon text="文献" iconName={'ios-book'} iconColor={'#CDB7B5'}
-                                              onPress={this._onPressDoc.bind(this)}/>
+                                              onPress={this._onPress.bind(this, InfoClass, 'InfoClass', '医学文献', '23e4546c-ccd8-456b-a91c-ad125d9d67a0')}/>
                                     <HomeIcon text="资讯" iconName={'ios-list-box'} iconColor={'#66CCFF'}
-                                              onPress={this._informationClick.bind(this)}/>
+                                              onPress={this._onPress.bind(this, InfoList, 'InfoList', '行业资讯', null)}/>
                                     <HomeIcon text="工具" iconName={'ios-build'} iconColor={'#FFAEB9'}
-                                              onPress={this._toolsPress.bind(this)}/>
+                                              onPress={this._onPress.bind(this, ToolsHome, 'ToolsHome', '健康工具', null)}/>
                                 </View>
                               </View>}
                         renderFooter={this.renderFooter.bind(this)}
