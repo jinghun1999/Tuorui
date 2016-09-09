@@ -87,7 +87,7 @@ class InfoClass extends React.Component {
                         requestId: g.ID,
                         parentId: g.ID,
                         headTitle: g.ClassName,
-                        url: CONSTAPI.WEB + '/App/home',
+                        url: CONSTAPI.WEB + '/App/New/NewsCat?ClassRequestID='+g.ID,
                     }
                 })
             }
