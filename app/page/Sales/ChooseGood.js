@@ -56,9 +56,6 @@ class Goods extends Component {
     componentWillUnmount() {
         this.timer && clearTimeout(this.timer);
     }
-    componentWillReceiveProps() {
-
-    }
 
     search(txt) {
         this.setState({
@@ -122,7 +119,8 @@ class Goods extends Component {
     renderGood(good, sectionID, rowID) {
         return (
             <TouchableOpacity
-                style={{ flexDirection:'row',marginLeft:15, marginRight:15, paddingTop:10, paddingBottom:10, borderBottomWidth:StyleSheet.hairlineWidth, borderBottomColor:'#ccc'}}
+                style={{ flexDirection:'row',margin:1,backgroundColor:'#ccc',
+                 borderBottomWidth:StyleSheet.hairlineWidth, borderBottomColor:'#ccc'}}
                 onPress={()=>this.pressRow(good)}>
                 <Image
                     style={styles.goodHead}

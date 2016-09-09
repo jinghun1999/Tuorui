@@ -160,6 +160,9 @@ class BeautyListInfo extends React.Component {
                     headTitle: '美容服务信息',
                     title: 'edit',
                     beautyInfo: beauty,
+                    getResult: function () {
+                        _this._onFetchData(1, false);
+                    }
                 }
             })
         }
@@ -174,12 +177,12 @@ class BeautyListInfo extends React.Component {
                 <View style={{flex:1,}}>
                     <Text style={{fontSize:14, fontWeight:'bold'}}>{beauty.GestName}</Text>
                     <View style={{flexDirection:'row',marginTop:3}}>
-                        <Text style={{flex: 1,}}>会员编号: {beauty.GestCode}</Text>
+                        <Text style={{flex: 1,}}>手机号码: {beauty.MobilePhone}</Text>
                         <Text style={{flex: 1,}}>宠物名: {beauty.PetName}</Text>
                     </View>
                 </View>
                 <View style={{width:20,alignItems:'center', justifyContent:'center'}}>
-                    <Text><Icon name={'angle-right'} size={20} color={'#ccc'}/></Text>
+                    <Icon name={'angle-right'} size={20} color={'#ccc'}/>
                 </View>
             </TouchableOpacity>
         )

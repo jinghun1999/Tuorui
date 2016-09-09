@@ -18,9 +18,8 @@ import {
 import Util from '../../util/Util';
 import Head from '../../commonview/Head';
 import Loading from '../../commonview/Loading';
-import FormPicker from '../../commonview/FormPicker';
 import ChooseBeautyServices from './ChooseBeautyServices';
-import Icon from '../../../node_modules/react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import Modal from 'react-native-modalbox';
 import ChoosePet from './ChoosePet';
 import NetUtil from '../../util/NetUtil';
@@ -63,6 +62,7 @@ class BeautyServices extends React.Component {
             navigator.pop();
         }
     }
+
     _onFetchServices() {
         //http://petservice.tuoruimed.com/service/Api/BusinessInvoices/ServiceCode?
         let _this = this;
@@ -198,18 +198,12 @@ class BeautyServices extends React.Component {
     _onRenderRow(beauty) {
         return (
             <TouchableOpacity
-                style={{flexDirection:'row',marginLeft:15, marginRight:15, paddingTop:10, paddingBottom:10,
+                style={{flexDirection:'row',margin:3,backgroundColor:'#FFE4E1',
                 borderBottomWidth:StyleSheet.hairlineWidth, borderBottomColor:'#ccc'}}
                 onPress={()=>this._onBeautyDetails(beauty)}>
-                <View style={{flex:1}}>
-                    <Text style={{fontSize:14, fontWeight:'bold'}}>名称: {beauty.ItemName}</Text>
-                    <View style={{flexDirection:'row'}}>
-                        <Text style={{flex: 1,}}>条码: {beauty.BarCode}</Text>
-                        <Text style={{flex: 1,}}>单价: ￥{beauty.SellPrice}</Text>
-                    </View>
-                </View>
-                <View style={{width:20,alignItems:'center', justifyContent:'center'}}>
-                    <Text><Icon name={'angle-right'} size={20} color={'#ccc'}/></Text>
+                <View style={{flex:1,flexDirection:'row'}}>
+                    <Text style={{flex: 1,fontSize:14, fontWeight:'bold'}}>名称: {beauty.ItemName}</Text>
+                    <Text style={{flex: 1,fontSize:14,}}>单价: ￥{beauty.SellPrice}</Text>
                 </View>
             </TouchableOpacity>
         )
@@ -251,23 +245,22 @@ class BeautyServices extends React.Component {
         }
         var service = _this.state.serviceSource;
         var servicesID = 0;
-        var serviceName=_this.state.serviceName;
+        var serviceName = _this.state.serviceName;
         alert(serviceName);
         service.forEach((item, index, array)=> {
             if (item.PersonName == _this.state.serviceName) {
                 servicesID = item.ID;
             }
         });
-        alert(servicesID);
         var _petSource = _this.state.petSource;
-        var totalNum=_this.state.totalNum;
+        var totalNum = _this.state.totalNum;
         var totalAmount = _this.state.totalAmount;
         var items = {
             "ID": null,
             "ServiceCode": _this.state.servicesFWID,
             "GestID": _petSource.GestID,
             "GestName": _petSource.GestName,
-            "PetID": _petSource.PetCode,
+            "PetID": _petSource.PetID,
             "PetName": _petSource.PetName,
             "GestCode": _petSource.GestCode,
             "MobilePhone": _petSource.MobilePhone,
@@ -277,7 +270,7 @@ class BeautyServices extends React.Component {
             "HairdresserName": serviceName,
             "TotalNum": totalNum,
             "TotalCost": totalAmount,
-            "PaidStatus":"SM00040",
+            "PaidStatus": "SM00040",
             "PaidTime": null,
             "Remark": "",
             "CreatedBy": null,
@@ -331,6 +324,9 @@ class BeautyServices extends React.Component {
             NetUtil.postJson(CONSTAPI.HOST + '/Service/AddList', postjson, header, function (data) {
                 if (data.Sign && data.Message) {
                     ToastAndroid.show("保存成功", ToastAndroid.SHORT);
+                    if (_this.props.getResult) {
+                        _this.props.getResult();
+                    }
                     _this._onBack();
                 } else {
                     ToastAndroid.show("获取数据错误" + data.Exception, ToastAndroid.SHORT);
@@ -364,81 +360,45 @@ class BeautyServices extends React.Component {
                     </View>
                     <View style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>会员名称</Text>
-                        <TextInput value={this.state.petSource.GestName}
-                                   editable={this.state.enable}
-                                   underlineColorAndroid={'transparent'}
-                                   keyboardType={'default'}
-                                   style={{height: 35, borderWidth:0, flex:1}}
-                        />
+                        <Text style={{flex:1}}>{this.state.petSource.GestName}</Text>
                     </View>
                     <View style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>手机号码</Text>
-                        <TextInput value={this.state.petSource.MobilePhone}
-                                   editable={this.state.enable}
-                                   underlineColorAndroid={'transparent'}
-                                   keyboardType={'default'}
-                                   style={{height: 35, borderWidth:0, flex:1}}
-                        />
+                        <Text style={{flex:1}}>{this.state.petSource.MobilePhone}</Text>
                     </View>
-                    <View style={styles.inputViewStyle}>
+                    <TouchableOpacity onPress={this._onChoosePet.bind(this)}
+                                      style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>宠物名称</Text>
-                        <TextInput value={this.state.petSource.PetName}
-                                   editable={this.state.enable}
-                                   underlineColorAndroid={'transparent'}
-                                   keyboardType={'default'}
-                                   style={{height: 35, borderWidth:0, flex:1}}
-                        />
-                        <TouchableOpacity onPress={this._onChoosePet.bind(this)}
-                                          style={{backgroundColor:'#FF6666',height:35,width:100,
-                                                  borderRadius:5,justifyContent:'center',
-                                                  margin:5,}}>
-                            <Text style={{color:'#fff',textAlign:'center',}}>选择宠物</Text>
-                        </TouchableOpacity>
-                    </View>
+                        <Text style={{flex:1}}>{this.state.petSource.PetName}</Text>
+                        <Icon name={'angle-right'} size={20} color={'#ccc'} style={{marginRight:10}}/>
+                    </TouchableOpacity>
                     <View style={styles.titleStyle}>
                         <Text style={{color:'#fff',marginLeft:10,fontSize:16,}}>服务信息</Text>
                     </View>
                     <View style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>服务单号</Text>
-                        <TextInput value={this.state.servicesFWID}
-                                   editable={this.state.enable}
-                                   underlineColorAndroid={'transparent'}
-                                   keyboardType={'default'}
-                                   style={{height: 35, borderWidth:0, flex:1}}
-                        />
+                        <Text style={{flex:1}}>{this.state.servicesFWID}</Text>
                     </View>
                     <TouchableOpacity onPress={this._onChooseService.bind(this)} style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>服务师</Text>
                         <Text style={{flex:1}}>{this.state.serviceName}</Text>
+                        <Icon name={'angle-right'} size={20} color={'#ccc'} style={{marginRight:10}}/>
                     </TouchableOpacity>
                     <View style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>总项</Text>
-                        <TextInput value={this.state.totalNum.toString()}
-                                   editable={false}
-                                   underlineColorAndroid={'transparent'}
-                                   keyboardType={'default'}
-                                   style={{height: 35, borderWidth:0, flex:1}}
-                        />
+                        <Text style={{flex:1}}>{this.state.totalNum.toString()}</Text>
                     </View>
                     <View style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>总金额</Text>
-                        <TextInput value={this.state.totalAmount.toString()}
-                                   editable={false}
-                                   underlineColorAndroid={'transparent'}
-                                   keyboardType={'default'}
-                                   style={{height: 35, borderWidth:0, flex:1}}
-                        />
+                        <Text style={{flex:1}}>{this.state.totalAmount.toString()}</Text>
                     </View>
                     <View style={styles.titleStyle}>
-                        <Text style={{color:'#fff',marginLeft:10,fontSize:16,}}>美容项目</Text>
-                    </View>
-                    <View style={styles.inputViewStyle}>
-                        <FormPicker title="添加美容项目"
-                                    tips="选择/扫码"
-                                    onPress={this.chooseBeauty.bind(this)}
-                                    showbottom={true}
-                                    style={{height: 35,flex:1,justifyContent:'center'}}
-                        />
+                        <Text style={{color:'#fff',marginLeft:10,fontSize:16,flex:1,}}>美容项目</Text>
+                        <TouchableOpacity style={{width:50,alignItems:'center',justifyContent:'center'}}
+                                          onPress={this.chooseBeauty.bind(this)}>
+                            <Text style={{textAlign:'center',color:'white'}}>新增</Text>
+                        </TouchableOpacity>
+
                     </View>
                     <View>
                         <ListView enableEmptySections={true}
@@ -474,7 +434,7 @@ const styles = StyleSheet.create({
         height: 20,
         margin: 2,
         flexDirection: 'row',
-        backgroundColor: '#efefef',
+        backgroundColor: '#4876FF',
     },
     inputViewStyle: {
         flex: 1,
