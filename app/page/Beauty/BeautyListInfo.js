@@ -26,8 +26,8 @@ class BeautyListInfo extends React.Component {
         super(props);
         this.state = {
             loaded: false,
-            pageSize:15,
-            pageIndex:1,
+            pageSize: 15,
+            pageIndex: 1,
             dataSource: [],
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
         }
@@ -96,13 +96,13 @@ class BeautyListInfo extends React.Component {
                 });
                 /*get recordCount from the api */
                 postdata = [{
-                    "Childrens":null,
-                    "Field":"IsDeleted",
-                    "Title":null,
-                    "Operator":{"Name":"=", "Title":"等于", "Expression":null},
-                    "DataType":0,
-                    "Value":"0",
-                    "Conn":0
+                    "Childrens": null,
+                    "Field": "IsDeleted",
+                    "Title": null,
+                    "Operator": {"Name": "=", "Title": "等于", "Expression": null},
+                    "DataType": 0,
+                    "Value": "0",
+                    "Conn": 0
                 }]
                 if (!isNext) {
                     NetUtil.postJson(CONSTAPI.HOST + '/Service/GetRecordCount', postdata, header, function (data) {
@@ -150,6 +150,19 @@ class BeautyListInfo extends React.Component {
 
     _onBeautyDetails(beauty) {
         alert(beauty.GestName);
+        let _this = this;
+        const {navigator}=_this.props;
+        if (navigator) {
+            navigator.push({
+                name: 'BeautyServices',
+                component: BeautyServices,
+                params: {
+                    headTitle: '美容服务信息',
+                    title: 'edit',
+                    beautyInfo: beauty,
+                }
+            })
+        }
     }
 
     _onRenderRow(beauty) {
@@ -184,9 +197,14 @@ class BeautyListInfo extends React.Component {
             <View style={styles.container}>
                 <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}
                       canAdd={true} edit="新增" editInfo={this._onEditInfo.bind(this)}/>
-                <View>
-                    {body}
-                </View>
+                <ScrollView key={'scrollView'}
+                            horizontal={false}
+                            showsVerticalScrollIndicator={true}
+                            scrollEnabled={true}>
+                    <View>
+                        {body}
+                    </View>
+                </ScrollView>
             </View>
         )
     }
