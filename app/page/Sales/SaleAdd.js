@@ -25,10 +25,10 @@ import ChooseGuest from './ChooseGuest';
 import ChooseStore from './ChooseStore';
 import FormPicker from '../../commonview/FormPicker';
 import FormInput from '../../commonview/FormInput';
-
+//import Scan from './Scan';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
-export default class Sale extends React.Component {
+export default class SaleAdd extends React.Component {
     constructor(props) {
         super(props);
         var now = new Date();
@@ -184,7 +184,7 @@ export default class Sale extends React.Component {
                     ItemStandard: _goods[i].ItemStandard,
                     ManufacturerCode: null,
                     ManufacturerName: null,
-                    PaidStatus: 'SM00040',
+                    PaidStatus: 'SM00051',
                     PaidTime: null,
                     SellContent: null,
                     SellPrice: _goods[i].SellPrice,
@@ -214,23 +214,6 @@ export default class Sale extends React.Component {
         }).catch(err => {
             alert('error:' + err);
         });
-    }
-
-    shouldComponentUpdate() {
-        return true;
-    }
-
-    componentWillReceiveProps() {
-        //var mustpay = 0.00;
-        //var _selectedgood = this.state.SelectedGoods;
-        //for (let i = 0; i < this.state.SelectedGoods.items.length; i++) {
-        //mustpay += this.state.SelectedGoods.items[i].GoodCount * this.state.SelectedGoods.items[i].SellPrice;
-        //}
-        //_selectedgood.MustPay = mustpay;
-        //_selectedgood.RealPay = mustpay;
-        //this.setState({
-        //    SelectedGoods: _selectedgood
-        //})
     }
 
     _onBack() {
@@ -277,7 +260,7 @@ export default class Sale extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Head title='新销售单' canBack={true} onPress={this._onBack.bind(this)}/>
+                <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
                 <ScrollView key={'scrollView'}
                             horizontal={false}
                             showsVerticalScrollIndicator={true}
@@ -380,4 +363,4 @@ const styles = StyleSheet.create({
         }
     }
 );
-module.exports = Sale;
+module.exports = SaleAdd;

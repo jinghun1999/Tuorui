@@ -13,6 +13,7 @@ import{
     TextInput,
     InteractionManager,
     } from 'react-native';
+import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
 import Loading from '../../commonview/Loading';
@@ -23,17 +24,13 @@ class GoodSales extends React.Component {
     constructor(props) {
         let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         super(props);
-        let myDate = new Date();
-        let year = myDate.getFullYear();
-        let month = myDate.getMonth() + 1;
-        let day = myDate.getDate();
         this.state = {
             user: {},
             ds: ds,
             dataSource: [],
             loaded: false,
-            dateFrom: year + "-" + month + "-1",
-            dateTo: year + "-" + month + "-" + day,
+            dateFrom: Util.GetDateStr(-30),
+            dateTo: Util.GetDateStr(0),
             kw: '',
             totalCount: 0,
             totalAmount: 0,

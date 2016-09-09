@@ -12,6 +12,7 @@ import{
     ListView,
     InteractionManager,
     } from 'react-native';
+import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
 import Loading from '../../commonview/Loading';
@@ -22,17 +23,21 @@ class Income extends React.Component {
     constructor(props) {
         let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         super(props);
-        let myDate = new Date();
-        let year = myDate.getFullYear();
-        let month = myDate.getMonth() + 1;
-        let day = myDate.getDate();
         this.state = {
             user: {},
             ds: ds,
+            sumInfo: {
+                TotalNum: 0,
+                SellTotal: 0,
+                InPrice: 0,
+                Discount: 0,
+                BackMoney: 0,
+                Profit: 0,
+            },
             dataSource: [],
             loaded: false,
-            dateFrom: year + "-" + month + "-1",
-            dateTo: year + "-" + month + "-" + day,
+            dateFrom: Util.GetDateStr(-30),
+            dateTo: Util.GetDateStr(0),
         };
     }
 
@@ -93,18 +98,26 @@ class Income extends React.Component {
                 };
                 NetUtil.postJson(CONSTAPI.HOST + '/HasPaidTotal/GetModelList', postdata, header, function (data) {
                     let ds = data.Message;
-                    let saleCount = 0, saleAmount = 0.00, saleCB = 0.00, yhCB = 0.00, otherCB = 0.00, lr = 0.00;
                     if (data.Sign && ds != null) {
-                        ds.forEach((d)=> {
-                            saleCount += d.TotalNum;
-                        });
                         _this.setState({
                             dataSource: ds,
                             loaded: true,
-                            saleCount: saleCount,
                         });
                     } else {
                         alert("获取数据失败：" + ds);
+                        _this.setState({
+                            loaded: true,
+                        });
+                    }
+                });
+                NetUtil.get(CONSTAPI.HOST + '/Report/GetSumTotalEarnMoney?startDate=' + _this.state.dateFrom + '&endDate=' + _this.state.dateTo + ' 23:59:59', header, function (data) {
+                    let ds = data.Message;
+                    if (data.Sign && ds != null) {
+                        _this.setState({
+                            sumInfo: ds,
+                            loaded: true,
+                        });
+                    } else {
                         _this.setState({
                             loaded: true,
                         });
@@ -133,31 +146,31 @@ class Income extends React.Component {
                 </View>
                 <View style={styles.outerRow}>
                     <View style={styles.sumRow}>
-                        <Text style={styles.sumValue}>{this.state.saleCount}</Text>
+                        <Text style={styles.sumValue}>{this.state.sumInfo.TotalNum}</Text>
                         <Text style={styles.sumTitle}>销售数量</Text>
                     </View>
                     <View style={[styles.sumRow,{borderRightWidth:0}]}>
-                        <Text style={styles.sumValue}>1200</Text>
+                        <Text style={styles.sumValue}>¥{this.state.sumInfo.SellTotal}</Text>
                         <Text style={styles.sumTitle}>销售额</Text>
                     </View>
                 </View>
                 <View style={styles.outerRow}>
                     <View style={styles.sumRow}>
-                        <Text style={styles.sumValue}>1200</Text>
+                        <Text style={styles.sumValue}>¥{this.state.sumInfo.InPrice}</Text>
                         <Text style={styles.sumTitle}>销售成本</Text>
                     </View>
                     <View style={[styles.sumRow,{borderRightWidth:0}]}>
-                        <Text style={styles.sumValue}>1200034.32</Text>
+                        <Text style={styles.sumValue}>¥{this.state.sumInfo.Discount}</Text>
                         <Text style={styles.sumTitle}>优惠成本</Text>
                     </View>
                 </View>
                 <View style={[styles.outerRow,{borderBottomWidth:0,}]}>
                     <View style={styles.sumRow}>
-                        <Text style={styles.sumValue}>1200</Text>
+                        <Text style={styles.sumValue}>¥{this.state.sumInfo.BackMoney}</Text>
                         <Text style={styles.sumTitle}>其他成本</Text>
                     </View>
                     <View style={[styles.sumRow,{borderRightWidth:0}]}>
-                        <Text style={styles.sumValue}>1200</Text>
+                        <Text style={styles.sumValue}>¥{this.state.sumInfo.Profit}</Text>
                         <Text style={styles.sumTitle}>利润</Text>
                     </View>
                 </View>
@@ -182,44 +195,44 @@ class Income extends React.Component {
 
     render() {
         let searchBox = (<View style={{flexDirection:'row', alignItems:'center', backgroundColor:'#fff'}}>
-                <Text style={{marginLeft:10}}>从</Text>
-                <DatePicker
-                    date={this.state.dateFrom}
-                    mode="date"
-                    placeholder="选择日期"
-                    format="YYYY-MM-DD"
-                    minDate="2010-01-01"
-                    maxDate="2020-01-01"
-                    confirmBtnText="Confirm"
-                    cancelBtnText="Cancel"
-                    showIcon={false}
-                    style={{width:80}}
-                    customStyles={{
+            <Text style={{marginLeft:10}}>从</Text>
+            <DatePicker
+                date={this.state.dateFrom}
+                mode="date"
+                placeholder="选择日期"
+                format="YYYY-MM-DD"
+                minDate="2010-01-01"
+                maxDate="2020-01-01"
+                confirmBtnText="Confirm"
+                cancelBtnText="Cancel"
+                showIcon={false}
+                style={{width:80}}
+                customStyles={{
                     dateInput: {
                       height:30,
                       borderWidth:StyleSheet.hairlineWidth,
                     },
                   }}
-                    onDateChange={(date) => {this.setState({dateFrom: date})}}/>
-                <Text>到</Text>
-                <DatePicker
-                    date={this.state.dateTo}
-                    mode="date"
-                    placeholder="选择日期"
-                    format="YYYY-MM-DD"
-                    minDate="2010-01-01"
-                    maxDate="2020-01-01"
-                    confirmBtnText="Confirm"
-                    cancelBtnText="Cancel"
-                    showIcon={false}
-                    style={{width:80}}
-                    customStyles={{
+                onDateChange={(date) => {this.setState({dateFrom: date})}}/>
+            <Text>到</Text>
+            <DatePicker
+                date={this.state.dateTo}
+                mode="date"
+                placeholder="选择日期"
+                format="YYYY-MM-DD"
+                minDate="2010-01-01"
+                maxDate="2020-01-01"
+                confirmBtnText="Confirm"
+                cancelBtnText="Cancel"
+                showIcon={false}
+                style={{width:80}}
+                customStyles={{
                     dateInput: {
                       height:30,
                       borderWidth:StyleSheet.hairlineWidth,
                     },
                   }}
-                    onDateChange={(date) => {this.setState({dateTo: date})}}/>
+                onDateChange={(date) => {this.setState({dateTo: date})}}/>
             <TouchableHighlight
                 underlayColor='#4169e1'
                 style={styles.searchBtn}
