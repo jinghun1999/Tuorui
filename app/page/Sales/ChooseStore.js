@@ -4,21 +4,19 @@
 'use strict';
 import React, {Component} from 'react';
 import {
-    AppRegistry,
     StyleSheet,
     Text,
     TextInput,
     View,
-    Dimensions,
     ToastAndroid,
     TouchableOpacity,
-    Image,
+    InteractionManager,
     ListView,
-    ScrollView,
     } from 'react-native';
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
+import Loading from '../../commonview/Loading';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
@@ -26,8 +24,6 @@ class ChooseStore extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            token: '',
-            kw: null,
             storeDataSource: null,
             loaded: false,
         };
@@ -44,36 +40,31 @@ class ChooseStore extends Component {
     }
 
     componentDidMount() {
-        var _this = this;
-        _this.timer = setTimeout(
-            () => {
-                _this.fetchData();
-            }, 500
-        );
-    }
-
-    componentWillUnmount() {
-        this.timer && clearTimeout(this.timer);
+        InteractionManager.runAfterInteractions(() => {
+            this.fetchData();
+        });
     }
 
     fetchData() {
         let _this = this;
         let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-        storage.load({
+        storage.getBatchData([{
             key: 'USER',
             autoSync: false,
-            syncInBackground: false
-        }).then(ret => {
+            syncInBackground: false,
+        }, {
+            key: 'HOSPITAL',
+            autoSync: false,
+            syncInBackground: false,
+        }]).then(rets => {
             let postjson = {
                 items: [],
                 sorts: []
             };
             let header = {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Mobile ' + Util.base64Encode(ret.user.Mobile + ':' + Util.base64Encode(ret.pwd) + ':' + (ret.user.Hospitals[0]!=null ? ret.user.Hospitals[0].Registration : '') + ":" + ret.user.Token)
+                'Authorization': NetUtil.headerAuthorization(rets[0].user.Mobile, rets[0].pwd, rets[1].hospital.Registration, rets[0].user.Token)
             };
-            NetUtil.postJson(CONSTAPI.GETSTORES, postjson, header, function (data) {
+            NetUtil.postJson(CONSTAPI.HOST+'/Warehouse/GetModelList', postjson, header, function (data) {
                 if (data.Sign && data.Message) {
                     _this.setState({
                         storeDataSource: ds.cloneWithRows(data.Message),
@@ -110,12 +101,11 @@ class ChooseStore extends Component {
         }
     }
 
-    renderGest(p, sectionID, rowID) {
+    renderRow(p, sectionID, rowID) {
         return (
-            <TouchableOpacity style={styles.container} onPress={()=>this._pressRow(p)}>
+            <TouchableOpacity style={styles.row} onPress={()=>this._pressRow(p)}>
                 <View style={styles.storeWrap}>
                     <Text style={styles.storeName}>{p.WarehouseName}</Text>
-                    {/*<Text style={styles.storeDetail}>编号：{p.ItemCode}</Text>*/}
                 </View>
                 <View style={{width:20,alignItems:'center', justifyContent:'center'}}>
                     <Text><Icon name={'angle-right'} size={20} color={'#ccc'}/></Text>
@@ -128,64 +118,43 @@ class ChooseStore extends Component {
         var body;
         if (!this.state.loaded) {
             body = (
-                <View style={styles.loadingBox}>
-                    <Bars size={10} color="#1CAFF6"/>
-                </View>
+                <Loading type={'text'}/>
             )
         } else {
             body = (
                 <ListView dataSource={this.state.storeDataSource} enableEmptySections={true}
-                          renderRow={this.renderGest.bind(this)}/>
+                          renderRow={this.renderRow.bind(this)}/>
             )
         }
         return (
             <View style={{flex:1}}>
                 <Head title='选择仓库' canBack={true} onPress={this._onBack.bind(this)}/>
-                <ScrollView key={'scrollView'}
-                            horizontal={false}
-                            showsVerticalScrollIndicator={true}
-                            scrollEnabled={true}>
-                    <View style={styles.searchRow}>
-                     <TextInput
-                         autoCapitalize="none"
-                         autoCorrect={false}
-                         clearButtonMode="always"
-                         onChangeText={(txt) => this.setState({kw: txt,})}
-                         placeholder="输入仓库名称..."
-                         style={styles.searchTextInput} />
-                     </View>
-                    {body}
-                    <View style={{height:100}}></View>
-                </ScrollView>
+                {body}
             </View>
         )
     }
 }
 const styles = StyleSheet.create({
-    container: {
+    row: {
         flex: 1,
         flexDirection: 'row',
         paddingTop: 5,
         paddingLeft: 15,
         paddingRight: 15,
         paddingBottom: 5,
+        backgroundColor:'#fff',
         borderBottomWidth: StyleSheet.hairlineWidth,
         borderBottomColor: '#ccc'
     },
-    loadingBox: {
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
     storeWrap: {
         flex: 1,
-        paddingTop:10,
-        paddingBottom:10,
+        paddingTop: 10,
+        paddingBottom: 10,
         justifyContent: 'center',
     },
     storeName: {
         fontWeight: 'bold',
         fontSize: 18,
-        backgroundColor: '#fff',
     },
     storeDetail: {
         fontSize: 12,
@@ -193,21 +162,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         paddingLeft: 5,
-    },
-    searchRow: {
-        backgroundColor: '#eeeeee',
-        paddingTop: 15,
-        paddingLeft: 10,
-        paddingRight: 10,
-        paddingBottom: 10,
-    },
-    searchTextInput: {
-        backgroundColor: '#fff',
-        borderColor: '#cccccc',
-        borderRadius: 3,
-        borderWidth: 1,
-        height: 40,
-        paddingLeft: 8,
     },
 });
 

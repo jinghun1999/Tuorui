@@ -4,21 +4,20 @@
 'use strict';
 import React, {Component} from 'react';
 import {
-    AppRegistry,
     StyleSheet,
     Text,
     TextInput,
     View,
-    Dimensions,
     ToastAndroid,
     TouchableOpacity,
     Image,
     ListView,
-    ScrollView,
+    InteractionManager,
     } from 'react-native';
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
+import Loading from '../../commonview/Loading';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
@@ -27,12 +26,22 @@ class Goods extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            token: '',
-            goodsDataSource: null,
+            dataSource: null,
             loaded: false,
-            storeId: null,
+            //storeId: this.props.storeId,
+            ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
             kw: null,
+            pageSize: 15,
+            pageIndex: 0,
+            recordCount: 0,
         };
+    }
+
+    _onBack() {
+        const { navigator } = this.props;
+        if (navigator) {
+            navigator.pop();
+        }
     }
 
     pressRow(good) {
@@ -43,89 +52,64 @@ class Goods extends Component {
     }
 
     componentDidMount() {
-        var _this = this;
-        _this.setState({
-            storeId: this.props.storeId,
-        })
-        _this.timer = setTimeout(
-            () => {
-                _this.fetchData();
-            }, 500
-        )
-    }
-    componentWillUnmount() {
-        this.timer && clearTimeout(this.timer);
-    }
-
-    search(txt) {
-        this.setState({
-            kw: txt,
-            loaded: false,
+        InteractionManager.runAfterInteractions(() => {
+            this.fetchData(1);
         });
-        this.fetchData();
     }
 
-    fetchData() {
+    fetchData(page) {
         let _this = this;
-        let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-        storage.load({
+        storage.getBatchData([{
             key: 'USER',
-            autoSync: true,
-            syncInBackground: true
-        }).then(ret => {
+            autoSync: false,
+            syncInBackground: false,
+        }, {
+            key: 'HOSPITAL',
+            autoSync: false,
+            syncInBackground: false,
+        }]).then(rets => {
             let postjson = {
-                WarehouseID: _this.state.storeId,
+                WarehouseID: _this.props.storeId,
                 CateNo: null,
-                InputTxt: _this.state.kw && _this.state.kw.length > 0 ? _this.state.kw : null,
-                BusiTypeCodes: [1,2,3,7,8,9,12],
-                pageSize: 10000,
-                pageIndex: 1
+                InputTxt: _this.state.kw,
+                BusiTypeCodes: [1, 2, 3, 7, 8, 9, 12],
+                pageSize: _this.state.pageSize,
+                pageIndex: page
             };
             let header = {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Mobile ' + Util.base64Encode(ret.user.Mobile + ':' + Util.base64Encode(ret.pwd) + ':' + (ret.user.Hospitals[0]!=null ? ret.user.Hospitals[0].Registration : '') + ":" + ret.user.Token)
+                'Authorization': NetUtil.headerAuthorization(rets[0].user.Mobile, rets[0].pwd, rets[1].hospital.Registration, rets[0].user.Token)
             };
-            NetUtil.postJson(CONSTAPI.GETGOODS, postjson, header, function (data) {
+            NetUtil.postJson(CONSTAPI.HOST + '/ItemTypeLeftJoinItemCount/SearchSellListByPage', postjson, header, function (data) {
                 if (data.Sign && data.Message != null) {
                     _this.setState({
-                        goodsDataSource: ds.cloneWithRows(data.Message),
+                        dataSource: data.Message,
+                        pageIndex: page,
                         loaded: true,
                     });
                 } else {
                     alert("获取数据失败：" + data.Message);
                     _this.setState({
-                        goodsDataSource: ds.cloneWithRows([]),
+                        dataSource: [],
                         loaded: true,
                     });
                 }
             });
         }).catch(err => {
             _this.setState({
-                goodsDataSource: ds.cloneWithRows([]),
+                dataSource: [],
                 loaded: true,
             });
             alert('error:' + err);
         });
     }
 
-    _onBack() {
-        const { navigator } = this.props;
-        if (navigator) {
-            navigator.pop();
-        }
+    search() {
+        this.fetchData(1);
     }
 
-    renderGood(good, sectionID, rowID) {
+    renderRow(good, sectionID, rowID) {
         return (
-            <TouchableOpacity
-                style={{ flexDirection:'row',margin:1,backgroundColor:'#ccc',
-                 borderBottomWidth:StyleSheet.hairlineWidth, borderBottomColor:'#ccc'}}
-                onPress={()=>this.pressRow(good)}>
-                <Image
-                    style={styles.goodHead}
-                    source={require('../../img/shopping_81px.png')}
-                    />
+            <TouchableOpacity style={styles.row} onPress={()=>this.pressRow(good)}>
                 <View style={{flex:1}}>
                     <Text style={{fontSize:14, fontWeight:'bold'}}>{good.ItemName} ({good.ItemStyle})</Text>
                     <View style={{flexDirection:'row'}}>
@@ -145,40 +129,38 @@ class Goods extends Component {
         var body;
         if (!this.state.loaded) {
             body = (
-                <View style={styles.loadingBox}>
-                    <Bars size={10} color="#1CAFF6"/>
-                </View>
+                <Loading type={'text'}/>
             )
         } else {
             body = (
-                <ListView dataSource={this.state.goodsDataSource} enableEmptySections={true}
-                          renderRow={this.renderGood.bind(this)}
-                          initialListSize={10}
-                          pageSize={10}
+                <ListView dataSource={this.state.ds.cloneWithRows(this.state.dataSource)}
+                          enableEmptySections={true}
+                          renderRow={this.renderRow.bind(this)}
+                          initialListSize={15}
+                          pageSize={15}
                     />
             )
         }
         return (
             <View style={{flex:1}}>
                 <Head title='选择商品' canBack={true} onPress={this._onBack.bind(this)}/>
-                <ScrollView key={'scrollView'}
-                            horizontal={false}
-                            showsVerticalScrollIndicator={true}
-                            scrollEnabled={true}>
-                    <View style={styles.searchRow}>
-                        <TextInput
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            clearButtonMode="always"
-                            onChangeText={this.search.bind(this)}
-                            placeholder="输入商品名称..."
-                            value={this.state.kw}
-                            style={styles.searchTextInput}
-                            />
-                    </View>
-                    {body}
-                    <View style={{height:100}}></View>
-                </ScrollView>
+                <View style={styles.searchRow}>
+                    <TextInput
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        clearButtonMode="always"
+                        onChangeText={(txt)=>{this.setState({kw:txt})}}
+                        placeholder="输入商品名称..."
+                        value={this.state.kw}
+                        style={styles.searchTextInput}/>
+                    <TouchableOpacity
+                        underlayColor='#4169e1'
+                        style={styles.searchBtn}
+                        onPress={this.search.bind(this)}>
+                        <Text style={{color:'#fff'}}>查询</Text>
+                    </TouchableOpacity>
+                </View>
+                {body}
             </View>
         )
     }
@@ -192,6 +174,13 @@ const styles = StyleSheet.create({
     loadingBox: {
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    row: {
+        padding:10,
+        flexDirection: 'row',
+        backgroundColor: '#fff',
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderBottomColor: '#ccc'
     },
     good_view: {
         flex: 1,
@@ -216,7 +205,18 @@ const styles = StyleSheet.create({
         paddingLeft: 5,
         backgroundColor: "#ccc"
     },
+    searchBtn: {
+        height: 30,
+        width: 50,
+        marginLeft: 10,
+        backgroundColor: '#0099CC',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5,
+    },
     searchRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
         backgroundColor: '#eeeeee',
         paddingTop: 15,
         paddingLeft: 10,
@@ -224,20 +224,13 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
     },
     searchTextInput: {
+        flex: 1,
         backgroundColor: '#fff',
         borderColor: '#cccccc',
         borderRadius: 3,
         borderWidth: 1,
         height: 40,
         paddingLeft: 8,
-    },
-    goodHead: {
-        width: 34,
-        height: 34,
-        marginRight: 10,
-        /*borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 17,*/
     },
 });
 

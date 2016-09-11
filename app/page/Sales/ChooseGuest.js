@@ -13,6 +13,7 @@ import {
     ToastAndroid,
     TouchableOpacity,
     InteractionManager,
+    ActivityIndicator,
     Image,
     ListView,
     ScrollView,
@@ -36,6 +37,7 @@ class ChooseGuest extends Component {
             loaded: false,
             GoodInfo: null,
             pageIndex: 1,
+            pageSize: 15,
             recordCount: 0,
         };
         //this.fetchData = this.fetchData.bind(this);
@@ -54,11 +56,8 @@ class ChooseGuest extends Component {
         });
     }
 
-    fetchData(page, isnext) {
+    fetchData(page, isNext) {
         let _this = this;
-        _this.setState({
-            loaded: false,
-        });
         storage.getBatchData([{
             key: 'USER',
             autoSync: false,
@@ -88,7 +87,7 @@ class ChooseGuest extends Component {
                 },],
                 "sorts": [{"Field": "ModifiedOn", "Title": null, "Sort": {"Name": "Desc", "Title": "降序"}, "Conn": 0}],
                 "index": page,
-                "pageSize": 15
+                "pageSize": _this.state.pageSize
             };
             if (_this.state.kw.length > 0) {
                 let query = {
@@ -142,6 +141,7 @@ class ChooseGuest extends Component {
                     _this.setState({
                         dataSource: dataSource,
                         pageIndex: page,
+                        loaded: true,
                     });
                 } else {
                     alert("获取数据失败：" + data.Message);
@@ -151,6 +151,65 @@ class ChooseGuest extends Component {
                     });
                 }
             });
+            postjson = [{
+                "Childrens": null,
+                "Field": "isVIP",
+                "Title": null,
+                "Operator": {"Name": "=", "Title": "等于", "Expression": null},
+                "DataType": 0,
+                "Value": "SM00054",
+                "Conn": 0
+            }, {
+                "Childrens": null,
+                "Field": "IsDeleted",
+                "Title": null,
+                "Operator": {"Name": "=", "Title": "等于", "Expression": null},
+                "DataType": 0,
+                "Value": "0",
+                "Conn": 1
+            },];
+            if(_this.state.kw.length>0){
+                let query = {
+                    "Childrens": [{
+                        "Childrens": null,
+                        "Field": "GestCode",
+                        "Title": null,
+                        "Operator": {"Name": "like", "Title": "相似", "Expression": " @File like '%' + @Value + '%' "},
+                        "DataType": 0,
+                        "Value": _this.state.kw,
+                        "Conn": 0
+                    }, {
+                        "Childrens": null,
+                        "Field": "GestName",
+                        "Title": null,
+                        "Operator": {"Name": "like", "Title": "相似", "Expression": " @File like '%' + @Value + '%' "},
+                        "DataType": 0,
+                        "Value": _this.state.kw,
+                        "Conn": 2
+                    }, {
+                        "Childrens": null,
+                        "Field": "MobilePhone",
+                        "Title": null,
+                        "Operator": {"Name": "like", "Title": "相似", "Expression": " @File like '%' + @Value + '%' "},
+                        "DataType": 0,
+                        "Value": _this.state.kw,
+                        "Conn": 2
+                    }], "Field": null, "Title": null, "Operator": null, "DataType": 0, "Value": null, "Conn": 1
+                };
+                postjson.push(query);
+            }
+            if (!isNext) {
+                NetUtil.postJson(CONSTAPI.HOST + '/Gest/GetRecordCount', postjson, header, function (data) {
+                    if (data.Sign && data.Message != null) {
+                        _this.setState({
+                            recordCount: data.Message,
+                            loaded: true,
+                        });
+                    } else {
+                        alert("获取记录数失败：" + data.Message);
+                    }
+                });
+            }
         }).catch(err => {
             _this.setState({
                 dataSource: [],
@@ -173,7 +232,7 @@ class ChooseGuest extends Component {
 
     renderRow(p, sectionID, rowID) {
         return (
-            <TouchableOpacity style={styles.container} onPress={()=>this._pressRow(p)}>
+            <TouchableOpacity style={styles.rowBox} onPress={()=>this._pressRow(p)}>
                 <View style={styles.gestWrap}>
                     <Text style={styles.guestName}>{p.GestName}</Text>
                     <Text style={styles.guestDetail}>手机：{p.MobilePhone}</Text>
@@ -182,6 +241,25 @@ class ChooseGuest extends Component {
                     <Text><Icon name={'angle-right'} size={20} color={'#ccc'}/></Text>
                 </View>
             </TouchableOpacity>
+        );
+    }
+
+    _onEndReached() {
+        this.fetchData(this.state.pageIndex + 1, true);
+    }
+
+    _renderFooter() {
+        if (this.state.pageIndex >= this.state.recordCount / this.state.pageSize) {
+            return (
+                <View style={{height: 40, justifyContent:'center', alignItems:'center'}}>
+                    <Text>没有更多数据了~</Text>
+                </View>
+            )
+        }
+        return (
+            <View style={{height: 120}}>
+                <ActivityIndicator />
+            </View>
         );
     }
 
@@ -227,13 +305,14 @@ class ChooseGuest extends Component {
     }
 }
 const styles = StyleSheet.create({
-    container: {
+    rowBox: {
         flex: 1,
         flexDirection: 'row',
         paddingTop: 5,
         paddingLeft: 15,
         paddingRight: 15,
         paddingBottom: 5,
+        backgroundColor:'#fff',
         borderBottomWidth: StyleSheet.hairlineWidth,
         borderBottomColor: '#ccc'
     },
@@ -248,14 +327,12 @@ const styles = StyleSheet.create({
     guestName: {
         fontWeight: 'bold',
         fontSize: 18,
-        backgroundColor: '#fff',
     },
     guestDetail: {
         fontSize: 12,
         textAlign: 'left',
         justifyContent: 'center',
         alignItems: 'center',
-        paddingLeft: 5,
     },
     searchBtn: {
         height: 30,

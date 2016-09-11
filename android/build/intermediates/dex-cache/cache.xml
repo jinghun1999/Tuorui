@@ -2,11 +2,11 @@
 <items version="2" >
 
     <item
-        jar="D:\work\Tuorui\android\app\build\intermediates\exploded-aar\Demo\react-native-camera\unspecified\jars\classes.jar"
+        jar="D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\Demo\react-native-camera\unspecified\jars\classes.jar"
         jumboMode="false"
         revision="23.0.1"
-        sha1="36ec7249764054d35258b89074a0c5960e703558">
-        <dex dex="D:\work\Tuorui\android\app\build\intermediates\pre-dexed\debug\classes-2456c1e959de53fc8640f9c5ceed600d6697d781.jar" />
+        sha1="fed44ac55ca06a1f083291c7b5285ef35a484568">
+        <dex dex="D:\Work\GitHub\Tuorui\android\app\build\intermediates\pre-dexed\debug\classes-71f163163ea56a08e39c082c249e21c77ea93ffc.jar" />
     </item>
 
 </items>

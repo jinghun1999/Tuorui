@@ -34,6 +34,7 @@ class SaleList extends Component {
             dateTo: Util.GetDateStr(0),
             pageIndex: 1,
             recordCount: 0,
+            pageSize: 15,
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
         };
         this._search =  this._search.bind(this);
@@ -112,7 +113,7 @@ class SaleList extends Component {
                         "Conn": 0
                     }],
                     index: page,
-                    pageSize: 15
+                    pageSize: _this.state.pageSize
                 };
                 let header = {
                     'Authorization': NetUtil.headerAuthorization(rets[0].user.Mobile, rets[0].pwd, rets[1].hospital.Registration, rets[0].user.Token)
