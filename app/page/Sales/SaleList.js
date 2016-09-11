@@ -11,6 +11,7 @@ import {
     View,
     TouchableOpacity,
     ListView,
+    ActivityIndicator,
     InteractionManager,
     ScrollView,
     } from 'react-native';
@@ -31,11 +32,11 @@ class SaleList extends Component {
             loaded: false,
             dateFrom: Util.GetDateStr(-1),
             dateTo: Util.GetDateStr(0),
-            kw: '',
             pageIndex: 1,
-            pageSize: 10,
+            recordCount: 0,
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
         };
+        this._search =  this._search.bind(this);
     }
 
     _onBack() {
@@ -111,7 +112,7 @@ class SaleList extends Component {
                         "Conn": 0
                     }],
                     index: page,
-                    pageSize: _this.state.pageSize
+                    pageSize: 15
                 };
                 let header = {
                     'Authorization': NetUtil.headerAuthorization(rets[0].user.Mobile, rets[0].pwd, rets[1].hospital.Registration, rets[0].user.Token)
@@ -128,14 +129,10 @@ class SaleList extends Component {
                         }
                         _this.setState({
                             dataSource: dataSource,
-                            loaded: true,
                             pageIndex: page,
                         });
                     } else {
                         alert("获取数据失败：" + data.Message);
-                        _this.setState({
-                            loaded: true,
-                        });
                     }
                 });
                 postdata = [{
@@ -162,20 +159,13 @@ class SaleList extends Component {
                     "DataType": 0,
                     "Value": _this.state.dateTo + " 23:59:59",
                     "Conn": 1
-                }, {
-                    "Childrens": null,
-                    "Field": "PaidStatus",
-                    "Title": null,
-                    "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                    "DataType": 0,
-                    "Value": "SM00051",
-                    "Conn": 1
                 }]
                 if (!isNext) {
                     NetUtil.postJson(CONSTAPI.HOST + '/Store_DirectSell/GetRecordCount', postdata, header, function (data) {
                         if (data.Sign && data.Message != null) {
                             _this.setState({
                                 recordCount: data.Message,
+                                loaded: true,
                             });
                         } else {
                             alert("获取记录数失败：" + data.Message);
@@ -189,8 +179,11 @@ class SaleList extends Component {
                     loaded: true,
                 });
                 alert('error:' + err.message);
-            }
-        )
+            });
+
+    }
+    _onEndReached() {
+        this._fetchData(this.state.pageIndex + 1, true);
     }
 
     _onAdd() {
@@ -202,44 +195,64 @@ class SaleList extends Component {
                 component: SaleAdd,
                 params: {
                     headTitle: '新销售单',
+                    getResult: function () {
+                        _this.search();
+                    }
                 }
             })
         }
     }
 
-    _search(txt) {
+    _search() {
         this._fetchData(1, false);
-        this.setState({
-            kw: txt,
-            loaded: false,
-        });
     }
 
-    _renderPet(pet) {
+    _renderRow(obj) {
+        let status = (<Text style={{color:'#FF6666'}}>未付款</Text>)
+        if (obj.PaidStatus == 'SM00051') {
+            status = (<Text style={{color:'#FF0033'}}>已付款</Text>)
+        }
         return (
-            <TouchableOpacity
-                style={{ flexDirection:'row',marginLeft:15, marginRight:15, paddingTop:10, paddingBottom:10, borderBottomWidth:StyleSheet.hairlineWidth, borderBottomColor:'#ccc'}}
-                onPress={()=>this._pressRow(pet)}>
+            <TouchableOpacity style={styles.row} onPress={()=>this._pressRow(obj)}>
                 <View style={{flex:1}}>
-                    <Text style={{fontSize:16, color:'#CC0033'}}>销售单号:{pet.DirectSellCode}</Text>
+                    <Text style={{fontSize:16, color:'#CC0033'}}>销售单号:{obj.DirectSellCode}</Text>
                     <View style={{flexDirection:'row'}}>
-                        <Text style={{flex: 1,}}>会员:{pet.GestName}</Text>
-                        <Text style={{flex: 1,}}>明细数:{pet.TotalNum}</Text>
-                        <Text style={{flex: 1,}}>总价:¥{pet.TotalCost}</Text>
-                        <Text style={{flex: 1,}}>折扣:¥{pet.Discount}</Text>
+                        <Text style={{flex: 1,}}>会员:{obj.GestName}</Text>
+                        <Text style={{flex: 1,}}>明细数:{obj.TotalNum}</Text>
+                        <Text style={{flex: 1,}}>总价:¥{obj.TotalCost}</Text>
+                        <Text style={{flex: 1,}}>折扣:¥{obj.Discount}</Text>
+                        {status}
                     </View>
                 </View>
             </TouchableOpacity>
         )
     }
-
+    _renderFooter() {
+        //计算总页数，如果最后一页，则返回没有数据啦~
+        let totalPage = this.state.recordCount / this.state.pageSize;
+        if (this.state.pageIndex >= totalPage) {
+            return (
+                <View style={{height: 40, justifyContent:'center', alignItems:'center'}}>
+                    <Text>没有更多数据了~</Text>
+                </View>
+            )
+        }
+        return (
+            <View style={{height: 120}}>
+                <ActivityIndicator />
+            </View>
+        );
+    }
     render() {
         var body = <Loading type={'text'}/>
         if (this.state.loaded) {
             body = <ListView dataSource={this.state.ds.cloneWithRows(this.state.dataSource)}
                              enableEmptySections={true}
-                             renderRow={this._renderPet.bind(this)}
-                />
+                             initialListSize={15}
+                             pageSize={15}
+                             onEndReached={this._onEndReached.bind(this)}
+                             renderRow={this._renderRow.bind(this)}
+                             renderFooter={this._renderFooter.bind(this)}/>
         }
         return (
             <View style={{flex:1}}>
@@ -335,6 +348,14 @@ const styles = StyleSheet.create({
         height: 40,
         paddingLeft: 8,
     },
-
+    row: {
+        flexDirection: 'row',
+        marginLeft: 15,
+        marginRight: 15,
+        paddingTop: 10,
+        paddingBottom: 10,
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderBottomColor: '#ccc'
+    },
 })
 module.exports = SaleList;

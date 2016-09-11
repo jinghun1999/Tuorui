@@ -10,7 +10,6 @@ import {
     Dimensions,
     ToastAndroid,
     TouchableOpacity,
-    DatePickerAndroid,
     ScrollView,
     ListView,
     Image,
@@ -25,17 +24,16 @@ import ChooseGuest from './ChooseGuest';
 import ChooseStore from './ChooseStore';
 import FormPicker from '../../commonview/FormPicker';
 import FormInput from '../../commonview/FormInput';
+import DatePicker from  'react-native-datepicker';
 //import Scan from './Scan';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 export default class SaleAdd extends React.Component {
     constructor(props) {
         super(props);
-        var now = new Date();
         this.state = {
-            simpleText: now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate(),
-            simpleDate: now,
-            SelectedGoods: {DisCount: 100, MustPay: 0, RealPay: 0, items: []},
+            date: Util.GetDateStr(0),
+            SelectedGoods: {DisCount: 0, MustPay: 0, RealPay: 0, items: []},
             goodsDataSource: [],
             Guest: {GestName: '选择会员', ID: null},
             Store: {WarehouseName: '选择仓库', ID: null},
@@ -43,24 +41,6 @@ export default class SaleAdd extends React.Component {
             goodDiscountInput: '',
             goodAmountInput: '',
         };
-    }
-
-    //进行创建时间日期选择器
-    async showPicker(stateKey, options) {
-        try {
-            var newState = {};
-            const {action, year, month, day} = await DatePickerAndroid.open(options);
-            if (action === DatePickerAndroid.dismissedAction) {
-                newState[stateKey + 'Text'] = 'dismissed';
-            } else {
-                var date = new Date(year, month, day);
-                newState[stateKey + 'Text'] = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
-                newState[stateKey + 'Date'] = date;
-            }
-            this.setState(newState);
-        } catch (o) {
-            alert('控件异常。');
-        }
     }
 
     chooseGuest() {
@@ -71,7 +51,6 @@ export default class SaleAdd extends React.Component {
                 name: 'ChooseGuest',
                 component: ChooseGuest,
                 params: {
-                    tabBarShow: false,
                     getResult: function (g) {
                         _this.setState({
                             Guest: g,
@@ -127,7 +106,7 @@ export default class SaleAdd extends React.Component {
                                 _exists = true;
                             }
                         });
-                        _goods.RealPay = (_goods.MustPay * _goods.DisCount / 100).toFixed(1);
+                        _goods.RealPay = (_goods.MustPay - _goods.DisCount).toFixed(1);
                         if (!_exists) {
                             _goods.items.push(good);
                         }
@@ -206,6 +185,9 @@ export default class SaleAdd extends React.Component {
             NetUtil.postJson(CONSTAPI.SAVESALES, postjson, header, function (data) {
                 if (data.Sign && data.Message) {
                     ToastAndroid.show("保存成功", ToastAndroid.SHORT);
+                    if (_this.props.getResult) {
+                        _this.props.getResult();
+                    }
                     _this._onBack();
                 } else {
                     ToastAndroid.show("获取数据错误" + data.Exception, ToastAndroid.SHORT);
@@ -266,8 +248,8 @@ export default class SaleAdd extends React.Component {
                             showsVerticalScrollIndicator={true}
                             scrollEnabled={true}>
                     <View style={styles.pickerBox}>
-                        <FormPicker title="日期" tips={this.state.simpleText}
-                                    onPress={this.showPicker.bind(this, 'simple', {date: this.state.simpleDate})}/>
+                        <FormPicker title="日期" tips={this.state.date}
+                                    onPress={()=>{}}/>
                         <FormPicker title="会员/客户" tips={this.state.Guest.GestName}
                                     onPress={this.chooseGuest.bind(this)}/>
                         <FormPicker title="仓库" tips={this.state.Store.WarehouseName}
@@ -299,17 +281,13 @@ export default class SaleAdd extends React.Component {
                                 }else{
                                     var good = this.state.SelectedGoods;
                                     good.DisCount = d;
-                                    good.RealPay = (good.MustPay*d/100).toFixed(1);
+                                    good.RealPay = (good.MustPay-d).toFixed(1);
                                     this.setState({
                                         SelectedGoods: good,
                                         goodAmountInput: good.RealPay,
                                     })
                                 }
-                            }}
-                                />
-                            <View style={{width:20, justifyContent:'center'}}>
-                                <Text>%</Text>
-                            </View>
+                            }}/>
                         </View>
                         <FormInput title="实收金额" value={this.state.goodAmountInput} enabled={true}
                                    showbottom={false}
