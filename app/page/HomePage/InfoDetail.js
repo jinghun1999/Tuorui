@@ -31,9 +31,10 @@ class DrugDetails extends React.Component {
         this.state = {
             url: Global.WEB + '/App/New/NewDetail?RequestID=' + this.props.requestId,
             loaded: false,
+            phone: '',
             title: Util.cutString(this.props.title, 24, '...'),
             isCollect: false,
-            viewNum:0,
+            readNum:0,
             collectNum:0
         }
     }
@@ -46,18 +47,22 @@ class DrugDetails extends React.Component {
 
     fetchData() {
         let _this = this;
-        storage.getBatchData([{
+        storage.load({
             key: 'USER',
             autoSync: false,
             syncInBackground: false,
-        }]).then(ret => {
-                let header =null;
-                //初始化是否已经收藏
-                let _ishasOperatedata = 'id=' + this.props.requestId + '&type=1' + '&operateby=' + ret[0].user.moblie;
-                NetUtil.get(CONSTAPI.APIAPP + "/AppInfo/IsHasOperate?" + _ishasOperatedata, header, function (data) {
+        }).then(ret => {
+                //初始化
+                let _paramData = 'id=' + this.props.requestId + '&operateby=' + ret.user.moblie;
+                NetUtil.get(CONSTAPI.APIAPP + "/AppInfo/GetArticleOperateInfo?" + _paramData, null, function (data) {
                     if (data.Status) {
+                        let result=data.Data;
+                        alert(JSON.stringify(result))
                         _this.setState({
-                            isCollect: data.Result
+                            isCollect: result.IsCollect,
+                            collectNum:result.CollectNumber,
+                            readNum:result.ReadNumber,
+                            phone: ret.user.moblie
                         });
                     } else {
                         alert(data.ErrorMessage);
@@ -65,44 +70,9 @@ class DrugDetails extends React.Component {
                             isCollect: false
                         });
                     }
-                    _this.setState({
-                        loaded: true
-                    });
-                });
-                //初始化收藏数
-                let _collectdata = 'type=1';
-                NetUtil.get(CONSTAPI.APIAPP + "/AppInfo/GetCountByOperateType?" + _collectdata, header, function (data) {
-                    if (data.Status) {
-                        _this.setState({
-                            collectNum: data.Result,
-                        });
-                    } else {
-                        alert(data.ErrorMessage);
-                    }
-                    _this.setState({
-                        loaded: true
-                    });
-                });
-                //初始化查看数
-                let _viewdata = 'type=2';
-                NetUtil.get(CONSTAPI.APIAPP + "/AppInfo/GetCountByOperateType?" + _viewdata, header, function (data) {
-                    if (data.Status) {
-                        _this.setState({
-                            viewNum: data.Result
-                        });
-                    } else {
-                        alert(data.ErrorMessage);
-                    }
-                    _this.setState({
-                        loaded: true
-                    });
                 });
             }
         ).catch(err => {
-                _this.setState({
-                    dataSource: [],
-                    loaded: true
-                });
                 alert('error:' + err.message);
             }
         );
@@ -116,133 +86,61 @@ class DrugDetails extends React.Component {
         }
     }
 
-    _requestCollect(){
-        let _this = this;
-        storage.getBatchData([{
-            key: 'USER',
-            autoSync: false,
-            syncInBackground: false,
-        }]).then(ret => {
-                let header = null;
-                let querystr = 'id=' + this.props.requestId + '&operateby=' + ret[0].user.moblie;
-                if (_this.state.isCollect) {     //收藏
-                    NetUtil.get(CONSTAPI.APIAPP + "/AppInfo/Collect?" + querystr, header, function (data) {
-                        if (data.Status) {
-                            _this.setState({
-                                isCollect: data.Result
-                            });
-                            if (!data.Result) {
-                                ToastAndroid.show("收藏失败", ToastAndroid.SHORT);
-                            }
-                            else {
-                                ToastAndroid.show("收藏成功", ToastAndroid.SHORT);
-                                _this.fetchData();
-                            }
-                            _this.setState({
-                                loaded: true
-                            });
-                        } else {
-                            alert("收藏失败：" + data.message);
-                            _this.setState({
-                                isCollect: false,
-                                loaded:true
-                            });
-                        }
-                    });
-                }
-                else {     //取消收藏
-                    NetUtil.get(CONSTAPI.APIAPP + "/AppInfo/CountermandCollect?" + querystr, header, function (data) {
-                        if (data.Status) {
-                            _this.setState({
-                                isCollect: !data.Result,
-                                loaded: true
-                            });
-                            if (!data.Result) {
-                                ToastAndroid.show("取消收藏失败", ToastAndroid.SHORT);
-                            }
-                            else {
-                                ToastAndroid.show("取消收藏成功", ToastAndroid.SHORT);
-                                _this.fetchData();
-                            }
-
-                        } else {
-                            alert("取消收藏失败：" + data.message);
-                            _this.setState({
-                                isCollect: true,
-                                loaded:true
-                            });
-                        }
-                    });
-                }
-            }
-        ).catch(err => {
-                _this.setState({
-                    dataSource: [],
-                    loaded: true
-                });
-                alert('error:' + err.ErrorMessage);
-            }
-        );
-    }
-
     _onCollect() {
         //alert('收藏' + this.props.requestId);
-        let _iscollect = this.state.isCollect;
-        this.setState({
-            isCollect: !_iscollect,
+        let _this = this;
+        let querystr = 'id=' + this.props.requestId + '&operateby=' + _this.state.phone;
+        NetUtil.get(CONSTAPI.APIAPP + "/AppInfo/AddOrCountermandOperate?operatetype=1" + querystr, null, function (data) {
+            if (data.Status) {
+                let result = data.Data;
+                ToastAndroid.show(result.Message, ToastAndroid.SHORT);
+                _this.setState({
+                    isCollect: result.IsCollect,
+                    collectNum: _this.state.collectNum - 1
+                });
+
+            }
         });
-        this._requestCollect();
+
     }
 
     renderLoad() {
         return (
-            <View>
-                <View style={{flexDirection:'column', justifyContent: 'center',alignItems: 'center',}}>
-                    <Bars size={10} color="#1CAFF6"/>
-                </View>
-            </View>
+            <Loading type={'text'}/>
         )
     }
 
     render() {
-        var body=<Loading type={'text'}/>;
-        if(this.state.loaded) {
-            body=(
-                <View style={{flex: 1}}>
-                    <WebView ref='webView'
-                             style={styles.webView}
-                             source={{uri: this.state.url}}
-                             startInLoadingState={true}
-                             domStorageEnabled={true}
-                             renderLoading={this.renderLoad.bind(this)}
-                             javaScriptEnabled={true}
-                             decelerationRate="normal"
-                             automaticallyAdjustContentInsets={false}/>
-                    <View style={styles.bottomContainer}>
-                        <View style={{flex: 1, flexDirection: 'row', backgroundColor: '#ccc'}}>
-                            <View style={styles.readInfo}>
-                                <Icon name={'ios-eye'} size={30} color={'#999'} style={{marginRight: 5}}/>
-                                <Text>{this.state.viewNum}</Text>
-                            </View>
-                            <View style={styles.readInfo}>
-                                <Icon name={'ios-star'} size={30} color={'#999'} style={{marginRight: 5}}/>
-                                <Text>{this.state.collectNum}</Text>
-                            </View>
-                        </View>
-                        <TouchableOpacity style={styles.viewCount} onPress={this._onCollect.bind(this)}>
-                            <Icon name={'ios-star'} size={40} color={this.state.isCollect ? '#993399' : '#ccc'}/>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            );
-        }
         return (
-
                 <View style={{flex: 1}}>
                     <Head title={this.state.title} canBack={true} onPress={this._onBack.bind(this)}/>
-                    {body}
+                    <View style={{flex: 1}}>
+                        <WebView ref='webView'
+                                 style={styles.webView}
+                                 source={{uri: this.state.url}}
+                                 startInLoadingState={true}
+                                 domStorageEnabled={true}
+                                 renderLoading={this.renderLoad.bind(this)}
+                                 javaScriptEnabled={true}
+                                 decelerationRate="normal"
+                                 automaticallyAdjustContentInsets={false}/>
+                        <View style={styles.bottomContainer}>
+                            <View style={{flex: 1, flexDirection: 'row', backgroundColor: '#ccc'}}>
+                                <View style={styles.readInfo}>
+                                    <Icon name={'ios-eye'} size={30} color={'#999'} style={{marginRight: 5}}/>
+                                    <Text>{this.state.viewNum}</Text>
+                                </View>
+                                <View style={styles.readInfo}>
+                                    <Icon name={'ios-star'} size={30} color={'#999'} style={{marginRight: 5}}/>
+                                    <Text>{this.state.collectNum}</Text>
+                                </View>
+                            </View>
+                            <TouchableOpacity style={styles.viewCount} onPress={this._onCollect.bind(this)}>
+                                <Icon name={'ios-star'} size={40} color={this.state.isCollect ? '#993399' : '#ccc'}/>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
                 </View>
-
         )
     }
 }
