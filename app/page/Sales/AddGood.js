@@ -24,8 +24,9 @@ import Head from '../../commonview/Head';
 import NButton from '../../commonview/NButton';
 import FormPicker from '../../commonview/FormPicker';
 import FormInput from '../../commonview/FormInput';
-import ScanQr from '../../commonview/ScanQr';
-import ChooseGoods from './ChooseGood'
+//import ScanQr from '../../commonview/ScanQr';
+import ChooseGoods from './ChooseGood';
+import Scan from './Scan';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 const scanIcon = (<Icon name={'md-barcode'} size={40} color={'#63B8FF'}/>);
@@ -47,22 +48,22 @@ class GoodsAdd extends Component {
         const { navigator } = this.props;
         if (navigator) {
             this.props.navigator.push({
-                component: ScanQr,
-                title: 'ScanQr',
+                component: Scan,
+                title: 'Scan',
                 params: {
                     onSucess: function (v) {
-                        _this.setState({kw: v});
-                        _this._getGood();
+                        //_this.setState({kw: v});
+                        _this._getGood(v);
                     },
                 },
             });
         }
     }
 
-    _getGood() {
+    _getGood(v) {
         let _this = this;
-        if (_this.state.kw == null || _this.state.kw.length == 0) {
-            Alert.alert('提示', '未获得条码/编号');
+        if (v == null || v.length == 0) {
+            Alert.alert('提示', '未获得商品条码/编号');
             return false;
         }
         storage.getBatchData([{

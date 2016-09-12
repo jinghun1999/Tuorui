@@ -8,5 +8,19 @@
         sha1="fed44ac55ca06a1f083291c7b5285ef35a484568">
         <dex dex="D:\Work\GitHub\Tuorui\android\app\build\intermediates\pre-dexed\debug\classes-71f163163ea56a08e39c082c249e21c77ea93ffc.jar" />
     </item>
+    <item
+        jar="D:\Work\GitHub\Tuorui\android\app\build\intermediates\exploded-aar\Demo\react-native-barcodescanner\unspecified\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="dd71062182ac762ec14fd07483bbe263e3a38e72">
+        <dex dex="D:\Work\GitHub\Tuorui\android\app\build\intermediates\pre-dexed\debug\classes-05cdf8870476d999736051efbb954587f4ac0bf8.jar" />
+    </item>
+    <item
+        jar="C:\Users\User\.gradle\caches\modules-2\files-2.1\com.google.zxing\core\3.2.1\2287494d4f5f9f3a9a2bb6980e3f32053721b315\core-3.2.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="2287494d4f5f9f3a9a2bb6980e3f32053721b315">
+        <dex dex="D:\Work\GitHub\Tuorui\android\app\build\intermediates\pre-dexed\debug\core-3.2.1-8c828b793020cee96d7b75e0f74881c1ef06f193.jar" />
+    </item>
 
 </items>

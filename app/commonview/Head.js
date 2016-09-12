@@ -18,14 +18,14 @@ class Head extends Component {
         super(props);
         this.state = {
             canBack: false,
-            canAdd:false,
+            canAdd: false,
         };
     }
 
     render() {
-        var canAdd=null;
-        if(this.props.canAdd){
-            canAdd = <TouchableOpacity onPress={this.props.editInfo}>
+        var canAdd = null;
+        if (this.props.canAdd) {
+            canAdd = <TouchableOpacity style={styles.editBtn} onPress={this.props.editInfo}>
                 <Text style={{fontSize: 16, color:'#fff'}}>{this.props.edit}</Text>
             </TouchableOpacity>
         }
@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
         alignSelf: 'stretch',
         backgroundColor: '#63B8FF',
         justifyContent: 'center',
+        paddingRight: 10,
     },
     backBtn: {
         width: 50,
@@ -80,6 +81,16 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    editBtn: {
+        flex: 1,
+        width: 60,
+        marginTop: 8,
+        marginBottom: 8,
+        borderRadius: 3,
+        backgroundColor: '#0099CC',
+        justifyContent: 'center',
+        alignItems:'center',
     },
 });
 

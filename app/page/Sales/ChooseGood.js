@@ -31,7 +31,7 @@ class Goods extends Component {
             //storeId: this.props.storeId,
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
             kw: null,
-            pageSize: 15,
+            pageSize: 1500,
             pageIndex: 0,
             recordCount: 0,
         };
@@ -137,8 +137,7 @@ class Goods extends Component {
                           enableEmptySections={true}
                           renderRow={this.renderRow.bind(this)}
                           initialListSize={15}
-                          pageSize={15}
-                    />
+                          pageSize={15}/>
             )
         }
         return (

@@ -13,6 +13,7 @@ import {
     Platform
     } from 'react-native';
 import Camera from 'react-native-camera';
+import BarcodeScanner from 'react-native-barcodescanner';
 
 var ScanQr = React.createClass({
     propTypes: {
