@@ -16,7 +16,7 @@ import NetUtil from '../../util/NetUtil';
 import Util from '../../util/Util';
 
 import DatePicker from 'react-native-datepicker';
-class InspectQuery extends Component {
+class NJY extends Component {
     constructor(props) {
         let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         super(props);
@@ -219,4 +219,4 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     }
 });
-module.exports = InspectQuery;
+module.exports = NJY;
