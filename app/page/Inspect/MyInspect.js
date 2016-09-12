@@ -1,9 +1,6 @@
 /**
  * Created by tuorui on 2016/9/6.
  */
-/**
- * Created by tuorui on 2016/9/6.
- */
 'use strict';
 import React, {Component} from 'react';
 import{
