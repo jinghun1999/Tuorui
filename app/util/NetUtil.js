@@ -106,7 +106,7 @@ class NetUtil extends React.Component {
     }
 
     static headerAuthorization(mobile, pwd, hospitalcode, token) {
-        return 'Mobile ' + Util.base64Encode(mobile + ':' + Util.base64Encode(pwd) + ':' + hospitalcode + ":" + token);
+        return 'Mobile ' + Util.base64Encode(mobile + ':' + hospitalcode + ":" + token);
     }
 }
 

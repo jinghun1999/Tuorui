@@ -128,7 +128,7 @@ class ChooseBeautyServices extends React.Component {
                             pageIndex: page,
                         });
                     } else {
-                        alert("获取数据失败：" + data.Message + ',' + rets[0].user.Mobile + ',' + rets[0].pwd);
+                        alert("获取数据失败：" + data.Message);
                         _this.setState({
                             loaded: true,
                         });

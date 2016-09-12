@@ -12,10 +12,11 @@ import {
     Image,
     Dimensions,
     ToastAndroid,
+    Alert,
     TouchableOpacity,
     BackAndroid,
     ScrollView
-} from 'react-native';
+    } from 'react-native';
 
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
@@ -33,24 +34,12 @@ class GoodsAdd extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            token: '',
-            goodsDataSource: null,
             loaded: false,
             GoodInfo: {ID: null, ItemName: null, BarCode: null, SellPrice: 0.00, GoodCount: 1, GoodAmount: 0.00},
-            //GoodCount: 1,
-            //GoodAmount: 0.00,
             kw: null,
-            storeId: null,
             goodCountInput: '',
         };
         this._this = this;
-    }
-
-    componentDidMount() {
-        //在组件加载后将上一页面传入的值保存到storeId
-        this.setState({
-            storeId: this.props.storeId,
-        })
     }
 
     _onPressQRCode() {
@@ -73,28 +62,30 @@ class GoodsAdd extends Component {
     _getGood() {
         let _this = this;
         if (_this.state.kw == null || _this.state.kw.length == 0) {
-            ToastAndroid.show('未获得条码/编号', ToastAndroid.SHORT);
+            Alert.alert('提示', '未获得条码/编号');
             return false;
         }
-        storage.load({
+        storage.getBatchData([{
             key: 'USER',
-            autoSync: true,
-            syncInBackground: true
-        }).then(ret => {
+            autoSync: false,
+            syncInBackground: false,
+        }, {
+            key: 'HOSPITAL',
+            autoSync: false,
+            syncInBackground: false,
+        }]).then(rets => {
             let postjson = {
-                WarehouseID: _this.state.storeId,
+                WarehouseID: _this.props.storeId,
                 CateNo: null,
-                InputTxt: _this.state.kw && _this.state.kw.length > 0 ? _this.state.kw : null,
-                BusiTypeCodes: [1,2,3,7,8,9,12],
+                InputTxt: _this.state.kw,
+                BusiTypeCodes: [1, 2, 3, 7, 8, 9, 12],
                 pageSize: 1,
                 pageIndex: 1
             };
             let header = {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Mobile ' + Util.base64Encode(ret.user.Mobile + ':' + Util.base64Encode(ret.pwd) + ':' + (ret.user.Hospitals[0]!=null ? ret.user.Hospitals[0].Registration : '') + ":" + ret.user.Token)
+                'Authorization': NetUtil.headerAuthorization(rets[0].user.Mobile, rets[0].pwd, rets[1].hospital.Registration, rets[0].user.Token)
             };
-            NetUtil.postJson(CONSTAPI.GETGOODS, postjson, header, function (data) {
+            NetUtil.postJson(CONSTAPI.HOST + '/ItemTypeLeftJoinItemCount/SearchSellListByPage', postjson, header, function (data) {
                 if (data.Sign && data.Message && data.Message.length > 0) {
                     var good = data.Message[0];
                     good.GoodCount = 1;
@@ -103,7 +94,7 @@ class GoodsAdd extends Component {
                         GoodInfo: good,
                     });
                 } else {
-                    ToastAndroid.show("未找到此商品", ToastAndroid.SHORT);
+                    Alert.alert('提示', "未找到此商品");
                 }
             });
         }).catch(err => {
@@ -114,15 +105,14 @@ class GoodsAdd extends Component {
     _SaveAndContinue(go) {
         var _this = this;
         if (_this.state.GoodInfo.ID == null) {
-            ToastAndroid.show('请先选择商品', ToastAndroid.SHORT);
+            Alert.alert('提示', '请先选择商品');
             return;
         }
         else if (_this.state.GoodCount < 1) {
-            ToastAndroid.show('商品数量不能少于1', ToastAndroid.SHORT);
+            Alert.alert('提示', '商品数量不能少于1');
             return;
         }
         if (_this.props.getResult) {
-            //调用上一页面的回掉函数给上一页面变量赋值
             _this.props.getResult(_this.state.GoodInfo);
         }
         _this.setState({
@@ -138,7 +128,7 @@ class GoodsAdd extends Component {
         if (go) {
             _this._onBack();
         } else {
-            ToastAndroid.show('添加成功', ToastAndroid.SHORT);
+            Alert.alert('提示', '添加成功');
         }
     }
 
@@ -157,7 +147,7 @@ class GoodsAdd extends Component {
                 name: 'ChooseGoods',
                 component: ChooseGoods,
                 params: {
-                    storeId: _this.state.storeId,
+                    storeId: _this.props.storeId,
                     getResult: function (res) {
                         res.GoodCount = 1;
                         res.GoodAmount = res.SellPrice;
@@ -267,6 +257,5 @@ const styles = StyleSheet.create({
         paddingRight: 5,
     }
 });
-
 
 module.exports = GoodsAdd;

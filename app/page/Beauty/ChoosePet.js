@@ -16,7 +16,7 @@ import {
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
-import Icon from '../../../node_modules/react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import Loading from '../../commonview/Loading';
 class ChoosePet extends Component {
     constructor(props) {
@@ -74,7 +74,7 @@ class ChoosePet extends Component {
                     </View>
                 </View>
                 <View style={{width:20,alignItems:'center', justifyContent:'center'}}>
-                    <Text><Icon name={'angle-right'} size={20} color={'#ccc'}/></Text>
+                    <Icon name={'angle-right'} size={20} color={'#ccc'}/>
                 </View>
             </TouchableOpacity>
         )

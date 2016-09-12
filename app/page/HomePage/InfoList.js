@@ -34,12 +34,13 @@ class Information extends React.Component {
             listInfoSource: new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2}),
             totalPage: 0,
             infoSearchTextInput: '',
+            isRefreshing: false,
             infoCache: [],
             loaded: false,
         }
     }
 
-    componentDidMount() {
+    componentWillMount() {
         InteractionManager.runAfterInteractions(() => {
             this._loadData();
         });

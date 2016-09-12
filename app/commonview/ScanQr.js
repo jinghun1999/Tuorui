@@ -12,35 +12,34 @@ import {
     Vibration,
     Platform
     } from 'react-native';
+import Camera from 'react-native-camera';
 
-import BarcodeScanner from 'react-native-barcode-scanner-universal'
 var ScanQr = React.createClass({
-
     propTypes: {
         cancelButtonVisible: React.PropTypes.bool,
         cancelButtonTitle: React.PropTypes.string,
         onSucess: React.PropTypes.func,
     },
 
-    getDefaultProps: function() {
+    getDefaultProps: function () {
         return {
             cancelButtonVisible: true,
             cancelButtonTitle: 'Cancel',
         };
     },
 
-    _onPressCancel: function() {
+    _onPressCancel: function () {
         var _this = this;
-        requestAnimationFrame(function() {
+        requestAnimationFrame(function () {
             _this.props.navigator.pop();
         });
     },
 
-    _onBarCodeRead: function(result) {
+    _onBarCodeRead: function (result) {
         var _this = this;
         if (this.barCodeFlag) {
             this.barCodeFlag = false;
-            setTimeout(function() {
+            setTimeout(function () {
                 Vibration.vibrate();
                 _this.props.navigator.pop();
                 _this.props.onSucess(result.data);
@@ -48,18 +47,18 @@ var ScanQr = React.createClass({
         }
     },
 
-    render: function() {
+    render: function () {
         var cancelButton = null;
         this.barCodeFlag = true;
 
         if (this.props.cancelButtonVisible) {
-            cancelButton = <CancelButton onPress={this._onPressCancel} title={this.props.cancelButtonTitle} />;
+            cancelButton = <CancelButton onPress={this._onPressCancel} title={this.props.cancelButtonTitle}/>;
         }
         let scanArea = null
         if (Platform.OS === 'ios') {
             scanArea = (
                 <View style={styles.rectangleContainer}>
-                    <View style={styles.rectangle} />
+                    <View style={styles.rectangle}/>
                 </View>
             )
         }
@@ -79,7 +78,7 @@ var ScanQr = React.createClass({
 });
 
 var CancelButton = React.createClass({
-    render: function() {
+    render: function () {
         return (
             <View style={styles.cancelButton}>
                 <TouchableOpacity onPress={this.props.onPress}>

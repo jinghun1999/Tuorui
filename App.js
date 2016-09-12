@@ -17,7 +17,7 @@ import{
     } from 'react-native';
 import Head from './app/commonview/Head';
 import IconButton from './app/commonview/HomeIcon';
-import Sale from './app/page/Sales/Sale';
+import SaleList from './app/page/Sales/SaleList';
 import MemberListInfo from './app/page/Member/MemberListInfo';
 import MyInspect from './app/page/Member/MyInspect';
 import PetListInfo from './app/page/Member/PetListInfo';
@@ -172,7 +172,7 @@ class App extends Component {
                         <IconButton text="我的预约" iconName={'ios-clock'} iconColor={'#9999CC'}
                                     onPress={this._onPress.bind(this, AppointListInfo, 'AppointListInfo', '我的预约')}/>
                         <IconButton text="商品销售" iconName={'ios-cart'} iconColor={'#DEB887'}
-                                    onPress={this._onPress.bind(this, Sale, 'Sale', '商品销售')}/>
+                                    onPress={this._onPress.bind(this, SaleList, 'SaleList', '商品销售')}/>
                         <IconButton text="拓瑞检测" iconName={'ios-paper'} iconColor={'#666699'}
                                     onPress={this._onPress.bind(this, MyInspect, 'MyInspect', '拓瑞检测')}/>
                     </View>

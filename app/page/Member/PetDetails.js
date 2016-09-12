@@ -19,7 +19,6 @@ import{
     } from 'react-native';
 import Head from '../../commonview/Head';
 import FormInput from '../../commonview/FormInput';
-//import FormPicker from '../../commonview/FormPicker';
 import DatePicker from 'react-native-datepicker';
 class PetDetails extends Component {
     constructor(props) {
