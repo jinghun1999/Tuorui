@@ -17,15 +17,16 @@ import{
     } from 'react-native';
 import Head from './app/commonview/Head';
 import IconButton from './app/commonview/HomeIcon';
+
 import SaleList from './app/page/Sales/SaleList';
 import MemberListInfo from './app/page/Member/MemberListInfo';
-import MyInspect from './app/page/Member/MyInspect';
+import MyInspect from './app/page/Inspect/MyInspect';
 import PetListInfo from './app/page/Member/PetListInfo';
 import Loading from './app/commonview/Loading';
 import AppointListInfo from './app/page/Appoint/AppointListInfo';
 import BeautyServices from './app/page/Beauty/BeautyListInfo';
 import ReportIndex from './app/page/Report/ReportIndex';
-import InspectQuery from './app/page/Equipment/InspectQuery';
+import NJY from './app/page/Device/NJY';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 class App extends Component {
@@ -178,7 +179,7 @@ class App extends Component {
                     </View>
                     <View style={styles.iconViewStyle}>
                         <IconButton text="我的设备" iconName={'md-phone-landscape'} iconColor={'#336666'}
-                                    onPress={this._onPress.bind(this, InspectQuery, 'InspectQuery', '我的设备')}/>
+                                    onPress={this._onPress.bind(this, NJY, 'NJY', '尿检结果')}/>
                         <IconButton text="数据报表" iconName={'ios-podium'} iconColor={'#6666FF'}
                                     onPress={this._onPress.bind(this, ReportIndex, 'ReportIndex', '数据报表')}/>
                         <View style={{flex:1}}></View>

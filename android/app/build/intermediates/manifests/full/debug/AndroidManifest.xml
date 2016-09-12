@@ -27,6 +27,10 @@
 
     <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
+    <uses-feature
+        android:name="android.hardware.camera.front"
+        android:required="false" />
+
     <application
         android:name="com.demo.MainApplication"
         android:allowBackup="true"

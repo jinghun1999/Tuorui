@@ -1,9 +1,6 @@
 /**
  * Created by tuorui on 2016/9/6.
  */
-/**
- * Created by tuorui on 2016/9/6.
- */
 'use strict';
 import React, {Component} from 'react';
 import{
@@ -13,18 +10,18 @@ import{
     ListView,
     TouchableOpacity,
     InteractionManager
-} from 'react-native';
+    } from 'react-native';
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
 import MyHomeIcon from '../../commonview/ComIconView';
 import Loading from '../../commonview/Loading';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from '../../../node_modules/react-native-vector-icons/Ionicons';
 class MyInspect extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dataSource:null,
+            dataSource: null,
             loaded: false,
         }
     }
@@ -94,20 +91,23 @@ class MyInspect extends Component {
     }
 
     _onRenderRow(Inspect) {
-        let stutas='';
-        switch (Inspect.State)
-        {
+        let stutas = '';
+        switch (Inspect.State) {
             case "已接收":
-                stutas=(<Text style={{fontWeight: 'bold',textAlign: 'center',fontSize: 16, color: '#FFFFFF',backgroundColor: '#FFB90F',width: 90,height: 25}}>{Inspect.State}</Text>);
+                stutas = (<Text
+                    style={{fontWeight: 'bold',textAlign: 'center',fontSize: 16, color: '#FFFFFF',backgroundColor: '#FFB90F',width: 90,height: 25}}>{Inspect.State}</Text>);
                 break;
             case "检测中":
-                stutas=(<Text style={{fontWeight: 'bold',textAlign: 'center',fontSize: 16, color: '#FFFFFF',backgroundColor: '#00EE00',width: 90,height: 25}}>{Inspect.State}</Text>);
+                stutas = (<Text
+                    style={{fontWeight: 'bold',textAlign: 'center',fontSize: 16, color: '#FFFFFF',backgroundColor: '#00EE00',width: 90,height: 25}}>{Inspect.State}</Text>);
                 break;
             case "已完成":
-                stutas=(<Text style={{fontWeight: 'bold',textAlign: 'center',fontSize: 16, color: '#FFFFFF',backgroundColor: '#8F8F8F',width: 90,height: 25}}>{Inspect.State}</Text>);
+                stutas = (<Text
+                    style={{fontWeight: 'bold',textAlign: 'center',fontSize: 16, color: '#FFFFFF',backgroundColor: '#8F8F8F',width: 90,height: 25}}>{Inspect.State}</Text>);
                 break;
             default:
-                stutas=(<Text style={{fontWeight: 'bold',textAlign: 'center',fontSize: 16, color: '#FFFFFF',backgroundColor: '#FFB90F',width: 90,height: 25}}>{Inspect.State}</Text>);
+                stutas = (<Text
+                    style={{fontWeight: 'bold',textAlign: 'center',fontSize: 16, color: '#FFFFFF',backgroundColor: '#FFB90F',width: 90,height: 25}}>{Inspect.State}</Text>);
                 break;
         }
         return (
@@ -137,12 +137,12 @@ class MyInspect extends Component {
                           initialListSize={10}
                           pageSize={10}
                           enableEmptySections={true}
-                />
+                    />
             )
         }
         return (
             <View style={styles.container}>
-                <Head title={this.props.headTitle} canAdd={true} canBack={true}
+                <Head title={this.props.headTitle} canBack={true}
                       onPress={this._onBack.bind(this)}/>
                 {body}
             </View>
