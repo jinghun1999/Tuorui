@@ -43,7 +43,7 @@ class BeautyServices extends React.Component {
             serviceSource: [],
             servicesID: null,
             edit: '保存',
-            serviceName: '张艺弦',
+            serviceName: '',
             pickerData: [],
             canChoose: true,
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
@@ -79,17 +79,9 @@ class BeautyServices extends React.Component {
             })
 
         }
-        storage.getBatchData([{
-            key: 'USER',
-            autoSync: false,
-            syncInBackground: false,
-        }, {
-            key: 'HOSPITAL',
-            autoSync: false,
-            syncInBackground: false,
-        }]).then(rets => {
+        NetUtil.getAuth(function (user, hos) {
                 let header = {
-                    'Authorization': NetUtil.headerAuthorization(rets[0].user.Mobile, rets[0].pwd, rets[1].hospital.Registration, rets[0].user.Token)
+                    'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
                 };
                 NetUtil.get(CONSTAPI.HOST + '/BusinessInvoices/ServiceCode?', header, function (data) {
                     if (_this.state.servicesFWID == null) {
@@ -109,6 +101,7 @@ class BeautyServices extends React.Component {
                             serviceSource: serviceData,
                             loaded: true,
                             ServicerNameData: _data,
+                            serviceName:_data[0],
                         });
                     }
                 )
@@ -149,16 +142,9 @@ class BeautyServices extends React.Component {
                         }
                     })
                 }
-            }
-        ).catch(err => {
-                _this.setState({
-                    servicesID: '',
-                    serviceSource: [],
-                    loaded: true,
-                });
-                alert('error:' + err.message);
-            }
-        );
+            },function(err){
+                alert(err);
+        })
     }
 
     chooseBeauty() {
@@ -246,7 +232,6 @@ class BeautyServices extends React.Component {
         var service = _this.state.serviceSource;
         var servicesID = 0;
         var serviceName = _this.state.serviceName;
-        alert(serviceName);
         service.forEach((item, index, array)=> {
             if (item.PersonName == _this.state.serviceName) {
                 servicesID = item.ID;
@@ -306,19 +291,13 @@ class BeautyServices extends React.Component {
             };
             beautyItems.push(item);
         }
-        storage.load({
-            key: 'USER',
-            autoSync: true,
-            syncInBackground: true
-        }).then(ret => {
+        NetUtil.getAuth(function (user, hos) {
             let postjson = {
                 item: items,
                 details: beautyItems,
             }
             let header = {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Mobile ' + Util.base64Encode(ret.user.Mobile + ':' + Util.base64Encode(ret.pwd) + ':' + (ret.user.Hospitals[0] != null ? ret.user.Hospitals[0].Registration : '') + ":" + ret.user.Token)
+                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, user.pwd, hos.hospital.Registration, user.user.Token)
             };
             ////save http://petservice.tuoruimed.com/service/Api/Service/AddList
             NetUtil.postJson(CONSTAPI.HOST + '/Service/AddList', postjson, header, function (data) {
@@ -332,9 +311,9 @@ class BeautyServices extends React.Component {
                     ToastAndroid.show("获取数据错误" + data.Exception, ToastAndroid.SHORT);
                 }
             });
-        }).catch(err => {
-            alert('error:' + err);
-        });
+        },function(err){
+            alert(err);
+        })
 
     }
 

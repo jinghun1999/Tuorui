@@ -15,7 +15,6 @@ import{
     Dimensions,
     DatePickerAndroid,
     TouchableOpacity,
-    NativeModules,
     } from 'react-native';
 import Head from '../../commonview/Head';
 import FormInput from '../../commonview/FormInput';

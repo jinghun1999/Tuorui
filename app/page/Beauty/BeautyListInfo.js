@@ -40,15 +40,7 @@ class BeautyListInfo extends React.Component {
 
     _onFetchData(page, isNext) {
         let _this = this;
-        storage.getBatchData([{
-            key: 'USER',
-            autoSync: false,
-            syncInBackground: false,
-        }, {
-            key: 'HOSPITAL',
-            autoSync: false,
-            syncInBackground: false,
-        }]).then(rets => {
+        NetUtil.getAuth(function (user, hos) {
                 let postdata = {
                     "items": [{
                         "Childrens": null,
@@ -70,7 +62,7 @@ class BeautyListInfo extends React.Component {
                 };
                 //let hospitalcode = 'aa15-740d-4e6d-a6ca-0ebf-81f1';
                 let header = {
-                    'Authorization': NetUtil.headerAuthorization(rets[0].user.Mobile, rets[0].pwd, rets[1].hospital.Registration, rets[0].user.Token)
+                    'Authorization': NetUtil.headerAuthorization(user.user.Mobile,hos.hospital.Registration, user.user.Token)
                 };
                 NetUtil.postJson(CONSTAPI.HOST + '/Service/GetPageRecord', postdata, header, function (data) {
                     if (data.Sign && data.Message != null) {
@@ -115,15 +107,9 @@ class BeautyListInfo extends React.Component {
                         }
                     });
                 }
-            }
-        ).catch(err => {
-                _this.setState({
-                    dataSource: [],
-                    loaded: true,
-                });
-                alert('error:' + err.message);
-            }
-        );
+            },function(err){
+            alert(err);
+        })
     }
 
     _onBack() {
@@ -143,13 +129,15 @@ class BeautyListInfo extends React.Component {
                 component: BeautyServices,
                 params: {
                     headTitle: '新增服务',
+                    getResult:function(){
+                        _this._onFetchData(1, false);
+                    }
                 }
             })
         }
     }
 
     _onBeautyDetails(beauty) {
-        alert(beauty.GestName);
         let _this = this;
         const {navigator}=_this.props;
         if (navigator) {
@@ -175,7 +163,7 @@ class BeautyListInfo extends React.Component {
             borderBottomWidth:StyleSheet.hairlineWidth, borderBottomColor:'#ccc'}}
                               onPress={()=>this._onBeautyDetails(beauty)}>
                 <View style={{flex:1,}}>
-                    <Text style={{fontSize:14, fontWeight:'bold'}}>{beauty.GestName}</Text>
+                    <Text style={{fontSize:16, color:'#27408B',fontWeight:'bold'}}>{beauty.GestName}</Text>
                     <View style={{flexDirection:'row',marginTop:3}}>
                         <Text style={{flex: 1,}}>手机号码: {beauty.MobilePhone}</Text>
                         <Text style={{flex: 1,}}>宠物名: {beauty.PetName}</Text>

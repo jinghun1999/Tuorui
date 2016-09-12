@@ -15,6 +15,7 @@ import{
     DatePickerAndroid,
     TouchableOpacity,
     ToastAndroid,
+    InteractionManager,
 } from 'react-native';
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
@@ -30,27 +31,25 @@ import NButton from '../../commonview/NButton';
 class AddMemberInfo extends Component {
     constructor(props) {
         super(props);
-        var now = new Date();
         this.state = {
             enable: true,
             loaded: false,
-            memberInfo: {
-                name: null, registrationTime: now, birthday: '',
-                phone: null, sex: '女', mail: null, level: '', state: '',
-                money: null, point: null, address: null, remarks: null,
-            },
-            memberName:null,
-            memberPhone:null,
-            memberSex:'女',
-            memberLevel:'金卡会员',
-            memberState:'正常',
-            memberBirthday:now,
+            memberName: null,
+            memberPhone: null,
+            memberSex: '女',
+            memberLevel: '8',
+            memberState: '正常',
+            memberBirthday: Util.GetDateStr(0),
+            memberRegistrationTime: Util.GetDateStr(0),
+            memberID: Util.guid(),
+            memberRemarks: null,
             memberItem: [],
             petSource: [],
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
             pageSize: 15,
             pageIndex: 1,
             levelData: [],
+            levelLoaded: false,
         }
     };
 
@@ -67,23 +66,77 @@ class AddMemberInfo extends Component {
     }
 
     componentDidMount() {
-        let _this = this;
-        _this._onFetchData();
+        InteractionManager.runAfterInteractions(() => {
+            this.fetchData();
+        });
     }
 
-    _save() {
+    _save(needback) {
         let _this = this;
-        if (_this.state.memberInfo.memberName == null) {
-            ToastAndroid.show("请输入姓名", ToastAndroid.SHORT);
+        if (_this.state.memberName == null) {
+            alert("请输入姓名");
             return false;
-        } else if (_this.state.memberInfo.memberName == null) {
-            ToastAndroid.show("请输入姓名", ToastAndroid.SHORT);
+        } else if (_this.state.memberPhone == null) {
+            alert("请输入手机号码");
             return false;
         }
+        NetUtil.getAuth(function (user, hos) {
+            //POST /service/Api/Gest/AddGest 保存会员信息
+            //DM00001 男 DM00002 女
+            var item = {
+                "ID": _this.state.memberID,
+                "GestCode": _this.state.memberItem.GestCode,
+                "LoseRightDate": null,
+                "GestName": _this.state.memberName,
+                "GestSex": _this.state.memberSex == '男' ? 'DM00001' : 'DM00002',
+                "GestBirthday": _this.state.memberBirthday,
+                "MobilePhone": _this.state.memberPhone,
+                "TelPhone": null,
+                "EMail": null,
+                "GestAddress": null,
+                "IsVIP": "SM00054",
+                "VIPNo": null,
+                "VIPAccount": null,
+                "LastPaidTime": null,
+                "GestStyle": "HYDJ000000003",
+                "Status": "SM00001",
+                "PaidStatus": null,
+                "Remark": _this.state.memberRemarks,
+                "CreatedBy": null,
+                "CreatedOn": _this.state.memberRegistrationTime,
+                "ModifiedBy": null,
+                "ModifiedOn": "0001-01-01T00:00:00",
+                "IsDeleted": 0,
+                "RewardPoint": null,
+                "PrepayMoney": null,
+                "EntID": "00000000-0000-0000-0000-000000000000",
+                "LevelName": null
+            };
+            let header = {
+                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
+            };
+            ////save http://test.tuoruimed.com/service/Api/Gest/AddGest
+            NetUtil.postJson(CONSTAPI.HOST + '/Gest/AddGest', item, header, function (data) {
+                if (data.Sign) {
+                    alert('保存成功');
+                    if (_this.props.getResult) {
+                        _this.props.getResult();
+                    }
+                    if (needback) {
+                        _this._onBack();
+                    }
+                } else {
+                    alert("获取数据错误" + data.Exception);
+                }
+            });
+        }, function (err) {
+            alert(err);
+        });
     }
 
     _saveAndAddPet() {
         let _this = this;
+        _this._save(false);
         const {navigator}=_this.props;
         if (navigator) {
             navigator.push({
@@ -91,46 +144,48 @@ class AddMemberInfo extends Component {
                 component: AddPet,
                 params: {
                     headTitle: '新增宠物',
-                    memberInfo: _this.state.memberInfo,
+                    member: {name: _this.state.memberName,
+                        phone: _this.state.memberPhone,
+                        memberID:_this.state.memberID,
+                        gestCode:_this.state.memberItem.GestCode},
                 }
             })
         }
     }
 
-    _onFetchData() {
+    fetchData() {
         let _this = this;
-        storage.load({
-            key: 'USER',
-            autoSync: true,
-            syncInBackground: true
-        }).then(ret => {
+        NetUtil.getAuth(function (user, hos) {
             let header = {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Mobile ' + Util.base64Encode(ret.user.Mobile + ':' + Util.base64Encode(ret.pwd) + ':' + (ret.user.Hospitals[0] != null ? ret.user.Hospitals[0].Registration : '') + ":" + ret.user.Token)
+                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
             };
-            //http://petservice.tuoruimed.com/service/Api/Gest/GetVipAddPageConfig?
+            //http://test.tuoruimed.com/service/Api/Gest/GetVipAddPageConfig?
             NetUtil.get(CONSTAPI.HOST + '/Gest/GetVipAddPageConfig?', header, function (data) {
-                var levelData = data.Message.Levels, _level = [];
-                levelData.forEach((item, index, array)=> {
-                    _level.push(item.LevelName);
-                })
-                _this.setState({
-                    levelData: _level,
-                    memberItem: data.Message.Item,//vip编号
-                    memberLevelData: data.Message.Levels,//普通，金卡会员
-                    memberSexData: data.Message.SexTypes,//男，女
-                    memberStatusData: data.Message.GestStatus,//正常，停用
-                    memberType: data.Message.GestTypes,//会员，散客
-                    loaded: true,
-                })
+                if (data.Sign && data.Message != null) {
+                    var levelData = data.Message.Levels, _level = [];
+                    levelData.forEach((item, index, array)=> {
+                        _level.push(item.LevelName);
+                    })
+                    _this.setState({
+                        levelData: _level,
+                        memberItem: data.Message.Item,//vip编号
+                        memberLevelData: data.Message.Levels,//普通，金卡会员
+                        memberSexData: data.Message.SexTypes,//男，女
+                        memberStatusData: data.Message.GestStatus,//正常，停用
+                        memberType: data.Message.GestTypes,//会员，散客
+                        levelLoaded: true,
+                        loaded: true,
+                    })
+                } else {
+                    alert("获取数据失败：" + data.Message);
+                    _this.setState({
+                        loaded: true,
+                    });
+                }
+            }, function (err) {
+                alert(err);
             })
-        }).catch(err => {
-            _this.setState({
-                loaded: true,
-            });
-            alert('error:' + err);
-        });
+        })
     }
 
     _onChooseSex() {
@@ -146,8 +201,12 @@ class AddMemberInfo extends Component {
     }
 
     render() {
-        if (!this.state.loaded) {
-            return <Loading type='text'/>
+        var body = (<View style={styles.container}>
+            <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
+            <Loading type='text'/>
+        </View>);
+        if (!this.state.levelLoaded) {
+            return body;
         }
         return (
             <View style={styles.container}>
@@ -173,28 +232,10 @@ class AddMemberInfo extends Component {
                     <View style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>登记日期</Text>
                         <View style={{flex:1,height:39}}>
-                            <DatePicker date={this.state.memberInfo.registrationTime}
-                                        mode="date"
-                                        placeholder="选择日期"
-                                        format="YYYY-MM-DD"
-                                        minDate="1980-01-01"
-                                        maxDate="2020-01-01"
-                                        confirmBtnText="Confirm"
-                                        cancelBtnText="Cancel"
-                                        showIcon={false}
-                                        enabled={false}
-                                        customStyles={{
-                                    dateIcon: {
-                                      position: 'absolute',
-                                      right: 0,
-                                      top: 4,
-                                      marginLeft: 0
-                                    },
-                                    dateInput: {
-                                      marginRight: 36,
-                                      borderWidth:StyleSheet.hairlineWidth,
-                                    },
-                                  }}
+                            <TextInput value={this.state.memberRegistrationTime}
+                                       editable={false}
+                                       underlineColorAndroid={'transparent'}
+                                       style={{height: 40, borderWidth:0, flex:1}}
                             />
                         </View>
                     </View>
@@ -243,25 +284,25 @@ class AddMemberInfo extends Component {
                     </View>
                     <View style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>电话</Text>
-                        <TextInput value={this.state.memberInfo.phone}
+                        <TextInput value={this.state.memberPhone}
                                    editable={this.state.enable}
                                    underlineColorAndroid={'transparent'}
                                    keyboardType={'default'}
                                    style={{height: 40, borderWidth:0, flex:1}}
-                                   onChangeText={(text)=>{this.setState({ memberInfo: {phone:text} })}}
+                                   onChangeText={(text)=>{this.setState({ memberPhone:text })}}
                         />
                     </View>
                     <TouchableOpacity onPress={this._onChooseSex.bind(this)} style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>性别</Text>
-                        <Text style={{flex:1,}}>{this.state.memberInfo.sex}</Text>
+                        <Text style={{flex:1,}}>{this.state.memberSex}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={this._onChooseLevel.bind(this)} style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>会员等级</Text>
-                        <Text style={{flex:1,}}>{this.state.memberInfo.level}</Text>
+                        <Text style={{flex:1,}}>{this.state.memberLevel}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={this._onChooseState.bind(this)} style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>会员状态</Text>
-                        <Text style={{flex:1,}}>{this.state.memberInfo.state}</Text>
+                        <Text style={{flex:1,}}>{this.state.memberState}</Text>
                     </TouchableOpacity>
                     <View style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>备注</Text>
@@ -273,8 +314,15 @@ class AddMemberInfo extends Component {
                                    onChangeText={(text)=>{this.setState({ memberRemarks:text })}}
                         />
                     </View>
-                    <NButton onPress={this._save.bind(this)} backgroundColor={'#87CEFA'} text="保存"/>
-                    <NButton onPress={this._saveAndAddPet.bind(this)} backgroundColor={'#87CEFA'} text="保存并添加宠物"/>
+                    <View style={{height:130, flexDirection:'row'}}>
+                        <View style={{flex:1}}>
+                            <NButton onPress={this._save.bind(this, true)} backgroundColor={'#87CEFA'} text="保存"/>
+                        </View>
+                        <View style={{flex:1}}>
+                            <NButton onPress={this._saveAndAddPet.bind(this)} backgroundColor={'#87CEFA'}
+                                     text="保存并添加宠物"/>
+                        </View>
+                    </View>
                 </ScrollView>
                 <Picker
                     style={{height: 300}}
@@ -285,9 +333,9 @@ class AddMemberInfo extends Component {
                     ref={picker => this.picker = picker}
                     pickerData={['男','女']}
                     selectedValue={this.state.memberSex}
-                    onPickerDone={(text)=>{
+                    onPickerDone={(sex)=>{
                         this.setState({
-                            memberSex: text
+                            memberSex: sex,
                         })
                     }}
                 />
@@ -300,9 +348,9 @@ class AddMemberInfo extends Component {
                     ref={picker => this.pickerLevel = picker}
                     pickerData={this.state.levelData}
                     selectedValue={this.state.memberLevel}
-                    onPickerDone={(text)=>{
+                    onPickerDone={(level)=>{
                         this.setState({
-                            memberLevel: text
+                            memberLevel: level,
                         })
                     }}
                 />
@@ -315,9 +363,9 @@ class AddMemberInfo extends Component {
                     ref={picker => this.pickerState = picker}
                     pickerData={['正常','停用']}
                     selectedValue={this.state.memberState}
-                    onPickerDone={(text)=>{
+                    onPickerDone={(cardState)=>{
                         this.setState({
-                            memberState:text
+                            memberState:cardState,
                         })
                     }}
                 />
@@ -325,15 +373,15 @@ class AddMemberInfo extends Component {
         )
     }
 }
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
     titleStyle: {
-        height: 20,
-        margin: 2,
+        padding:2,
         flexDirection: 'row',
-        backgroundColor: '#EEB4B4',
+        backgroundColor: '#4682B4',
     },
     inputViewStyle: {
         flex: 1,
@@ -347,4 +395,5 @@ const styles = StyleSheet.create({
         borderBottomWidth: StyleSheet.hairlineWidth,
     },
 })
-module.exports = AddMemberInfo;
+module
+    .exports = AddMemberInfo;

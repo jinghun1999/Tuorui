@@ -82,15 +82,7 @@ class ChoosePet extends Component {
     _fetchData(value,page,isNext){
         let _this =this;
         //http://petservice.tuoruimed.com/service/Api/GestAndPet/GetPageRecord
-        storage.getBatchData([{
-            key: 'USER',
-            autoSync: false,
-            syncInBackground: false,
-        }, {
-            key: 'HOSPITAL',
-            autoSync: false,
-            syncInBackground: false,
-        }]).then(rets => {
+        NetUtil.getAuth(function (user, hos) {
                 let postdata = {
                     "items": [{
                         "Childrens": null,
@@ -135,7 +127,7 @@ class ChoosePet extends Component {
                 };
                 //let hospitalcode = 'aa15-740d-4e6d-a6ca-0ebf-81f1';
                 let header = {
-                    'Authorization': NetUtil.headerAuthorization(rets[0].user.Mobile, rets[0].pwd, rets[1].hospital.Registration, rets[0].user.Token)
+                    'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
                 };
                 NetUtil.postJson(CONSTAPI.HOST + '/GestAndPet/GetPageRecord', postdata, header, function (data) {
                     if (data.Sign && data.Message != null) {
@@ -196,15 +188,9 @@ class ChoosePet extends Component {
                         }
                     });
                 }
-            }
-        ).catch(err => {
-                _this.setState({
-                    petDataSource: [],
-                    loaded: true,
-                });
-                alert('error:' + err.message);
-            }
-        )
+            },function(err){
+            alert(err);
+        })
     }
 
     search(txt) {
