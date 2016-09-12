@@ -26,7 +26,7 @@ import FormPicker from '../../commonview/FormPicker';
 import FormInput from '../../commonview/FormInput';
 //import ScanQr from '../../commonview/ScanQr';
 import ChooseGoods from './ChooseGood';
-import Scan from './Scan';
+import ScanBarcode from './ScanBarcode';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 const scanIcon = (<Icon name={'md-barcode'} size={40} color={'#63B8FF'}/>);
@@ -48,8 +48,8 @@ class GoodsAdd extends Component {
         const { navigator } = this.props;
         if (navigator) {
             this.props.navigator.push({
-                component: Scan,
-                title: 'Scan',
+                component: ScanBarcode,
+                title: 'ScanBarcode',
                 params: {
                     onSucess: function (v) {
                         //_this.setState({kw: v});
