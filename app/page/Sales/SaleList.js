@@ -37,7 +37,7 @@ class SaleList extends Component {
             pageSize: 15,
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
         };
-        this._search =  this._search.bind(this);
+        this._search = this._search.bind(this);
     }
 
     _onBack() {
@@ -71,72 +71,12 @@ class SaleList extends Component {
 
     _fetchData(page, isNext) {
         let _this = this;
-        storage.getBatchData([{
-            key: 'USER',
-            autoSync: false,
-            syncInBackground: false,
-        }, {
-            key: 'HOSPITAL',
-            autoSync: false,
-            syncInBackground: false,
-        }]).then(rets => {
-                let postdata = {
-                    "items": [{
-                        "Childrens": null,
-                        "Field": "IsDeleted",
-                        "Title": null,
-                        "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                        "DataType": 0,
-                        "Value": "0",
-                        "Conn": 0
-                    }, {
-                        "Childrens": null,
-                        "Field": "CreatedOn",
-                        "Title": null,
-                        "Operator": {"Name": ">=", "Title": "大于等于", "Expression": null},
-                        "DataType": 0,
-                        "Value": _this.state.dateFrom,
-                        "Conn": 1
-                    }, {
-                        "Childrens": null,
-                        "Field": "CreatedOn",
-                        "Title": null,
-                        "Operator": {"Name": "<=", "Title": "小于等于", "Expression": null},
-                        "DataType": 0,
-                        "Value": _this.state.dateTo + " 23:59:59",
-                        "Conn": 1
-                    }],
-                    "sorts": [{
-                        "Field": "PaidStatus,CreatedOn",
-                        "Title": null,
-                        "Sort": {"Name": "Desc", "Title": "降序"},
-                        "Conn": 0
-                    }],
-                    index: page,
-                    pageSize: _this.state.pageSize
-                };
-                let header = {
-                    'Authorization': NetUtil.headerAuthorization(rets[0].user.Mobile, rets[0].pwd, rets[1].hospital.Registration, rets[0].user.Token)
-                };
-                NetUtil.postJson(CONSTAPI.HOST + '/Store_DirectSell/GetPageRecord', postdata, header, function (data) {
-                    if (data.Sign && data.Message != null) {
-                        let dataSource = _this.state.dataSource;
-                        if (isNext) {
-                            data.Message.forEach((d)=> {
-                                dataSource.push(d);
-                            });
-                        } else {
-                            dataSource = data.Message;
-                        }
-                        _this.setState({
-                            dataSource: dataSource,
-                            pageIndex: page,
-                        });
-                    } else {
-                        alert("获取数据失败：" + data.Message);
-                    }
-                });
-                postdata = [{
+        NetUtil.getAuth(function (user, hos) {
+            let header = {
+                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
+            };
+            let postdata = {
+                "items": [{
                     "Childrens": null,
                     "Field": "IsDeleted",
                     "Title": null,
@@ -160,29 +100,76 @@ class SaleList extends Component {
                     "DataType": 0,
                     "Value": _this.state.dateTo + " 23:59:59",
                     "Conn": 1
-                }]
-                if (!isNext) {
-                    NetUtil.postJson(CONSTAPI.HOST + '/Store_DirectSell/GetRecordCount', postdata, header, function (data) {
-                        if (data.Sign && data.Message != null) {
-                            _this.setState({
-                                recordCount: data.Message,
-                                loaded: true,
-                            });
-                        } else {
-                            alert("获取记录数失败：" + data.Message);
-                        }
+                }],
+                "sorts": [{
+                    "Field": "PaidStatus,CreatedOn",
+                    "Title": null,
+                    "Sort": {"Name": "Desc", "Title": "降序"},
+                    "Conn": 0
+                }],
+                index: page,
+                pageSize: _this.state.pageSize
+            };
+            NetUtil.postJson(CONSTAPI.HOST + '/Store_DirectSell/GetPageRecord', postdata, header, function (data) {
+                if (data.Sign && data.Message != null) {
+                    let dataSource = _this.state.dataSource;
+                    if (isNext) {
+                        data.Message.forEach((d)=> {
+                            dataSource.push(d);
+                        });
+                    } else {
+                        dataSource = data.Message;
+                    }
+                    _this.setState({
+                        dataSource: dataSource,
+                        pageIndex: page,
                     });
+                } else {
+                    alert("获取数据失败：" + data.Message);
                 }
-            }
-        ).catch(err => {
-                _this.setState({
-                    petDataSource: [],
-                    loaded: true,
-                });
-                alert('error:' + err.message);
             });
+            postdata = [{
+                "Childrens": null,
+                "Field": "IsDeleted",
+                "Title": null,
+                "Operator": {"Name": "=", "Title": "等于", "Expression": null},
+                "DataType": 0,
+                "Value": "0",
+                "Conn": 0
+            }, {
+                "Childrens": null,
+                "Field": "CreatedOn",
+                "Title": null,
+                "Operator": {"Name": ">=", "Title": "大于等于", "Expression": null},
+                "DataType": 0,
+                "Value": _this.state.dateFrom,
+                "Conn": 1
+            }, {
+                "Childrens": null,
+                "Field": "CreatedOn",
+                "Title": null,
+                "Operator": {"Name": "<=", "Title": "小于等于", "Expression": null},
+                "DataType": 0,
+                "Value": _this.state.dateTo + " 23:59:59",
+                "Conn": 1
+            }]
+            if (!isNext) {
+                NetUtil.postJson(CONSTAPI.HOST + '/Store_DirectSell/GetRecordCount', postdata, header, function (data) {
+                    if (data.Sign && data.Message != null) {
+                        _this.setState({
+                            recordCount: data.Message,
+                            loaded: true,
+                        });
+                    } else {
+                        alert("获取记录数失败：" + data.Message);
+                    }
+                });
+            }
+        }, function (err) {
 
+        });
     }
+
     _onEndReached() {
         this._fetchData(this.state.pageIndex + 1, true);
     }
@@ -228,6 +215,7 @@ class SaleList extends Component {
             </TouchableOpacity>
         )
     }
+
     _renderFooter() {
         //计算总页数，如果最后一页，则返回没有数据啦~
         let totalPage = this.state.recordCount / this.state.pageSize;
@@ -244,6 +232,7 @@ class SaleList extends Component {
             </View>
         );
     }
+
     render() {
         var body = <Loading type={'text'}/>
         if (this.state.loaded) {

@@ -55,51 +55,20 @@ class GoodSales extends React.Component {
         _this.setState({
             loaded: false,
         })
-        storage.getBatchData([{
-            key: 'USER',
-            autoSync: false,
-            syncInBackground: false,
-        }, {
-            key: 'HOSPITAL',
-            autoSync: false,
-            syncInBackground: false,
-        }]).then(rets => {
+        NetUtil.getAuth(function (user, hos) {
                 let header = {
-                    'Authorization': NetUtil.headerAuthorization(rets[0].user.Mobile, rets[0].pwd, rets[1].hospital.Registration, rets[0].user.Token)
+                    'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
                 };
                 let querystr = 'startDate=' + _this.state.dateFrom + '&endDate=' + _this.state.dateTo + ' 23:59:59&itemName=' + _this.state.kw;
-                //GetCountItemSellDataTable
-                NetUtil.get(CONSTAPI.HOST + '/Report/GetCountItemSell?' + querystr, header, function (data) {
-                    let json = [
-                        {
-                            条码: '111111',
-                            商品名: '强力多维',
-                            规格: '130g/只',
-                            生产商: '从而向',
-                            总数量: '100',
-                            单位: '只',
-                            平均售价: '79',
-                            总金额: '1000',
-                        }, {
-                            条码: '2222',
-                            商品名: '强力多维',
-                            规格: '130g/只',
-                            生产商: '从而向',
-                            总数量: '210',
-                            单位: '只',
-                            平均售价: '79',
-                            总金额: '1000.21',
-                        },
-                    ]
-                    let a1 = 0, a2 = 0;
-                    json.forEach((d)=> {
-                        a1 += parseInt(d.总数量);
-                        a2 += parseFloat(d.总金额);
-                    });
+                NetUtil.get(CONSTAPI.HOST + '/Report/GetCountItemSellDataTable?' + querystr, header, function (data) {
                     if (data.Sign && data.Message != null) {
-                        //alert(data.Message)
+                        let a1 = 0, a2 = 0, json = data.Message;
+                        json.forEach((d)=> {
+                            a1 += parseInt(d.总数量);
+                            a2 += parseFloat(d.总金额);
+                        });
                         _this.setState({
-                            dataSource: json,//data.Message,
+                            dataSource: json,
                             loaded: true,
                             totalCount: a1,
                             totalAmount: a2,
@@ -111,15 +80,7 @@ class GoodSales extends React.Component {
                         });
                     }
                 });
-            }
-        ).catch(err => {
-                _this.setState({
-                    dataSource: [],
-                    memberLoaded: true,
-                });
-                alert('error:' + err.message);
-            }
-        );
+            }, function (err) {});
     }
 
     _search() {

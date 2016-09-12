@@ -51,12 +51,6 @@ class MyAccount extends React.Component {
         /*从缓存中读取*/
         let _this = this;
         let hosds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-        /*storage.getBatchData([
-         {key: 'USER', autoSync: false, syncInBackground: false},
-         {key: 'HOSPITAL', autoSync: false, syncInBackground: false},
-         ]).then(results => {
-
-         })*/
         storage.load({key: 'USER', autoSync: false, syncInBackground: false}).then(ret => {
             let hos = ret.user.Hospitals;
             hos.forEach(v =>

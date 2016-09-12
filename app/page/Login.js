@@ -46,7 +46,7 @@ class Login extends Component {
                 if (data.Sign && data.Message) {
                     Alert.alert('登录成功', "Token:" + data.Message.Token);
                     storage.save({
-                        key: 'USER',  //注意:请不要在key中使用_下划线符号!
+                        key: 'USER',
                         rawData: {
                             user: data.Message,
                             pwd: _this.state.pwd,
@@ -74,12 +74,12 @@ class Login extends Component {
     }
 
     _register() {
-        let _this= this;
+        let _this = this;
         const {navigator} = _this.props;
-        if(navigator){
+        if (navigator) {
             navigator.push({
-                name:'Register',
-                component:Register
+                name: 'Register',
+                component: Register
             })
         }
     }
@@ -116,7 +116,7 @@ class Login extends Component {
                         underlayColor='#4169e1'
                         style={styles.style_view_button}
                         onPress={this._Login.bind(this)}
-                        text='登录' />
+                        text='登录'/>
                 </View>
 
                 <View style={{flex:1,flexDirection:'row',alignItems: 'flex-end',bottom:10}}>

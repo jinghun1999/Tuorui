@@ -48,21 +48,13 @@ class ChooseStore extends Component {
     fetchData() {
         let _this = this;
         let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-        storage.getBatchData([{
-            key: 'USER',
-            autoSync: false,
-            syncInBackground: false,
-        }, {
-            key: 'HOSPITAL',
-            autoSync: false,
-            syncInBackground: false,
-        }]).then(rets => {
+        NetUtil.getAuth(function (user, hos) {
             let postjson = {
                 items: [],
                 sorts: []
             };
             let header = {
-                'Authorization': NetUtil.headerAuthorization(rets[0].user.Mobile, rets[0].pwd, rets[1].hospital.Registration, rets[0].user.Token)
+                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
             };
             NetUtil.postJson(CONSTAPI.HOST+'/Warehouse/GetModelList', postjson, header, function (data) {
                 if (data.Sign && data.Message) {
@@ -78,13 +70,7 @@ class ChooseStore extends Component {
                     });
                 }
             });
-        }).catch(err => {
-            _this.setState({
-                storeDataSource: ds.cloneWithRows([]),
-                loaded: true,
-            });
-            alert('error:' + err);
-        });
+        },function(err){});
     }
 
     search(val) {

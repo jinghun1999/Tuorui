@@ -9,28 +9,12 @@ var base64 = require('base-64');
 class Util extends React.Component {
 
     static getToken(time) {
-        return Md5Util.md5(time + Util.getPswId());
-    }
-
-    static getKo() {
-        return '0000';
+        return Md5Util.md5(time + '0010000app');
     }
 
     static getTime() {
         var moment = require('moment');
         return moment().format("YYYY-MM-DD HH:mm:ss");
-    }
-
-    static getPswId() {
-        return '0010000app';
-    }
-
-    static tokenAndKo(map) {
-        let time = Util.getTime();
-        map.set('time', time);
-        map.set('ko', Util.getKo());
-        map.set('token', Util.getToken(time));
-        return map;
     }
 
     static cutString(str, len, suffix) {

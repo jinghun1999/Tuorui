@@ -13,7 +13,6 @@ import {
     } from 'react-native';
 import BarcodeScanner from 'react-native-barcodescanner';
 import Loading from '../../commonview/Loading';
-var TimerMixin = require('react-timer-mixin');
 
 class ScanBarcode extends Component {
     constructor(props) {
@@ -71,7 +70,7 @@ class ScanBarcode extends Component {
     }
 
     render() {
-        let body = <View style={{flex:1, alignItems:'center'}}><Loading type={'text'}/></View>
+        let body = <View style={{flex:1, alignItems:'center', justifyContent:'center'}}><Loading type={'text'}/></View>
         if (this.state.loaded) {
             body = <BarcodeScanner
                 onBarCodeRead={this.barcodeReceived.bind(this)}

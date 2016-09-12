@@ -58,15 +58,7 @@ class ChooseGuest extends Component {
 
     fetchData(page, isNext) {
         let _this = this;
-        storage.getBatchData([{
-            key: 'USER',
-            autoSync: false,
-            syncInBackground: false,
-        }, {
-            key: 'HOSPITAL',
-            autoSync: false,
-            syncInBackground: false,
-        }]).then(rets => {
+        NetUtil.getAuth(function (user, hos) {
             let postjson = {
                 "items": [{
                     "Childrens": null,
@@ -126,7 +118,7 @@ class ChooseGuest extends Component {
                 postjson.items.push(query);
             }
             let header = {
-                'Authorization': NetUtil.headerAuthorization(rets[0].user.Mobile, rets[0].pwd, rets[1].hospital.Registration, rets[0].user.Token)
+                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
             };
             NetUtil.postJson(CONSTAPI.HOST + '/Gest/GetPageRecord', postjson, header, function (data) {
                 if (data.Sign && data.Message) {
@@ -210,13 +202,7 @@ class ChooseGuest extends Component {
                     }
                 });
             }
-        }).catch(err => {
-            _this.setState({
-                dataSource: [],
-                loaded: true,
-            });
-            alert('error:' + err.message);
-        });
+        }, function(err){});
     }
 
     search() {

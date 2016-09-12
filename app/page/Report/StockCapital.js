@@ -50,15 +50,7 @@ class StockCapital extends React.Component {
         _this.setState({
             loaded: false,
         })
-        storage.getBatchData([{
-            key: 'USER',
-            autoSync: false,
-            syncInBackground: false,
-        }, {
-            key: 'HOSPITAL',
-            autoSync: false,
-            syncInBackground: false,
-        }]).then(rets => {
+        NetUtil.getAuth(function (user, hos) {
                 let postdata = [{
                     "Childrens": null,
                     "Field": "IsDeleted",
@@ -69,25 +61,25 @@ class StockCapital extends React.Component {
                     "Conn": 0
                 }];
                 let header = {
-                    'Authorization': NetUtil.headerAuthorization(rets[0].user.Mobile, rets[0].pwd, rets[1].hospital.Registration, rets[0].user.Token)
+                    'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
                 };
                 NetUtil.postJson(CONSTAPI.HOST + '/ItemCount/GetModelList', postdata, header, function (data) {
                     let dt = data.Message;
-                    let _count = 0, _val = 0.00, _cb = 0.00, _lr = 0.00;
-                    dt.forEach((d)=> {
-                        _count += d.ItemCountNum;
-                        _val += d.ItemCountNum * d.SellPrice;
-                        _cb += d.ItemCountNum * d.InputPrice;
-                        _lr += d.ItemCountNum * d.SellPrice - d.ItemCountNum * d.InputPrice;
-                    });
                     if (data.Sign && dt != null) {
+                        let _count = 0, _val = 0.00, _cb = 0.00, _lr = 0.00;
+                        dt.forEach((d)=> {
+                            _count += d.ItemCountNum;
+                            _val += d.ItemCountNum * d.SellPrice;
+                            _cb += d.ItemCountNum * d.InputPrice;
+                            _lr += d.ItemCountNum * d.SellPrice - d.ItemCountNum * d.InputPrice;
+                        });
                         _this.setState({
                             dataSource: dt,
                             loaded: true,
                             totalCount: _count,
-                            totalVal: _val,
-                            totalCB: _cb,
-                            totalLR: _lr,
+                            totalVal: _val.toFixed(2),
+                            totalCB: _cb.toFixed(2),
+                            totalLR: _lr.toFixed(2),
                         });
                     } else {
                         alert("获取数据失败：" + dt);
@@ -96,13 +88,8 @@ class StockCapital extends React.Component {
                         });
                     }
                 });
-            }
-        ).catch(err => {
-                _this.setState({
-                    dataSource: [],
-                    memberLoaded: true,
-                });
-                alert('error:' + err.message);
+            }, function (err) {
+
             }
         );
     }
@@ -150,7 +137,8 @@ class StockCapital extends React.Component {
                 <Text style={styles.itemName}>{obj.ItemName}</Text>
                 <View style={{flexDirection:'column', flex:1, marginLeft:15,}}>
                     <Text style={styles.barcode}>
-                        <Text style={{marginRight:5,paddingLeft:5, fontSize:12, color:'#fff', backgroundColor:'#ccc'}}>{obj.ItemStyle}</Text>
+                        <Text
+                            style={{marginRight:5,paddingLeft:5, fontSize:12, color:'#fff', backgroundColor:'#ccc'}}>{obj.ItemStyle}</Text>
                         <Text>{obj.BarCode}</Text>
                     </Text>
                     <View style={{flexDirection:'row'}}>

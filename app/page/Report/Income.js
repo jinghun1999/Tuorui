@@ -36,7 +36,7 @@ class Income extends React.Component {
             },
             dataSource: [],
             loaded: false,
-            dateFrom: Util.GetDateStr(-30),
+            dateFrom: Util.GetDateStr(-7),
             dateTo: Util.GetDateStr(0),
         };
     }
@@ -59,15 +59,10 @@ class Income extends React.Component {
         _this.setState({
             loaded: false,
         })
-        storage.getBatchData([{
-            key: 'USER',
-            autoSync: false,
-            syncInBackground: false,
-        }, {
-            key: 'HOSPITAL',
-            autoSync: false,
-            syncInBackground: false,
-        }]).then(rets => {
+        NetUtil.getAuth(function (user, hos) {
+                let header = {
+                    'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
+                };
                 let postdata = [{
                     "Childrens": null,
                     "Field": "1",
@@ -93,9 +88,6 @@ class Income extends React.Component {
                     "Value": _this.state.dateTo + ' 23:59:59',
                     "Conn": 1
                 }];
-                let header = {
-                    'Authorization': NetUtil.headerAuthorization(rets[0].user.Mobile, rets[0].pwd, rets[1].hospital.Registration, rets[0].user.Token)
-                };
                 NetUtil.postJson(CONSTAPI.HOST + '/HasPaidTotal/GetModelList', postdata, header, function (data) {
                     let ds = data.Message;
                     if (data.Sign && ds != null) {
@@ -124,14 +116,9 @@ class Income extends React.Component {
                     }
                 });
             }
-        ).catch(err => {
-                _this.setState({
-                    dataSource: [],
-                    memberLoaded: true,
-                });
-                alert('error:' + err.message);
-            }
-        );
+            , function (err) {
+
+            });
     }
 
     _search() {

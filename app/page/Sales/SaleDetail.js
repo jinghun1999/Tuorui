@@ -46,57 +46,43 @@ class SaleDetail extends Component {
 
     _fetchData() {
         let _this = this;
-        storage.getBatchData([{
-            key: 'USER',
-            autoSync: false,
-            syncInBackground: false,
-        }, {
-            key: 'HOSPITAL',
-            autoSync: false,
-            syncInBackground: false,
-        }]).then(rets => {
-                let postdata = [{
-                    "Childrens": null,
-                    "Field": "IsDeleted",
-                    "Title": null,
-                    "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                    "DataType": 0,
-                    "Value": "0",
-                    "Conn": 0
-                }, {
-                    "Childrens": null,
-                    "Field": "DirectSellCode",
-                    "Title": null,
-                    "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                    "DataType": 0,
-                    "Value": _this.state.sale.DirectSellCode,
-                    "Conn": 1
-                }];
-                let header = {
-                    'Authorization': NetUtil.headerAuthorization(rets[0].user.Mobile, rets[0].pwd, rets[1].hospital.Registration, rets[0].user.Token)
-                };
-                NetUtil.postJson(CONSTAPI.HOST + '/Store_DirectSellDetail/GetModelListByQitems', postdata, header, function (data) {
-                    if (data.Sign && data.Message != null) {
-                        _this.setState({
-                            dataSource: data.Message.returns,
-                            loaded: true,
-                        });
-                    } else {
-                        alert("获取数据失败：" + data.Message);
-                        _this.setState({
-                            loaded: true,
-                        });
-                    }
-                });
-            }
-        ).catch(err => {
-                _this.setState({
-                    dataSource: [],
-                    loaded: true,
-                });
-                alert('error:' + err.message);
-            }
-        )
+        NetUtil.getAuth(function (user, hos) {
+            let postdata = [{
+                "Childrens": null,
+                "Field": "IsDeleted",
+                "Title": null,
+                "Operator": {"Name": "=", "Title": "等于", "Expression": null},
+                "DataType": 0,
+                "Value": "0",
+                "Conn": 0
+            }, {
+                "Childrens": null,
+                "Field": "DirectSellCode",
+                "Title": null,
+                "Operator": {"Name": "=", "Title": "等于", "Expression": null},
+                "DataType": 0,
+                "Value": _this.state.sale.DirectSellCode,
+                "Conn": 1
+            }];
+            let header = {
+                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
+            };
+            NetUtil.postJson(CONSTAPI.HOST + '/Store_DirectSellDetail/GetModelListByQitems', postdata, header, function (data) {
+                if (data.Sign && data.Message != null) {
+                    _this.setState({
+                        dataSource: data.Message.returns,
+                        loaded: true,
+                    });
+                } else {
+                    alert("获取数据失败：" + data.Message);
+                    _this.setState({
+                        loaded: true,
+                    });
+                }
+            });
+        }, function (err) {
+
+        });
     }
 
     _renderPet(obj) {
@@ -159,8 +145,8 @@ const styles = StyleSheet.create({
     row: {
         flexDirection: 'column',
         flex: 1,
-        backgroundColor:'#fff',
-        padding:10,
+        backgroundColor: '#fff',
+        padding: 10,
         borderBottomWidth: StyleSheet.hairlineWidth,
         borderBottomColor: '#ccc'
     },
@@ -172,7 +158,7 @@ const styles = StyleSheet.create({
     },
     itemBox: {
         flexDirection: 'row',
-        backgroundColor:'#fff',
+        backgroundColor: '#fff',
         padding: 10,
         borderBottomWidth: StyleSheet.hairlineWidth,
         borderBottomColor: '#ccc'

@@ -136,11 +136,7 @@ export default class SaleAdd extends React.Component {
             ToastAndroid.show("请输入付款金额", ToastAndroid.SHORT);
             return false;
         }
-        storage.load({
-            key: 'USER',
-            autoSync: true,
-            syncInBackground: true
-        }).then(ret => {
+        NetUtil.getAuth(function (user, hos) {
             let items = [];
             let _goods = _this.state.SelectedGoods.items;
             for (let i = 0; i < _goods.length; i++) {
@@ -178,9 +174,7 @@ export default class SaleAdd extends React.Component {
                 sellItemList: items,
             }
             let header = {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Mobile ' + Util.base64Encode(ret.user.Mobile + ':' + Util.base64Encode(ret.pwd) + ':' + (ret.user.Hospitals[0] != null ? ret.user.Hospitals[0].Registration : '') + ":" + ret.user.Token)
+                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
             };
             NetUtil.postJson(CONSTAPI.SAVESALES, postjson, header, function (data) {
                 if (data.Sign && data.Message) {
@@ -193,8 +187,7 @@ export default class SaleAdd extends React.Component {
                     ToastAndroid.show("获取数据错误" + data.Exception, ToastAndroid.SHORT);
                 }
             });
-        }).catch(err => {
-            alert('error:' + err);
+        }, function (err) {
         });
     }
 
@@ -220,7 +213,7 @@ export default class SaleAdd extends React.Component {
     renderGood(good, sectionID, rowID) {
         return (
             <TouchableOpacity
-                style={{ flexDirection:'row',marginLeft:15, marginRight:15, paddingTop:10, paddingBottom:10, borderBottomWidth:StyleSheet.hairlineWidth, borderBottomColor:'#ccc'}}
+                style={styles.row}
                 onPress={()=>this.pressRow(good)}>
                 <Image style={styles.goodHead}
                        source={require('../../img/shopping_81px.png')}/>
@@ -292,8 +285,6 @@ export default class SaleAdd extends React.Component {
                         <FormInput title="实收金额" value={this.state.goodAmountInput} enabled={true}
                                    showbottom={false}
                                    onChangeText={(text)=>{
-                                        //var _t = this.state.SelectedGoods;
-                                        // _t.RealPay = parseFloat(_t).toFixed(1);
                                         this.setState({
                                             goodAmountInput: text
                                         });
@@ -338,7 +329,16 @@ const styles = StyleSheet.create({
             borderTopWidth: 1,
             paddingLeft: 5,
             paddingRight: 5,
-        }
+        },
+        row: {
+            flexDirection: 'row',
+            marginLeft: 15,
+            marginRight: 15,
+            paddingTop: 10,
+            paddingBottom: 10,
+            borderBottomWidth: StyleSheet.hairlineWidth,
+            borderBottomColor: '#ccc'
+        },
     }
 );
 module.exports = SaleAdd;
