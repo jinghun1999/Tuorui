@@ -90,6 +90,8 @@ class GoodsAdd extends Component {
                     Alert.alert('提示', "未找到此商品");
                 }
             });
+        }, function(msg){
+            Alert.alert('错误', msg)
         });
     }
 

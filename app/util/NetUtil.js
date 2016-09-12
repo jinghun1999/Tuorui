@@ -75,7 +75,7 @@ class NetUtil extends React.Component {
         }
     }
 
-    static getAuth(callback) {
+    static getAuth(success, error) {
         storage.getBatchData([{
             key: 'USER',
             autoSync: false,
@@ -85,9 +85,9 @@ class NetUtil extends React.Component {
             autoSync: false,
             syncInBackground: false,
         }]).then(rets => {
-            callback(rets[0], rets[1]);
+            success(rets[0], rets[1]);
         }).catch(err => {
-            alert('error:' + err);
+            error(err.message);
         });
     }
 
