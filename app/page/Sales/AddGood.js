@@ -37,7 +37,7 @@ class GoodsAdd extends Component {
         this.state = {
             loaded: false,
             GoodInfo: {ID: null, ItemName: null, BarCode: null, SellPrice: 0.00, GoodCount: 1, GoodAmount: 0.00},
-            kw: null,
+            kw: '',
             goodCountInput: '',
         };
         this._this = this;
@@ -62,19 +62,11 @@ class GoodsAdd extends Component {
 
     _getGood(v) {
         let _this = this;
-        if (v == null || v.length == 0) {
+        if ((v == null || v.length == 0) && _this.state.kw == '') {
             Alert.alert('提示', '未获得商品条码/编号');
             return false;
         }
-        storage.getBatchData([{
-            key: 'USER',
-            autoSync: false,
-            syncInBackground: false,
-        }, {
-            key: 'HOSPITAL',
-            autoSync: false,
-            syncInBackground: false,
-        }]).then(rets => {
+        NetUtil.getAuth(function (user, hos) {
             let postjson = {
                 WarehouseID: _this.props.storeId,
                 CateNo: null,
@@ -84,7 +76,7 @@ class GoodsAdd extends Component {
                 pageIndex: 1
             };
             let header = {
-                'Authorization': NetUtil.headerAuthorization(rets[0].user.Mobile, rets[0].pwd, rets[1].hospital.Registration, rets[0].user.Token)
+                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, user.pwd, hos.hospital.Registration, user.user.Token)
             };
             NetUtil.postJson(CONSTAPI.HOST + '/ItemTypeLeftJoinItemCount/SearchSellListByPage', postjson, header, function (data) {
                 if (data.Sign && data.Message && data.Message.length > 0) {
@@ -98,8 +90,6 @@ class GoodsAdd extends Component {
                     Alert.alert('提示', "未找到此商品");
                 }
             });
-        }).catch(err => {
-            alert('error:' + err);
         });
     }
 

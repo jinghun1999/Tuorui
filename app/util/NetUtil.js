@@ -75,6 +75,22 @@ class NetUtil extends React.Component {
         }
     }
 
+    static getAuth(callback) {
+        storage.getBatchData([{
+            key: 'USER',
+            autoSync: false,
+            syncInBackground: false,
+        }, {
+            key: 'HOSPITAL',
+            autoSync: false,
+            syncInBackground: false,
+        }]).then(rets => {
+            callback(rets[0], rets[1]);
+        }).catch(err => {
+            alert('error:' + err);
+        });
+    }
+
     /*get请求
      static get(url, callback) {
      fetch(url)
