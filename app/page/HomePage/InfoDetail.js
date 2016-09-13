@@ -53,16 +53,15 @@ class DrugDetails extends React.Component {
             syncInBackground: false,
         }).then(ret => {
                 //初始化
-                let _paramData = 'id=' + this.props.requestId + '&operateby=' + ret.user.moblie;
+                let _paramData = 'id=' + this.props.requestId + '&operateby=' + ret.user.Mobile;
                 NetUtil.get(CONSTAPI.APIAPP + "/AppInfo/GetArticleOperateInfo?" + _paramData, null, function (data) {
                     if (data.Status) {
                         let result=data.Data;
-                        alert(JSON.stringify(result))
                         _this.setState({
                             isCollect: result.IsCollect,
                             collectNum:result.CollectNumber,
                             readNum:result.ReadNumber,
-                            phone: ret.user.moblie
+                            phone: ret.user.Mobile
                         });
                     } else {
                         alert(data.ErrorMessage);
@@ -90,15 +89,14 @@ class DrugDetails extends React.Component {
         //alert('收藏' + this.props.requestId);
         let _this = this;
         let querystr = 'id=' + this.props.requestId + '&operateby=' + _this.state.phone;
-        NetUtil.get(CONSTAPI.APIAPP + "/AppInfo/AddOrCountermandOperate?operatetype=1" + querystr, null, function (data) {
+        NetUtil.get(CONSTAPI.APIAPP + "/AppInfo/AddOrCountermandOperate?operatetype=1&" + querystr, null, function (data) {
             if (data.Status) {
                 let result = data.Data;
                 ToastAndroid.show(result.Message, ToastAndroid.SHORT);
                 _this.setState({
                     isCollect: result.IsCollect,
-                    collectNum: _this.state.collectNum - 1
+                    collectNum: result.IsCollect?_this.state.collectNum + 1:_this.state.collectNum - 1
                 });
-
             }
         });
 
@@ -122,13 +120,12 @@ class DrugDetails extends React.Component {
                                  domStorageEnabled={true}
                                  renderLoading={this.renderLoad.bind(this)}
                                  javaScriptEnabled={true}
-                                 decelerationRate="normal"
-                                 automaticallyAdjustContentInsets={false}/>
+                                 decelerationRate="normal"/>
                         <View style={styles.bottomContainer}>
                             <View style={{flex: 1, flexDirection: 'row', backgroundColor: '#ccc'}}>
                                 <View style={styles.readInfo}>
                                     <Icon name={'ios-eye'} size={30} color={'#999'} style={{marginRight: 5}}/>
-                                    <Text>{this.state.viewNum}</Text>
+                                    <Text>{this.state.readNum}</Text>
                                 </View>
                                 <View style={styles.readInfo}>
                                     <Icon name={'ios-star'} size={30} color={'#999'} style={{marginRight: 5}}/>
