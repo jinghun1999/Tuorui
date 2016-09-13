@@ -37,9 +37,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#FFFFCC',
-        margin: 10,
         height: 50,
-        padding: 20,
     },
 });
 module.exports = BBS;

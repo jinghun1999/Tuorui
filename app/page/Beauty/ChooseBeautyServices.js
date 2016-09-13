@@ -50,15 +50,7 @@ class ChooseBeautyServices extends React.Component {
     _onFetchData(page, isNext) {
         //获取数据http://petservice.tuoruimed.com/service/Api/ItemTypeWithBranchDefine/GetPageRecord
         let _this = this;
-        storage.getBatchData([{
-            key: 'USER',
-            autoSync: false,
-            syncInBackground: false,
-        }, {
-            key: 'HOSPITAL',
-            autoSync: false,
-            syncInBackground: false,
-        }]).then(rets => {
+        NetUtil.getAuth(function (user, hos) {
                 let postdata = {
                     items: [{
                         "Childrens": null,
@@ -109,7 +101,7 @@ class ChooseBeautyServices extends React.Component {
                 };
                 //let hospitalcode = 'aa15-740d-4e6d-a6ca-0ebf-81f1';
                 let header = {
-                    'Authorization': NetUtil.headerAuthorization(rets[0].user.Mobile, rets[0].pwd, rets[1].hospital.Registration, rets[0].user.Token)
+                    'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
                 };
                 //http://petservice.tuoruimed.com/service/Api/ItemTypeWithBranchDefine/GetPageRecord
                 NetUtil.postJson(CONSTAPI.HOST + '/ItemTypeWithBranchDefine/GetPageRecord', postdata, header, function (data) {
@@ -186,15 +178,9 @@ class ChooseBeautyServices extends React.Component {
                         }
                     });
                 }
-            }
-        ).catch(err => {
-                _this.setState({
-                    dataSource: [],
-                    loaded: true,
-                });
-                alert('error:' + err.message);
-            }
-        );
+            },function(err){
+            alert(err);
+        })
     }
 
     _onBack() {
