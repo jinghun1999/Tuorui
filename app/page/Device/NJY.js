@@ -22,11 +22,12 @@ class NJY extends Component {
         super(props);
         this.state = {
             loaded: false,
+            clues:'您绑定的尿检仪设备号为',
             deviceId: null,
             startDate: Util.GetDateStr(-1),
             endDate: Util.GetDateStr(0),
             ds: ds,
-            dataSource: []
+            dataSource: null
         }
     }
 
@@ -37,50 +38,75 @@ class NJY extends Component {
     }
 
     _search() {
-        this.fetchData();
+        let _this=this;
+        alert(_this.state.deviceId);
+        if(_this.state.deviceId!=null) {
+            storage.getBatchData([{
+                key: 'USER',
+                autoSync: false,
+                syncInBackground: false,
+            }, {
+                key: 'HOSPITAL',
+                autoSync: false,
+                syncInBackground: false,
+            }]).then(rets => {
+                    let header = {
+                        'Authorization': NetUtil.headerAuthorization(rets[0].user.Mobile, rets[0].pwd, rets[1].hospital.Registration, rets[0].user.Token)
+                    };
+                    let querystr = 'deviceid=' + _this.state.deviceId + '&starttime=' + _this.state.startDate + '&endtime=' + _this.state.endDate + ' 23:59:59';
+                    NetUtil.get('http://wx.tuoruimed.com/Device/njy/getchecklist?' + querystr, header, function (data) {
+                        if (data.result) {
+                            _this.setState({
+                                dataSource: data.lists,
+                                loaded: true,
+                            });
+                        } else {
+                            alert("获取数据失败：" + data.message);
+                            _this.setState({
+                                loaded: true,
+                            });
+                        }
+                    });
+                }
+            ).catch(err => {
+                    _this.setState({
+                        dataSource: null,
+                        loaded: true,
+                    });
+                    alert('error:' + err.message);
+                }
+            );
+        }
     }
 
     fetchData() {
         let _this = this;
-        _this.setState({
-            loaded: false,
-        })
-        storage.getBatchData([{
+        storage.load({
             key: 'USER',
             autoSync: false,
             syncInBackground: false,
-        }, {
-            key: 'HOSPITAL',
-            autoSync: false,
-            syncInBackground: false,
-        }]).then(rets => {
-                let header = {
-                    'Authorization': NetUtil.headerAuthorization(rets[0].user.Mobile, rets[0].pwd, rets[1].hospital.Registration, rets[0].user.Token)
-                };
-                _this.setState({deviceId: '48430101010005b2'});
-                let querystr = 'deviceid=' + _this.state.deviceId + '&starttime=' + _this.state.startDate + '&endtime=' + _this.state.endDate + ' 23:59:59';
-                NetUtil.get('http://wx.tuoruimed.com/Device/njy/getchecklist?' + querystr, header, function (data) {
-                    if (data.result) {
-                        _this.setState({
-                            dataSource: data.lists,
-                            loaded: true,
-                        });
-                    } else {
-                        alert("获取数据失败：" + data.message);
-                        _this.setState({
-                            loaded: true,
-                        });
+        }).then(ret => {
+            //获取设备号
+            NetUtil.get(CONSTAPI.APIAPP + '/AppInfo/GetNJYDeviceInfo?phone='+ret.user.Mobile, null, function (data) {
+                if (data.Status) {
+                    let deviceInfo = data.Data;
+                    alert(JSON.stringify(deviceInfo));
+                    if(deviceInfo.DeviceID!=null && deviceInfo.DeviceID!='') {
+                        _this.setState({deviceId :deviceInfo.DeviceID});
+                        _this._search();
                     }
-                });
+                    else{
+                        _this.setState({clues: '您还没有绑定设备，请先绑定设备'});
+                    }
+                }
+            });
+
             }
         ).catch(err => {
-                _this.setState({
-                    dataSource: [],
-                    loaded: true,
-                });
                 alert('error:' + err.message);
             }
         );
+
     }
 
     _onBack() {
@@ -126,7 +152,7 @@ class NJY extends Component {
     render() {
         let body = (<Loading type={'text'}/>);
         if (this.state.loaded) {
-            if (this.state.dataSource.length > 0) {
+            if (this.state.dataSource!=null) {
                 body = (<View style={{backgroundColor: '#fff', flex: 1, marginBottom:10}}>
                         <ListView dataSource={this.state.ds.cloneWithRows(this.state.dataSource)}
                                   renderRow={this._onRenderRow.bind(this)}
@@ -152,7 +178,7 @@ class NJY extends Component {
                 <Head title={this.props.headTitle} canAdd={false} canBack={true}
                       onPress={this._onBack.bind(this)}/>
                 <View style={{backgroundColor:'#CCFFFF', padding:10, height:30, justifyContent:'center'}}>
-                    <Text>您绑定的尿检仪设备号为<Text style={{fontWeight:'bold'}}>{this.state.deviceId}</Text></Text>
+                    <Text>{this.state.clues}<Text style={{fontWeight:'bold'}}>{this.state.deviceId}</Text></Text>
                 </View>
                 <View style={{margin:10,flexDirection:'row',alignItems:'center', padding:10,}}>
                     <Text>从</Text>
