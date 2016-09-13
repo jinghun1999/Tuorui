@@ -44,7 +44,7 @@ class Login extends Component {
         try {
             NetUtil.get(CONSTAPI.LOGIN + "?identity=" + _this.state.user + "&password=" + _this.state.pwd + "&type=m", false, function (data) {
                 if (data.Sign && data.Message) {
-                    Alert.alert('登录成功', "Token:" + data.Message.Token);
+                    //Alert.alert('登录成功', "Token:" + data.Message.Token);
                     storage.save({
                         key: 'USER',
                         rawData: {

@@ -17,8 +17,6 @@ class Head extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            canBack: false,
-            canAdd: false,
         };
     }
 

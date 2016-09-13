@@ -13,7 +13,8 @@ import{
 import Head from './app/commonview/Head';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ComIconView from './app/commonview/ComIconView';
-import MyInfo from './app/page/uc/myinfo';
+import MyInfo from './app/page/uc/MyAccount';
+import Setting from './app/page/uc/Setting';
 import IndexPage from './Index';
 import NButton from './app/commonview/NButton';
 class UC extends React.Component {
@@ -24,18 +25,22 @@ class UC extends React.Component {
         };
     }
 
-    _more() {
-        //alert('no more');
-        //alertA('a')
-        Alert.alert('提醒', '功能未启用');
-    }
-
     _myInfo() {
         const { navigator } = this.props;
         if (navigator) {
             navigator.push({
                 name: 'MyInfo',
                 component: MyInfo,
+                params: {}
+            })
+        }
+    }
+    _setting() {
+        const { navigator } = this.props;
+        if (navigator) {
+            navigator.push({
+                name: 'Setting',
+                component: Setting,
                 params: {}
             })
         }
@@ -85,9 +90,7 @@ class UC extends React.Component {
         return (
             <View style={styles.container}>
                 <Head title="个人中心"/>
-                <ScrollView key={'scrollView'}
-                            horizontal={false}
-                            style={{flex:1, backgroundColor:'#f7f7f7'}}>
+                <ScrollView key={'scrollView'} horizontal={false} style={{flex:1, backgroundColor:'#f7f7f7'}}>
                     <View style={styles.basicBox}>
                         <Image source={require('./image/Head_physician_128px.png')} style={styles.imageStyle}/>
                         <View style={styles.basicText}>
@@ -111,21 +114,21 @@ class UC extends React.Component {
                     <View style={{backgroundColor:'#fff', marginTop:15, marginBottom:30}}>
                         <ComIconView text="我的信息" icon={'ios-contact'} color={'#00BBFF'}
                                      onPress={this._myInfo.bind(this)}/>
-                        <ComIconView text="邀请朋友" icon={'md-contacts'} color={'#FF3333'}
-                                     onPress={this._more.bind(this)}/>
-                        <ComIconView text="我的问题" icon={'ios-help-circle'} color={'#BDB76B'}
-                                     onPress={this._more.bind(this)}/>
-                        <ComIconView text="我的收藏" icon={'ios-star'} color={'#FF6666'}
-                                     onPress={this._more.bind(this)}/>
-                        <ComIconView text="我的优惠券" icon={'ios-card'} color={'#9370DB'}
-                                     onPress={this._more.bind(this)}/>
-                        <ComIconView text="我的积分" icon={'ios-timer'} color={'#FF9900'}
-                                     onPress={this._more.bind(this)}/>
+                        {/*<ComIconView text="邀请朋友" icon={'md-contacts'} color={'#FF3333'}
+                         onPress={this._more.bind(this)}/>
+                         <ComIconView text="我的问题" icon={'ios-help-circle'} color={'#BDB76B'}
+                         onPress={this._more.bind(this)}/>
+                         <ComIconView text="我的收藏" icon={'ios-star'} color={'#FF6666'}
+                         onPress={this._more.bind(this)}/>
+                         <ComIconView text="我的优惠券" icon={'ios-card'} color={'#9370DB'}
+                         onPress={this._more.bind(this)}/>
+                         <ComIconView text="我的积分" icon={'ios-timer'} color={'#FF9900'}
+                         onPress={this._more.bind(this)}/>*/}
                         <ComIconView text="设置" icon={'ios-settings'} color={'#BBBB00'}
-                                     onPress={this._more.bind(this)}/>
-                        <View style={{height:20}}></View>
-                        <NButton onPress={this.Logout.bind(this)} backgroundColor={'#FF6666'} text="注 销"/>
-                        <View style={{height:50}}></View>
+                                     onPress={this._setting.bind(this)}/>
+                        <View style={{padding:10,}}>
+                            <NButton onPress={this.Logout.bind(this)} backgroundColor={'#FF6666'} text="注 销"/>
+                        </View>
                     </View>
                 </ScrollView>
             </View>
