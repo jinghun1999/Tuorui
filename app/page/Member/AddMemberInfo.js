@@ -83,6 +83,8 @@ class AddMemberInfo extends Component {
         NetUtil.getAuth(function (user, hos) {
             //POST /service/Api/Gest/AddGest 保存会员信息
             //DM00001 男 DM00002 女
+            if(_this.state.memberItem.GestCode ==null ){alert('GestCode null');return false;}
+            if(_this.state.memberID ==null){alert('memberID null');return false;}
             var item = {
                 "ID": _this.state.memberID,
                 "GestCode": _this.state.memberItem.GestCode,
@@ -318,10 +320,10 @@ class AddMemberInfo extends Component {
                         <View style={{flex:1}}>
                             <NButton onPress={this._save.bind(this, true)} backgroundColor={'#87CEFA'} text="保存"/>
                         </View>
-                        <View style={{flex:1}}>
+                        {/*<View style={{flex:1}}>
                             <NButton onPress={this._saveAndAddPet.bind(this)} backgroundColor={'#87CEFA'}
                                      text="保存并添加宠物"/>
-                        </View>
+                        </View>*/}
                     </View>
                 </ScrollView>
                 <Picker

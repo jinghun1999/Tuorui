@@ -43,6 +43,7 @@ class BeautyServices extends React.Component {
             serviceSource: [],
             servicesID: null,
             edit: '保存',
+            canAdd: true,
             serviceName: '',
             pickerData: [],
             canChoose: true,
@@ -52,7 +53,9 @@ class BeautyServices extends React.Component {
 
     componentWillMount() {
         let _this = this;
-        _this._onFetchServices();
+        InteractionManager.runAfterInteractions(() => {
+            _this._onFetchServices();
+        });
     }
 
     _onBack() {
@@ -66,19 +69,58 @@ class BeautyServices extends React.Component {
     _onFetchServices() {
         //http://petservice.tuoruimed.com/service/Api/BusinessInvoices/ServiceCode?
         let _this = this;
-        if (_this.props.title == 'edit' || !isNaN(_this.props.title)) {
-            alert(_this.props.beautyInfo.ID);
+        if (_this.props.isLook) {
+            //查看
             _this.setState({
-                edit: '',
                 petSource: _this.props.beautyInfo,
                 servicesFWID: _this.props.beautyInfo.ServiceCode,
                 serviceName: _this.props.beautyInfo.HairdresserName,
                 servicesID: _this.props.beautyInfo.HairdresserID,
                 totalNum: _this.props.beautyInfo.TotalNum,
                 totalAmount: _this.props.beautyInfo.TotalCost,
+                canAdd: false,
             })
-
+            NetUtil.getAuth(function (user, hos) {
+                let header = {
+                    'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
+                };
+                var postdata = [{
+                    "Childrens": null,
+                    "Field": "IsDeleted",
+                    "Title": null,
+                    "Operator": {"Name": "=", "Title": "等于", "Expression": null},
+                    "DataType": 0,
+                    "Value": "0",
+                    "Conn": 0
+                }, {
+                    "Childrens": null,
+                    "Field": "ServiceID",
+                    "Title": null,
+                    "Operator": {"Name": "=", "Title": "等于", "Expression": null},
+                    "DataType": 0,
+                    "Value": _this.props.beautyInfo.ID,
+                    "Conn": 1
+                }]
+                //http://petservice.tuoruimed.com/service/Api/ServiceDetail/GetModelList
+                NetUtil.postJson(CONSTAPI.HOST + '/ServiceDetail/GetModelList', postdata, header, function (data) {
+                    if (data.Sign && data.Message != null) {
+                        _this.setState({
+                            beautySource: data.Message,
+                            loaded: true,
+                        })
+                    }
+                    else {
+                        alert("获取数据失败：" + data.Message);
+                        _this.setState({
+                            loaded: true,
+                        });
+                    }
+                })
+            }, function (err) {
+                alert(err)
+            })
         }
+        //新增
         NetUtil.getAuth(function (user, hos) {
                 let header = {
                     'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
@@ -101,79 +143,45 @@ class BeautyServices extends React.Component {
                             serviceSource: serviceData,
                             loaded: true,
                             ServicerNameData: _data,
-                            serviceName:_data[0],
+                            serviceName: _data[0],
                         });
                     }
-                )
-
-                if (this.state.edit == '') {
-                    var postdata = [{
-                        "Childrens": null,
-                        "Field": "IsDeleted",
-                        "Title": null,
-                        "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                        "DataType": 0,
-                        "Value": "0",
-                        "Conn": 0
-                    }, {
-                        "Childrens": null,
-                        "Field": "ServiceID",
-                        "Title": null,
-                        "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                        "DataType": 0,
-                        "Value": _this.props.beautyInfo.ID,
-                        "Conn": 1
-                    }]
-                    let header = {
-                        'Authorization': NetUtil.headerAuthorization(rets[0].user.Mobile, rets[0].pwd, rets[1].hospital.Registration, rets[0].user.Token)
-                    };
-                    //http://petservice.tuoruimed.com/service/Api/ServiceDetail/GetModelList
-                    NetUtil.postJson(CONSTAPI.HOST + '/ServiceDetail/GetModelList', postdata, header, function (data) {
-                        if (data.Sign && data.Message != null) {
-                            _this.setState({
-                                beautySource: data.Message,
-                            })
-                        }
-                        else {
-                            alert("获取数据失败：" + data.Message);
-                            _this.setState({
-                                loaded: true,
-                            });
-                        }
-                    })
+                ), function (err) {
+                    alert(err);
                 }
-            },function(err){
-                alert(err);
-        })
+            }
+        )
     }
 
     chooseBeauty() {
-        let _this = this;
-        const {navigator} = _this.props;
-        if (navigator) {
-            navigator.push({
-                name: 'ChooseBeautyServices',
-                component: ChooseBeautyServices,
-                params: {
-                    headTitle: '选择美容服务',
-                    getResult: function (beauty) {
-                        var _beauty = _this.state.beautySource, _exists = false;
-                        _beauty && _beauty.forEach((item, index, array) => {
-                            if (item.BarCode == beauty.BarCode) {
-                                _exists = true;
+        if (this.props.isLook) {
+            let _this = this;
+            const {navigator} = _this.props;
+            if (navigator) {
+                navigator.push({
+                    name: 'ChooseBeautyServices',
+                    component: ChooseBeautyServices,
+                    params: {
+                        headTitle: '选择美容服务',
+                        getResult: function (beauty) {
+                            var _beauty = _this.state.beautySource, _exists = false;
+                            _beauty && _beauty.forEach((item, index, array) => {
+                                if (item.BarCode == beauty.BarCode) {
+                                    _exists = true;
+                                }
+                            })
+                            if (!_exists) {
+                                _beauty.push(beauty);
+                                _this.state.totalAmount += beauty.RecipePrice;
+                                _this.state.totalNum += 1;
                             }
-                        })
-                        if (!_exists) {
-                            _beauty.push(beauty);
-                            _this.state.totalAmount += beauty.RecipePrice;
-                            _this.state.totalNum += 1;
+                            _this.setState({
+                                beautySource: _beauty,
+                            })
                         }
-                        _this.setState({
-                            beautySource: _beauty,
-                        })
                     }
-                }
-            })
+                })
+            }
         }
     }
 
@@ -197,7 +205,7 @@ class BeautyServices extends React.Component {
 
     _onChoosePet() {
         let _this = this;
-        if (_this.state.edit == '') {
+        if (_this.state.canAdd) {
             return false;
         }
         const {navigator} =_this.props;
@@ -311,24 +319,30 @@ class BeautyServices extends React.Component {
                     ToastAndroid.show("获取数据错误" + data.Exception, ToastAndroid.SHORT);
                 }
             });
-        },function(err){
+        }, function (err) {
             alert(err);
         })
 
     }
 
     _onChooseService() {
-        this.picker.toggle();
+        if (this.props.isLook) {
+            this.picker.toggle();
+        }
     }
 
     render() {
+        var body = (<View>
+            <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
+            <Loading type="text"/>
+        </View>);
         if (!this.state.loaded) {
-            return <Loading />
+            return body;
         }
         return (
             <View style={styles.container}>
                 <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}
-                      canAdd={true} edit={this.state.edit} editInfo={this._onEditInfo.bind(this)}
+                      canAdd={this.state.canAdd} edit={this.state.edit} editInfo={this._onEditInfo.bind(this)}
                 />
                 <ScrollView key={'scrollView'}
                             horizontal={false}
@@ -405,6 +419,7 @@ class BeautyServices extends React.Component {
         )
     }
 }
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -427,4 +442,5 @@ const styles = StyleSheet.create({
         borderBottomWidth: StyleSheet.hairlineWidth,
     },
 })
-module.exports = BeautyServices
+module
+    .exports = BeautyServices

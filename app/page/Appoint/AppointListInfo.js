@@ -44,46 +44,37 @@ class AppointListInfo extends React.Component {
     _onFetchData(page,isNext) {
         //获取数据http://petservice.tuoruimed.com/service/Api/Persons/GetModelList
         let _this = this;
-        storage.getBatchData([{
-            key: 'USER',
-            autoSync: false,
-            syncInBackground: false,
-        }, {
-            key: 'HOSPITAL',
-            autoSync: false,
-            syncInBackground: false,
-        }]).then(rets => {
-                let postdata = {
-                    items: [{
-                        Childrens: null,
-                        Field: "isVIP",
-                        Title: null,
-                        Operator: {"Name": "=", "Title": "等于", "Expression": null},
-                        DataType: 0,
-                        Value: "SM00054",
-                        Conn: 0
-                    }, {
-                        Childrens: null,
-                        Field: "IsDeleted",
-                        Title: null,
-                        Operator: {"Name": "=", "Title": "等于", "Expression": null},
-                        DataType: 0,
-                        Value: "0",
-                        Conn: 1
-                    }],
-                    sorts: [{
-                        Field: "ModifiedOn",
-                        Title: null,
-                        Sort: {"Name": "Desc", "Title": "降序"},
-                        Conn: 0
-                    }],
-                    index: page,
-                    pageSize: _this.state.pageSize
-                };
-                //let hospitalcode = 'aa15-740d-4e6d-a6ca-0ebf-81f1';
-                let header = {
-                    'Authorization': NetUtil.headerAuthorization(rets[0].user.Mobile, rets[0].pwd, rets[1].hospital.Registration, rets[0].user.Token)
-                };
+        NetUtil.getAuth(function (user, hos) {
+            let header = {
+                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
+            };
+            let postdata = {
+                items: [{
+                    Childrens: null,
+                    Field: "isVIP",
+                    Title: null,
+                    Operator: {"Name": "=", "Title": "等于", "Expression": null},
+                    DataType: 0,
+                    Value: "SM00054",
+                    Conn: 0
+                }, {
+                    Childrens: null,
+                    Field: "IsDeleted",
+                    Title: null,
+                    Operator: {"Name": "=", "Title": "等于", "Expression": null},
+                    DataType: 0,
+                    Value: "0",
+                    Conn: 1
+                }],
+                sorts: [{
+                    Field: "ModifiedOn",
+                    Title: null,
+                    Sort: {"Name": "Desc", "Title": "降序"},
+                    Conn: 0
+                }],
+                index: page,
+                pageSize: _this.state.pageSize
+            };
                 NetUtil.postJson(CONSTAPI.HOST + '/Persons/GetModelList', postdata, header, function (data) {
                     if (data.Sign && data.Message != null) {
                         let dataSource = _this.state.dataSource;
@@ -106,15 +97,7 @@ class AppointListInfo extends React.Component {
                         });
                     }
                 });
-            }
-        ).catch(err => {
-                _this.setState({
-                    dataSource: [],
-                    loaded: true,
-                });
-                alert('error:' + err.message);
-            }
-        );
+            },function(err){alert(err)})
     }
 
     _onBack() {

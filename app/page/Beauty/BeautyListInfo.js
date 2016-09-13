@@ -129,6 +129,7 @@ class BeautyListInfo extends React.Component {
                 component: BeautyServices,
                 params: {
                     headTitle: '新增服务',
+                    isLook:false,
                     getResult:function(){
                         _this._onFetchData(1, false);
                     }
@@ -146,7 +147,7 @@ class BeautyListInfo extends React.Component {
                 component: BeautyServices,
                 params: {
                     headTitle: '美容服务信息',
-                    title: 'edit',
+                    isLook:true,
                     beautyInfo: beauty,
                     getResult: function () {
                         _this._onFetchData(1, false);

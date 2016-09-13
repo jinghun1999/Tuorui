@@ -30,22 +30,62 @@ class AddPet extends Component {
             petDataSource: [],
             loaded: false,
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
-            enabled:true,
-            petType:'兔',
-            petState:'未绝育',
-            petSex:'雌性',
-            petID:null,
-            petSickID:null,
+            enabled: true,
+            petState: '未绝育',
+            petSex: '雌性',
+            petID: null,
+            edit: '',
+            isUpdate: false,
+            petSickID: null,
+            disabled: false,
         };
     }
+
     componentWillMount() {
         InteractionManager.runAfterInteractions(() => {
             this._onFetchBasicData();
         });
     }
 
-    _onFetchBasicData(){
-        let _this= this;
+    _onFetchBasicData() {
+        let _this = this;
+        if (!this.props.isAdd) {
+            let _state = '';
+            if (_this.props.petSource.BirthStatus == 'SM00003') {
+                _state = '未绝育';
+            } else if (_this.props.petSource.BirthStatus == 'SM00004') {
+                _state = '已绝育';
+            }
+            let _sex = '';
+            if (_this.props.petSource.PetSex == 'DM00004') {
+                _sex = '雌性'
+            } else if (_this.props.petSource.PetSex == 'DM00003') {
+                _sex = '雄性'
+            } else if (_this.props.petSource.PetSex == 'DM00035') {
+                _sex = '其他'
+            }
+            _this.setState({
+                edit: '编辑',
+                enabled: false,
+                disabled: true,
+                petSex: _sex,
+                petName: _this.props.petSource.PetName,
+                petID: _this.props.petSource.PetCode,
+                petSickID: _this.props.petSource.SickFileCode,
+                petRace: _this.props.petSource.PetRace,
+                petState: _state,
+                petBirthday: _this.props.petSource.PetBirthday,
+                isUpdate:true,
+            })
+        } else {
+            _this.setState({
+                edit: '保存',
+                enabled: true,
+                disabled: false,
+                isUpdate: false,
+
+            })
+        }
         NetUtil.getAuth(function (user, hos) {
             let header = {
                 'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
@@ -59,33 +99,34 @@ class AddPet extends Component {
                 }
             })
             //病历编号
-            NetUtil.get(CONSTAPI.HOST+'/BusinessInvoices/SickFileCode?',header,function(data){
-                if(_this.state.petSickID==null){
+            NetUtil.get(CONSTAPI.HOST + '/BusinessInvoices/SickFileCode?', header, function (data) {
+                if (_this.state.petSickID == null) {
                     _this.setState({
-                        petSickID:data.Message,
+                        petSickID: data.Message,
                     })
                 }
             })
-            let postdata=[{
-                "Childrens":null,
-                "Field":"IsDeleted",
-                "Title":null,
-                "Operator":{"Name":"=","Title":"等于","Expression":null},
-                "DataType":0,
-                "Value":"0",
-                "Conn":0}];
+            let postdata = [{
+                "Childrens": null,
+                "Field": "IsDeleted",
+                "Title": null,
+                "Operator": {"Name": "=", "Title": "等于", "Expression": null},
+                "DataType": 0,
+                "Value": "0",
+                "Conn": 0
+            }];
             //宠物种类 http://test.tuoruimed.com/service/Api/PetRace/GetModelList
             NetUtil.postJson(CONSTAPI.HOST + '/PetRace/GetModelList', postdata, header, function (data) {
                 if (data.Sign && data.Message != null) {
-                    var typeSource = data.Message,_type = [];
-                    typeSource.forEach((item,index,array)=>{
+                    var typeSource = data.Message, _type = [];
+                    typeSource.forEach((item, index, array)=> {
                         _type.push(item.BigTypeName);
                     })
                     _this.setState({
                         typeSource: typeSource,
-                        typeSelectData:_type,
-                        petType:_type[0],
-                        loaded:true,
+                        typeSelectData: _type,
+                        petRace: _type[0],
+                        loaded: true,
                     })
                 }
                 else {
@@ -95,70 +136,182 @@ class AddPet extends Component {
                     });
                 }
             })
-        },function(err){alert(err)})
-    }
-    _save(){
-        //保存
-        let _this = this;
-        if (_this.state.petName == null) {
-            alert("请输入宠物昵称");
-            return false;
-        }else if(_this.state.petBirthday ==null){
-            alert("请选择出生日期");
-            return false;
-        }
-        //保存宠物信息
-
-        NetUtil.getAuth(function (user, hos) {
-            let header = {
-                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-            };
-            let item = {
-                "ID":"00000000-0000-0000-0000-000000000000",
-                "PetCode":_this.state.petID,
-                "GestID":_this.props.member.memberID,
-                "GestCode":_this.props.member.GestCode,
-                "GestName":_this.props.member.name,
-                "PetName":_this.state.petName,
-                "PetSex":_this.state.petSex,
-                "PetBirthday":_this.state.petBirthday,
-                "Age":null,
-                "PetSkinColor":null,
-                "PetRace":_this.state.petRace,
-                "PetBreed":"",
-                "PetWeight":null,
-                "PetHeight":null,
-                "PetSWidth":null,
-                "PetBodyLong":null,
-                "SickFileCode":_this.state.petSickID,
-                "BirthStatus":_this.state.petState,
-                "Status":"SM00052",
-                "PetHead":null,
-                "PetHeadID":null,
-                "DogBandID":null,
-                "MdicTypeName":"DM00017",
-                "Remark":null,
-                "CreatedBy":null,
-                "CreatedOn":"0001-01-01T00:00:00",
-                "ModifiedBy":null,
-                "ModifiedOn":"0001-01-01T00:00:00",
-                "IsDeleted":0,
-                "EntID":"00000000-0000-0000-0000-000000000000"
-            };
-            NetUtil.postJson(CONSTAPI.HOST + '/Gest/AddGest', item, header, function (data) {
-                if (data.Sign) {
-                    alert('保存成功');
-                    if (_this.props.getResult) {
-                        _this.props.getResult();
-                    }
-                        _this._onBack()
-                } else {
-                    alert("获取数据错误" + data.Exception);
-                }
-            });
-        },function(err){
+        }, function (err) {
             alert(err)
         })
+    }
+
+    _save() {
+        //保存
+        let _this = this;
+        if (_this.state.edit == '保存' && _this.state.isUpdate == false) {
+            alert('保存')
+            if (_this.state.petName == null) {
+                alert("请输入宠物昵称");
+                return false;
+            } else if (_this.state.petBirthday == null) {
+                alert("请选择出生日期");
+                return false;
+            }
+            //保存宠物信息
+            NetUtil.getAuth(function (user, hos) {
+                let header = {
+                    'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
+                };
+                let _sex = _this.state.petSex, sexCode = null;
+                if (_sex == '雄性') {
+                    sexCode = 'DM00003'
+                } else if (_sex == '雌性') {
+                    sexCode = 'DM00004'
+                } else if (_sex == '其他') {
+                    sexCode = 'DM00035'
+                }
+                let _petState = _this.state.petState, _petCode = null;
+                if (_petState == '未绝育') {
+                    _petCode = 'SM00003'
+                } else if (_petState == '已绝育') {
+                    _petCode = 'SM00004'
+                }
+                if (_this.props.member.gestCode == null) {
+                    alert('gestCode null');
+                    return false
+                }
+                if (_this.props.member.memberID == null) {
+                    alert('ID null');
+                    return false
+                }
+                let item = {
+                    "ID": "00000000-0000-0000-0000-000000000000",
+                    "PetCode": _this.state.petID,
+                    "GestID": _this.props.member.memberID,
+                    "GestCode": _this.props.member.GestCode,
+                    "GestName": _this.props.member.name,
+                    "PetName": _this.state.petName,
+                    "PetSex": sexCode,
+                    "PetBirthday": _this.state.petBirthday,
+                    "Age": null,
+                    "PetSkinColor": null,
+                    "PetRace": _this.state.petRace,
+                    "PetBreed": "",
+                    "PetWeight": null,
+                    "PetHeight": null,
+                    "PetSWidth": null,
+                    "PetBodyLong": null,
+                    "SickFileCode": _this.state.petSickID,
+                    "BirthStatus": _petCode,
+                    "Status": "SM00052",
+                    "PetHead": null,
+                    "PetHeadID": null,
+                    "DogBandID": null,
+                    "MdicTypeName": 'DM0000000060',
+                    "Remark": null,
+                    "CreatedBy": null,
+                    "CreatedOn": "0001-01-01T00:00:00",
+                    "ModifiedBy": null,
+                    "ModifiedOn": "0001-01-01T00:00:00",
+                    "IsDeleted": 0,
+                    "EntID": "00000000-0000-0000-0000-000000000000"
+                };
+                //http://test.tuoruimed.com/service/Api/Pet/AddAndReturn
+                NetUtil.postJson(CONSTAPI.HOST + '/Pet/AddAndReturn', item, header, function (data) {
+                    if (data.Sign) {
+                        alert('保存成功');
+                        if (_this.props.getResult) {
+                            let id = _this.props.member.memberID;
+                            _this.props.getResult(id);
+                        }
+                        _this._onBack()
+                    } else {
+                        alert("获取数据错误" + data.Exception);
+                    }
+                });
+            }, function (err) {
+                alert(err)
+            })
+        } else if (_this.state.edit == '保存' && _this.state.isUpdate == true) {
+            alert('修改')
+            //修改http://test.tuoruimed.com/service/Api/Pet/UpdateAndReturn
+            NetUtil.getAuth(function (user, hos) {
+                let header = {
+                    'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
+                };
+                let _sex = _this.state.petSex, sexCode = null;
+                if (_sex == '雄性') {
+                    sexCode = 'DM00003'
+                } else if (_sex == '雌性') {
+                    sexCode = 'DM00004'
+                } else if (_sex == '其他') {
+                    sexCode = 'DM00035'
+                }
+                let _petState = _this.state.petState, _petCode = null;
+                if (_petState == '未绝育') {
+                    _petCode = 'SM00003'
+                } else if (_petState == '已绝育') {
+                    _petCode = 'SM00004'
+                }
+                if (_this.props.member.gestCode == null) {
+                    alert('gestCode null');
+                    return false
+                }
+                if (_this.props.member.memberID == null) {
+                    alert('ID null');
+                    return false
+                }
+                let date = Util.getTime();
+                let item = {
+                    "ID": _this.props.petSource.PetID,
+                    "PetCode": _this.state.petID,
+                    "GestID": _this.props.member.memberID,
+                    "GestCode": _this.props.member.GestCode,
+                    "GestName": _this.props.member.name,
+                    "PetName": _this.state.petName,
+                    "PetSex": sexCode,
+                    "PetBirthday": _this.state.petBirthday,
+                    "Age": null,
+                    "PetSkinColor": null,
+                    "PetRace": _this.state.petRace,
+                    "PetBreed": "",
+                    "PetWeight": null,
+                    "PetHeight": null,
+                    "PetSWidth": null,
+                    "PetBodyLong": null,
+                    "SickFileCode": _this.state.petSickID,
+                    "BirthStatus": _petCode,
+                    "Status": "SM00052",
+                    "PetHead": null,
+                    "PetHeadID": null,
+                    "DogBandID": null,
+                    "MdicTypeName": '',
+                    "Remark": null,
+                    "CreatedBy": _this.props.member.createdBy,
+                    "CreatedOn": _this.props.member.createdOn,
+                    "ModifiedBy": user.user.user,
+                    "ModifiedOn": date,
+                    "IsDeleted": 0,
+                    "EntID": hos.hospital.ID
+                };
+                NetUtil.postJson(CONSTAPI.HOST + '/Pet/UpdateAndReturn', item, header, function (data) {
+                    if (data.Sign) {
+                        alert('修改成功');
+                        if (_this.props.getResult) {
+                            let id = _this.props.member.memberID;
+                            _this.props.getResult(id);
+                        }
+                        _this._onBack()
+                    } else {
+                        alert("获取数据错误" + data.Exception);
+                    }
+                });
+            }, function (err) {
+                alert(err)
+            })
+        }else if(_this.state.edit=='编辑'){
+            _this.setState({
+                edit:'保存',
+                enabled:true,
+                disabled:false,
+            })
+        }
     }
 
     _onBack() {
@@ -168,14 +321,26 @@ class AddPet extends Component {
             navigator.pop();
         }
     }
-    _onChooseSex(){
-        this.pickerSex.toggle();
+
+    _onChooseSex() {
+        let _this = this;
+        if (_this.state.edit == '保存') {
+            this.pickerSex.toggle();
+        }
     }
-    _onChooseState(){
-        this.pickerState.toggle();
+
+    _onChooseState() {
+        let _this = this;
+        if (_this.state.edit == '保存') {
+            this.pickerState.toggle();
+        }
     }
-    _onChooseRace(){
-        this.pickerRace.toggle();
+
+    _onChooseRace() {
+        let _this = this;
+        if (_this.state.edit == '保存') {
+            this.pickerRace.toggle();
+        }
     }
 
     render() {
@@ -183,12 +348,15 @@ class AddPet extends Component {
             <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
             <Loading type='text'/>
         </View>)
-        if(!this.state.loaded){
+        if (!this.state.loaded) {
             return load;
         }
         return (
             <View style={styles.container}>
-                <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
+                <Head title={this.props.headTitle}
+                      canBack={true} onPress={this._onBack.bind(this)}
+                      canAdd={true} edit={this.state.edit} editInfo={this._save.bind(this)}
+                />
                 <ScrollView key={'scrollView'}
                             horizontal={false}
                             showsVerticalScrollIndicator={true}
@@ -219,11 +387,12 @@ class AddPet extends Component {
                     </View>
                     <View style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>宠物编号</Text>
-                        <TextInput value={this.state.petID}
-                                   editable={false}
-                                   underlineColorAndroid={'transparent'}
-                                   keyboardType={'default'}
-                                   style={{height: 40, borderWidth:0, flex:1}}
+                        <TextInput
+                            value={this.state.petID}
+                            editable={false}
+                            underlineColorAndroid={'transparent'}
+                            keyboardType={'default'}
+                            style={{height: 40, borderWidth:0, flex:1}}
                         />
                     </View>
                     <View style={styles.inputViewStyle}>
@@ -237,12 +406,13 @@ class AddPet extends Component {
                     </View>
                     <View style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>宠物昵称</Text>
-                        <TextInput value={this.state.petName}
-                                   editable={this.state.enabled}
-                                   underlineColorAndroid={'transparent'}
-                                   keyboardType={'default'}
-                                   style={{height: 40, borderWidth:0, flex:1}}
-                                   onChangeText={(text)=>{this.setState({ petName:text })}}
+                        <TextInput
+                            value={this.state.petName}
+                            editable={this.state.enabled}
+                            underlineColorAndroid={'transparent'}
+                            keyboardType={'default'}
+                            style={{height: 40, borderWidth:0, flex:1}}
+                            onChangeText={(text)=>{this.setState({ petName:text })}}
                         />
                     </View>
                     <View style={styles.inputViewStyle}>
@@ -258,7 +428,7 @@ class AddPet extends Component {
                                 confirmBtnText="Confirm"
                                 cancelBtnText="Cancel"
                                 showIcon={false}
-                                disabled={false}
+                                disabled={this.state.disabled}
                                 customStyles={{
                                     dateIcon: {
                                       position: 'absolute',
@@ -284,9 +454,10 @@ class AddPet extends Component {
                     </TouchableOpacity>
                     <TouchableOpacity onPress={this._onChooseRace.bind(this)} style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>宠物种类</Text>
-                        <Text style={{flex:1,}}>{this.state.petRace}</Text>
+                        <Text
+                            style={{flex:1,}}>{this.state.petRace}</Text>
                     </TouchableOpacity>
-                    <NButton onPress={this._save.bind(this)} backgroundColor={'#87CEFA'} text="保存"/>
+
                 </ScrollView>
                 <Picker
                     style={{height: 300}}
