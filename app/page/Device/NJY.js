@@ -39,7 +39,6 @@ class NJY extends Component {
 
     _search() {
         let _this=this;
-        alert(_this.state.deviceId);
         if(_this.state.deviceId!=null) {
             storage.getBatchData([{
                 key: 'USER',
@@ -86,21 +85,19 @@ class NJY extends Component {
             autoSync: false,
             syncInBackground: false,
         }).then(ret => {
-            //获取设备号
-            NetUtil.get(CONSTAPI.APIAPP + '/AppInfo/GetNJYDeviceInfo?phone='+ret.user.Mobile, null, function (data) {
-                if (data.Status) {
-                    let deviceInfo = data.Data;
-                    alert(JSON.stringify(deviceInfo));
-                    if(deviceInfo.DeviceID!=null && deviceInfo.DeviceID!='') {
-                        _this.setState({deviceId :deviceInfo.DeviceID});
-                        _this._search();
+                //获取设备号
+                NetUtil.get(CONSTAPI.APIAPP + '/AppInfo/GetNJYDeviceInfo?phone=' + ret.user.Mobile, null, function (data) {
+                    if (data.Status) {
+                        let deviceInfo = data.Data;
+                        if (deviceInfo.DeviceID != null && deviceInfo.DeviceID != '') {
+                            _this.setState({deviceId: deviceInfo.DeviceID});
+                            _this._search();   //获取设备号成功，查询数据
+                        }
+                        else {
+                            _this.setState({clues: '您还没有绑定设备，请先绑定设备'});
+                        }
                     }
-                    else{
-                        _this.setState({clues: '您还没有绑定设备，请先绑定设备'});
-                    }
-                }
-            });
-
+                });
             }
         ).catch(err => {
                 alert('error:' + err.message);
