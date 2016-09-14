@@ -200,9 +200,11 @@ class SaleList extends Component {
     }
 
     _renderRow(obj) {
-        let status = (<Text style={{color:'#FF9999',flex:1, textAlign:'right'}}>未付款</Text>)
+        let status = null;
         if (obj.PaidStatus == 'SM00051') {
-            status = (<Text style={{color:'#99CC66',flex:1, textAlign:'right'}}>已付款</Text>)
+            status = (<Text style={{color:'#99CC66',width:100, textAlign:'right'}}>已付款</Text>)
+        }else{
+            status = (<Text style={{color:'#FF9999',width:100, textAlign:'right'}}>未付款</Text>)
         }
         return (
             <TouchableOpacity style={styles.row} onPress={()=>this._pressRow(obj)}>
