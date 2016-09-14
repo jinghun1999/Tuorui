@@ -31,12 +31,19 @@ import ViewPager from 'react-native-viewpager';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import HomeIcon from './app/commonview/HomeIcon';
+import CacheableImage from 'react-native-cacheable-image'
+
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
 const IMAGES = [
     require('./image/job1.jpg'),
     require('./image/job2.jpg'),
     require('./image/job3.jpg'),
+    /*'http://www.pptbz.com/pptpic/UploadFiles_6909/201203/2012031220134655.jpg',
+    'http://img.taopic.com/uploads/allimg/130711/318756-130G1222R317.jpg',
+    'http://scimg.jb51.net/allimg/160815/103-160Q509544OC.jpg',
+    'http://www.xxjxsj.cn/article/UploadPic/2009-5/2009530163624615.jpg',
+    'http://att.bbs.duowan.com/forum/201502/26/07145918v8xcce2tvy27s8.jpg',*/
 ];
 const infolistApi = CONSTAPI.APIAPP + '/AppInfo/GetHomeInfo';
 
@@ -180,7 +187,14 @@ class TopScreen extends Component {
     }
 
     renderViewPage(data) {
-        return (<Image source={data} style={styles.page}/>);
+        return(
+            <CacheableImage
+                resizeMode="cover"
+                style={styles.page}
+                source={data}
+            />
+        );
+        {/*return (<Image source={data} style={styles.page}/>);*/}
     }
 
     renderInfo(Info) {
