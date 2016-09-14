@@ -4,7 +4,6 @@
 'use strict';
 import React, { Component } from 'react';
 import {
-    AppRegistry,
     StyleSheet,
     Text,
     ScrollView,
@@ -14,17 +13,18 @@ import {
     TouchableOpacity,
     ToastAndroid,
     InteractionManager,
-}from 'react-native';
+    }from 'react-native';
+
 import Util from '../../util/Util';
+import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
 import Loading from '../../commonview/Loading';
 import ChooseBeautyServices from './ChooseBeautyServices';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import Modal from 'react-native-modalbox';
 import ChoosePet from './ChoosePet';
-import NetUtil from '../../util/NetUtil';
-import Picker from 'react-native-picker';
 import BeautyListInfo from './BeautyListInfo';
+
+import Picker from 'react-native-picker';
+import Icon from 'react-native-vector-icons/FontAwesome';
 class BeautyServices extends React.Component {
     constructor(props) {
         super(props);
@@ -47,14 +47,14 @@ class BeautyServices extends React.Component {
             serviceName: '',
             pickerData: [],
             canChoose: true,
+            ServicerNameData: [],
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
         }
     }
 
     componentWillMount() {
-        let _this = this;
         InteractionManager.runAfterInteractions(() => {
-            _this._onFetchServices();
+            this._loadData();
         });
     }
 
@@ -66,11 +66,10 @@ class BeautyServices extends React.Component {
         }
     }
 
-    _onFetchServices() {
-        //http://petservice.tuoruimed.com/service/Api/BusinessInvoices/ServiceCode?
+    _loadData() {
         let _this = this;
-        if (_this.props.isLook) {
-            //查看
+        //查看
+        if (!_this.props.canEdit) {
             _this.setState({
                 petSource: _this.props.beautyInfo,
                 servicesFWID: _this.props.beautyInfo.ServiceCode,
@@ -101,7 +100,6 @@ class BeautyServices extends React.Component {
                     "Value": _this.props.beautyInfo.ID,
                     "Conn": 1
                 }]
-                //http://petservice.tuoruimed.com/service/Api/ServiceDetail/GetModelList
                 NetUtil.postJson(CONSTAPI.HOST + '/ServiceDetail/GetModelList', postdata, header, function (data) {
                     if (data.Sign && data.Message != null) {
                         _this.setState({
@@ -122,39 +120,38 @@ class BeautyServices extends React.Component {
         }
         //新增
         NetUtil.getAuth(function (user, hos) {
-                let header = {
-                    'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-                };
-                NetUtil.get(CONSTAPI.HOST + '/BusinessInvoices/ServiceCode?', header, function (data) {
-                    if (_this.state.servicesFWID == null) {
-                        _this.setState({
-                            servicesFWID: data.Message,
-                        });
-                    }
-                })
-                //http://petservice.tuoruimed.com/service/Api/Persons/GetPersonsByAppconfigID?appconfigID=82
-                NetUtil.get(CONSTAPI.HOST + '/Persons/GetPersonsByAppconfigID?appconfigID=82', header, function (data) {
-                        var serviceData = data.Message;
-                        var _data = [];
-                        serviceData.forEach((item, index, array)=> {
-                            _data.push(item.PersonName);
-                        })
-                        _this.setState({
-                            serviceSource: serviceData,
-                            loaded: true,
-                            ServicerNameData: _data,
-                            serviceName: _data[0],
-                        });
-                    }
-                ), function (err) {
-                    alert(err);
+            let header = {
+                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
+            };
+            NetUtil.get(CONSTAPI.HOST + '/BusinessInvoices/ServiceCode?', header, function (data) {
+                if (_this.state.servicesFWID == null) {
+                    _this.setState({
+                        servicesFWID: data.Message,
+                    });
                 }
+            })
+            //http://petservice.tuoruimed.com/service/Api/Persons/GetPersonsByAppconfigID?appconfigID=82
+            NetUtil.get(CONSTAPI.HOST + '/Persons/GetPersonsByAppconfigID?appconfigID=82', header, function (data) {
+                    var serviceData = data.Message;
+                    var _data = [];
+                    serviceData.forEach((item, index, array)=> {
+                        _data.push(item.PersonName);
+                    })
+                    _this.setState({
+                        serviceSource: serviceData,
+                        loaded: true,
+                        ServicerNameData: _data,
+                        serviceName: _data[0],
+                    });
+                }
+            ), function (err) {
+                alert(err);
             }
-        )
+        });
     }
 
     chooseBeauty() {
-        if (this.props.isLook) {
+        if (this.props.canEdit) {
             let _this = this;
             const {navigator} = _this.props;
             if (navigator) {
@@ -189,20 +186,6 @@ class BeautyServices extends React.Component {
         alert(beauty.ItemName);
     }
 
-    _onRenderRow(beauty) {
-        return (
-            <TouchableOpacity
-                style={{flexDirection:'row',margin:3,backgroundColor:'#FFE4E1',
-                borderBottomWidth:StyleSheet.hairlineWidth, borderBottomColor:'#ccc'}}
-                onPress={()=>this._onBeautyDetails(beauty)}>
-                <View style={{flex:1,flexDirection:'row'}}>
-                    <Text style={{flex: 1,fontSize:14, fontWeight:'bold'}}>名称: {beauty.ItemName}</Text>
-                    <Text style={{flex: 1,fontSize:14,}}>单价: ￥{beauty.SellPrice}</Text>
-                </View>
-            </TouchableOpacity>
-        )
-    }
-
     _onChoosePet() {
         let _this = this;
         if (_this.state.canAdd) {
@@ -218,7 +201,7 @@ class BeautyServices extends React.Component {
                     getResult: function (pet) {
                         _this.setState({
                             petSource: pet,
-                        })
+                        });
                     }
                 },
             })
@@ -326,94 +309,105 @@ class BeautyServices extends React.Component {
     }
 
     _onChooseService() {
-        if (this.props.isLook) {
+        if (this.props.canEdit) {
             this.picker.toggle();
         }
     }
 
+    _renderHeader() {
+        return (
+            <View style={{flex:1,}}>
+                <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}
+                      canAdd={this.props.canEdit} edit={this.state.edit} editInfo={this._onEditInfo.bind(this)}/>
+                <View style={styles.titleStyle}>
+                    <Text style={styles.titleText}>宠物信息</Text>
+                </View>
+                <View style={styles.inputViewStyle}>
+                    <Text style={{width:100,}}>会员名称</Text>
+                    <Text style={{flex:1}}>{this.state.petSource.GestName}</Text>
+                </View>
+                <View style={styles.inputViewStyle}>
+                    <Text style={{width:100,}}>手机号码</Text>
+                    <Text style={{flex:1}}>{this.state.petSource.MobilePhone}</Text>
+                </View>
+                <TouchableOpacity onPress={this._onChoosePet.bind(this)}
+                                  style={styles.inputViewStyle}>
+                    <Text style={{width:100,}}>宠物名称</Text>
+                    <Text style={{flex:1}}>{this.state.petSource.PetName}</Text>
+                    <Icon name={'angle-right'} size={20} color={'#ccc'} style={{marginRight:10}}/>
+                </TouchableOpacity>
+                <View style={styles.titleStyle}>
+                    <Text style={styles.titleText}>服务信息</Text>
+                </View>
+                <View style={styles.inputViewStyle}>
+                    <Text style={{width:100,}}>服务单号</Text>
+                    <Text style={{flex:1}}>{this.state.servicesFWID}</Text>
+                </View>
+                <TouchableOpacity onPress={this._onChooseService.bind(this)} style={styles.inputViewStyle}>
+                    <Text style={{width:100,}}>服务师</Text>
+                    <Text style={{flex:1}}>{this.state.serviceName}</Text>
+                    <Icon name={'angle-right'} size={20} color={'#ccc'} style={{marginRight:10}}/>
+                </TouchableOpacity>
+                <View style={styles.inputViewStyle}>
+                    <Text style={{width:100,}}>总项</Text>
+                    <Text style={{flex:1}}>{this.state.totalNum.toString()}</Text>
+                </View>
+                <View style={styles.inputViewStyle}>
+                    <Text style={{width:100,}}>总金额</Text>
+                    <Text style={{flex:1}}>￥{this.state.totalAmount.toString()}</Text>
+                </View>
+                <View style={styles.titleStyle}>
+                    <Text style={styles.titleText}>美容项目</Text>
+                    <TouchableOpacity
+                        style={{width:50,alignItems:'center', backgroundColor:'#99CCFF', justifyContent:'center'}}
+                        onPress={this.chooseBeauty.bind(this)}>
+                        <Text>添加</Text>
+                    </TouchableOpacity>
+
+                </View>
+            </View>
+        )
+    }
+
+    _onRenderRow(beauty) {
+        return (
+            <TouchableOpacity style={styles.row} onPress={()=>this._onBeautyDetails(beauty)}>
+                <Text style={{flex: 1,fontSize:14, fontWeight:'bold'}}>{beauty.ItemName}</Text>
+                <Text style={{flex: 1,fontSize:14,}}>单价: ￥{beauty.SellPrice}</Text>
+            </TouchableOpacity>
+        )
+    }
+
     render() {
-        var body = (<View>
-            <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
-            <Loading type="text"/>
-        </View>);
         if (!this.state.loaded) {
-            return body;
+            return (
+                <View style={styles.container}>
+                    <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
+                    <Loading type="text"/>
+                </View>
+            )
         }
         return (
             <View style={styles.container}>
-                <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}
-                      canAdd={this.state.canAdd} edit={this.state.edit} editInfo={this._onEditInfo.bind(this)}
-                />
-                <ScrollView key={'scrollView'}
-                            horizontal={false}
-                            showsVerticalScrollIndicator={true}
-                            scrollEnabled={true}>
-                    <View style={styles.titleStyle}>
-                        <Text style={{color:'#fff',marginLeft:10,fontSize:16,}}>宠物信息</Text>
-                    </View>
-                    <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>会员名称</Text>
-                        <Text style={{flex:1}}>{this.state.petSource.GestName}</Text>
-                    </View>
-                    <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>手机号码</Text>
-                        <Text style={{flex:1}}>{this.state.petSource.MobilePhone}</Text>
-                    </View>
-                    <TouchableOpacity onPress={this._onChoosePet.bind(this)}
-                                      style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>宠物名称</Text>
-                        <Text style={{flex:1}}>{this.state.petSource.PetName}</Text>
-                        <Icon name={'angle-right'} size={20} color={'#ccc'} style={{marginRight:10}}/>
-                    </TouchableOpacity>
-                    <View style={styles.titleStyle}>
-                        <Text style={{color:'#fff',marginLeft:10,fontSize:16,}}>服务信息</Text>
-                    </View>
-                    <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>服务单号</Text>
-                        <Text style={{flex:1}}>{this.state.servicesFWID}</Text>
-                    </View>
-                    <TouchableOpacity onPress={this._onChooseService.bind(this)} style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>服务师</Text>
-                        <Text style={{flex:1}}>{this.state.serviceName}</Text>
-                        <Icon name={'angle-right'} size={20} color={'#ccc'} style={{marginRight:10}}/>
-                    </TouchableOpacity>
-                    <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>总项</Text>
-                        <Text style={{flex:1}}>{this.state.totalNum.toString()}</Text>
-                    </View>
-                    <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>总金额</Text>
-                        <Text style={{flex:1}}>{this.state.totalAmount.toString()}</Text>
-                    </View>
-                    <View style={styles.titleStyle}>
-                        <Text style={{color:'#fff',marginLeft:10,fontSize:16,flex:1,}}>美容项目</Text>
-                        <TouchableOpacity style={{width:50,alignItems:'center',justifyContent:'center'}}
-                                          onPress={this.chooseBeauty.bind(this)}>
-                            <Text style={{textAlign:'center',color:'white'}}>新增</Text>
-                        </TouchableOpacity>
-
-                    </View>
-                    <View>
-                        <ListView enableEmptySections={true}
-                                  dataSource={this.state.ds.cloneWithRows(this.state.beautySource)}
-                                  renderRow={this._onRenderRow.bind(this)}
-                        />
-                    </View>
-                </ScrollView>
-                <Picker
-                    style={{height: 300}}
-                    showDuration={300}
-                    showMask={true}
-                    pickerBtnText={'确认'}
-                    pickerCancelBtnText={'取消'}
-                    ref={picker => this.picker = picker}
-                    pickerData={this.state.ServicerNameData}
-                    selectedValue={this.state.serviceName}
-                    onPickerDone={(text)=>{
-                        this.setState({
-                            serviceName: text,
-                        })
-                    }}
+                <ListView enableEmptySections={true}
+                          dataSource={this.state.ds.cloneWithRows(this.state.beautySource)}
+                          renderHeader={this._renderHeader.bind(this)}
+                          renderRow={this._onRenderRow.bind(this)}
+                    />
+                {/**/}<Picker
+                style={{height: 300}}
+                showDuration={300}
+                showMask={true}
+                pickerBtnText={'确认'}
+                pickerCancelBtnText={'取消'}
+                ref={picker => this.picker = picker}
+                pickerData={this.state.ServicerNameData}
+                selectedValue={this.state.serviceName}
+                onPickerDone={(text)=>{
+                 this.setState({
+                 serviceName: text,
+                 })
+                 }}
                 />
             </View>
         )
@@ -423,23 +417,30 @@ class BeautyServices extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: '#e7e7e7',
     },
     titleStyle: {
-        height: 20,
-        margin: 2,
+        padding: 5,
+        paddingLeft: 10,
         flexDirection: 'row',
-        backgroundColor: '#4876FF',
     },
+    titleText: {marginLeft: 10, fontSize: 16, flex: 1,},
     inputViewStyle: {
         flex: 1,
         flexDirection: 'row',
-        marginTop: 5,
-        marginLeft: 10,
-        height: 40,
+        padding: 10,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: '#fff',
         borderBottomColor: '#ccc',
         borderBottomWidth: StyleSheet.hairlineWidth,
+    },
+    row: {
+        flexDirection: 'row',
+        padding: 10,
+        backgroundColor: '#fff',
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderBottomColor: '#ccc'
     },
 })
 module

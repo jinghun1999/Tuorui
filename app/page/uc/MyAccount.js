@@ -28,10 +28,10 @@ class MyAccount extends React.Component {
             user: {},
             memberSex: '男',
             memberSexKey: 0,
-            memberNickName: '张三丰',
-            memberEmail: '123@qq.com',
-            memberAddress: '徐汇区桂果园8号楼4楼',
-            memberSchool: '家里',
+            memberNickName: '',
+            memberEmail: '',
+            memberAddress: '',
+            memberSchool: '',
             dataSource: [],
             loaded: false,
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
@@ -52,7 +52,9 @@ class MyAccount extends React.Component {
             let hospitals = user.user.Hospitals;
             hospitals.forEach(v => {
                 if (hos != null && hos.hospital != null && v.ID === hos.hospital.ID) {
-                    v.IsBind = true
+                    v.IsBind = true;
+                } else {
+                    v.IsBind = false;
                 }
             });
             _this.setState({
@@ -60,6 +62,13 @@ class MyAccount extends React.Component {
                 isRefreshing: false,
                 dataSource: hospitals,
                 loaded: true,
+                memberMobile: user.user.Mobile,
+                memberSex: user.user.Sex == 0 ? '男' : '女',
+                memberSexKey: user.user.Sex,
+                memberNickName: user.user.FullName,
+                memberEmail: '@',
+                memberAddress: '',
+                memberSchool: '',
             });
         }, function (msg) {
             alert(msg)
@@ -76,16 +85,22 @@ class MyAccount extends React.Component {
     }
 
     pressRow(hos) {
-        try{
+        try {
             storage.save({
                 key: 'HOSPITAL',
                 rawData: {
                     hospital: hos
                 }
             });
-            Alert.alert('提示', '设置默认医院成功', [{text: '确定', onPress: () => {}},]);
-        }catch(e){
-            Alert.alert('提示', '设置失败', [{text: '确定', onPress: () => {}},]);
+            Alert.alert('提示', '设置默认医院成功', [{
+                text: '确定', onPress: () => {
+                }
+            },]);
+        } catch (e) {
+            Alert.alert('提示', '设置失败', [{
+                text: '确定', onPress: () => {
+                }
+            },]);
         }
     }
 
@@ -96,13 +111,15 @@ class MyAccount extends React.Component {
     _onRenderRow(h) {
         let d = null;
         if (h.IsBind) {
-            d = <View style={{marginLeft:10, width:40, height:18, borderRadius:5, backgroundColor:'#FF9900'}}>
+            d = <View
+                style={{marginLeft:10, width:40, height:18, justifyContent:'center', alignItems:'center', borderRadius:2, backgroundColor:'#FF9900'}}>
                 <Text style={{color:'#fff', textAlign:'center'}}>默认</Text>
             </View>
         }
         return (
             <TouchableOpacity style={styles.row} onPress={()=>this.pressRow(h)}>
-                <Text style={{marginLeft:20,fontSize:14, fontWeight:'bold'}}>{h.FULLName}</Text>
+                <Icon name="md-home" size={30} color="#CCCCFF"/>
+                <Text style={{marginLeft:10,fontSize:14, fontWeight:'bold'}}>{h.FULLName}</Text>
                 {d}
             </TouchableOpacity>
         )
@@ -155,7 +172,7 @@ class MyAccount extends React.Component {
                                 style={{flex:1, textAlign:'right', alignItems:'center',}}
                                 onChangeText={(text) => this.setState({memberNickName: text})}
                                 value={this.state.memberNickName}
-                                maxLength={10}
+                                maxLength={20}
                                 underlineColorAndroid={'transparent'}/>
                         </View>
                     </View>
@@ -170,6 +187,19 @@ class MyAccount extends React.Component {
                                 initValue={this.state.memberSex}
                                 cancelText={'取消'}
                                 onChange={(option)=>{ this.setState({memberSex: option.label, memberSexKey:option.key});}}/>
+                        </View>
+                    </View>
+                    <View style={styles.headBox}>
+                        <View style={styles.ititle}>
+                            <Text style={styles.ititletxt}>手机</Text>
+                        </View>
+                        <View style={styles.contentStyle}>
+                            <TextInput
+                                style={{flex:1, textAlign:'right', alignItems:'center',}}
+                                onChangeText={(text) => this.setState({memberMobile: text})}
+                                value={this.state.memberMobile}
+                                maxLength={20}
+                                underlineColorAndroid={'transparent'}/>
                         </View>
                     </View>
                     <View style={styles.headBox}>

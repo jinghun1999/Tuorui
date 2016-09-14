@@ -28,19 +28,19 @@ import BeautyServices from './app/page/Beauty/BeautyListInfo';
 import ReportIndex from './app/page/Report/ReportIndex';
 import NJY from './app/page/Device/NJY';
 
+import Immutable from 'immutable';
 import Icon from 'react-native-vector-icons/Ionicons';
+var {List, Map}= Immutable;
 class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            listSource: new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2}),
+            ds: new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2}),
             hospitals: [],
             hospital: {},
             user: null,
             userloaded: false,
             hosloaded: false,
-            memberNumber: 0,
-            memberPetNumber: 0
         }
     }
 
@@ -92,6 +92,7 @@ class App extends Component {
             });
         }
     }
+
     setHospital(hos) {
         this.setState({
             hospital: hos,
@@ -113,6 +114,9 @@ class App extends Component {
         });
     }
 
+    //shouldComponentUpdate(nextProps, nextState){
+    //return nextProps.value !== this.props.value;
+    //}
     _renderHos(hos) {
         return (
             <TouchableOpacity style={styles.rows} onPress={()=>this.setHospital(hos)}>
@@ -136,7 +140,7 @@ class App extends Component {
         else if (this.state.hospital.ID != null && this.state.hospital.ID != '') {
             body = (
                 <View>
-                    <View style={{flex:1}}>
+                    <View style={{flex:1, borderBottomWidth:StyleSheet.hairlineWidth, borderBottomColor:'#ccc'}}>
                         <View style={[styles.homeStyle,{height:80, }]}>
                             <Image style={styles.IconStyle}
                                    source={{uri:'http://www.easyicon.net/api/resizeApi.php?id=1173423&size=96'}}/>
@@ -148,18 +152,17 @@ class App extends Component {
                                     <Text>修改</Text>
                                 </TouchableOpacity>
                             </View>
-
                         </View>
-                        <View style={styles.homeStyle}>
-                            <View style={styles.fontViewStyle}>
-                                <Icon name={'ios-people'} color={'#00BBFF'} size={30}/>
-                                <Text style={styles.fontStyle}>会员：{this.state.memberNumber}</Text>
-                            </View>
-                            <View style={[styles.fontViewStyle,{borderLeftWidth:0}]}>
-                                <Icon name={'ios-paw'} color={'#EE9A00'} size={30}/>
-                                <Text style={styles.fontStyle}>宠物：{this.state.memberPetNumber}</Text>
-                            </View>
-                        </View>
+                        {/*<View style={styles.homeStyle}>
+                         <View style={styles.fontViewStyle}>
+                         <Icon name={'ios-people'} color={'#00BBFF'} size={30}/>
+                         <Text style={styles.fontStyle}>会员：{this.state.memberNumber}</Text>
+                         </View>
+                         <View style={[styles.fontViewStyle,{borderLeftWidth:0}]}>
+                         <Icon name={'ios-paw'} color={'#EE9A00'} size={30}/>
+                         <Text style={styles.fontStyle}>宠物：{this.state.memberPetNumber}</Text>
+                         </View>
+                         </View>*/}
                     </View>
                     <View style={styles.iconViewStyle}>
                         <IconButton text="会员宠物" iconName={'md-people'} iconColor={'#FFB6C1'}
@@ -193,7 +196,7 @@ class App extends Component {
                         <Text>您当前还没有默认医院，请先选择默认医院</Text>
                     </View>
                     {this.state.hospitals.length > 0 ? null : noTips}
-                    <ListView dataSource={this.state.listSource.cloneWithRows(this.state.hospitals)}
+                    <ListView dataSource={this.state.ds.cloneWithRows(this.state.hospitals)}
                               renderRow={this._renderHos.bind(this)}
                               initialListSize={15}
                               pageSize={10}

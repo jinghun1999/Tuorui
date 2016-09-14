@@ -118,6 +118,10 @@ class SaleDetail extends Component {
                     <View style={styles.itemVal}><Text>{this.state.sale.GestName}</Text></View>
                 </View>
                 <View style={styles.itemBox}>
+                    <View style={{width:100,}}><Text style={{fontSize:16}}>时间</Text></View>
+                    <View style={styles.itemVal}><Text>{this.state.sale.CreatedOn.replace('T', ' ')}</Text></View>
+                </View>
+                <View style={styles.itemBox}>
                     <View style={{width:100,}}><Text style={{fontSize:16}}>明细数</Text></View>
                     <View style={styles.itemVal}><Text>{this.state.sale.TotalNum}</Text></View>
                 </View>

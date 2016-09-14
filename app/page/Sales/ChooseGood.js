@@ -12,6 +12,7 @@ import {
     TouchableOpacity,
     Image,
     ListView,
+    ActivityIndicator,
     InteractionManager,
     } from 'react-native';
 import Util from '../../util/Util';
@@ -31,9 +32,11 @@ class Goods extends Component {
             //storeId: this.props.storeId,
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
             kw: null,
-            pageSize: 1500,
+            pageSize: 15,
             pageIndex: 0,
             recordCount: 0,
+            nomore: false,
+            sellStoreId: null,
         };
     }
 
@@ -57,11 +60,14 @@ class Goods extends Component {
         });
     }
 
-    fetchData(page) {
+    fetchData(page, isnext) {
         let _this = this;
+        if (page == 1) {
+            _this.setState({nomore: false});
+        }
         NetUtil.getAuth(function (user, hos) {
             let postjson = {
-                WarehouseID: _this.props.storeId,
+                WarehouseID: 'a574a9fb-038a-4221-8f33-675d5b305b30',
                 CateNo: null,
                 InputTxt: _this.state.kw,
                 BusiTypeCodes: [1, 2, 3, 7, 8, 9, 12],
@@ -71,13 +77,32 @@ class Goods extends Component {
             let header = {
                 'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
             };
+            if(_this.state.sellStoreId==null){
+                NetUtil.get(CONSTAPI.HOST+'/Store_DirectSell/GetDirectSellPageConfig', header, function(data){
+                    if(data.Sign && data.Message){
+                         data.Message.SellStoreID;
+                    }
+                });
+            }
             NetUtil.postJson(CONSTAPI.HOST + '/ItemTypeLeftJoinItemCount/SearchSellListByPage', postjson, header, function (data) {
                 if (data.Sign && data.Message != null) {
+                    let dataSource = _this.state.dataSource;
+                    if (isnext) {
+                        data.Message.forEach((d)=> {
+                            dataSource.push(d);
+                        });
+                    } else {
+                        dataSource = data.Message;
+                    }
                     _this.setState({
-                        dataSource: data.Message,
+                        dataSource: dataSource,
                         pageIndex: page,
                         loaded: true,
                     });
+                } else if (data.Message == null || data.Message.length === 0) {
+                    _this.setState({
+                        nomore: true,
+                    })
                 } else {
                     alert("获取数据失败：" + data.Message);
                     _this.setState({
@@ -86,13 +111,17 @@ class Goods extends Component {
                     });
                 }
             });
-        }, function(err){
+        }, function (err) {
 
         });
     }
 
     search() {
         this.fetchData(1);
+    }
+
+    _onEndReached() {
+        this.fetchData(this.state.pageIndex + 1, true);
     }
 
     renderRow(good, sectionID, rowID) {
@@ -113,6 +142,21 @@ class Goods extends Component {
         )
     }
 
+    _renderFooter() {
+        if (this.state.nomore) {
+            return (
+                <View style={{height: 40, justifyContent:'center', alignItems:'center'}}>
+                    <Text>没有更多数据了~</Text>
+                </View>
+            )
+        }
+        return (
+            <View style={{height: 120}}>
+                <ActivityIndicator />
+            </View>
+        );
+    }
+
     render() {
         var body;
         if (!this.state.loaded) {
@@ -125,7 +169,9 @@ class Goods extends Component {
                           enableEmptySections={true}
                           renderRow={this.renderRow.bind(this)}
                           initialListSize={15}
-                          pageSize={15}/>
+                          pageSize={15}
+                          onEndReached={this._onEndReached.bind(this)}
+                          renderFooter={this._renderFooter.bind(this)}/>
             )
         }
         return (
@@ -163,7 +209,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     row: {
-        padding:10,
+        padding: 10,
         flexDirection: 'row',
         backgroundColor: '#fff',
         borderBottomWidth: StyleSheet.hairlineWidth,

@@ -24,6 +24,7 @@ import Loading from '../../commonview/Loading';
 
 import DatePicker from  'react-native-datepicker';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Immutable from 'immutable';
 class SaleList extends Component {
     constructor(props) {
         super(props);
@@ -37,36 +38,39 @@ class SaleList extends Component {
             pageSize: 15,
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
         };
-        this._search = this._search.bind(this);
+        //this._search = this._search.bind(this);
     }
 
     _onBack() {
-        let _this = this;
-        const {navigator}=_this.props;
-        if (navigator) {
-            navigator.pop();
-        }
+        requestAnimationFrame(() => {
+            const {navigator}=this.props;
+            if (navigator) {
+                navigator.pop();
+            }
+        });
     }
 
-    componentWillMount() {
+    componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
             this._fetchData(1, false);
         });
     }
 
     _pressRow(obj) {
-        var _this = this;
-        const { navigator } = _this.props;
-        if (navigator) {
-            navigator.push({
-                name: 'SaleDetail',
-                component: SaleDetail,
-                params: {
-                    headTitle: '销售详情',
-                    sale: obj,
-                }
-            });
-        }
+        requestAnimationFrame(() => {
+            var _this = this;
+            const { navigator } = _this.props;
+            if (navigator) {
+                navigator.push({
+                    name: 'SaleDetail',
+                    component: SaleDetail,
+                    params: {
+                        headTitle: '销售详情',
+                        sale: obj,
+                    }
+                });
+            }
+        });
     }
 
     _fetchData(page, isNext) {
@@ -184,7 +188,7 @@ class SaleList extends Component {
                 params: {
                     headTitle: '新销售单',
                     getResult: function () {
-                        _this.search();
+                        _this._fetchData(1, false);
                     }
                 }
             })
@@ -196,22 +200,22 @@ class SaleList extends Component {
     }
 
     _renderRow(obj) {
-        let status = (<Text style={{color:'#FF6666'}}>未付款</Text>)
+        let status = (<Text style={{color:'#FF9999',flex:1, textAlign:'right'}}>未付款</Text>)
         if (obj.PaidStatus == 'SM00051') {
-            status = (<Text style={{color:'#FF0033'}}>已付款</Text>)
+            status = (<Text style={{color:'#99CC66',flex:1, textAlign:'right'}}>已付款</Text>)
         }
         return (
             <TouchableOpacity style={styles.row} onPress={()=>this._pressRow(obj)}>
-                <View style={{flex:1}}>
-                    <Text style={{fontSize:16, color:'#CC0033'}}>销售单号:{obj.DirectSellCode}</Text>
-                    <View style={{flexDirection:'row'}}>
-                        <Text style={{flex: 1,}}>会员:{obj.GestName}</Text>
-                        <Text style={{flex: 1,}}>明细数:{obj.TotalNum}</Text>
-                        <Text style={{flex: 1,}}>总价:¥{obj.TotalCost}</Text>
-                        <Text style={{flex: 1,}}>折扣:¥{obj.Discount}</Text>
-                        {status}
-                    </View>
+                <View style={{flexDirection:'row',}}>
+                    <Text style={{fontSize:16, flex:1, color:'#CC0033'}}>单号:{obj.DirectSellCode}</Text>
+                    {status}
                 </View>
+                <View style={{flexDirection:'row'}}>
+                    <Text style={{flex: 1,}}>会员:{obj.GestName}</Text>
+                    <Text style={{flex: 1,}}>总价:¥{obj.TotalCost}</Text>
+                    <Text style={{flex:1, textAlign:'right'}}>{obj.CreatedOn.replace('T', ' ')}</Text>
+                </View>
+
             </TouchableOpacity>
         )
     }
@@ -252,56 +256,51 @@ class SaleList extends Component {
                       canAdd={true}
                       edit="新增"
                       editInfo={this._onAdd.bind(this)}/>
-                <ScrollView key={'scrollView'}
-                            horizontal={false}
-                            showsVerticalScrollIndicator={true}
-                            scrollEnabled={true}>
-                    <View style={styles.searchRow}>
-                        <Text style={{marginLeft:10}}>购买时间</Text>
-                        <DatePicker
-                            date={this.state.dateFrom}
-                            mode="date"
-                            placeholder="选择日期"
-                            format="YYYY-MM-DD"
-                            minDate="2010-01-01"
-                            maxDate="2020-01-01"
-                            confirmBtnText="Confirm"
-                            cancelBtnText="Cancel"
-                            showIcon={false}
-                            style={{width:80}}
-                            customStyles={{
+                <View style={styles.searchRow}>
+                    <Text>购买时间</Text>
+                    <DatePicker
+                        date={this.state.dateFrom}
+                        mode="date"
+                        placeholder="选择日期"
+                        format="YYYY-MM-DD"
+                        minDate="2010-01-01"
+                        maxDate="2020-01-01"
+                        confirmBtnText="Confirm"
+                        cancelBtnText="Cancel"
+                        showIcon={false}
+                        style={{width:80}}
+                        customStyles={{
                     dateInput: {
                       height:30,
                       borderWidth:StyleSheet.hairlineWidth,
                     },
                   }} onDateChange={(date) => {this.setState({dateFrom: date})}}/>
-                        <Text>到</Text>
-                        <DatePicker
-                            date={this.state.dateTo}
-                            mode="date"
-                            placeholder="选择日期"
-                            format="YYYY-MM-DD"
-                            minDate="2010-01-01"
-                            maxDate="2020-01-01"
-                            confirmBtnText="Confirm"
-                            cancelBtnText="Cancel"
-                            showIcon={false}
-                            style={{width:80}}
-                            customStyles={{
+                    <Text>到</Text>
+                    <DatePicker
+                        date={this.state.dateTo}
+                        mode="date"
+                        placeholder="选择日期"
+                        format="YYYY-MM-DD"
+                        minDate="2010-01-01"
+                        maxDate="2020-01-01"
+                        confirmBtnText="Confirm"
+                        cancelBtnText="Cancel"
+                        showIcon={false}
+                        style={{width:80}}
+                        customStyles={{
                     dateInput: {
                       height:30,
                       borderWidth:StyleSheet.hairlineWidth,
                     },
                   }} onDateChange={(date) => {this.setState({dateTo: date})}}/>
-                        <TouchableOpacity
-                            underlayColor='#4169e1'
-                            style={styles.searchBtn}
-                            onPress={this._search.bind(this)}>
-                            <Text style={{color:'#fff'}}>查询</Text>
-                        </TouchableOpacity>
-                    </View>
-                    {body}
-                </ScrollView>
+                    <TouchableOpacity
+                        underlayColor='#4169e1'
+                        style={styles.searchBtn}
+                        onPress={this._search.bind(this)}>
+                        <Text style={{color:'#fff'}}>查询</Text>
+                    </TouchableOpacity>
+                </View>
+                {body}
             </View>
         )
     }
@@ -316,10 +315,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         backgroundColor: '#fff',
         alignItems: 'center',
-        paddingTop: 15,
-        paddingLeft: 10,
-        paddingRight: 10,
-        paddingBottom: 10,
+        padding: 10,
     },
     searchBtn: {
         height: 30,
@@ -339,11 +335,9 @@ const styles = StyleSheet.create({
         paddingLeft: 8,
     },
     row: {
-        flexDirection: 'row',
-        marginLeft: 15,
-        marginRight: 15,
-        paddingTop: 10,
-        paddingBottom: 10,
+        flex: 1,
+        flexDirection: 'column',
+        padding: 10,
         borderBottomWidth: StyleSheet.hairlineWidth,
         borderBottomColor: '#ccc'
     },

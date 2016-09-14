@@ -123,9 +123,9 @@ class UC extends React.Component {
                          <ComIconView text="我的优惠券" icon={'ios-card'} color={'#9370DB'}
                          onPress={this._more.bind(this)}/>
                          <ComIconView text="我的积分" icon={'ios-timer'} color={'#FF9900'}
-                         onPress={this._more.bind(this)}/>*/}
+                         onPress={this._more.bind(this)}/>
                         <ComIconView text="设置" icon={'ios-settings'} color={'#BBBB00'}
-                                     onPress={this._setting.bind(this)}/>
+                                     onPress={this._setting.bind(this)}/>*/}
                         <View style={{padding:10,}}>
                             <NButton onPress={this.Logout.bind(this)} backgroundColor={'#FF6666'} text="注 销"/>
                         </View>
