@@ -14,6 +14,7 @@ import{
     TextInput,
     DatePickerAndroid,
     TouchableOpacity,
+    InteractionManager,
 } from 'react-native';
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
@@ -43,7 +44,9 @@ class MemberDetails extends Component {
     componentDidMount() {
         var _this = this;
         let id = _this.props.memberInfo.ID;
-        _this._fetchData(id, 1, false);
+        InteractionManager.runAfterInteractions(() => {
+            _this._fetchData(id, 1, false);
+        });
     }
 
     componentWillUnmount() {

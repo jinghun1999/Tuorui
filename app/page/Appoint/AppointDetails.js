@@ -9,10 +9,10 @@ import {
     ScrollView,
     TextInput,
     View,
-    Picker,
     ListView,
     TouchableOpacity,
 }from 'react-native';
+import Util from '../../util/Util';
 import Head from '../../commonview/Head';
 class AppointDetails extends React.Component {
     constructor(props) {
@@ -31,6 +31,9 @@ class AppointDetails extends React.Component {
     }
 
     render() {
+        var starTime = Util.getFormateTime(this.props.appointInfo.StartTime,'min');
+        var endTime = Util.getFormateTime(this.props.appointInfo.EndTime,'min');
+        var regTime = Util.getFormateTime(this.props.appointInfo.ModifiedOn,'min');
         return (
             <View style={styles.container}>
                 <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
@@ -39,16 +42,7 @@ class AppointDetails extends React.Component {
                 </View>
                 <View style={styles.inputViewStyle}>
                     <Text style={{width:100,}}>宠物名称</Text>
-                    <TextInput value={this.props.appointInfo.petName}
-                               editable={this.state.enable}
-                               underlineColorAndroid={'transparent'}
-                               keyboardType={'default'}
-                               style={{height: 40, borderWidth:0, flex:1}}
-                    />
-                </View>
-                <View style={styles.inputViewStyle}>
-                    <Text style={{width:100,}}>宠物年龄</Text>
-                    <TextInput value={this.props.appointInfo.petAge}
+                    <TextInput value={this.props.appointInfo.PetName}
                                editable={this.state.enable}
                                underlineColorAndroid={'transparent'}
                                keyboardType={'default'}
@@ -60,7 +54,7 @@ class AppointDetails extends React.Component {
                 </View>
                 <View style={styles.inputViewStyle}>
                     <Text style={{width:100,}}>预约人</Text>
-                    <TextInput value={this.props.appointInfo.PersonName}
+                    <TextInput value={this.props.appointInfo.GestName}
                                editable={this.state.enable}
                                underlineColorAndroid={'transparent'}
                                keyboardType={'default'}
@@ -68,8 +62,8 @@ class AppointDetails extends React.Component {
                     />
                 </View>
                 <View style={styles.inputViewStyle}>
-                    <Text style={{width:100,}}>预约手机</Text>
-                    <TextInput value={this.props.appointInfo.MobilePhone}
+                    <Text style={{width:100,}}>预约医生</Text>
+                    <TextInput value={this.props.appointInfo.DoctorName}
                                editable={this.state.enable}
                                underlineColorAndroid={'transparent'}
                                keyboardType={'default'}
@@ -77,8 +71,17 @@ class AppointDetails extends React.Component {
                     />
                 </View>
                 <View style={styles.inputViewStyle}>
-                    <Text style={{width:100,}}>预约时间</Text>
-                    <TextInput value={this.props.appointInfo.appointTime}
+                    <Text style={{width:100,}}>预约开始时间</Text>
+                    <TextInput value={starTime}
+                               editable={this.state.enable}
+                               underlineColorAndroid={'transparent'}
+                               keyboardType={'default'}
+                               style={{height: 40, borderWidth:0, flex:1}}
+                    />
+                </View>
+                <View style={styles.inputViewStyle}>
+                    <Text style={{width:100,}}>预约结束时间</Text>
+                    <TextInput value={endTime}
                                editable={this.state.enable}
                                underlineColorAndroid={'transparent'}
                                keyboardType={'default'}
@@ -87,24 +90,12 @@ class AppointDetails extends React.Component {
                 </View>
                 <View style={styles.inputViewStyle}>
                     <Text style={{width:100,}}>登记时间</Text>
-                    <TextInput value={this.props.appointInfo.registerTime}
+                    <TextInput value={regTime}
                                editable={this.state.enable}
                                underlineColorAndroid={'transparent'}
                                keyboardType={'default'}
                                style={{height: 40, borderWidth:0, flex:1}}
                     />
-                </View>
-                <View style={styles.inputViewStyle}>
-                    <Text style={{width:100,}}>预约状态</Text>
-                    <Picker selectedValue={this.props.appointInfo.appointState}
-                            mode="dropdown"
-                            enabled={this.state.enable}
-                            style={{height: 39, borderWidth:0, backgroundColor:'#fff',flex:1,justifyContent:'center',}}
-                            onValueChange={(state) => this.setState({appointState: state})}>
-                        <Picker.Item label="请选择" value='0'/>
-                        <Picker.Item label="已确定" value='1'/>
-                        <Picker.Item label="已取消" value='2'/>
-                    </Picker>
                 </View>
             </View>
         )
@@ -112,6 +103,11 @@ class AppointDetails extends React.Component {
 }
 const styles = StyleSheet.create({
     container: {},
+    titleStyle: {
+        margin: 2,
+        flexDirection: 'row',
+        backgroundColor: '#ccc',
+    },
     inputViewStyle: {
         flex: 1,
         flexDirection: 'row',
@@ -123,11 +119,6 @@ const styles = StyleSheet.create({
         borderBottomColor: '#ccc',
         borderBottomWidth: StyleSheet.hairlineWidth,
     },
-    titleStyle: {
-        height: 20,
-        margin: 2,
-        flexDirection: 'row',
-        backgroundColor: '#ccc',
-    },
+
 })
 module.exports = AppointDetails;

@@ -21,7 +21,7 @@ import IconButton from './app/commonview/HomeIcon';
 import SaleList from './app/page/Sales/SaleList';
 import MemberListInfo from './app/page/Member/MemberListInfo';
 import MyInspect from './app/page/Inspect/MyInspect';
-import PetListInfo from './app/page/Member/PetListInfo';
+import PetListInfo from './app/page/Vaccine/VaccineListInfo';
 import Loading from './app/commonview/Loading';
 import AppointListInfo from './app/page/Appoint/AppointListInfo';
 import BeautyServices from './app/page/Beauty/BeautyListInfo';

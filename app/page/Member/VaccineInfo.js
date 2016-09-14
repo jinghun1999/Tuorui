@@ -18,7 +18,7 @@ import{
 import Head from '../../commonview/Head';
 import FormInput from '../../commonview/FormInput';
 import FormPicker from '../../commonview/FormPicker';
-import ChooseVaccineInfo from './ChooseVaccineInfo';
+import ChooseVaccineInfo from './../Vaccine/ChooseVaccineInfo';
 import Icon from '../../../node_modules/react-native-vector-icons/FontAwesome';
 class VaccineInfo extends Component {
     constructor(props) {

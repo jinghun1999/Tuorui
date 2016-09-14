@@ -1,7 +1,7 @@
 'use strict';
 import React, {
     Component
-    } from 'react';
+} from 'react';
 
 import Md5Util from './Md5Util';
 var base64 = require('base-64');
@@ -15,6 +15,20 @@ class Util extends React.Component {
     static getTime() {
         var moment = require('moment');
         return moment().format("YYYY-MM-DD HH:mm:ss");
+    }
+
+    static getFormateTime(time, t) {
+        if (time == null) {
+            return '';
+        } else {
+            time = time.replace('T', ' ');
+        }
+        if (t == 'day') {
+            time = Util.cutString(time, 10, '');
+        } else if (t == 'min') {
+            time = Util.cutString(time, 16, '');
+        }
+        return time;
     }
 
     static cutString(str, len, suffix) {
@@ -45,13 +59,14 @@ class Util extends React.Component {
         var dd = new Date();
         dd.setDate(dd.getDate() + adddays);//adddays
         var y = dd.getFullYear();
-        var m = dd.getMonth() + 1;//获取当前月份的日期
+        var m = dd.getMonth() + 1;//锟斤拷取锟斤拷前锟铰份碉拷锟斤拷锟斤拷
         var d = dd.getDate();
         return y + "-" + m + "-" + d;
     }
+
     static guid() {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-            var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
         });
     }

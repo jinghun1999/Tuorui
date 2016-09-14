@@ -18,13 +18,16 @@ import Head from '../../commonview/Head';
 import Loading from '../../commonview/Loading';
 import Icon from '../../../node_modules/react-native-vector-icons/FontAwesome';
 import AppointDetails from './AppointDetails';
+import DatePicker from  'react-native-datepicker';
 class AppointListInfo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            dataSource: [],
+            appointSource: [],
             loaded: false,
-            ds:new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
+            dateFrom:Util.GetDateStr(0),
+            dateTo:Util.GetDateStr(0),
+            ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
         }
     }
 
@@ -32,7 +35,7 @@ class AppointListInfo extends React.Component {
         var _this = this;
         _this.timer = setTimeout(
             () => {
-                _this._onFetchData(1,false);
+                _this._onFetchData();
             }, 500
         )
     }
@@ -41,63 +44,55 @@ class AppointListInfo extends React.Component {
         this.timer && clearTimeout(this.timer);
     }
 
-    _onFetchData(page,isNext) {
-        //获取数据http://petservice.tuoruimed.com/service/Api/Persons/GetModelList
+    _onFetchData() {
         let _this = this;
         NetUtil.getAuth(function (user, hos) {
             let header = {
                 'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
             };
-            let postdata = {
-                items: [{
-                    Childrens: null,
-                    Field: "isVIP",
-                    Title: null,
-                    Operator: {"Name": "=", "Title": "等于", "Expression": null},
-                    DataType: 0,
-                    Value: "SM00054",
-                    Conn: 0
-                }, {
-                    Childrens: null,
-                    Field: "IsDeleted",
-                    Title: null,
-                    Operator: {"Name": "=", "Title": "等于", "Expression": null},
-                    DataType: 0,
-                    Value: "0",
-                    Conn: 1
-                }],
-                sorts: [{
-                    Field: "ModifiedOn",
-                    Title: null,
-                    Sort: {"Name": "Desc", "Title": "降序"},
-                    Conn: 0
-                }],
-                index: page,
-                pageSize: _this.state.pageSize
-            };
-                NetUtil.postJson(CONSTAPI.HOST + '/Persons/GetModelList', postdata, header, function (data) {
-                    if (data.Sign && data.Message != null) {
-                        let dataSource = _this.state.dataSource;
-                        if (isNext) {
-                            data.Message.forEach((d)=> {
-                                dataSource.push(d);
-                            });
-                        } else {
-                            dataSource = data.Message;
-                        }
-                        _this.setState({
-                            dataSource: dataSource,
-                            loaded: true,
-                            pageIndex: page,
-                        });
-                    } else {
-                        alert("获取数据失败：" + data.Message);
-                        _this.setState({
-                            loaded: true,
-                        });
-                    }
-                });
-            },function(err){alert(err)})
+            let postdata = [{
+                "Childrens": null,
+                "Field": "IsDeleted",
+                "Title": null,
+                "Operator": {"Name": "=", "Title": "等于", "Expression": null},
+                "DataType": 0,
+                "Value": "0",
+                "Conn": 0
+            }, {
+                "Childrens": null,
+                "Field": "StartTime",
+                "Title": null,
+                "Operator": {"Name": ">", "Title": "大于", "Expression": null},
+                "DataType": 0,
+                "Value": _this.state.dateFrom +" 00:00:00",
+                "Conn": 1
+            }, {
+                "Childrens": null,
+                "Field": "StartTime",
+                "Title": null,
+                "Operator": {"Name": "<", "Title": "小于", "Expression": null},
+                "DataType": 0,
+                "Value": _this.state.dateTo + " 23:59:59",
+                "Conn": 1
+            }]
+            //预约信息接口 http://test.tuoruimed.com/service/Api/Appoint/GetModelList
+            NetUtil.postJson(CONSTAPI.HOST + '/Appoint/GetModelList', postdata, header, function (data) {
+                if (data.Sign && data.Message != null) {
+                    _this.setState({
+                        appointSource: data.Message,
+                        loaded: true,
+                    })
+                }
+                else {
+                    alert("获取数据失败：" + data.Message);
+                    _this.setState({
+                        loaded: true,
+                    });
+                }
+            })
+        }, function (err) {
+            alert(err)
+        })
     }
 
     _onBack() {
@@ -109,44 +104,37 @@ class AppointListInfo extends React.Component {
     }
 
     _onAppointDetails(a) {
-        let _this= this;
+        let _this = this;
         const {navigator} = _this.props;
-        if(navigator){
+        if (navigator) {
             navigator.push({
-                name:'AppointDetails',
-                component:AppointDetails,
-                params:{
-                    headTitle:'预约详情',
+                name: 'AppointDetails',
+                component: AppointDetails,
+                params: {
+                    headTitle: '预约详情',
                     appointInfo: a,
                 }
             })
         }
     }
+    _search(){
+        let _this =this;
+       _this._onFetchData();
+    }
 
     _onRenderRow(a) {
-        let isStateBody = null;
-        if (a.appointState == '1') {
-            isStateBody = <View style={{marginLeft:10, width:50, height:18, borderRadius:5, backgroundColor:'#FF9900'}}>
-                <Text style={{color:'#fff', textAlign:'center'}}>已确认</Text>
-            </View>
-        } else {
-            isStateBody = <View style={{marginLeft:10, width:50, height:18, borderRadius:5, backgroundColor:'#BEBEBE'}}>
-                <Text style={{color:'#fff', textAlign:'center'}}>已取消</Text>
-            </View>
-        }
+        var time = Util.getFormateTime(a.StartTime, 'min');
         return (
-            <TouchableOpacity style={{
-            flexDirection:'row',marginLeft:15, marginRight:15,paddingTop:10, paddingBottom:10,
-            borderBottomWidth:StyleSheet.hairlineWidth, borderBottomColor:'#ccc'}}
-                              onPress={()=>this._onAppointDetails(a)}>
+            <TouchableOpacity style={styles.row} onPress={()=>this._onAppointDetails(a)}>
                 <View style={{flex:1,}}>
-                        <Text style={{fontSize:14, fontWeight:'bold'}}>{a.PersonName}</Text>
-                    <View style={{flexDirection:'row',marginTop:10}}>
-                        <Text style={{flex: 1,}}>手机: {a.MobilePhone}</Text>
-                        <Text style={{flex:1,}}>预约会诊时间:{a.appointTime}</Text>
+                    <View style={{flex:1, flexDirection:'row'}}>
+                        <Text style={{fontSize:16, color:'#27408B',fontWeight:'bold'}}>预约医生:{a.DoctorName}</Text>
+                    </View>
+                    <View style={{flexDirection:'row',marginTop:3}}>
+                        <Text style={{flex: 1,}}>预约人: {a.GestName}</Text>
+                        <Text style={{flex:1,textAlign:'right'}}>预约时间:{time}</Text>
                     </View>
                 </View>
-                {isStateBody}
                 <View style={{width:20,alignItems:'center', justifyContent:'center'}}>
                     <Text><Icon name={'angle-right'} size={20} color={'#ccc'}/></Text>
                 </View>
@@ -160,7 +148,7 @@ class AppointListInfo extends React.Component {
         );
         if (this.state.loaded) {
             body = (
-                <ListView dataSource={this.state.ds.cloneWithRows(this.state.dataSource)}
+                <ListView dataSource={this.state.ds.cloneWithRows(this.state.appointSource)}
                           enableEmptySections={true}
                           renderRow={this._onRenderRow.bind(this)}
                 />
@@ -169,6 +157,50 @@ class AppointListInfo extends React.Component {
         return (
             <View style={styles.container}>
                 <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
+                <View style={styles.searchRow}>
+                    <Text>预约时间  </Text>
+                    <DatePicker
+                        date={this.state.dateFrom}
+                        mode="date"
+                        placeholder="选择日期"
+                        format="YYYY-MM-DD"
+                        minDate="2010-01-01"
+                        maxDate="2020-01-01"
+                        confirmBtnText="Confirm"
+                        cancelBtnText="Cancel"
+                        showIcon={false}
+                        style={{width:80}}
+                        customStyles={{
+                    dateInput: {
+                      height:30,
+                      borderWidth:StyleSheet.hairlineWidth,
+                    },
+                  }} onDateChange={(date) => {this.setState({dateFrom: date})}}/>
+                    <Text>  到  </Text>
+                    <DatePicker
+                        date={this.state.dateTo}
+                        mode="date"
+                        placeholder="选择日期"
+                        format="YYYY-MM-DD"
+                        minDate="2010-01-01"
+                        maxDate="2020-01-01"
+                        confirmBtnText="Confirm"
+                        cancelBtnText="Cancel"
+                        showIcon={false}
+                        style={{width:80}}
+                        customStyles={{
+                    dateInput: {
+                      height:30,
+                      borderWidth:StyleSheet.hairlineWidth,
+                    },
+                  }} onDateChange={(date) => {this.setState({dateTo: date})}}/>
+                    <TouchableOpacity
+                        underlayColor='#4169e1'
+                        style={styles.searchBtn}
+                        onPress={this._search.bind(this)}>
+                        <Text style={{color:'#fff'}}>查询</Text>
+                    </TouchableOpacity>
+                </View>
                 {body}
             </View>
         )
@@ -177,6 +209,27 @@ class AppointListInfo extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    row: {
+        flexDirection: 'row',
+        padding: 10,
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderBottomColor: '#ccc'
+    },
+    searchRow: {
+        flexDirection: 'row',
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        padding: 10,
+    },
+    searchBtn: {
+        height: 30,
+        width: 50,
+        marginLeft: 10,
+        backgroundColor: '#0099CC',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5,
     },
 })
 module.exports = AppointListInfo;
