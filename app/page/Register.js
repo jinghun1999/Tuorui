@@ -50,8 +50,7 @@ class Register extends Component {
     render() {
         return (
             <View style={{backgroundColor: '#f4f4f4', flex: 1}}>
-                <Head title={'用户注册'} canAdd={true} canBack={true}
-                      onPress={this._onBack.bind(this)}/>
+                <Head title={'用户注册'} canBack={true} onPress={this._onBack.bind(this)}/>
                 <TextInput
                     style={styles._input}
                     placeholder='手机号'
@@ -130,6 +129,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#63B8FF',
         borderColor:'#5bc0de',
         height:45,
+        marginRight:10,
         borderRadius:5,
         justifyContent: 'center',
         alignItems: 'center',

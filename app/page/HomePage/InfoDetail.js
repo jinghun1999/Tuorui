@@ -34,8 +34,8 @@ class DrugDetails extends React.Component {
             phone: '',
             title: Util.cutString(this.props.title, 24, '...'),
             isCollect: false,
-            readNum:0,
-            collectNum:0
+            readNum: 0,
+            collectNum: 0
         }
     }
 
@@ -56,11 +56,11 @@ class DrugDetails extends React.Component {
                 let _paramData = 'id=' + this.props.requestId + '&operateby=' + ret.user.Mobile;
                 NetUtil.get(CONSTAPI.APIAPP + "/AppInfo/GetArticleOperateInfo?" + _paramData, null, function (data) {
                     if (data.Status) {
-                        let result=data.Data;
+                        let result = data.Data;
                         _this.setState({
                             isCollect: result.IsCollect,
-                            collectNum:result.CollectNumber,
-                            readNum:result.ReadNumber,
+                            collectNum: result.CollectNumber,
+                            readNum: result.ReadNumber,
                             phone: ret.user.Mobile
                         });
                     } else {
@@ -95,7 +95,7 @@ class DrugDetails extends React.Component {
                 ToastAndroid.show(result.Message, ToastAndroid.SHORT);
                 _this.setState({
                     isCollect: result.IsCollect,
-                    collectNum: result.IsCollect?_this.state.collectNum + 1:_this.state.collectNum - 1
+                    collectNum: result.IsCollect ? _this.state.collectNum + 1 : _this.state.collectNum - 1
                 });
             }
         });
@@ -110,43 +110,43 @@ class DrugDetails extends React.Component {
 
     render() {
         return (
+            <View style={{flex: 1}}>
+                <Head title={'资讯:'+this.state.title} canBack={true} onPress={this._onBack.bind(this)}/>
                 <View style={{flex: 1}}>
-                    <Head title={this.state.title} canBack={true} onPress={this._onBack.bind(this)}/>
-                    <View style={{flex: 1}}>
-                        <WebView ref='webView'
-                                 style={styles.webView}
-                                 source={{uri: this.state.url}}
-                                 startInLoadingState={true}
-                                 domStorageEnabled={true}
-                                 renderLoading={this.renderLoad.bind(this)}
-                                 javaScriptEnabled={true}
-                                 decelerationRate="normal"/>
-                        <View style={styles.bottomContainer}>
-                            <View style={{flex: 1, flexDirection: 'row', backgroundColor: '#ccc'}}>
-                                <View style={styles.readInfo}>
-                                    <Icon name={'ios-eye'} size={30} color={'#999'} style={{marginRight: 5}}/>
-                                    <Text>{this.state.readNum}</Text>
-                                </View>
-                                <View style={styles.readInfo}>
-                                    <Icon name={'ios-star'} size={30} color={'#999'} style={{marginRight: 5}}/>
-                                    <Text>{this.state.collectNum}</Text>
-                                </View>
+                    <WebView ref='webView'
+                             style={styles.webView}
+                             source={{uri: this.state.url}}
+                             startInLoadingState={true}
+                             domStorageEnabled={true}
+                             renderLoading={this.renderLoad.bind(this)}
+                             javaScriptEnabled={true}
+                             scalesPageToFit={false}
+                             decelerationRate="normal"/>
+                    <View style={styles.bottomContainer}>
+                        <View style={{flex: 1, flexDirection: 'row', backgroundColor: '#ccc'}}>
+                            {/*<View style={styles.readInfo}>
+                                <Icon name={'ios-eye'} size={30} color={'#999'} style={{marginRight: 5}}/>
+                                <Text>{this.state.readNum}</Text>
+                            </View>*/}
+                            <View style={styles.readInfo}>
+                                <Icon name={'ios-star'} size={30} color={'#999'} style={{marginRight: 5}}/>
+                                <Text>{this.state.collectNum}</Text>
                             </View>
-                            <TouchableOpacity style={styles.viewCount} onPress={this._onCollect.bind(this)}>
-                                <Icon name={'ios-star'} size={40} color={this.state.isCollect ? '#993399' : '#ccc'}/>
-                            </TouchableOpacity>
                         </View>
+                        <TouchableOpacity style={styles.viewCount} onPress={this._onCollect.bind(this)}>
+                            <Icon name={'ios-star'} size={40} color={this.state.isCollect ? '#993399' : '#ccc'}/>
+                        </TouchableOpacity>
                     </View>
                 </View>
+            </View>
         )
     }
 }
 
 const styles = StyleSheet.create({
     webView: {
-        backgroundColor: 'red',
+        backgroundColor: '#e7e7e7',
         flex: 1,
-        width: Width,
     },
     bottomContainer: {
         flexDirection: 'row',
