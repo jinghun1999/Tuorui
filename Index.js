@@ -11,7 +11,8 @@ import {
     Navigator,
     Image,
     ToastAndroid,
-    View
+    View,
+    Alert,
     } from 'react-native';
 import MainPage from './MainPage';
 import Login from './app/page/Login';
@@ -24,14 +25,16 @@ class Index extends React.Component {
         };
         NetWorkTool.checkNetworkState((isConnected)=> {
             if (!isConnected) {
-                ToastAndroid.show(NetWorkTool.NOT_NETWORK, ToastAndroid.SHORT);
+                //ToastAndroid.show(NetWorkTool.NOT_NETWORK, ToastAndroid.SHORT);
+                Alert.alert('提示','无法连接到网络');
             }
         });
         NetWorkTool.removeEventListener(NetWorkTool.TAG_NETWORK_CHANGE, this.handleNetConnect);
     }
 
     handleNetConnect(isConnected) {
-        console.log('test', (isConnected ? 'online' : 'offline'));
+        //console.log('test', (isConnected ? 'online' : 'offline'));
+        Alert.alert('提示',(isConnected ? 'online' : 'offline'));
     }
 
     shouldComponentUpdate() {
