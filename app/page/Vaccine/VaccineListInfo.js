@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         padding: 10,
         borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: '#ccc'
+        borderBottomColor: '#ccc',
     },
 })
 module.exports = VaccineListInfo;
