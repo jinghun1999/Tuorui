@@ -179,6 +179,7 @@ class AddPet extends Component {
                     alert('ID null');
                     return false
                 }
+
                 let item = {
                     "ID": "00000000-0000-0000-0000-000000000000",
                     "PetCode": _this.state.petID,
@@ -228,7 +229,6 @@ class AddPet extends Component {
                 alert(err)
             })
         } else if (_this.state.edit == '保存' && _this.state.isUpdate == true) {
-            alert('修改')
             //修改http://test.tuoruimed.com/service/Api/Pet/UpdateAndReturn
             NetUtil.getAuth(function (user, hos) {
                 let header = {
@@ -499,7 +499,7 @@ class AddPet extends Component {
                     selectedValue={this.state.petRace}
                     onPickerDone={(type)=>{
                         this.setState({
-                            petRace: type,
+                            petRace: type[0]!=null?type[0]:'',
                         })
                     }}
                 />
