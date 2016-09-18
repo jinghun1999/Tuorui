@@ -31,12 +31,18 @@ import ViewPager from 'react-native-viewpager';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import HomeIcon from './app/commonview/HomeIcon';
+import CacheableImage from 'react-native-cacheable-image'
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
 const IMAGES = [
-    require('./image/job1.jpg'),
+    /*require('./image/job1.jpg'),
     require('./image/job2.jpg'),
-    require('./image/job3.jpg'),
+    require('./image/job3.jpg'),*/
+    'http://img2.gamfe.com/userfiles/9801/photo/show_201102220926036856.jpg',
+    'http://pic38.nipic.com/20140217/18011310_164700650134_2.jpg',
+    'http://www.taopic.com/uploads/allimg/120421/108064-12042114341441.jpg',
+    'http://img.taopic.com/uploads/allimg/120718/201600-120gqzi729.jpg',
+    'http://img.taopic.com/uploads/allimg/120619/188818-12061913030721.jpg'
 ];
 const infolistApi = CONSTAPI.APIAPP + '/AppInfo/GetHomeInfo';
 
@@ -180,7 +186,14 @@ class TopScreen extends Component {
     }
 
     renderViewPage(data) {
-        return (<Image source={data} style={styles.page}/>);
+        //return (<Image source={data} style={styles.page}/>);
+        return(
+            <CacheableImage
+                resizeMode="cover"
+                style={styles.page}
+                source={{uri: data}}
+            />
+        );
     }
 
     renderInfo(Info) {
