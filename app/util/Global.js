@@ -5,7 +5,7 @@ import Storage from 'react-native-storage';
 let API_Service = 'http://test.tuoruimed.com/service/api';
 let API_Auth = 'http://test.tuoruimed.com/auth/api';
 let WEB_HOST = 'http://120.24.89.243/trweb';
-let API_APP = 'http://120.24.89.243:20000/api';
+let API_APP = 'http://120.24.89.243/trapi/api';
 var storage = new Storage({
     // 最大容量，默认值1000条数据循环存储
     size: 1000,
