@@ -145,7 +145,6 @@ class AddPet extends Component {
         //保存
         let _this = this;
         if (_this.state.edit == '保存' && _this.state.isUpdate == false) {
-            alert('保存')
             if (_this.state.petName == null) {
                 alert("请输入宠物昵称");
                 return false;
@@ -362,7 +361,7 @@ class AddPet extends Component {
                             showsVerticalScrollIndicator={true}
                             scrollEnabled={true}>
                     <View style={styles.titleStyle}>
-                        <Text style={{color:'#fff',textAlign:'center',marginLeft:10,fontSize:16,}}>会员信息</Text>
+                        <Text style={styles.titleText}>会员信息</Text>
                     </View>
                     <View style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>会员名</Text>
@@ -383,7 +382,7 @@ class AddPet extends Component {
                         />
                     </View>
                     <View style={styles.titleStyle}>
-                        <Text style={{color:'#fff',textAlign:'center',marginLeft:10,fontSize:16,}}>宠物信息</Text>
+                        <Text  style={styles.titleText}>宠物信息</Text>
                     </View>
                     <View style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>宠物编号</Text>
@@ -438,7 +437,7 @@ class AddPet extends Component {
                                     },
                                     dateInput: {
                                       marginRight: 36,
-                                      borderWidth:StyleSheet.hairlineWidth,
+                                      borderWidth:0,
                                     },
                                   }}
                                 onDateChange={(dateBirth) => {this.setState({petBirthday:dateBirth})}}/>
@@ -509,22 +508,32 @@ class AddPet extends Component {
     }
 }
 const styles = StyleSheet.create({
-    container: {flex: 1,},
-    titleStyle: {
-        padding: 2,
-        flexDirection: 'row',
-        backgroundColor: '#FF6347',
+    container: {
+        flex: 1,
+        backgroundColor: '#e7e7e7',
     },
+    titleStyle: {
+        padding: 5,
+        paddingLeft: 10,
+        flexDirection: 'row',
+    },
+    titleText: {marginLeft: 10, fontSize: 16, flex: 1,},
     inputViewStyle: {
         flex: 1,
         flexDirection: 'row',
-        marginTop: 5,
-        marginLeft: 10,
-        height: 40,
+        padding: 10,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: '#fff',
         borderBottomColor: '#ccc',
         borderBottomWidth: StyleSheet.hairlineWidth,
+    },
+    row: {
+        flexDirection: 'row',
+        padding: 10,
+        backgroundColor: '#fff',
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderBottomColor: '#ccc'
     },
 })
 module.exports = AddPet;

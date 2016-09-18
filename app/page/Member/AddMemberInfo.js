@@ -220,7 +220,7 @@ class AddMemberInfo extends Component {
                             showsVerticalScrollIndicator={true}
                             scrollEnabled={true}>
                     <View style={styles.titleStyle}>
-                        <Text style={{color:'#fff',marginLeft:10,fontSize:16,}}>基本信息</Text>
+                        <Text  style={styles.titleText}>基本信息</Text>
                     </View>
                     <View style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>编号</Text>
@@ -237,7 +237,7 @@ class AddMemberInfo extends Component {
                             <TextInput value={this.state.memberRegistrationTime}
                                        editable={false}
                                        underlineColorAndroid={'transparent'}
-                                       style={{height: 40, borderWidth:0, flex:1}}
+                                       style={{height: 39, borderWidth:0, flex:1}}
                             />
                         </View>
                     </View>
@@ -278,7 +278,7 @@ class AddMemberInfo extends Component {
                                     },
                                     dateInput: {
                                       marginRight: 36,
-                                      borderWidth:StyleSheet.hairlineWidth,
+                                      borderWidth:0,
                                     },
                                   }}
                                 onDateChange={(dateBirth) => {this.setState({memberBirthday:dateBirth})}}/>
@@ -298,6 +298,9 @@ class AddMemberInfo extends Component {
                         <Text style={{width:100,}}>性别</Text>
                         <Text style={{flex:1,}}>{this.state.memberSex}</Text>
                     </TouchableOpacity>
+                    <View style={styles.titleStyle}>
+                        <Text  style={styles.titleText}>会员信息</Text>
+                    </View>
                     <TouchableOpacity onPress={this._onChooseLevel.bind(this)} style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>会员等级</Text>
                         <Text style={{flex:1,}}>{this.state.memberLevel}</Text>
@@ -379,23 +382,30 @@ class AddMemberInfo extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: '#e7e7e7',
     },
     titleStyle: {
-        padding:2,
+        padding: 5,
+        paddingLeft: 10,
         flexDirection: 'row',
-        backgroundColor: '#4682B4',
     },
+    titleText: {marginLeft: 10, fontSize: 16, flex: 1,},
     inputViewStyle: {
         flex: 1,
         flexDirection: 'row',
-        marginTop: 5,
-        marginLeft: 10,
-        height: 40,
+        padding: 10,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: '#fff',
         borderBottomColor: '#ccc',
         borderBottomWidth: StyleSheet.hairlineWidth,
     },
+    row: {
+        flexDirection: 'row',
+        padding: 10,
+        backgroundColor: '#fff',
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderBottomColor: '#ccc'
+    },
 })
-module
-    .exports = AddMemberInfo;
+module.exports = AddMemberInfo;

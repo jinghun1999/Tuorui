@@ -430,5 +430,4 @@ const styles = StyleSheet.create({
         borderBottomColor: '#ccc'
     },
 })
-module
-    .exports = BeautyServices
+module.exports = BeautyServices
