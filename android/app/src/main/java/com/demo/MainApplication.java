@@ -12,6 +12,7 @@ import com.facebook.react.shell.MainReactPackage;
 import com.eguma.barcodescanner.BarcodeScannerPackage;
 import java.util.Arrays;
 import java.util.List;
+import com.rnfs.RNFSPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -26,7 +27,8 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
           new RCTCameraPackage(),
-          new BarcodeScannerPackage()
+          new BarcodeScannerPackage(),
+          new RNFSPackage()
       );
     }
   };
