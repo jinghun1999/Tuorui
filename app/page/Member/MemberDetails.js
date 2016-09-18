@@ -121,14 +121,14 @@ class MemberDetails extends Component {
                 component: AddPet,
                 params: {
                     headTitle: '新增宠物',
-                    isAdd:true,
-                    member:{
-                        name:_this.props.memberInfo.GestName,
-                        phone:_this.props.memberInfo.MobilePhone,
-                        memberID:_this.props.memberInfo.ID,
-                        gestCode:_this.props.memberInfo.GestCode,
+                    isAdd: true,
+                    member: {
+                        name: _this.props.memberInfo.GestName,
+                        phone: _this.props.memberInfo.MobilePhone,
+                        memberID: _this.props.memberInfo.ID,
+                        gestCode: _this.props.memberInfo.GestCode,
                     },
-                    getResult:function(id){
+                    getResult: function (id) {
                         _this._fetchData(id, 1, false);
                     }
                 }
@@ -164,17 +164,17 @@ class MemberDetails extends Component {
                 component: AddPet,
                 params: {
                     headTitle: '宠物详情',
-                    isAdd:false,
-                    member:{
-                        name:_this.props.memberInfo.GestName,
-                        phone:_this.props.memberInfo.MobilePhone,
-                        gestCode:_this.props.memberInfo.GestCode,
-                        memberID:_this.props.memberInfo.ID,
-                        createdBy:_this.props.memberInfo.CreatedBy,
-                        createdOn:_this.props.memberInfo.CreatedOn,
+                    isAdd: false,
+                    member: {
+                        name: _this.props.memberInfo.GestName,
+                        phone: _this.props.memberInfo.MobilePhone,
+                        gestCode: _this.props.memberInfo.GestCode,
+                        memberID: _this.props.memberInfo.ID,
+                        createdBy: _this.props.memberInfo.CreatedBy,
+                        createdOn: _this.props.memberInfo.CreatedOn,
                     },
                     petSource: pet,
-                    getResult:function(id){
+                    getResult: function (id) {
                         _this._fetchData(id, 1, false);
                     }
                 }
@@ -217,46 +217,28 @@ class MemberDetails extends Component {
                             showsVerticalScrollIndicator={true}
                             scrollEnabled={true}>
                     <View style={styles.titleStyle}>
-                        <Text style={{color:'#fff',textAlign:'center',marginLeft:10,fontSize:16,}}>会员信息</Text>
+                        <Text style={styles.titleText}>会员信息</Text>
                     </View>
                     <View style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>登记日期</Text>
                         <View style={{flex:1,height:39}}>
-                            <DatePicker
-                                date={this.props.memberInfo.CreatedOn}
-                                mode="date"
-                                placeholder="选择日期"
-                                format="YYYY-MM-DD"
-                                minDate="1980-01-01"
-                                maxDate="2020-01-01"
-                                confirmBtnText="Confirm"
-                                cancelBtnText="Cancel"
-                                showIcon={false}
-                                enabled={this.state.enable}
-                                customStyles={{
-                                    dateIcon: {
-                                      position: 'absolute',
-                                      right: 0,
-                                      top: 4,
-                                      marginLeft: 0
-                                    },
-                                    dateInput: {
-                                      marginRight: 36,
-                                      borderWidth:StyleSheet.hairlineWidth,
-                                    },
-                                  }}
-                                onDateChange={(date) => {this.setState({registrationDate: date})}}/>
+                            <TextInput value={this.props.memberInfo.CreatedOn}
+                                       editable={false}
+                                       underlineColorAndroid={'transparent'}
+                            />
                         </View>
                     </View>
                     <View style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>会员名</Text>
-                        <TextInput value={this.props.memberInfo.GestName}
-                                   editable={this.state.enable}
-                                   underlineColorAndroid={'transparent'}
-                                   keyboardType={'default'}
-                                   style={{height: 45, borderWidth:0, flex:1}}
-                                   onChangeText={(text)=>{this.setState({ memberName: text })}}
-                        />
+                        <View style={{flex:1,height:39}}>
+                            <TextInput value={this.props.memberInfo.GestName}
+                                       editable={this.state.enable}
+                                       underlineColorAndroid={'transparent'}
+                                       keyboardType={'default'}
+                                       style={{borderWidth:0,flex:1}}
+                                       onChangeText={(text)=>{this.setState({ memberName: text })}}
+                            />
+                        </View>
                     </View>
                     <View style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>生日</Text>
@@ -281,7 +263,7 @@ class MemberDetails extends Component {
                                     },
                                     dateInput: {
                                       marginRight: 36,
-                                      borderWidth:StyleSheet.hairlineWidth,
+                                      borderWidth:0,
                                     },
                                   }}
                                 onDateChange={(date) => {this.setState({birthDate: date})}}/>
@@ -289,37 +271,44 @@ class MemberDetails extends Component {
                     </View>
                     <View style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>电话</Text>
-                        <TextInput value={this.props.memberInfo.MobilePhone}
-                                   editable={this.state.enable}
-                                   underlineColorAndroid={'transparent'}
-                                   keyboardType={'default'}
-                                   style={{height: 45, borderWidth:0, flex:1}}
-                                   onChangeText={(text)=>{this.setState({ memberPhone: text })}}
-                        />
+                        <View style={{flex:1,height:39}}>
+                            <TextInput value={this.props.memberInfo.MobilePhone}
+                                       editable={this.state.enable}
+                                       underlineColorAndroid={'transparent'}
+                                       keyboardType={'default'}
+                                       style={{borderWidth:0,}}
+                                       onChangeText={(text)=>{this.setState({ memberPhone: text })}}
+                            />
+                        </View>
                     </View>
                     <TouchableOpacity onPress={this._onChooseSex.bind(this)} style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>性别</Text>
-                        <Text style={{flex:1,}}>{this.props.memberInfo.GestSex == 'DM00001' ? '男' : '女'}</Text>
+                        <Text
+                            style={{flex:1,height:39,}}>{this.props.memberInfo.GestSex == 'DM00001' ? '男' : '女'}</Text>
                     </TouchableOpacity>
                     <View style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>地址</Text>
-                        <TextInput value={this.props.memberInfo.GestAddress}
-                                   editable={this.state.enable}
-                                   underlineColorAndroid={'transparent'}
-                                   keyboardType={'default'}
-                                   style={{height: 45, borderWidth:0, flex:1}}
-                                   onChangeText={(text)=>{this.setState({ memberAddress: text })}}
-                        />
+                        <View style={{flex:1,height:39}}>
+                            <TextInput value={this.props.memberInfo.GestAddress}
+                                       editable={this.state.enable}
+                                       underlineColorAndroid={'transparent'}
+                                       keyboardType={'default'}
+                                       style={{borderWidth:0,}}
+                                       onChangeText={(text)=>{this.setState({ memberAddress: text })}}
+                            />
+                        </View>
                     </View>
                     <View style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>备注</Text>
-                        <TextInput value={this.props.memberInfo.Remark}
-                                   editable={this.state.enable}
-                                   underlineColorAndroid={'transparent'}
-                                   keyboardType={'default'}
-                                   style={{height: 45, borderWidth:0, flex:1}}
-                                   onChangeText={(text)=>{this.setState({ memberRemark: text })}}
-                        />
+                        <View style={{flex:1,height:39}}>
+                            <TextInput value={this.props.memberInfo.Remark}
+                                       editable={this.state.enable}
+                                       underlineColorAndroid={'transparent'}
+                                       keyboardType={'default'}
+                                       style={{borderWidth:0,}}
+                                       onChangeText={(text)=>{this.setState({ memberRemark: text })}}
+                            />
+                        </View>
                     </View>
                     {/*<View style={styles.optionBox}>
                      <View style={styles.optionTxt}>
@@ -362,11 +351,11 @@ class MemberDetails extends Component {
                      onChangeText={(text)=>{this.setState({ memberPoint: text })}}
                      />*/}
                     <View style={styles.titleStyle}>
-                        <View style={{flex:1}}>
-                            <Text style={{color:'#fff',marginLeft:10,fontSize:16,}}>宠物信息</Text>
-                        </View>
-                        <TouchableOpacity style={{width:50,}} onPress={this._onAddPet.bind(this)}>
-                            <Text style={{textAlign:'center',fontSize:14,}}>新增</Text>
+                        <Text style={styles.titleText}>宠物信息</Text>
+                        <TouchableOpacity
+                            style={{width:50,alignItems:'center', backgroundColor:'#99CCFF', justifyContent:'center'}}
+                            onPress={this._onAddPet.bind(this)}>
+                            <Text>添加</Text>
                         </TouchableOpacity>
                     </View>
                     <View>
@@ -395,22 +384,30 @@ class MemberDetails extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: '#e7e7e7',
     },
     titleStyle: {
-        padding: 2,
+        padding: 5,
+        paddingLeft: 10,
         flexDirection: 'row',
-        backgroundColor: '#FF6347',
     },
+    titleText: {marginLeft: 10, fontSize: 16, flex: 1,},
     inputViewStyle: {
         flex: 1,
         flexDirection: 'row',
-        marginTop: 5,
-        marginLeft: 10,
-        height: 40,
+        padding: 10,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: '#fff',
         borderBottomColor: '#ccc',
         borderBottomWidth: StyleSheet.hairlineWidth,
+    },
+    row: {
+        flexDirection: 'row',
+        padding: 10,
+        backgroundColor: '#fff',
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderBottomColor: '#ccc'
     },
 })
 module.exports = MemberDetails;

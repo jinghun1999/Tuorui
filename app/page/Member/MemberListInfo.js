@@ -175,7 +175,7 @@ class MemberListInfo extends Component {
                 <Icon name={'ios-person'} size={50} color={'#00BBFF'}/>
                 <View style={{flex:1, marginLeft:15,}}>
                     <View style={{flexDirection:'row'}}>
-                        <Text style={{fontWeight:'bold', fontSize:16, marginRight:10}}>{g.GestName}</Text>
+                        <Text style={{flex:1, fontSize:16, color:'#27408B',fontWeight:'bold'}}>{g.GestName}</Text>
                     </View>
                     <View style={{flexDirection:'row'}}>
                         <Text style={{width:150}}>手机: {g.MobilePhone}</Text>
