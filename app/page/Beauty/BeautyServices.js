@@ -294,7 +294,6 @@ class BeautyServices extends React.Component {
         }, function (err) {
             alert(err);
         })
-
     }
 
     _onChooseService() {
