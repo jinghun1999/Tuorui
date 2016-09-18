@@ -144,14 +144,10 @@ class App extends Component {
                         <View style={[styles.homeStyle,{height:80, }]}>
                             <Image style={styles.IconStyle}
                                    source={{uri:'http://www.easyicon.net/api/resizeApi.php?id=1173423&size=96'}}/>
-                            <View style={styles.titleViewStyle}>
+                            <TouchableOpacity onPress={this.clearHospital.bind(this)} style={styles.titleViewStyle}>
                                 <Text style={styles.titleTextStyle}>{this.state.hospital.FULLName}</Text>
                                 <Text>地址：{this.state.hospital.Address}</Text>
-                                <TouchableOpacity onPress={this.clearHospital.bind(this)}
-                                                  style={{position: 'absolute', top: 20, right:-36, borderWidth:1, borderColor:'#ccc', padding:2,}}>
-                                    <Text>修改</Text>
-                                </TouchableOpacity>
-                            </View>
+                            </TouchableOpacity>
                         </View>
                         {/*<View style={styles.homeStyle}>
                          <View style={styles.fontViewStyle}>
@@ -165,26 +161,82 @@ class App extends Component {
                          </View>*/}
                     </View>
                     <View style={styles.iconViewStyle}>
-                        <IconButton text="会员宠物" iconName={'md-people'} iconColor={'#FFB6C1'}
-                                    onPress={this._onPress.bind(this, MemberListInfo, 'MemberListInfo', '会员信息')}/>
-                        <IconButton text="疫苗接种" iconName={'ios-medkit'} iconColor={'#6666CC'}
-                                    onPress={this._onPress.bind(this, PetListInfo, 'PetListInfo', '疫苗接种')}/>
-                        <IconButton text="美容服务" iconName={'ios-color-palette'} iconColor={'#66CCFF'}
-                                    onPress={this._onPress.bind(this, BeautyServices, 'BeautyServices', '美容服务')}/>
+                        <TouchableOpacity style={styles.grid_view}
+                                          onPress={this._onPress.bind(this, MemberListInfo, 'MemberListInfo', '会员信息')}>
+                            <View style={styles.iconOuter}>
+                                <Icon name={'md-people'} size={40} color={'#FF6600'}/>
+                                <Text style={{fontSize:15}}>会员宠物</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.grid_view}
+                                          onPress={this._onPress.bind(this, PetListInfo, 'PetListInfo', '疫苗接种')}>
+                            <View style={styles.iconOuter}>
+                                <Icon name={'ios-medkit'} size={40} color={'#FF9933'}/>
+                                <Text style={{fontSize:15}}>疫苗接种</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.grid_view}
+                                          onPress={this._onPress.bind(this, BeautyServices, 'BeautyServices', '美容服务')}>
+                            <View style={styles.iconOuter}>
+                                <Icon name={'ios-color-palette'} size={40} color={'#FF6666'}/>
+                                <Text style={{fontSize:15}}>美容服务</Text>
+                            </View>
+                        </TouchableOpacity>
+                        {/*<IconButton text="会员宠物" iconName={'md-people'} iconColor={'#FFB6C1'}
+                         onPress={this._onPress.bind(this, MemberListInfo, 'MemberListInfo', '会员信息')}/>
+                         <IconButton text="疫苗接种" iconName={'ios-medkit'} iconColor={'#6666CC'}
+                         onPress={this._onPress.bind(this, PetListInfo, 'PetListInfo', '疫苗接种')}/>
+                         <IconButton text="美容服务" iconName={'ios-color-palette'} iconColor={'#66CCFF'}
+                         onPress={this._onPress.bind(this, BeautyServices, 'BeautyServices', '美容服务')}/>*/}
                     </View>
                     <View style={styles.iconViewStyle}>
-                        <IconButton text="我的预约" iconName={'ios-clock'} iconColor={'#9999CC'}
-                                    onPress={this._onPress.bind(this, AppointListInfo, 'AppointListInfo', '我的预约')}/>
-                        <IconButton text="商品销售" iconName={'ios-cart'} iconColor={'#DEB887'}
-                                    onPress={this._onPress.bind(this, SaleList, 'SaleList', '商品销售')}/>
-                        <IconButton text="拓瑞检测" iconName={'ios-paper'} iconColor={'#666699'}
-                                    onPress={this._onPress.bind(this, MyInspect, 'MyInspect', '拓瑞检测')}/>
+                        <TouchableOpacity style={styles.grid_view}
+                                          onPress={this._onPress.bind(this, AppointListInfo, 'AppointListInfo', '我的预约')}>
+                            <View style={styles.iconOuter}>
+                                <Icon name={'ios-clock'} size={40} color={'#0066CC'}/>
+                                <Text style={{fontSize:15}}>我的预约</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.grid_view}
+                                          onPress={this._onPress.bind(this, SaleList, 'SaleList', '商品销售')}>
+                            <View style={styles.iconOuter}>
+                                <Icon name={'ios-cart'} size={40} color={'#CCCC00'}/>
+                                <Text style={{fontSize:15}}>商品销售</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.grid_view}
+                                          onPress={this._onPress.bind(this, MyInspect, 'MyInspect', '拓瑞检测')}>
+                            <View style={styles.iconOuter}>
+                                <Icon name={'ios-paper'} size={40} color={'#FF6666'}/>
+                                <Text style={{fontSize:15}}>拓瑞检测</Text>
+                            </View>
+                        </TouchableOpacity>{/*
+                     <IconButton text="我的预约" iconName={'ios-clock'} iconColor={'#9999CC'}
+                     onPress={this._onPress.bind(this, AppointListInfo, 'AppointListInfo', '我的预约')}/>
+                     <IconButton text="商品销售" iconName={'ios-cart'} iconColor={'#DEB887'}
+                     onPress={this._onPress.bind(this, SaleList, 'SaleList', '商品销售')}/>
+                     <IconButton text="拓瑞检测" iconName={'ios-paper'} iconColor={'#666699'}
+                     onPress={this._onPress.bind(this, MyInspect, 'MyInspect', '拓瑞检测')}/>*/}
                     </View>
                     <View style={styles.iconViewStyle}>
-                        <IconButton text="我的设备" iconName={'md-phone-landscape'} iconColor={'#336666'}
-                                    onPress={this._onPress.bind(this, NJY, 'NJY', '尿检结果')}/>
-                        <IconButton text="数据报表" iconName={'ios-podium'} iconColor={'#6666FF'}
-                                    onPress={this._onPress.bind(this, ReportIndex, 'ReportIndex', '数据报表')}/>
+                        <TouchableOpacity style={styles.grid_view}
+                                          onPress={this._onPress.bind(this, NJY, 'NJY', '尿检结果')}>
+                            <View style={styles.iconOuter}>
+                                <Icon name={'md-phone-landscape'} size={40} color={'#FF9900'}/>
+                                <Text style={{fontSize:15}}>尿检结果</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.grid_view, {borderRightWidth:StyleSheet.hairlineWidth, borderRightColor:'#ccc'}]}
+                                          onPress={this._onPress.bind(this, ReportIndex, 'ReportIndex', '数据报表')}>
+                            <View style={styles.iconOuter}>
+                                <Icon name={'ios-podium'} size={40} color={'#99CCFF'}/>
+                                <Text style={{fontSize:15}}>数据报表</Text>
+                            </View>
+                        </TouchableOpacity>
+                        {/*<IconButton text="我的设备" iconName={'md-phone-landscape'} iconColor={'#336666'}
+                         onPress={this._onPress.bind(this, NJY, 'NJY', '尿检结果')}/>
+                         <IconButton text="数据报表" iconName={'ios-podium'} iconColor={'#6666FF'}
+                         onPress={this._onPress.bind(this, ReportIndex, 'ReportIndex', '数据报表')}/>*/}
                         <View style={{flex:1}}></View>
                     </View>
 
@@ -226,6 +278,22 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
     },
+    grid_view: {
+        flex: 1,
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderBottomColor: '#ccc',
+        borderLeftWidth: StyleSheet.hairlineWidth,
+        borderLeftColor: '#ccc',
+        //borderRightWidth: StyleSheet.hairlineWidth,
+        //borderRightColor: '#ccc',
+    },
+    iconOuter: {
+        flex: 1,
+        paddingTop: 30,
+        paddingBottom: 30,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     IconStyle: {
         height: 60,
         width: 60,
@@ -239,7 +307,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     titleTextStyle: {
-        fontSize: 20,
+        fontSize: 15,
         color: '#003366',
     },
     fontViewStyle: {
@@ -256,7 +324,6 @@ const styles = StyleSheet.create({
         marginLeft: 5,
     },
     iconViewStyle: {
-        marginTop: 20,
         flexDirection: 'row',
     },
     rows: {

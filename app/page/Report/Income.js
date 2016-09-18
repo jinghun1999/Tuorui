@@ -289,7 +289,7 @@ const styles = StyleSheet.create({
     },
     sumValue: {
         fontSize: 24,
-        color: '#FF6666',
+        color: '#0099CC',
         fontWeight: 'bold',
     },
     row: {
@@ -304,12 +304,12 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: '#fff',
         width: 100,
-        backgroundColor: '#CC0033',
+        backgroundColor: '#0099CC',
         padding: 2
     },
     guestName: {
         fontSize: 16,
-        color: '#CC0033',
+        color: '#0099CC',
         fontWeight: 'bold',
         width: 50,
         marginLeft: 5,

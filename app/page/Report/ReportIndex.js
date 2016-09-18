@@ -15,7 +15,7 @@ import Head from '../../commonview/Head';
 import Income from './Income';
 import StockCapital from './StockCapital';
 import GoodSales from './GoodSales';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 class ReportIndex extends React.Component {
     constructor(props) {
@@ -53,24 +53,24 @@ class ReportIndex extends React.Component {
         return (
             <View style={styles.container}>
                 <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
-                <View style={{padding:5, marginTop:5, backgroundColor:'#CCCC99',}}>
-                    <Text style={{color:'#CC3333'}}>宠物医院数据统计</Text>
-                </View>
+
                 <View style={{flexDirection:'column'}}>
                     <TouchableHighlight style={styles.touch}
                                         onPress={this._onPress.bind(this, Income, 'Income', '营业收入统计')}
                                         underlayColor={'#CCCC99'}>
                         <View style={{flexDirection:'row', alignItems:'center'}}>
-                            <Icon name={'ios-open'} size={40} color={'#CC0033'}/>
-                            <Text style={[styles.touchText, {color:'#CC0033'}]}>营业收入统计</Text>
+                            <Icon name={'money'} size={30} color={'#0099CC'}/>
+                            <Text style={styles.touchText}>营业收入统计</Text>
+                            <Icon name={'angle-right'} size={20} color={'#ccc'}/>
                         </View>
                     </TouchableHighlight>
                     <TouchableHighlight style={styles.touch}
                                         onPress={this._onPress.bind(this, StockCapital, 'StockCapital', '库存资产统计')}
                                         underlayColor={'#CCCC99'}>
                         <View style={{flexDirection:'row', alignItems:'center'}}>
-                            <Icon name={'ios-filing'} size={40} color={'#0099CC'}/>
-                            <Text style={[styles.touchText, {color:'#0099CC'}]}>库存资产统计</Text>
+                            <Icon name={'database'} size={30} color={'#0099CC'}/>
+                            <Text style={styles.touchText}>库存资产统计</Text>
+                            <Icon name={'angle-right'} size={20} color={'#ccc'}/>
                         </View>
                     </TouchableHighlight>
                     <TouchableHighlight style={styles.touch}
@@ -78,8 +78,9 @@ class ReportIndex extends React.Component {
                                         underlayColor={'#CCCC99'}>
 
                         <View style={{flexDirection:'row', alignItems:'center'}}>
-                            <Icon name={'ios-cart'} size={40} color={'#FF9999'}/>
-                            <Text style={[styles.touchText, {color:'#FF9999'}]}>商品销售统计</Text>
+                            <Icon name={'cart-plus'} size={30} color={'#0099CC'}/>
+                            <Text style={styles.touchText}>商品销售统计</Text>
+                            <Icon name={'angle-right'} size={20} color={'#ccc'}/>
                         </View>
                     </TouchableHighlight>
                 </View>
@@ -98,12 +99,14 @@ const styles = StyleSheet.create({
         flex: 1,
         height: 50,
         justifyContent:'center',
-        marginTop: 5,
         padding: 10,
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
+        borderBottomWidth:StyleSheet.hairlineWidth,
+        borderBottomColor:'#ccc',
     },
     touchText: {
-        color: '#fff',
+        flex:1,
+        color: '#0099CC',
         fontSize: 18,
         marginLeft:20,
     }

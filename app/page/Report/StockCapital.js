@@ -12,6 +12,7 @@ import{
     ListView,
     InteractionManager,
     } from 'react-native';
+import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
 import Loading from '../../commonview/Loading';
@@ -27,8 +28,8 @@ class StockCapital extends React.Component {
             ds: ds,
             dataSource: [],
             loaded: false,
-            dateFrom: '2016-01-10',
-            dateTo: '2016-10-10',
+            dateFrom: Util.GetDateStr(-30),
+            dateTo: Util.GetDateStr(0),
         };
     }
 

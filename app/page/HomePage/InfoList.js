@@ -72,7 +72,7 @@ class Information extends React.Component {
                 isRefreshing: false,
             });
         }).catch(err => {
-            alert(err.message);
+            //alert(err.message);
             _this._fetchData(_this.state.pageIndex, false);
         });
     }

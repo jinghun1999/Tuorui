@@ -56,31 +56,32 @@ class GoodSales extends React.Component {
             loaded: false,
         })
         NetUtil.getAuth(function (user, hos) {
-                let header = {
-                    'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-                };
-                let querystr = 'startDate=' + _this.state.dateFrom + '&endDate=' + _this.state.dateTo + ' 23:59:59&itemName=' + _this.state.kw;
-                NetUtil.get(CONSTAPI.HOST + '/Report/GetCountItemSellDataTable?' + querystr, header, function (data) {
-                    if (data.Sign && data.Message != null) {
-                        let a1 = 0, a2 = 0, json = data.Message;
-                        json.forEach((d)=> {
-                            a1 += parseInt(d.总数量);
-                            a2 += parseFloat(d.总金额);
-                        });
-                        _this.setState({
-                            dataSource: json,
-                            loaded: true,
-                            totalCount: a1,
-                            totalAmount: a2,
-                        });
-                    } else {
-                        alert("获取数据失败：" + data.Message);
-                        _this.setState({
-                            loaded: true,
-                        });
-                    }
-                });
-            }, function (err) {});
+            let header = {
+                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
+            };
+            let querystr = 'startDate=' + _this.state.dateFrom + '&endDate=' + _this.state.dateTo + ' 23:59:59&itemName=' + _this.state.kw;
+            NetUtil.get(CONSTAPI.HOST + '/Report/GetCountItemSellDataTable?' + querystr, header, function (data) {
+                if (data.Sign && data.Message != null) {
+                    let a1 = 0, a2 = 0, json = data.Message;
+                    json.forEach((d)=> {
+                        a1 += parseInt(d.总数量);
+                        a2 += parseFloat(d.总金额);
+                    });
+                    _this.setState({
+                        dataSource: json,
+                        loaded: true,
+                        totalCount: a1,
+                        totalAmount: a2,
+                    });
+                } else {
+                    alert("获取数据失败：" + data.Message);
+                    _this.setState({
+                        loaded: true,
+                    });
+                }
+            });
+        }, function (err) {
+        });
     }
 
     _search() {
@@ -174,7 +175,7 @@ class GoodSales extends React.Component {
                                   renderHeader={()=>
                                     <View style={{backgroundColor:'#e7e7e7'}}>
                                         <View style={styles.hd}>
-                                            <Text style={{color:'#0099CC'}}>销售汇总</Text>
+                                            <Text style={{color:'#CC0033'}}>销售汇总</Text>
                                         </View>
                                         <View style={styles.outerRow}>
                                             <View style={styles.sumRow}>
@@ -216,7 +217,7 @@ const styles = StyleSheet.create({
     hd: {
         margin: 5,
         borderLeftWidth: 3,
-        borderLeftColor: '#FF9999',
+        borderLeftColor: '#CC0033',
         paddingLeft: 5,
     },
     outerRow: {
@@ -241,7 +242,7 @@ const styles = StyleSheet.create({
     },
     sumValue: {
         fontSize: 32,
-        color: '#FF9999',
+        color: '#0099CC',
         fontWeight: 'bold',
     },
     row: {
@@ -256,12 +257,12 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: '#fff',
         width: 100,
-        backgroundColor: '#FF9999',
+        backgroundColor: '#0099CC',
         padding: 2
     },
     guestName: {
         fontSize: 16,
-        color: '#CC0033',
+        color: '#0099CC',
         fontWeight: 'bold',
         width: 50,
         marginLeft: 20,
@@ -290,7 +291,7 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         marginRight: 10,
         height: 60,
-        backgroundColor: '#FF9999',
+        backgroundColor: '#0099CC',
         justifyContent: 'center',
         alignItems: 'center',
     },

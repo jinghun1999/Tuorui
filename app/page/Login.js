@@ -8,7 +8,6 @@
 'use strict';
 import React,{Component,} from 'react';
 import {
-    AppRegistry,
     StyleSheet,
     Text,
     Image,
@@ -23,10 +22,13 @@ import MainPage from '../../Index';
 import NButton from '../commonview/NButton';
 import Register  from './Register';
 
-class Login extends Component {
+class Login extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            pwd: '',
+            user: '',
+        };
     }
 
     _Login() {
@@ -97,7 +99,9 @@ class Login extends Component {
                     underlineColorAndroid={'transparent'}
                     onChangeText={(text) => this.setState({user: text})}
                     textAlignVertical='center'
-                    textAlign='center'/>
+                    textAlign='center'
+                    keyboardType={'numeric'}
+                    value={this.state.user}/>
                 <View style={{height:1,backgroundColor:'#f4f4f4'}}/>
                 <TextInput
                     style={styles.style_pwd_input}
@@ -110,6 +114,7 @@ class Login extends Component {
                     textAlign='center'
                     ref='pwd'
                     onFocus={() => {this.refs.pwd.focus()}}
+                    value={this.state.pwd}
                     />
                 <View>
                     <NButton
@@ -134,7 +139,7 @@ class Login extends Component {
 
 const styles = StyleSheet.create({
     style_image: {
-        borderRadius: 45,
+        borderRadius: 35,
         height: 70,
         width: 70,
         marginTop: 40,
@@ -186,5 +191,4 @@ const styles = StyleSheet.create({
         textAlign: 'right',
     },
 });
-
-export default Login
+module.exports = Login;
