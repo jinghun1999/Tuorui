@@ -20,7 +20,7 @@ class Index extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            loading: true,
+            loaded: false,
         };
         NetWorkTool.checkNetworkState((isConnected)=> {
             if (!isConnected) {
@@ -58,12 +58,12 @@ class Index extends React.Component {
         }).then(ret => {
             _this.setState({
                 user: ret.user,
-                loading: false,
+                loaded: true,
             });
         }).catch(err => {
-            alert('error:' + err.name);
+            //alert('error:' + err.name);
             _this.setState({
-                loading: false,
+                loaded: true,
             });
         });
     }
@@ -75,7 +75,7 @@ class Index extends React.Component {
             defaultName = 'MainPage';
             defaultComponent = MainPage;
         }
-        if (this.state.loading) {
+        if (!this.state.loaded) {
             return (
                 <View>
                     <Text>Loading...</Text>

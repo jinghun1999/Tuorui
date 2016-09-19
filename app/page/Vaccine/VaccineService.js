@@ -46,7 +46,7 @@ class VaccineService extends Component {
 
     _onBack() {
         let _this = this;
-        const {navigator}=_this.props;
+        const {navigator} =_this.props;
         if (navigator) {
             navigator.pop();
         }
@@ -472,18 +472,15 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     titleText: {
-        marginLeft: 10,
-        fontSize: 16,
-        flex: 1,
+        marginLeft: 10, fontSize: 16, flex: 1,
     },
     inputViewStyle: {
         flex: 1,
         flexDirection: 'row',
-        marginTop: 5,
-        marginLeft: 10,
-        height: 40,
+        padding: 10,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: '#fff',
         borderBottomColor: '#ccc',
         borderBottomWidth: StyleSheet.hairlineWidth,
     },

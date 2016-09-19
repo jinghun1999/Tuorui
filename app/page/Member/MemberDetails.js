@@ -184,13 +184,12 @@ class MemberDetails extends Component {
 
     _onRenderRow(pet) {
         return (
-            <TouchableOpacity style={{flexDirection:'row',flex:1,height:45,justifyContent:'center',alignItems:'center',
-            borderBottomColor:'#ccc',borderBottomWidth:StyleSheet.hairlineWidth,}}
+            <TouchableOpacity style={styles.inputViewStyle}
                               onPress={()=>this._onPetDetails(pet)}>
                 <Image source={require('./../../../image/pet.jpg')}
                        style={{width:40,height:35,marginLeft:10,justifyContent:'center'}}
                 />
-                <Text style={{flex:1,marginLeft:10,fontSize:16}}>{pet.PetName}</Text>
+                <Text style={{flex:1}}>{pet.PetName}</Text>
                 <Icon name={'ios-arrow-forward'} size={15} color={'#666'} style={{marginRight:10}}/>
             </TouchableOpacity>
         )
@@ -222,7 +221,7 @@ class MemberDetails extends Component {
                     <View style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>登记日期</Text>
                         <View style={{flex:1,height:39}}>
-                            <TextInput value={this.props.memberInfo.CreatedOn}
+                            <TextInput value={this.props.memberInfo.CreatedOn.replace('T', ' ')}
                                        editable={false}
                                        underlineColorAndroid={'transparent'}
                             />
@@ -262,7 +261,7 @@ class MemberDetails extends Component {
                                       marginLeft: 0
                                     },
                                     dateInput: {
-                                      marginRight: 36,
+                                      marginRight: 25,
                                       borderWidth:0,
                                     },
                                   }}

@@ -148,7 +148,10 @@ class MemberListInfo extends Component {
                 name: 'AddMemberInfo',
                 component: AddMemberInfo,
                 params: {
-                    headTitle: '新增会员'
+                    headTitle: '新增会员',
+                    getResult:function(){
+                        _this.fetchData(1,false);
+                    }
                 }
             })
         }
