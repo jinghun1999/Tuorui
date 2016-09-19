@@ -185,7 +185,7 @@ class VaccineService extends Component {
             return false;
         }
         NetUtil.getAuth(function (user, hos) {
-           var vaccineGroupCode ='YM2016091800025';
+           var vaccineGroupCode =_this.state.VaccineGroupCode;
             let vaccineItems = [];
             let _vaccine = _this.state.vaccine;
             var executorID = 0;
@@ -204,7 +204,7 @@ class VaccineService extends Component {
                     "GestName":_this.state.petSource.GestName,
                     "GestCode":_this.state.petSource.GestCode,
                     "PetID":_this.state.petSource.PetID,
-                    "MobilePhone":null,
+                    "MobilePhone":_this.state.petSource.MobilePhone,
                     "ItemName":_vaccine[i].ItemName,
                     "ItemCode":_vaccine[i].ItemCode,
                     "ItemCost":_vaccine[i].SellPrice,
@@ -244,19 +244,19 @@ class VaccineService extends Component {
             }
             var item ={
                 "ID":"00000000-0000-0000-0000-000000000000",
-                "VaccineGroupCode":"YM2016091800025",
-                "PetName":"豆豆",
-                "GestID":"e9530e2d-b5df-414d-a2d9-32f0261e3e89",
-                "GestName":"豆豆",
-                "GestCode":"VIP0000000026",
-                "PetID":"9f8b6f21-02ef-44dc-9e74-eede3afd9d4c",
-                "MobilePhone":null,
+                "VaccineGroupCode":"YM2016091900004",
+                "PetName":"卡卡",
+                "GestID":"875f40b2-c40f-4ef5-935e-ceba855fa491",
+                "GestName":"zutter1",
+                "GestCode":"VIP0000000152",
+                "PetID":"98e75159-5ce9-4965-8692-c85a23b8a1fa",
+                "MobilePhone":"13108181988",
                 "ItemName":"英特威狂犬疫苗",
                 "ItemCode":"WF0000000069",
-                "ItemCost":150,
+                "ItemCost":200,
                 "ItemStandard":"DM00050",
                 "EstimateTime":null,
-                "FactShootTime":"2016-09-18T15:36:53.6553714+08:00",
+                "FactShootTime":"2016-09-19T14:08:08.6973497+08:00",
                 "ShootLevelNum":null,
                 "ShootProcess":"首免",
                 "IntervalDay":null,
@@ -282,13 +282,13 @@ class VaccineService extends Component {
                 "AssistantDoctorID":null,
                 "AssistantDoctorName":"",
                 "ItemNum":1,
-                "TotalCost":150,
+                "TotalCost":200,
                 "Sign":null,
                 "EntID":"00000000-0000-0000-0000-000000000000"
             }
             let postjson = {
                 vaccineGroupCode: vaccineGroupCode,
-                list: item,
+                list: vaccineItems,
             }
             let header = {
                 'Authorization': NetUtil.headerAuthorization(user.user.Mobile, user.pwd, hos.hospital.Registration, user.user.Token)

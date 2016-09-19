@@ -167,6 +167,9 @@ class MemberListInfo extends Component {
                 params: {
                     headTitle: '会员详情',
                     memberInfo: g,
+                    getResult:function(){
+                        _this.fetchData(1, false);
+                    }
                 }
             })
         }

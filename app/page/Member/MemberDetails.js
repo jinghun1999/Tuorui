@@ -38,6 +38,7 @@ class MemberDetails extends Component {
             memberLoaded: false,
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
             memberSex: '男',
+            disabled:true,
         }
     };
 
@@ -90,6 +91,12 @@ class MemberDetails extends Component {
                         petSource: dataSource,
                         memberLoaded: true,
                         pageIndex: page,
+                        memberName:_this.props.memberInfo.GestName,
+                        birthDate:_this.props.memberInfo.GestBirthday,
+                        memberPhone:_this.props.memberInfo.MobilePhone,
+                        memberSex:_this.props.memberInfo.GestSex,
+                        memberAddress:_this.props.memberInfo.GestAddress,
+                        memberRemark:_this.props.memberInfo.Remark,
                     });
                 } else {
                     alert("获取数据失败：" + data.Message);
@@ -145,7 +152,72 @@ class MemberDetails extends Component {
                 edit: '保存',
             })
         } else {
-            alert('保存成功');
+            if (_this.state.memberName == null) {
+                alert("请输入姓名");
+                return false;
+            } else if (_this.state.memberPhone == null) {
+                alert("请输入手机号码");
+                return false;
+            }
+            NetUtil.getAuth(function (user, hos) {
+                let header = {
+                    'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
+                };
+                var _sex;
+                if(_this.state.memberSex=='男'){
+                    _sex='DM00001'
+                }else if(_this.state.memberSex=='女'){
+                    _sex='DM00002'
+                }
+                let item={
+                    "ID":_this.props.memberInfo.ID,
+                    "GestCode":_this.props.memberInfo.GestCode,
+                    "LoseRightDate":null,
+                    "GestName":_this.state.memberName,
+                    "GestSex":_sex,
+                    "GestBirthday":_this.state.birthDate,
+                    "MobilePhone":_this.state.memberPhone,
+                    "TelPhone":null,
+                    "EMail":null,
+                    "GestAddress":_this.state.memberAddress,
+                    "IsVIP":"SM00054",
+                    "VIPNo":null,
+                    "VIPAccount":0,
+                    "LastPaidTime":"2016-09-19T11:48:35",
+                    "GestStyle":"HYDJ000000003",
+                    "Status":"SM00001",
+                    "PaidStatus":"SM00040",
+                    "Remark":_this.state.memberRemark,
+                    "CreatedBy":"18307722503",
+                    "CreatedOn":"2016-09-18T17:40:37",
+                    "ModifiedBy":user.user.Mobile,
+                    "ModifiedOn":Util.getTime(),
+                    "IsDeleted":0,
+                    "RewardPoint":null,
+                    "PrepayMoney":null,
+                    "EntID":_this.props.memberInfo.EntID,
+                    "LevelName":null
+                };
+                let postJson = {
+                    "gest":item,
+                    "oldRewardPoint":0,
+                };
+                //http://test.tuoruimed.com/service/Api/Gest/UpdateGest
+                NetUtil.postJson(CONSTAPI.HOST + '/Gest/UpdateGest', postJson, header, function (data) {
+                    if (data.Sign) {
+                        alert('修改成功');
+                        if (_this.props.getResult) {
+                            let id = _this.props.member.memberID;
+                            _this.props.getResult(id);
+                        }
+                        _this._onBack()
+                    } else {
+                        alert("获取数据错误" + data.Exception);
+                    }
+                });
+            }, function (err) {
+                alert(err)
+            })
             _this.setState({
                 enable: false,
                 edit: '编辑',
@@ -196,6 +268,8 @@ class MemberDetails extends Component {
     }
 
     _onChooseSex() {
+        let _this =this;
+        if(_this.state.edit =='编辑'){return false;}
         this.pickerSex.toggle();
     }
 
@@ -230,7 +304,7 @@ class MemberDetails extends Component {
                     <View style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>会员名</Text>
                         <View style={{flex:1,height:39}}>
-                            <TextInput value={this.props.memberInfo.GestName}
+                            <TextInput value={this.state.memberName}
                                        editable={this.state.enable}
                                        underlineColorAndroid={'transparent'}
                                        keyboardType={'default'}
@@ -243,7 +317,7 @@ class MemberDetails extends Component {
                         <Text style={{width:100,}}>生日</Text>
                         <View style={{flex:1,height:39}}>
                             <DatePicker
-                                date={this.props.memberInfo.GestBirthday}
+                                date={this.state.birthDate}
                                 mode="date"
                                 placeholder="选择日期"
                                 format="YYYY-MM-DD"
@@ -252,7 +326,7 @@ class MemberDetails extends Component {
                                 confirmBtnText="Confirm"
                                 cancelBtnText="Cancel"
                                 showIcon={false}
-                                enabled={this.state.enable}
+                                disabled={this.state.disabled}
                                 customStyles={{
                                     dateIcon: {
                                       position: 'absolute',
@@ -261,7 +335,7 @@ class MemberDetails extends Component {
                                       marginLeft: 0
                                     },
                                     dateInput: {
-                                      marginRight: 25,
+                                      marginRight: 45,
                                       borderWidth:0,
                                     },
                                   }}
@@ -271,7 +345,7 @@ class MemberDetails extends Component {
                     <View style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>电话</Text>
                         <View style={{flex:1,height:39}}>
-                            <TextInput value={this.props.memberInfo.MobilePhone}
+                            <TextInput value={this.state.memberPhone}
                                        editable={this.state.enable}
                                        underlineColorAndroid={'transparent'}
                                        keyboardType={'default'}
@@ -283,12 +357,12 @@ class MemberDetails extends Component {
                     <TouchableOpacity onPress={this._onChooseSex.bind(this)} style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>性别</Text>
                         <Text
-                            style={{flex:1,height:39,}}>{this.props.memberInfo.GestSex == 'DM00001' ? '男' : '女'}</Text>
+                            style={{flex:1,height:39,}}>{this.state.memberSex == 'DM00001' ? '男' : '女'}</Text>
                     </TouchableOpacity>
                     <View style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>地址</Text>
                         <View style={{flex:1,height:39}}>
-                            <TextInput value={this.props.memberInfo.GestAddress}
+                            <TextInput value={this.state.memberAddress}
                                        editable={this.state.enable}
                                        underlineColorAndroid={'transparent'}
                                        keyboardType={'default'}
@@ -300,7 +374,7 @@ class MemberDetails extends Component {
                     <View style={styles.inputViewStyle}>
                         <Text style={{width:100,}}>备注</Text>
                         <View style={{flex:1,height:39}}>
-                            <TextInput value={this.props.memberInfo.Remark}
+                            <TextInput value={this.state.memberRemark}
                                        editable={this.state.enable}
                                        underlineColorAndroid={'transparent'}
                                        keyboardType={'default'}
@@ -369,7 +443,7 @@ class MemberDetails extends Component {
                     pickerCancelBtnText={'取消'}
                     ref={picker => this.pickerSex = picker}
                     pickerData={['男','女','其他']}
-                    selectedValue={this.props.memberInfo.GestSex=='DM00001'?'男':'女'}
+                    selectedValue={this.state.memberSex=='DM00001'?'男':'女'}
                     onPickerDone={(sex)=>{
                         this.setState({
                             memberSex: sex,

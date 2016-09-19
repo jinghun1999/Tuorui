@@ -179,8 +179,8 @@ class VaccineListInfo extends Component {
                             style={{flex:1, fontSize:16, color:'#27408B',fontWeight:'bold'}}>会员名: {vacc.GestName}</Text>
                     </View>
                     <View style={{flexDirection:'row',marginTop:3}}>
-                        <Text style={{flex:1,}}>宠物名: {vacc.PetName}</Text>
-                        <Text style={{flex:1, textAlign:'right' }}>疫苗名称: {vacc.ItemName}</Text>
+                        <Text style={{width:100,}}>宠物名: {vacc.PetName}</Text>
+                        <Text style={{flex:1, }}>疫苗名称: {vacc.ItemName}</Text>
                     </View>
                 </View>
                 <View style={{width:20,marginLeft:10, alignItems:'center', justifyContent:'center'}}>
@@ -229,16 +229,16 @@ class VaccineListInfo extends Component {
     render() {
         let body = (<Loading type={'text'}/>);
         if (this.state.loaded) {
-            body = (
-                <ListView dataSource={this.state.ds.cloneWithRows(this.state.vaccine)}
-                          renderRow={this._onRenderRow.bind(this)}
-                          initialListSize={15}
-                          pageSize={15}
-                          onEndReached={this._onEndReached.bind(this)}
-                          enableEmptySections={true}
-                          renderFooter={this._renderFooter.bind(this)}
-                />
-            )
+                body = (
+                    <ListView dataSource={this.state.ds.cloneWithRows(this.state.vaccine)}
+                              renderRow={this._onRenderRow.bind(this)}
+                              initialListSize={15}
+                              pageSize={15}
+                              onEndReached={this._onEndReached.bind(this)}
+                              enableEmptySections={true}
+                              renderFooter={this._renderFooter.bind(this)}
+                    />
+                )
         }
         return (
             <View style={styles.container}>

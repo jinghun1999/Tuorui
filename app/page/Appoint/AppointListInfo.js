@@ -131,8 +131,8 @@ class AppointListInfo extends React.Component {
                         <Text style={{fontSize:16, color:'#27408B',fontWeight:'bold'}}>预约医生:{a.DoctorName}</Text>
                     </View>
                     <View style={{flexDirection:'row',marginTop:3}}>
-                        <Text style={{flex: 1,}}>预约人: {a.GestName}</Text>
-                        <Text style={{flex:1,textAlign:'right'}}>预约时间:{time}</Text>
+                        <Text style={{width:150}}>预约人: {a.GestName}</Text>
+                        <Text style={{flex:1,}}>预约时间:{time}</Text>
                     </View>
                 </View>
                 <View style={{width:20,alignItems:'center', justifyContent:'center'}}>
@@ -143,22 +143,32 @@ class AppointListInfo extends React.Component {
     }
 
     render() {
-        let body = (
-            <Loading type="text"/>
-        );
+        let body = <Loading type="text"/>
         if (this.state.loaded) {
-            body = (
-                <ListView dataSource={this.state.ds.cloneWithRows(this.state.appointSource)}
-                          enableEmptySections={true}
-                          renderRow={this._onRenderRow.bind(this)}
-                />
-            );
+            if(this.state.appointSource!=null){
+                body = (
+                    <ListView dataSource={this.state.ds.cloneWithRows(this.state.appointSource)}
+                              enableEmptySections={true}
+                              initialListSize={5}
+                              pageSize={5}
+                              renderRow={this._onRenderRow.bind(this)}
+                    />
+                )
+            }else{
+                body = (
+                    <View style={styles.noResultContainer}>
+                        <View style={styles.noResult}>
+                            <Text>暂无筛选数据，请修改查询条件后重试！</Text>
+                        </View>
+                    </View>
+                )
+            }
         }
         return (
             <View style={styles.container}>
                 <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
                 <View style={styles.searchRow}>
-                    <Text>预约时间  </Text>
+                    <Text>预约时间</Text>
                     <DatePicker
                         date={this.state.dateFrom}
                         mode="date"
@@ -230,6 +240,19 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 5,
+    },
+    noResultContainer: {
+        flex: 1,
+        flexDirection: 'row',
+    },
+    noResult: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#FFFFCC',
+        margin: 10,
+        height: 50,
+        padding: 20,
     },
 })
 module.exports = AppointListInfo;
