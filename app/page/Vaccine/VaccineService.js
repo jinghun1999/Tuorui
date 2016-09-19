@@ -46,7 +46,7 @@ class VaccineService extends Component {
 
     _onBack() {
         let _this = this;
-        const {navigator}=_this.props;
+        const {navigator} =_this.props;
         if (navigator) {
             navigator.pop();
         }

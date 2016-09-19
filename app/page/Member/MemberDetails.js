@@ -261,7 +261,7 @@ class MemberDetails extends Component {
                                       marginLeft: 0
                                     },
                                     dateInput: {
-                                      marginRight: 20,
+                                      marginRight: 25,
                                       borderWidth:0,
                                     },
                                   }}

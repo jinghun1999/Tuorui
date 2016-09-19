@@ -252,7 +252,9 @@ class VaccineListInfo extends Component {
     }
 }
 const styles = StyleSheet.create({
-    container: {flex:1,},
+    container: {
+        flex:1,
+    },
     row: {
         flexDirection: 'row',
         padding: 10,
