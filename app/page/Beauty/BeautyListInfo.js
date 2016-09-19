@@ -133,7 +133,7 @@ class BeautyListInfo extends React.Component {
                     headTitle: '新增服务',
                     canEdit: true,
                     getResult: function () {
-                        _this._onFetchData(1, false);
+                        _this.fetchData(1, false);
                     }
                 }
             })
@@ -152,7 +152,7 @@ class BeautyListInfo extends React.Component {
                     canEdit: false,
                     beautyInfo: beauty,
                     getResult: function () {
-                        //_this._onFetchData(1, false);
+                        _this.fetchData(1, false);
                     }
                 }
             })

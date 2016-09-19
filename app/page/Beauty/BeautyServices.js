@@ -277,7 +277,7 @@ class BeautyServices extends React.Component {
                 details: beautyItems,
             }
             let header = {
-                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, user.pwd, hos.hospital.Registration, user.user.Token)
+                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
             };
             ////save http://petservice.tuoruimed.com/service/Api/Service/AddList
             NetUtil.postJson(CONSTAPI.HOST + '/Service/AddList', postjson, header, function (data) {
@@ -342,7 +342,7 @@ class BeautyServices extends React.Component {
                 </View>
                 <View style={styles.inputViewStyle}>
                     <Text style={{width:100,}}>总金额</Text>
-                    <Text style={{flex:1}}>￥{this.state.totalAmount.toString()}</Text>
+                    <Text style={{flex:1}}>¥{this.state.totalAmount.toString()}</Text>
                 </View>
                 <View style={styles.titleStyle}>
                     <Text style={styles.titleText}>美容项目</Text>
@@ -360,7 +360,7 @@ class BeautyServices extends React.Component {
         return (
             <TouchableOpacity style={styles.row} onPress={()=>this._onBeautyDetails(beauty)}>
                 <Text style={{flex: 1,fontSize:14, fontWeight:'bold'}}>{beauty.ItemName}</Text>
-                <Text style={{flex: 1,fontSize:14,}}>单价: ￥{beauty.SellPrice}</Text>
+                <Text style={{flex: 1,fontSize:14,}}>单价: ¥{beauty.SellPrice}</Text>
             </TouchableOpacity>
         )
     }
@@ -392,7 +392,7 @@ class BeautyServices extends React.Component {
                 selectedValue={this.state.serviceName}
                 onPickerDone={(text)=>{
                  this.setState({
-                     serviceName: text,
+                     serviceName: text!==null?text[0]:'',
                  })
                  }}
             />

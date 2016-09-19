@@ -207,10 +207,10 @@ class VaccineService extends Component {
                     "MobilePhone":_this.state.petSource.MobilePhone,
                     "ItemName":_vaccine[i].ItemName,
                     "ItemCode":_vaccine[i].ItemCode,
-                    "ItemCost":_vaccine[i].SellPrice,
+                    "ItemCost":_vaccine[i].SellPrice?_vaccine[i].SellPrice:_vaccine[i].TotalCost,
                     "ItemStandard":_vaccine[i].ItemStandard,
                     "EstimateTime":null,
-                    "FactShootTime":Util.getTime(),
+                    "FactShootTime":"2016-09-19T16:20:08.6973497+08:00",
                     "ShootLevelNum":null,
                     "ShootProcess":"首免",
                     "IntervalDay":null,
@@ -236,62 +236,18 @@ class VaccineService extends Component {
                     "AssistantDoctorID":null,
                     "AssistantDoctorName":"",
                     "ItemNum":_vaccine[i].ItemCountNum,
-                    "TotalCost":_vaccine[i].SellPrice,
+                    "TotalCost":_vaccine[i].SellPrice?_vaccine[i].SellPrice:_vaccine[i].TotalCost,
                     "Sign":null,
                     "EntID":"00000000-0000-0000-0000-000000000000"
                 };
                 vaccineItems.push(items);
             }
-            var item ={
-                "ID":"00000000-0000-0000-0000-000000000000",
-                "VaccineGroupCode":"YM2016091900004",
-                "PetName":"卡卡",
-                "GestID":"875f40b2-c40f-4ef5-935e-ceba855fa491",
-                "GestName":"zutter1",
-                "GestCode":"VIP0000000152",
-                "PetID":"98e75159-5ce9-4965-8692-c85a23b8a1fa",
-                "MobilePhone":"13108181988",
-                "ItemName":"英特威狂犬疫苗",
-                "ItemCode":"WF0000000069",
-                "ItemCost":200,
-                "ItemStandard":"DM00050",
-                "EstimateTime":null,
-                "FactShootTime":"2016-09-19T14:08:08.6973497+08:00",
-                "ShootLevelNum":null,
-                "ShootProcess":"首免",
-                "IntervalDay":null,
-                "AddType":null,
-                "Remark":null,
-                "PaidStatus":"SM00040",
-                "WarnStatus":"SM00027",
-                "ShootStatus":"SM00029",
-                "PaidTime":null,
-                "CreatedBy":null,
-                "CreatedOn":"0001-01-01T00:00:00",
-                "ModifiedBy":null,
-                "ModifiedOn":"0001-01-01T00:00:00",
-                "IsDeleted":0,
-                "BatchNumber":"",
-                "OutDateTime":null,
-                "ManufacturerCode":"JXS0000000003",
-                "ManufacturerName":"美国瑞普斯生物药品集团有限公司",
-                "ExecutorID":"bcefd6b4-b024-4fe7-96c3-4d8e198d113e",
-                "ExecutorName":"阳涛",
-                "DoctorID":null,
-                "DoctorName":null,
-                "AssistantDoctorID":null,
-                "AssistantDoctorName":"",
-                "ItemNum":1,
-                "TotalCost":200,
-                "Sign":null,
-                "EntID":"00000000-0000-0000-0000-000000000000"
-            }
             let postjson = {
                 vaccineGroupCode: vaccineGroupCode,
                 list: vaccineItems,
-            }
+            };
             let header = {
-                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, user.pwd, hos.hospital.Registration, user.user.Token)
+                'Authorization': NetUtil.headerAuthorization(user.user.Mobile,hos.hospital.Registration, user.user.Token)
             };
             ////save http://test.tuoruimed.com/service/Api/Medic_Vaccine/AddOrUpdate
             NetUtil.postJson(CONSTAPI.HOST + '/Medic_Vaccine/AddOrUpdate', postjson, header, function (data) {
@@ -375,39 +331,39 @@ class VaccineService extends Component {
                     <Text style={styles.titleText}>宠物信息</Text>
                 </View>
                 <View style={styles.inputViewStyle}>
-                    <Text style={{width:100,}}>会员编号</Text>
-                    <Text style={{flex:1}}>{this.state.petSource.GestCode}</Text>
+                    <Text style={styles.textTitle}>会员编号</Text>
+                    <Text style={{flex:1,color:'black'}}>{this.state.petSource.GestCode}</Text>
                 </View>
                 <View style={styles.inputViewStyle}>
-                    <Text style={{width:100,}}>会员名称</Text>
-                    <Text style={{flex:1}}>{this.state.petSource.GestName}</Text>
+                    <Text style={styles.textTitle}>会员名称</Text>
+                    <Text style={{flex:1,color:'black'}}>{this.state.petSource.GestName}</Text>
                 </View>
                 <TouchableOpacity onPress={this._onChoosePet.bind(this)}
                                   style={styles.inputViewStyle}>
-                    <Text style={{width:100,}}>宠物名称</Text>
-                    <Text style={{flex:1}}>{this.state.petSource.PetName}</Text>
+                    <Text style={styles.textTitle}>宠物名称</Text>
+                    <Text style={{flex:1,color:'black'}}>{this.state.petSource.PetName}</Text>
                     <Icon name={'angle-right'} size={20} color={'#ccc'} style={{marginRight:10}}/>
                 </TouchableOpacity>
                 <View style={styles.titleStyle}>
                     <Text style={styles.titleText}>服务信息</Text>
                 </View>
                 <View style={styles.inputViewStyle}>
-                    <Text style={{width:100,}}>组号</Text>
-                    <Text style={{flex:1}}>{this.state.VaccineGroupCode}</Text>
+                    <Text style={styles.textTitle}>组号</Text>
+                    <Text style={{flex:1,color:'black'}}>{this.state.VaccineGroupCode}</Text>
                 </View>
                 <TouchableOpacity onPress={this._onChoosePerson.bind(this)}
                                   style={styles.inputViewStyle}>
-                    <Text style={{width:100,}}>执行人</Text>
-                    <Text style={{flex:1}}>{this.state.executorName}</Text>
+                    <Text style={styles.textTitle}>执行人</Text>
+                    <Text style={{flex:1,color:'black'}}>{this.state.executorName}</Text>
                     <Icon name={'angle-right'} size={20} color={'#ccc'} style={{marginRight:10}}/>
                 </TouchableOpacity>
                 <View style={styles.inputViewStyle}>
-                    <Text style={{width:100,}}>数量</Text>
-                    <Text style={{flex:1}}>{this.state.totalNum.toString()}</Text>
+                    <Text style={styles.textTitle}>数量</Text>
+                    <Text style={{flex:1,color:'black'}}>{this.state.totalNum.toString()}</Text>
                 </View>
                 <View style={styles.inputViewStyle}>
-                    <Text style={{width:100,}}>金额</Text>
-                    <Text style={{flex:1}}>{this.state.totalAmount.toString()}</Text>
+                    <Text style={styles.textTitle}>金额</Text>
+                    <Text style={{flex:1,color:'black'}}>¥{this.state.totalAmount.toString()}</Text>
                 </View>
                 <View style={styles.titleStyle}>
                     <Text style={styles.titleText}>疫苗信息</Text>
@@ -422,14 +378,14 @@ class VaccineService extends Component {
     }
 
     _onVaccineDetails(vaccine) {
-        alert(vaccine.ItemName);
+        return false;
     }
 
     _onRenderRow(vaccine) {
         return (
             <TouchableOpacity style={styles.row} onPress={()=>this._onVaccineDetails(vaccine)}>
                 <Text style={{flex: 1,fontSize:14, fontWeight:'bold'}}>{vaccine.ItemName}</Text>
-                <Text style={{flex: 1,fontSize:14,}}>单价: ￥{vaccine.SellPrice}</Text>
+                <Text style={{flex: 1,fontSize:14,}}>单价: ￥{vaccine.SellPrice?vaccine.SellPrice:vaccine.TotalCost}</Text>
             </TouchableOpacity>
         )
     }
@@ -466,13 +422,22 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#e7e7e7',
     },
+    textTitle:{
+        width:100,
+        fontSize:16,
+    },
     titleStyle: {
-        padding: 5,
-        paddingLeft: 10,
-        flexDirection: 'row',
+        margin: 5,
+        borderLeftWidth: 3,
+        borderLeftColor: '#CC0033',
+        paddingLeft: 5,
+        flexDirection:'row',
     },
     titleText: {
-        marginLeft: 10, fontSize: 16, flex: 1,
+        marginLeft: 10,
+        fontSize: 16,
+        flex: 1,
+        color:'#CC0033',
     },
     inputViewStyle: {
         flex: 1,

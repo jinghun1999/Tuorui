@@ -38,84 +38,68 @@ class AppointDetails extends React.Component {
             <View style={styles.container}>
                 <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
                 <View style={styles.titleStyle}>
-                    <Text style={{color:'#fff',marginLeft:10,fontSize:16,}}>宠物信息</Text>
+                    <Text style={styles.titleText}>宠物信息</Text>
                 </View>
                 <View style={styles.inputViewStyle}>
-                    <Text style={{width:100,}}>宠物名称</Text>
-                    <TextInput value={this.props.appointInfo.PetName}
-                               editable={this.state.enable}
-                               underlineColorAndroid={'transparent'}
-                               keyboardType={'default'}
-                               style={{height: 40, borderWidth:0, flex:1}}
-                    />
+                    <Text style={styles.textTitle}>宠物名称</Text>
+                    <Text style={{flex:1,color:'black'}}>{this.props.appointInfo.PetName}</Text>
                 </View>
                 <View style={styles.titleStyle}>
-                    <Text style={{color:'#fff',marginLeft:10,fontSize:16,}}>预约信息</Text>
+                    <Text style={styles.titleText}>预约信息</Text>
                 </View>
                 <View style={styles.inputViewStyle}>
-                    <Text style={{width:100,}}>预约人</Text>
-                    <TextInput value={this.props.appointInfo.GestName}
-                               editable={this.state.enable}
-                               underlineColorAndroid={'transparent'}
-                               keyboardType={'default'}
-                               style={{height: 40, borderWidth:0, flex:1}}
-                    />
+                    <Text style={styles.textTitle}>预约人</Text>
+                    <Text style={{flex:1,color:'black'}}>{this.props.appointInfo.GestName}</Text>
                 </View>
                 <View style={styles.inputViewStyle}>
-                    <Text style={{width:100,}}>预约医生</Text>
-                    <TextInput value={this.props.appointInfo.DoctorName}
-                               editable={this.state.enable}
-                               underlineColorAndroid={'transparent'}
-                               keyboardType={'default'}
-                               style={{height: 40, borderWidth:0, flex:1}}
-                    />
+                    <Text style={styles.textTitle}>预约医生</Text>
+                    <Text style={{flex:1,color:'black'}}>{this.props.appointInfo.DoctorName}</Text>
                 </View>
                 <View style={styles.inputViewStyle}>
-                    <Text style={{width:100,}}>预约开始时间</Text>
-                    <TextInput value={starTime}
-                               editable={this.state.enable}
-                               underlineColorAndroid={'transparent'}
-                               keyboardType={'default'}
-                               style={{height: 40, borderWidth:0, flex:1}}
-                    />
+                    <Text style={styles.textTitle}>预约开始时间</Text>
+                    <Text style={{flex:1,color:'black'}}>{starTime}</Text>
                 </View>
                 <View style={styles.inputViewStyle}>
-                    <Text style={{width:100,}}>预约结束时间</Text>
-                    <TextInput value={endTime}
-                               editable={this.state.enable}
-                               underlineColorAndroid={'transparent'}
-                               keyboardType={'default'}
-                               style={{height: 40, borderWidth:0, flex:1}}
-                    />
+                    <Text style={styles.textTitle}>预约结束时间</Text>
+                    <Text style={{flex:1,color:'black'}}>{endTime}</Text>
                 </View>
                 <View style={styles.inputViewStyle}>
-                    <Text style={{width:100,}}>登记时间</Text>
-                    <TextInput value={regTime}
-                               editable={this.state.enable}
-                               underlineColorAndroid={'transparent'}
-                               keyboardType={'default'}
-                               style={{height: 40, borderWidth:0, flex:1}}
-                    />
+                    <Text style={styles.textTitle}>登记时间</Text>
+                    <Text style={{flex:1,color:'black'}}>{regTime}</Text>
                 </View>
             </View>
         )
     }
 }
 const styles = StyleSheet.create({
-    container: {},
+    container: {
+        flex: 1,
+        backgroundColor: '#e7e7e7',
+    },
+    textTitle:{
+        width:100,
+        fontSize:16,
+    },
     titleStyle: {
-        margin: 2,
-        flexDirection: 'row',
-        backgroundColor: '#ccc',
+        margin: 5,
+        borderLeftWidth: 3,
+        borderLeftColor: '#CC0033',
+        paddingLeft: 5,
+        flexDirection:'row',
+    },
+    titleText: {
+        marginLeft: 10,
+        fontSize: 16,
+        flex: 1,
+        color:'#CC0033',
     },
     inputViewStyle: {
         flex: 1,
         flexDirection: 'row',
-        marginTop: 5,
-        marginLeft: 10,
-        height: 40,
+        padding: 10,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: '#fff',
         borderBottomColor: '#ccc',
         borderBottomWidth: StyleSheet.hairlineWidth,
     },
