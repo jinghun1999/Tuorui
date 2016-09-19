@@ -58,8 +58,8 @@ class ReportIndex extends React.Component {
                     <TouchableHighlight style={styles.touch}
                                         onPress={this._onPress.bind(this, Income, 'Income', '营业收入统计')}
                                         underlayColor={'#CCCC99'}>
-                        <View style={{flexDirection:'row', alignItems:'center'}}>
-                            <Icon name={'money'} size={30} color={'#0099CC'}/>
+                        <View style={styles.btninner}>
+                            <Icon name={'money'} size={30} style={{width:40}} color={'#FF9966'}/>
                             <Text style={styles.touchText}>营业收入统计</Text>
                             <Icon name={'angle-right'} size={20} color={'#ccc'}/>
                         </View>
@@ -67,8 +67,8 @@ class ReportIndex extends React.Component {
                     <TouchableHighlight style={styles.touch}
                                         onPress={this._onPress.bind(this, StockCapital, 'StockCapital', '库存资产统计')}
                                         underlayColor={'#CCCC99'}>
-                        <View style={{flexDirection:'row', alignItems:'center'}}>
-                            <Icon name={'database'} size={30} color={'#0099CC'}/>
+                        <View style={styles.btninner}>
+                            <Icon name={'database'} size={30} style={{width:40}} color={'#99CCFF'}/>
                             <Text style={styles.touchText}>库存资产统计</Text>
                             <Icon name={'angle-right'} size={20} color={'#ccc'}/>
                         </View>
@@ -77,8 +77,8 @@ class ReportIndex extends React.Component {
                                         onPress={this._onPress.bind(this, GoodSales, 'GoodSales', '商品销售统计')}
                                         underlayColor={'#CCCC99'}>
 
-                        <View style={{flexDirection:'row', alignItems:'center'}}>
-                            <Icon name={'cart-plus'} size={30} color={'#0099CC'}/>
+                        <View style={styles.btninner}>
+                            <Icon name={'cart-plus'} size={30} style={{width:40}} color={'#FF9933'}/>
                             <Text style={styles.touchText}>商品销售统计</Text>
                             <Icon name={'angle-right'} size={20} color={'#ccc'}/>
                         </View>
@@ -98,17 +98,23 @@ const styles = StyleSheet.create({
     touch: {
         flex: 1,
         height: 50,
-        justifyContent:'center',
-        padding: 10,
+        justifyContent: 'center',
+        paddingLeft: 20,
+        paddingRight:20,
         backgroundColor: '#fff',
-        borderBottomWidth:StyleSheet.hairlineWidth,
-        borderBottomColor:'#ccc',
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderBottomColor: '#ccc',
+    },
+    btninner: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent:'center'
     },
     touchText: {
-        flex:1,
-        color: '#0099CC',
+        flex: 1,
+        color: '#999',
         fontSize: 18,
-        marginLeft:20,
+        marginLeft: 20,
     }
 });
 

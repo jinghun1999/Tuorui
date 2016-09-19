@@ -182,7 +182,7 @@ class Income extends React.Component {
 
     render() {
         let searchBox = (<View style={{flexDirection:'row', alignItems:'center', backgroundColor:'#fff'}}>
-            <Text style={{marginLeft:10}}>从</Text>
+            <Text style={{marginLeft:10}}>查询日期从</Text>
             <DatePicker
                 date={this.state.dateFrom}
                 mode="date"
@@ -193,7 +193,7 @@ class Income extends React.Component {
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
                 showIcon={false}
-                style={{width:80}}
+                style={{width:100}}
                 customStyles={{
                     dateInput: {
                       height:30,
@@ -212,7 +212,7 @@ class Income extends React.Component {
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
                 showIcon={false}
-                style={{width:80}}
+                style={{width:100}}
                 customStyles={{
                     dateInput: {
                       height:30,

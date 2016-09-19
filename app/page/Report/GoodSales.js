@@ -109,9 +109,9 @@ class GoodSales extends React.Component {
 
     render() {
         let searchBox = (<View style={styles.searchBox}>
-            <View style={{flexDirection:'column'}}>
-                <View style={{flexDirection:'row', alignItems:'center'}}>
-                    <Text style={{marginLeft:10}}>从</Text>
+            <View style={{flexDirection:'column', flex:1,}}>
+                <View style={{flexDirection:'row', flex:1, alignItems:'center'}}>
+                    <Text style={{marginLeft:10}}>查询日期从</Text>
                     <DatePicker
                         date={this.state.dateFrom}
                         mode="date"
@@ -122,7 +122,7 @@ class GoodSales extends React.Component {
                         confirmBtnText="Confirm"
                         cancelBtnText="Cancel"
                         showIcon={false}
-                        style={{width:80}}
+                        style={{width:100}}
                         customStyles={{
                             dateInput: {
                               height:30,
@@ -140,7 +140,7 @@ class GoodSales extends React.Component {
                         confirmBtnText="Confirm"
                         cancelBtnText="Cancel"
                         showIcon={false}
-                        style={{width:80}}
+                        style={{width:100}}
                         customStyles={{
                             dateInput: {
                               height:30,
@@ -148,21 +148,23 @@ class GoodSales extends React.Component {
                             },
                           }} onDateChange={(date) => {this.setState({dateTo: date})}}/>
                 </View>
-                <View style={styles.input}>
-                    <TextInput
-                        style={{height:35,flex:1,borderWidth:0}}
-                        onChangeText={(text) => this.setState({kw: text})}
-                        value={this.state.kw}
-                        underlineColorAndroid={'transparent'}
-                        placeholder={'请输入关键字'}/>
+                <View style={{flexDirection:'row', alignItems:'center', flex:1,}}>
+                    <View style={styles.input}>
+                        <TextInput
+                            style={{height:35,flex:1,borderWidth:0}}
+                            onChangeText={(text) => this.setState({kw: text})}
+                            value={this.state.kw}
+                            underlineColorAndroid={'transparent'}
+                            placeholder={'商品名/条码/拼音码'}/>
+                    </View>
+                    <TouchableHighlight
+                        underlayColor='#999933'
+                        style={styles.searchBtn}
+                        onPress={this._search.bind(this)}>
+                        <Text style={{color:'#fff'}}>查询</Text>
+                    </TouchableHighlight>
                 </View>
             </View>
-            <TouchableHighlight
-                underlayColor='#FF0033'
-                style={styles.searchBtn}
-                onPress={this._search.bind(this)}>
-                <Text style={{color:'#fff'}}>查询</Text>
-            </TouchableHighlight>
         </View>)
         if (this.state.loaded) {
             return (
@@ -187,7 +189,9 @@ class GoodSales extends React.Component {
                                                 <Text style={styles.sumTitle}>总金额</Text>
                                             </View>
                                         </View>
-                                        <View style={styles.hd}></View>
+                                        <View style={styles.hd}>
+                                            <Text style={{color:'#CC0033'}}>销售记录</Text>
+                                        </View>
                                     </View>
                                   }
                                   initialListSize={15}
@@ -287,10 +291,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff'
     },
     searchBtn: {
-        flex: 1,
         marginLeft: 10,
         marginRight: 10,
-        height: 60,
+        height: 30,
+        width: 50,
+        borderRadius: 5,
         backgroundColor: '#0099CC',
         justifyContent: 'center',
         alignItems: 'center',

@@ -80,6 +80,29 @@ class SaleDetail extends Component {
                     });
                 }
             });
+            /*postdata = [{
+             "Childrens": null,
+             "Field": "SettleAccountsID",
+             "Title": null,
+             "Operator": {"Name": "=", "Title": "等于", "Expression": null},
+             "DataType": 0,
+             "Value": _this.state.sale.ID,
+             "Conn": 0
+             }, {
+             "Childrens": null,
+             "Field": "IsDeleted",
+             "Title": null,
+             "Operator": {"Name": "=", "Title": "等于", "Expression": null},
+             "DataType": 0,
+             "Value": "0",
+             "Conn": 1
+             }];
+             NetUtil.postJson(CONSTAPI.HOST + '/GestPaidRecord/GetModelList', postdata, header, function (data) {
+             if (data.Sign && data.Message != null) {
+             alert(JSON.stringify(data.Message));
+             } else {
+             }
+             });*/
         }, function (err) {
 
         });
@@ -111,30 +134,26 @@ class SaleDetail extends Component {
             <View style={styles.container}>
                 <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
                 <View style={styles.hd}>
-                    <Text style={{color:'#CC0033'}}>基本信息</Text>
+                    <Text style={styles.hdText}>基本信息</Text>
                 </View>
                 <View style={styles.itemBox}>
-                    <View style={{width:100,}}><Text style={{fontSize:16}}>会员</Text></View>
+                    <View style={styles.itemTitle}><Text style={styles.titleText}>会员</Text></View>
                     <View style={styles.itemVal}><Text>{this.state.sale.GestName}</Text></View>
                 </View>
                 <View style={styles.itemBox}>
-                    <View style={{width:100,}}><Text style={{fontSize:16}}>时间</Text></View>
+                    <View style={styles.itemTitle}><Text style={styles.titleText}>时间</Text></View>
                     <View style={styles.itemVal}><Text>{this.state.sale.CreatedOn.replace('T', ' ')}</Text></View>
                 </View>
                 <View style={styles.itemBox}>
-                    <View style={{width:100,}}><Text style={{fontSize:16}}>明细数</Text></View>
+                    <View style={styles.itemTitle}><Text style={styles.titleText}>明细数</Text></View>
                     <View style={styles.itemVal}><Text>{this.state.sale.TotalNum}</Text></View>
                 </View>
                 <View style={styles.itemBox}>
-                    <View style={{width:100,}}><Text style={{fontSize:16}}>总价</Text></View>
+                    <View style={styles.itemTitle}><Text style={styles.titleText}>总价</Text></View>
                     <View style={styles.itemVal}><Text>¥{this.state.sale.TotalCost}</Text></View>
                 </View>
-                <View style={styles.itemBox}>
-                    <View style={{width:100,}}><Text style={{fontSize:16}}>折扣</Text></View>
-                    <View style={styles.itemVal}><Text>¥{this.state.sale.Discount}</Text></View>
-                </View>
                 <View style={styles.hd}>
-                    <Text style={{color:'#CC0033'}}>商品明细</Text>
+                    <Text style={styles.hdText}>商品明细</Text>
                 </View>
                 {body}
             </View>
@@ -159,6 +178,16 @@ const styles = StyleSheet.create({
         borderLeftWidth: 3,
         borderLeftColor: '#CC0033',
         paddingLeft: 5,
+    },
+    hdText: {
+        color: '#CC0033'
+    },
+    itemTitle: {
+        width: 100,
+    },
+    titleText: {
+        fontSize: 16,
+        color: '#000'
     },
     itemBox: {
         flexDirection: 'row',

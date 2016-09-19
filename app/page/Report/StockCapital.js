@@ -103,7 +103,7 @@ class StockCapital extends React.Component {
         return (
             <View style={{backgroundColor:'#e7e7e7'}}>
                 <View style={styles.hd}>
-                    <Text style={{color:'#0099CC'}}>资产汇总</Text>
+                    <Text style={{color:'#CC0033'}}>资产汇总</Text>
                 </View>
                 <View style={styles.outerRow}>
                     <View style={styles.sumRow}>
@@ -126,7 +126,7 @@ class StockCapital extends React.Component {
                     </View>
                 </View>
                 <View style={styles.hd}>
-                    <Text style={{color:'#0099CC'}}>营收明细</Text>
+                    <Text style={{color:'#CC0033'}}>营收明细</Text>
                 </View>
             </View>
         )
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     hd: {
         margin: 5,
         borderLeftWidth: 3,
-        borderLeftColor: '#0099CC',
+        borderLeftColor: '#CC0033',
         paddingLeft: 5,
     },
     outerRow: {

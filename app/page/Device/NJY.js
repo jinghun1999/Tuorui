@@ -22,7 +22,7 @@ class NJY extends Component {
         super(props);
         this.state = {
             loaded: false,
-            clues:'您绑定的尿检仪设备号为',
+            clues: '您绑定的尿检仪设备号为',
             deviceId: null,
             startDate: Util.GetDateStr(-1),
             endDate: Util.GetDateStr(0),
@@ -38,8 +38,8 @@ class NJY extends Component {
     }
 
     _search() {
-        let _this=this;
-        if(_this.state.deviceId!=null) {
+        let _this = this;
+        if (_this.state.deviceId != null) {
             storage.getBatchData([{
                 key: 'USER',
                 autoSync: false,
@@ -149,7 +149,7 @@ class NJY extends Component {
     render() {
         let body = (<Loading type={'text'}/>);
         if (this.state.loaded) {
-            if (this.state.dataSource!=null) {
+            if (this.state.dataSource != null) {
                 body = (<View style={{backgroundColor: '#fff', flex: 1, marginBottom:10}}>
                         <ListView dataSource={this.state.ds.cloneWithRows(this.state.dataSource)}
                                   renderRow={this._onRenderRow.bind(this)}
@@ -162,10 +162,8 @@ class NJY extends Component {
             }
             else {
                 body = (
-                    <View style={styles.noResultContainer}>
-                        <View style={styles.noResult}>
-                            <Text>暂无筛选数据，请修改查询条件后重试！</Text>
-                        </View>
+                    <View style={styles.noResult}>
+                        <Text>无筛选结果,请修改检测时间后重试</Text>
                     </View>
                 )
             }
@@ -174,11 +172,11 @@ class NJY extends Component {
             <View style={{flex:1, flexDirection:'column'}}>
                 <Head title={this.props.headTitle} canAdd={false} canBack={true}
                       onPress={this._onBack.bind(this)}/>
-                <View style={{backgroundColor:'#CCFFFF', padding:10, height:30, justifyContent:'center'}}>
+                <View style={{backgroundColor:'#e7e7e7', padding:10, height:30, justifyContent:'center'}}>
                     <Text>{this.state.clues}<Text style={{fontWeight:'bold'}}>{this.state.deviceId}</Text></Text>
                 </View>
-                <View style={{margin:10,flexDirection:'row',alignItems:'center', padding:10,}}>
-                    <Text>从</Text>
+                <View style={{flexDirection:'row',alignItems:'center', padding:10,}}>
+                    <Text>检测时间从</Text>
                     <DatePicker
                         date={this.state.startDate}
                         mode="date"
@@ -191,6 +189,12 @@ class NJY extends Component {
                         showIcon={false}
                         enabled={this.state.enable}
                         style={{width:100}}
+                        customStyles={{
+                            dateInput: {
+                              height:30,
+                              borderWidth:StyleSheet.hairlineWidth,
+                            },
+                          }}
                         onDateChange={(date) => {this.setState({startDate: date})}}/>
                     <Text>到</Text>
                     <DatePicker
@@ -205,6 +209,12 @@ class NJY extends Component {
                         showIcon={false}
                         enabled={this.state.enable}
                         style={{width:100}}
+                        customStyles={{
+                            dateInput: {
+                              height:30,
+                              borderWidth:StyleSheet.hairlineWidth,
+                            },
+                          }}
                         onDateChange={(date) => {this.setState({endDate: date})}}/>
                     <TouchableHighlight
                         underlayColor='#FF0033'
@@ -219,24 +229,21 @@ class NJY extends Component {
     }
 }
 const styles = StyleSheet.create({
-    noResultContainer: {
-        flex: 1,
-        flexDirection: 'row',
-    },
     noResult: {
-        flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#FFFFCC',
-        margin: 10,
-        height: 50,
-        padding: 20,
+        marginLeft:10,
+        marginRight:10,
+        borderTopWidth:1,
+        borderTopColor:'#e7e7e7',
+        padding: 10,
     },
     searchBtn: {
         marginLeft: 5,
         marginRight: 5,
-        flex: 1,
-        height: 40,
+        height: 30,
+        width: 50,
+        borderRadius: 5,
         backgroundColor: '#0099CC',
         justifyContent: 'center',
         alignItems: 'center',

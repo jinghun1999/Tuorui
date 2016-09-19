@@ -31,7 +31,7 @@ class Index extends React.Component {
     }
 
     handleNetConnect(isConnected) {
-        console.log('test', (isConnected ? 'online' : 'offline'));
+        //console.log('test', (isConnected ? 'online' : 'offline'));
     }
 
     shouldComponentUpdate() {
