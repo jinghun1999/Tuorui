@@ -142,12 +142,7 @@ class HomePage extends Component {
 
     _onRefresh() {
         this.setState({isRefreshing: true});
-        setTimeout(() => {
-            this._fetchData(1);
-            this.setState({
-                isRefreshing: false,
-            });
-        }, 1);
+        this._fetchData(1);
     }
 
     _infoClick(Info) {
