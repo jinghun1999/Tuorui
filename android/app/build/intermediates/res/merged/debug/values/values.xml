@@ -222,7 +222,7 @@
     <string name="abc_toolbar_collapse_description">Collapse</string>
     <!-- From: file:/D:/Work/GitHub/Tuorui/android/app/src/main/res/values/strings.xml -->
     <eat-comment/>
-    <string name="app_name">拓瑞医生</string>
+    <string name="app_name">拓瑞App</string>
     <!-- From: file:/D:/Work/GitHub/Tuorui/android/app/build/intermediates/exploded-aar/com.facebook.react/react-native/0.32.0/res/values/values.xml -->
     <eat-comment/>
     <string name="catalyst_copy_button" project="catalyst" translatable="false">Copy</string>
