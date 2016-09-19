@@ -245,13 +245,14 @@ class VaccineListInfo extends Component {
                 <Head title={this.props.headTitle} canAdd={true} canBack={true} edit="新增"
                       onPress={this._onBack.bind(this)}
                       editInfo={this._addInfo.bind(this)}/>
+
                 {body}
             </View>
         )
     }
 }
 const styles = StyleSheet.create({
-    container: {},
+    container: {flex:1,},
     row: {
         flexDirection: 'row',
         padding: 10,
