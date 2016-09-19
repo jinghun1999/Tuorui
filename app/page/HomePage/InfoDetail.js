@@ -144,7 +144,7 @@ class DrugDetails extends React.Component {
 
 const styles = StyleSheet.create({
     webView: {
-        backgroundColor: 'red',
+        backgroundColor: '#fff',
         flex: 1,
         width: Width,
     },

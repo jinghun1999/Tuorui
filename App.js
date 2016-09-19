@@ -75,7 +75,7 @@ class App extends Component {
             });
         }).catch(err => {
             _this.setState({hosloaded: true,});
-            alert('您还没有选择默认医院' + err.message);
+            //alert('您还没有选择默认医院' + err.message);
         });
     }
 
@@ -149,16 +149,6 @@ class App extends Component {
                                 <Text>地址：{this.state.hospital.Address}</Text>
                             </TouchableOpacity>
                         </View>
-                        {/*<View style={styles.homeStyle}>
-                         <View style={styles.fontViewStyle}>
-                         <Icon name={'ios-people'} color={'#00BBFF'} size={30}/>
-                         <Text style={styles.fontStyle}>会员：{this.state.memberNumber}</Text>
-                         </View>
-                         <View style={[styles.fontViewStyle,{borderLeftWidth:0}]}>
-                         <Icon name={'ios-paw'} color={'#EE9A00'} size={30}/>
-                         <Text style={styles.fontStyle}>宠物：{this.state.memberPetNumber}</Text>
-                         </View>
-                         </View>*/}
                     </View>
                     <View style={styles.iconViewStyle}>
                         <TouchableOpacity style={styles.grid_view}
@@ -182,12 +172,6 @@ class App extends Component {
                                 <Text style={{fontSize:15}}>美容服务</Text>
                             </View>
                         </TouchableOpacity>
-                        {/*<IconButton text="会员宠物" iconName={'md-people'} iconColor={'#FFB6C1'}
-                         onPress={this._onPress.bind(this, MemberListInfo, 'MemberListInfo', '会员信息')}/>
-                         <IconButton text="疫苗接种" iconName={'ios-medkit'} iconColor={'#6666CC'}
-                         onPress={this._onPress.bind(this, PetListInfo, 'PetListInfo', '疫苗接种')}/>
-                         <IconButton text="美容服务" iconName={'ios-color-palette'} iconColor={'#66CCFF'}
-                         onPress={this._onPress.bind(this, BeautyServices, 'BeautyServices', '美容服务')}/>*/}
                     </View>
                     <View style={styles.iconViewStyle}>
                         <TouchableOpacity style={styles.grid_view}
@@ -210,13 +194,7 @@ class App extends Component {
                                 <Icon name={'ios-paper'} size={40} color={'#FF6666'}/>
                                 <Text style={{fontSize:15}}>拓瑞检测</Text>
                             </View>
-                        </TouchableOpacity>{/*
-                     <IconButton text="我的预约" iconName={'ios-clock'} iconColor={'#9999CC'}
-                     onPress={this._onPress.bind(this, AppointListInfo, 'AppointListInfo', '我的预约')}/>
-                     <IconButton text="商品销售" iconName={'ios-cart'} iconColor={'#DEB887'}
-                     onPress={this._onPress.bind(this, SaleList, 'SaleList', '商品销售')}/>
-                     <IconButton text="拓瑞检测" iconName={'ios-paper'} iconColor={'#666699'}
-                     onPress={this._onPress.bind(this, MyInspect, 'MyInspect', '拓瑞检测')}/>*/}
+                        </TouchableOpacity>
                     </View>
                     <View style={styles.iconViewStyle}>
                         <TouchableOpacity style={styles.grid_view}
@@ -233,10 +211,6 @@ class App extends Component {
                                 <Text style={{fontSize:15}}>数据报表</Text>
                             </View>
                         </TouchableOpacity>
-                        {/*<IconButton text="我的设备" iconName={'md-phone-landscape'} iconColor={'#336666'}
-                         onPress={this._onPress.bind(this, NJY, 'NJY', '尿检结果')}/>
-                         <IconButton text="数据报表" iconName={'ios-podium'} iconColor={'#6666FF'}
-                         onPress={this._onPress.bind(this, ReportIndex, 'ReportIndex', '数据报表')}/>*/}
                         <View style={{flex:1}}></View>
                     </View>
 

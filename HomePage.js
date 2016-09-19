@@ -42,7 +42,7 @@ const IMAGES = [
     'http://img.taopic.com/uploads/allimg/120619/188818-12061913030721.jpg'
 ];
 
-class TopScreen extends Component {
+class HomePage extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -307,4 +307,4 @@ const styles = StyleSheet.create({
     rowRight: {justifyContent: 'center', alignSelf: 'center'},
 });
 
-module.exports = TopScreen;
+module.exports = HomePage;
