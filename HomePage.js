@@ -31,22 +31,12 @@ import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import CacheableImage from 'react-native-cacheable-image'
 var deviceWidth = Dimensions.get('window').width;
-const IMAGES = [
-    /*require('./image/job1.jpg'),
-     require('./image/job2.jpg'),
-     require('./image/job3.jpg'),*/
-    'http://img2.gamfe.com/userfiles/9801/photo/show_201102220926036856.jpg',
-    'http://pic38.nipic.com/20140217/18011310_164700650134_2.jpg',
-    'http://www.taopic.com/uploads/allimg/120421/108064-12042114341441.jpg',
-    'http://img.taopic.com/uploads/allimg/120718/201600-120gqzi729.jpg',
-    'http://img.taopic.com/uploads/allimg/120619/188818-12061913030721.jpg'
-];
 
 class HomePage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            imageSource: new ViewPager.DataSource({pageHasChanged: (p1, p2)=>p1 !== p2}).cloneWithPages(IMAGES),
+            imageSource: null,
             informationSource: new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2}),
             loaded: false,
             pageIndex: 1,
@@ -69,6 +59,19 @@ class HomePage extends Component {
 
     componentWillMount() {
         NetWorkTool.removeEventListener(NetWorkTool.TAG_NETWORK_CHANGE, this.handleMethod);
+        let _this = this;
+        NetUtil.get(CONSTAPI.APIAPP + '/AppInfo/GetHomePageImageInfo', null, function (data) {
+            if (data.Status) {
+                if (data.Data.length > 0) {
+                    _this.setState({
+                        imageSource: new ViewPager.DataSource({pageHasChanged: (p1, p2)=>p1 !== p2}).cloneWithPages(data.Data)
+                    });
+                }
+
+            }else {
+                alert("获取数据失败：" + data.message);
+            }
+        });
     }
 
     componentWillUnmount() {
@@ -187,7 +190,7 @@ class HomePage extends Component {
             <CacheableImage
                 resizeMode="cover"
                 style={styles.page}
-                source={{uri: data}}
+                source={{uri: data.AddressUrl}}
                 />
         );
     }
