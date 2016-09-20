@@ -1,12 +1,14 @@
 /**
  * Created by User on 2016-09-01.
  */
-import React,{
+'use strict';
+
+import React from 'react';
+import {
     NetInfo
     } from 'react-native';
-
 const NOT_NETWORK = "网络不可用，请稍后再试";
-const TAG_NETWORK_CHANGE = "NetworkChange";
+const TAG_NETWORK_CHANGE = "change";
 
 /***
  * 检查网络链接状态

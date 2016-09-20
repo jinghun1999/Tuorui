@@ -187,6 +187,13 @@ class MyAccount extends React.Component {
                                 initValue={this.state.memberSex}
                                 cancelText={'取消'}
                                 onChange={(option)=>{ this.setState({memberSex: option.label, memberSexKey:option.key});}}/>
+                            {/*<Picker
+                                style={{alignItems:'flex-end', borderWidth:0, borderColor:'#fff', marginRight:10,}}
+                                selectedValue={this.state.memberSex}
+                                onValueChange={(lang) => this.setState({language: lang})}>
+                                <Picker.Item label="男" value="0" />
+                                <Picker.Item label="女" value="1" />
+                            </Picker>*/}
                         </View>
                     </View>
                     <View style={styles.headBox}>
