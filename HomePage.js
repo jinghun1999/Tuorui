@@ -10,8 +10,8 @@ import {
     Dimensions,
     TouchableOpacity,
     Image,
+    Alert,
     ListView,
-    ScrollView,
     ActivityIndicator,
     RefreshControl,
     ToastAndroid
@@ -36,6 +36,7 @@ class HomePage extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            connect: false,
             imageSource: [],
             dsImage: new ViewPager.DataSource({pageHasChanged: (p1, p2)=>p1 !== p2}),
             informationSource: new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2}),
@@ -52,24 +53,35 @@ class HomePage extends Component {
             if (!isConnected) {
                 ToastAndroid.show(NetWorkTool.NOT_NETWORK, ToastAndroid.SHORT);
             }
+            this.setState({connect: isConnected});
         });
+        this.networkChanged = this.networkChanged.bind(this);
     }
 
-    handleMethod(isConnected) {
-        console.log('test', (isConnected ? 'online' : 'offline'));
-    }
-
-    componentWillMount() {
-        NetWorkTool.removeEventListener(NetWorkTool.TAG_NETWORK_CHANGE, this.handleMethod);
-    }
-
-    componentWillUnmount() {
-        NetWorkTool.removeEventListener(NetWorkTool.TAG_NETWORK_CHANGE, this.handleMethod);
-        //this.timer && clearTimeout(this.timer);
+    networkChanged(isConnected) {
+        //console.log('test', (isConnected ? 'online' : 'offline'));
+        if (!isConnected) {
+            Alert.alert('提醒', '无法连接到互联网', [{
+                text: '知道了', onPress: () => {
+                }
+            },]);
+            this.setState({
+                connect: false,
+            });
+        } else {
+            this.setState({
+                connect: true,
+            })
+        }
     }
 
     componentDidMount() {
+        NetWorkTool.addEventListener(NetWorkTool.TAG_NETWORK_CHANGE, this.networkChanged);
         this._loadData();
+    }
+
+    componentWillUnmount() {
+        NetWorkTool.removeEventListener(NetWorkTool.TAG_NETWORK_CHANGE, this.networkChanged);
     }
 
     _loadData() {
@@ -88,6 +100,7 @@ class HomePage extends Component {
         }).catch(err => {
             _this._fetchData(1);
         });
+        /*加载焦点图*/
         storage.load({
             key: 'IndexFocus',
             autoSync: false,
@@ -101,65 +114,71 @@ class HomePage extends Component {
             _this._loadAD();
         });
     }
+
     _loadAD() {
         let _this = this;
-        NetUtil.get(CONSTAPI.APIAPP + '/AppInfo/GetHomePageImageInfo', null, function (data) {
-            if (data.Status) {
-                if (data.Data.length > 0) {
-                    let imgs = [];
-                    data.Data.forEach(function(obj, index, v){
-                        imgs.push({uri:obj.AddressUrl});
-                    });
-                    storage.save({
-                        key: 'IndexFocus',
-                        rawData: {
-                            IndexFocus: imgs,
-                        }
-                    });
-                    _this.setState({
-                        imageSource: imgs,
-                        focusLoaded: true,
-                    });
-                    alert(JSON.stringify(imgs))
+        if (_this.state.connect) {
+            NetUtil.get(CONSTAPI.APIAPP + '/AppInfo/GetHomePageImageInfo', null, function (data) {
+                if (data.Status) {
+                    if (data.Data.length > 0) {
+                        let imgs = [];
+                        data.Data.forEach(function (obj, index, v) {
+                            imgs.push({uri: obj.AddressUrl});
+                        });
+                        storage.save({
+                            key: 'IndexFocus',
+                            rawData: {
+                                IndexFocus: imgs,
+                            }
+                        });
+                        _this.setState({
+                            imageSource: imgs,
+                            focusLoaded: true,
+                        });
+                        //alert(JSON.stringify(imgs))
+                    } else {
+                        //alert('没有图片');
+                    }
                 } else {
-                    alert('没有图片');
+                    alert("获取数据失败：" + data.message);
                 }
-            } else {
-                alert("获取数据失败：" + data.message);
-            }
-        });
+            });
+        }
     }
+
     _fetchData(page) {
         let _this = this;
-        NetUtil.get(CONSTAPI.APIAPP + '/AppInfo/GetHomeInfo?pid=&PageSize=' + this.state.pageSize + '&PageIndex=' + page, false, function (result) {
-            if (result.Status && result.Data) {
-                let _dataCache = _this.state.dataCache;
-                if (page > 1) {
-                    result.Data.rows.forEach((d)=> {
-                        _dataCache.push(d);
-                    });
-                } else {
-                    _dataCache = result.Data.rows;
-                    storage.save({
-                        key: 'IndexInfoList',
-                        rawData: {
-                            IndexInfoList: _dataCache
-                        }
+        if (_this.state.connect) {
+            NetUtil.get(CONSTAPI.APIAPP + '/AppInfo/GetHomeInfo?pid=&PageSize=' + this.state.pageSize + '&PageIndex=' + page, false, function (result) {
+                if (result.Status && result.Data) {
+                    let _dataCache = _this.state.dataCache;
+                    if (page > 1) {
+                        result.Data.rows.forEach((d)=> {
+                            _dataCache.push(d);
+                        });
+                    } else {
+                        _dataCache = result.Data.rows;
+                        storage.save({
+                            key: 'IndexInfoList',
+                            rawData: {
+                                IndexInfoList: _dataCache
+                            }
+                        });
+                    }
+                    _this.setState({
+                        total: result.Data.total,
+                        totalPage: result.Data.TotalPage,
+                        loaded: true,
+                        pageIndex: page,
+                        isRefreshing: false,
+                        dataCache: _dataCache,
                     });
                 }
-                _this.setState({
-                    total: result.Data.total,
-                    totalPage: result.Data.TotalPage,
-                    loaded: true,
-                    pageIndex: page,
-                    isRefreshing: false,
-                    dataCache: _dataCache,
-                });
-            }
-            else {
-                alert("get data error")
-            }
-        });
+                else {
+                    alert("get data error")
+                }
+            });
+        }
     }
 
     _onEndReached() {
