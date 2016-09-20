@@ -270,7 +270,7 @@ class MemberDetails extends Component {
     _onChooseSex() {
         let _this = this;
         if (_this.state.edit == '编辑') {
-            return false;
+            return false
         }
         this.pickerSex.toggle();
     }
