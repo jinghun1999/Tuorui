@@ -264,7 +264,7 @@ class MemberDetails extends Component {
                 <Image source={require('./../../../image/pet.jpg')}
                        style={{width:40,height:35,marginLeft:10,justifyContent:'center'}}
                 />
-                <Text style={{flex:1}}>{pet.PetName}</Text>
+                <Text style={{flex:1,color:'#27408B',fontWeight:'bold'}}>{pet.PetName}</Text>
                 <Icon name={'ios-arrow-forward'} size={15} color={'#666'} style={{marginRight:10}}/>
             </TouchableOpacity>
         )

@@ -387,8 +387,8 @@ class VaccineService extends Component {
     _onRenderRow(vaccine) {
         return (
             <TouchableOpacity style={styles.row} onPress={()=>this._onVaccineDetails(vaccine)}>
-                <Text style={{flex: 1,fontSize:14, fontWeight:'bold'}}>{vaccine.ItemName}</Text>
-                <Text style={{flex: 1,fontSize:14,}}>单价: ￥{vaccine.SellPrice?vaccine.SellPrice:vaccine.TotalCost}</Text>
+                <Text style={{flex: 1,fontSize:14, color:'#27408B',fontWeight:'bold'}}>{vaccine.ItemName}</Text>
+                <Text style={{flex: 1,fontSize:14,color:'#8B0000'}}>单价:¥ {vaccine.SellPrice?vaccine.SellPrice:vaccine.TotalCost}</Text>
             </TouchableOpacity>
         )
     }

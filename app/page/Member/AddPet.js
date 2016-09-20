@@ -364,21 +364,21 @@ class AddPet extends Component {
                         <Text style={styles.titleText}>会员信息</Text>
                     </View>
                     <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>会员名</Text>
+                        <Text style={styles.textTitle}>会员名</Text>
                         <TextInput value={this.props.member.name}
                                    editable={false}
                                    underlineColorAndroid={'transparent'}
                                    keyboardType={'default'}
-                                   style={{height: 40, borderWidth:0, flex:1}}
+                                   style={{height: 40, borderWidth:0, flex:1,color:'black'}}
                         />
                     </View>
                     <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>手机号码</Text>
+                        <Text style={styles.textTitle}>手机号码</Text>
                         <TextInput value={this.props.member.phone}
                                    editable={false}
                                    underlineColorAndroid={'transparent'}
                                    keyboardType={'default'}
-                                   style={{height: 40, borderWidth:0, flex:1}}
+                                   style={{height: 40, borderWidth:0, flex:1,color:'black'}}
                         />
                     </View>
                     <View style={styles.titleStyle}>
@@ -434,16 +434,15 @@ class AddPet extends Component {
                     </View>
                     <TouchableOpacity onPress={this._onChooseSex.bind(this)} style={styles.inputViewStyle}>
                         <Text style={styles.textTitle}>宠物性别</Text>
-                        <Text style={{flex:1,}}>{this.state.petSex}</Text>
+                        <Text style={{flex:1,color:'black'}}>{this.state.petSex}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={this._onChooseState.bind(this)} style={styles.inputViewStyle}>
                         <Text style={styles.textTitle}>宠物状态</Text>
-                        <Text style={{flex:1,}}>{this.state.petState}</Text>
+                        <Text style={{flex:1,color:'black'}}>{this.state.petState}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={this._onChooseRace.bind(this)} style={styles.inputViewStyle}>
                         <Text style={styles.textTitle}>宠物种类</Text>
-                        <Text
-                            style={{flex:1,}}>{this.state.petRace}</Text>
+                        <Text style={{flex:1,color:'black'}}>{this.state.petRace}</Text>
                     </TouchableOpacity>
 
                 </ScrollView>

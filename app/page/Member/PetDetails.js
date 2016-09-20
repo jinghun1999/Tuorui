@@ -90,59 +90,39 @@ class PetDetails extends Component {
                             showsVerticalScrollIndicator={true}
                             scrollEnabled={true} style={styles.contentStyle}>
                     <View style={styles.titleStyle}>
-                        <Text style={{color:'#fff',textAlign:'center',marginLeft:10,fontSize:16,}}>会员信息</Text>
+                        <Text style={styles.titleText}>会员信息</Text>
                     </View>
                     <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>会员名</Text>
-                        <TextInput value={this.props.member.name}
-                                   editable={false}
-                                   underlineColorAndroid={'transparent'}
-                                   keyboardType={'default'}
-                                   style={{height: 40, borderWidth:0, flex:1}}
-                        />
+                        <Text style={styles.textTitle}>会员名</Text>
+                        <Text style={{flex:1,color:'black'}}>{this.props.member.name}</Text>
                     </View>
                     <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>手机号码</Text>
-                        <TextInput value={this.props.member.phone}
-                                   editable={false}
-                                   underlineColorAndroid={'transparent'}
-                                   keyboardType={'default'}
-                                   style={{height: 40, borderWidth:0, flex:1}}
-                        />
+                        <Text style={styles.textTitle}>手机号码</Text>
+                        <Text style={{flex:1,color:'black'}}>{this.props.member.phone}</Text>
                     </View>
                     <View style={styles.titleStyle}>
-                        <Text style={{color:'#fff',textAlign:'center',marginLeft:10,fontSize:16,}}>宠物信息</Text>
+                        <Text style={styles.titleText}>宠物信息</Text>
                     </View>
                     <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>宠物编号</Text>
-                        <TextInput value={this.state.petID}
-                                   editable={false}
-                                   underlineColorAndroid={'transparent'}
-                                   keyboardType={'default'}
-                                   style={{height: 40, borderWidth:0, flex:1}}
-                        />
+                        <Text style={styles.textTitle}>宠物编号</Text>
+                        <Text style={{flex:1,color:'black'}}>{this.state.petID}</Text>
                     </View>
                     <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>宠物病历号</Text>
-                        <TextInput value={this.state.petSickID}
-                                   editable={false}
-                                   underlineColorAndroid={'transparent'}
-                                   keyboardType={'default'}
-                                   style={{height: 40, borderWidth:0, flex:1}}
-                        />
+                        <Text style={styles.textTitle}>宠物病历号</Text>
+                        <Text style={{flex:1,color:'black'}}>{this.state.petSickID}</Text>
                     </View>
                     <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>宠物昵称</Text>
+                        <Text style={styles.textTitle}>宠物昵称</Text>
                         <TextInput value={this.state.petName}
                                    editable={this.state.enabled}
                                    underlineColorAndroid={'transparent'}
                                    keyboardType={'default'}
-                                   style={{height: 40, borderWidth:0, flex:1}}
+                                   style={{height: 40, borderWidth:0, flex:1,color:'black'}}
                                    onChangeText={(text)=>{this.setState({ petName:text })}}
                         />
                     </View>
                     <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>出生日期</Text>
+                        <Text style={styles.textTitle}>出生日期</Text>
                         <View style={{flex:1,height:39}}>
                             <DatePicker
                                 date={this.state.petBirthday}
@@ -171,16 +151,16 @@ class PetDetails extends Component {
                         </View>
                     </View>
                     <TouchableOpacity onPress={this._onChooseSex.bind(this)} style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>宠物性别</Text>
-                        <Text style={{flex:1,}}>{this.state.petSex}</Text>
+                        <Text style={styles.textTitle}>宠物性别</Text>
+                        <Text style={{flex:1,color:'black'}}>{this.state.petSex}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={this._onChooseState.bind(this)} style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>宠物状态</Text>
-                        <Text style={{flex:1,}}>{this.state.petState}</Text>
+                        <Text style={styles.textTitle}>宠物状态</Text>
+                        <Text style={{flex:1,color:'black'}}>{this.state.petState}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={this._onChooseRace.bind(this)} style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>宠物种类</Text>
-                        <Text style={{flex:1,}}>{this.state.petRace}</Text>
+                        <Text style={styles.textTitle}>宠物种类</Text>
+                        <Text style={{flex:1,color:'black'}}>{this.state.petRace}</Text>
                     </TouchableOpacity>
                 </ScrollView>
                 <Picker
@@ -235,45 +215,41 @@ class PetDetails extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        flexDirection: 'column',
         backgroundColor: '#e7e7e7',
     },
-    basicStyle: {
+    titleStyle: {
+        margin: 5,
+        borderLeftWidth: 3,
+        borderLeftColor: '#CC0033',
+        paddingLeft: 5,
+        flexDirection: 'row',
+    },
+    textTitle: {
+        width: 100,
+        fontSize: 16,
+    },
+    titleText: {
+        marginLeft: 10,
+        fontSize: 16,
+        flex: 1,
+        color: '#CC0033',
+    },
+    inputViewStyle: {
         flex: 1,
         flexDirection: 'row',
-        marginTop: 5,
-    },
-    optionBox: {
-        height: 50,
-        flexDirection: 'row',
+        padding: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
         backgroundColor: '#fff',
         borderBottomColor: '#ccc',
         borderBottomWidth: StyleSheet.hairlineWidth,
     },
-    optionTxt: {
-        width: 100,
-        justifyContent: 'center',
-        marginLeft: 10,
-    },
-    optionValue: {
-        flex: 1,
-        justifyContent: 'center',
-    },
-    basicContentStyle: {
-        flex: 1,
-        marginTop: 15,
-    },
-    imageStyle: {
-        margin: 2,
-        height: 200,
-        width: 180,
-        borderColor: '#666',
-        borderWidth: StyleSheet.hairlineWidth,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    contentStyle: {
-        backgroundColor: '#e7e7e7',
+    row: {
+        flexDirection: 'row',
+        padding: 10,
+        backgroundColor: '#fff',
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderBottomColor: '#ccc'
     },
 })
 module.exports = PetDetails
