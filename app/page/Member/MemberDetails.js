@@ -481,9 +481,8 @@ const styles = StyleSheet.create({
         color: '#CC0033',
     },
     inputViewStyle: {
-        flex:1,
         flexDirection: 'row',
-        padding: 10,
+        padding: 5,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#fff',

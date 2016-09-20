@@ -233,11 +233,21 @@ class AddMemberInfo extends Component {
                     </View>
                     <View style={styles.inputViewStyle}>
                         <Text style={styles.textTitle}>编号</Text>
-                        <Text style={{flex:1,color:'black'}}>{this.state.memberItem.GestCode}</Text>
+                        <TextInput value={this.state.memberItem.GestCode}
+                                   editable={true}
+                                   underlineColorAndroid={'transparent'}
+                                   keyboardType={'default'}
+                                   style={{borderWidth:0, flex:1,color:'black'}}
+                        />
                     </View>
                     <View style={styles.inputViewStyle}>
                         <Text style={styles.textTitle}>登记日期</Text>
-                        <Text style={{flex:1,color:'black'}}>{this.state.memberRegistrationTime}</Text>
+                        <TextInput value={this.state.memberRegistrationTime}
+                                   editable={true}
+                                   underlineColorAndroid={'transparent'}
+                                   keyboardType={'default'}
+                                   style={{borderWidth:0, flex:1,color:'black'}}
+                        />
                     </View>
                     <View style={styles.inputViewStyle}>
                         <Text style={styles.textTitle}>姓名</Text>
@@ -275,7 +285,7 @@ class AddMemberInfo extends Component {
                                       marginLeft: 0
                                     },
                                     dateInput: {
-                                      marginRight: 70,
+                                      marginRight: 50,
                                       borderWidth:0,
                                     },
                                   }}
@@ -294,18 +304,33 @@ class AddMemberInfo extends Component {
                     </View>
                     <TouchableOpacity onPress={this._onChooseSex.bind(this)} style={styles.inputViewStyle}>
                         <Text style={styles.textTitle}>性别</Text>
-                        <Text style={{flex:1,color:'black'}}>{this.state.memberSex}</Text>
+                        <TextInput value={this.state.memberSex}
+                                   editable={true}
+                                   underlineColorAndroid={'transparent'}
+                                   keyboardType={'default'}
+                                   style={{borderWidth:0, flex:1,color:'black'}}
+                        />
                     </TouchableOpacity>
                     <View style={styles.titleStyle}>
                         <Text style={styles.titleText}>会员信息</Text>
                     </View>
                     <TouchableOpacity onPress={this._onChooseLevel.bind(this)} style={styles.inputViewStyle}>
                         <Text style={styles.textTitle}>会员等级</Text>
-                        <Text style={{flex:1,color:'black'}}>{this.state.memberLevel}</Text>
+                        <TextInput value={this.state.memberLevel}
+                                   editable={true}
+                                   underlineColorAndroid={'transparent'}
+                                   keyboardType={'default'}
+                                   style={{borderWidth:0, flex:1,color:'black'}}
+                        />
                     </TouchableOpacity>
                     <TouchableOpacity onPress={this._onChooseState.bind(this)} style={styles.inputViewStyle}>
                         <Text style={styles.textTitle}>会员状态</Text>
-                        <Text style={{flex:1,color:'black'}}>{this.state.memberState}</Text>
+                        <TextInput value={this.state.memberState}
+                                   editable={true}
+                                   underlineColorAndroid={'transparent'}
+                                   keyboardType={'default'}
+                                   style={{borderWidth:0, flex:1,color:'black'}}
+                        />
                     </TouchableOpacity>
                     <View style={styles.inputViewStyle}>
                         <Text style={styles.textTitle}>备注</Text>
@@ -402,7 +427,7 @@ const styles = StyleSheet.create({
     inputViewStyle: {
         flex: 1,
         flexDirection: 'row',
-        padding: 10,
+        padding: 5,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#fff',
