@@ -38,7 +38,6 @@ class MemberDetails extends Component {
             memberLoaded: false,
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
             memberSex: '男',
-            disabled:true,
         }
     };
 
@@ -91,12 +90,12 @@ class MemberDetails extends Component {
                         petSource: dataSource,
                         memberLoaded: true,
                         pageIndex: page,
-                        memberName:_this.props.memberInfo.GestName,
-                        birthDate:_this.props.memberInfo.GestBirthday,
-                        memberPhone:_this.props.memberInfo.MobilePhone,
-                        memberSex:_this.props.memberInfo.GestSex,
-                        memberAddress:_this.props.memberInfo.GestAddress,
-                        memberRemark:_this.props.memberInfo.Remark,
+                        memberName: _this.props.memberInfo.GestName,
+                        birthDate: _this.props.memberInfo.GestBirthday,
+                        memberPhone: _this.props.memberInfo.MobilePhone,
+                        memberSex: _this.props.memberInfo.GestSex,
+                        memberAddress: _this.props.memberInfo.GestAddress,
+                        memberRemark: _this.props.memberInfo.Remark,
                     });
                 } else {
                     alert("获取数据失败：" + data.Message);
@@ -150,10 +149,9 @@ class MemberDetails extends Component {
             //可修改状态
             _this.setState({
                 enable: true,
-                disabled:false,
                 edit: '保存',
             })
-        } else if(edit == '保存'){
+        } else if (edit == '保存') {
             if (_this.state.memberName == null) {
                 alert("请输入姓名");
                 return false;
@@ -166,43 +164,43 @@ class MemberDetails extends Component {
                     'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
                 };
                 var _sex;
-                if(_this.state.memberSex=='男'){
-                    _sex='DM00001'
-                }else if(_this.state.memberSex=='女'){
-                    _sex='DM00002'
+                if (_this.state.memberSex == '男') {
+                    _sex = 'DM00001'
+                } else if (_this.state.memberSex == '女') {
+                    _sex = 'DM00002'
                 }
-                let item={
-                    "ID":_this.props.memberInfo.ID,
-                    "GestCode":_this.props.memberInfo.GestCode,
-                    "LoseRightDate":null,
-                    "GestName":_this.state.memberName,
-                    "GestSex":_sex,
-                    "GestBirthday":_this.state.birthDate,
-                    "MobilePhone":_this.state.memberPhone,
-                    "TelPhone":null,
-                    "EMail":null,
-                    "GestAddress":_this.state.memberAddress,
-                    "IsVIP":"SM00054",
-                    "VIPNo":null,
-                    "VIPAccount":0,
-                    "LastPaidTime":"2016-09-19T11:48:35",
-                    "GestStyle":"HYDJ000000003",
-                    "Status":"SM00001",
-                    "PaidStatus":"SM00040",
-                    "Remark":_this.state.memberRemark,
-                    "CreatedBy":"18307722503",
-                    "CreatedOn":"2016-09-18T17:40:37",
-                    "ModifiedBy":user.user.Mobile,
-                    "ModifiedOn":Util.getTime(),
-                    "IsDeleted":0,
-                    "RewardPoint":null,
-                    "PrepayMoney":null,
-                    "EntID":_this.props.memberInfo.EntID,
-                    "LevelName":null
+                let item = {
+                    "ID": _this.props.memberInfo.ID,
+                    "GestCode": _this.props.memberInfo.GestCode,
+                    "LoseRightDate": _this.props.memberInfo.LoseRightDate,
+                    "GestName": _this.state.memberName,
+                    "GestSex": _sex,
+                    "GestBirthday": _this.state.birthDate,
+                    "MobilePhone": _this.state.memberPhone,
+                    "TelPhone": _this.props.memberInfo.TelPhone,
+                    "EMail": _this.props.memberInfo.EMail,
+                    "GestAddress": _this.state.memberAddress,
+                    "IsVIP": _this.props.memberInfo.IsVIP,
+                    "VIPNo": _this.props.memberInfo.VIPNo,
+                    "VIPAccount": _this.props.memberInfo.VIPAccount,
+                    "LastPaidTime": _this.props.memberInfo.LastPaidTime,
+                    "GestStyle": _this.props.memberInfo.GestStyle,
+                    "Status": _this.props.memberInfo.Status,
+                    "PaidStatus": _this.props.memberInfo.PaidStatus,
+                    "Remark": _this.state.memberRemark,
+                    "CreatedBy": _this.props.memberInfo.CreatedBy,
+                    "CreatedOn": _this.props.memberInfo.CreatedOn,
+                    "ModifiedBy": user.user.Mobile,
+                    "ModifiedOn": Util.getTime(),
+                    "IsDeleted": _this.props.memberInfo.IsDeleted,
+                    "RewardPoint": _this.props.memberInfo.RewardPoint,
+                    "PrepayMoney": _this.props.memberInfo.PrepayMoney,
+                    "EntID": _this.props.memberInfo.EntID,
+                    "LevelName": _this.props.memberInfo.LevelName
                 };
                 let postJson = {
-                    "gest":item,
-                    "oldRewardPoint":0,
+                    "gest": item,
+                    "oldRewardPoint": 0,
                 };
                 //http://test.tuoruimed.com/service/Api/Gest/UpdateGest
                 NetUtil.postJson(CONSTAPI.HOST + '/Gest/UpdateGest', postJson, header, function (data) {
@@ -222,7 +220,6 @@ class MemberDetails extends Component {
             })
             _this.setState({
                 enable: false,
-                disabled:true,
                 edit: '编辑',
             })
         }
@@ -271,8 +268,10 @@ class MemberDetails extends Component {
     }
 
     _onChooseSex() {
-        let _this =this;
-        if(_this.state.edit =='编辑'){return false;}
+        let _this = this;
+        if (_this.state.edit == '编辑') {
+            return false;
+        }
         this.pickerSex.toggle();
     }
 
@@ -297,23 +296,26 @@ class MemberDetails extends Component {
                     </View>
                     <View style={styles.inputViewStyle}>
                         <Text style={styles.textTitle}>登记日期</Text>
-                        <Text style={{flex:1,color:'black'}}>{this.props.memberInfo.CreatedOn.replace('T', ' ')}</Text>
+                        <TextInput value={this.props.memberInfo.CreatedOn.replace('T', ' ')}
+                                   editable={false}
+                                   underlineColorAndroid={'transparent'}
+                                   keyboardType={'default'}
+                                   style={{borderWidth:0,flex:1,color:'black'}}
+                        />
                     </View>
                     <View style={styles.inputViewStyle}>
                         <Text style={styles.textTitle}>会员名</Text>
-                        <View style={{flex:1,height:39}}>
-                            <TextInput value={this.state.memberName}
-                                       editable={this.state.enable}
-                                       underlineColorAndroid={'transparent'}
-                                       keyboardType={'default'}
-                                       style={{borderWidth:0,flex:1}}
-                                       onChangeText={(text)=>{this.setState({ memberName: text })}}
-                            />
-                        </View>
+                        <TextInput value={this.state.memberName}
+                                   editable={this.state.enable}
+                                   underlineColorAndroid={'transparent'}
+                                   keyboardType={'default'}
+                                   style={{borderWidth:0,flex:1,color:'black'}}
+                                   onChangeText={(text)=>{this.setState({ memberName: text })}}
+                        />
                     </View>
                     <View style={styles.inputViewStyle}>
                         <Text style={styles.textTitle}>生日</Text>
-                        <View style={{flex:1,height:39}}>
+                        <View style={{flex:1,}}>
                             <DatePicker
                                 date={this.state.birthDate}
                                 mode="date"
@@ -324,7 +326,7 @@ class MemberDetails extends Component {
                                 confirmBtnText="Confirm"
                                 cancelBtnText="Cancel"
                                 showIcon={false}
-                                disabled={this.state.disabled}
+                                disabled={this.state.edit!=='编辑'}
                                 customStyles={{
                                     dateIcon: {
                                       position: 'absolute',
@@ -333,49 +335,54 @@ class MemberDetails extends Component {
                                       marginLeft: 0
                                     },
                                     dateInput: {
-                                      marginRight: 70,
+                                      marginRight: 50,
                                       borderWidth:0,
                                     },
                                   }}
-                                onDateChange={(date) => {this.setState({birthDate: date})}}/>
+                                onDateChange={(date) => {
+                                if(this.state.edit=='编辑'){return false;}
+                                this.setState({birthDate: date})}
+                                }
+                            />
                         </View>
                     </View>
                     <View style={styles.inputViewStyle}>
                         <Text style={styles.textTitle}>电话</Text>
-                        <View style={{flex:1,height:39}}>
-                            <TextInput value={this.state.memberPhone}
-                                       editable={this.state.enable}
-                                       underlineColorAndroid={'transparent'}
-                                       keyboardType={'default'}
-                                       style={{borderWidth:0,}}
-                                       onChangeText={(text)=>{this.setState({ memberPhone: text })}}
-                            />
-                        </View>
+                        <TextInput value={this.state.memberPhone}
+                                   editable={this.state.enable}
+                                   underlineColorAndroid={'transparent'}
+                                   keyboardType={'default'}
+                                   style={{flex:1,borderWidth:0,color:'black'}}
+                                   onChangeText={(text)=>{this.setState({ memberPhone: text })}}
+                        />
                     </View>
                     <TouchableOpacity onPress={this._onChooseSex.bind(this)} style={styles.inputViewStyle}>
                         <Text style={styles.textTitle}>性别</Text>
-                        <Text style={{flex:1,height:39,}}>{this.state.memberSex == 'DM00001' ? '男' : '女'}</Text>
+                        <TextInput value={this.state.memberSex == 'DM00001' ? '男' : '女'}
+                                   editable={this.state.enable}
+                                   underlineColorAndroid={'transparent'}
+                                   keyboardType={'default'}
+                                   style={{flex:1,borderWidth:0,color:'black'}}
+                        />
                     </TouchableOpacity>
                     <View style={styles.inputViewStyle}>
                         <Text style={styles.textTitle}>地址</Text>
-                        <View style={{flex:1,height:39}}>
-                            <TextInput value={this.state.memberAddress}
-                                       editable={this.state.enable}
-                                       underlineColorAndroid={'transparent'}
-                                       keyboardType={'default'}
-                                       style={{borderWidth:0,}}
-                                       onChangeText={(text)=>{this.setState({ memberAddress: text })}}
-                            />
-                        </View>
+                        <TextInput value={this.state.memberAddress}
+                                   editable={this.state.enable}
+                                   underlineColorAndroid={'transparent'}
+                                   keyboardType={'default'}
+                                   style={{flex:1,borderWidth:0,color:'black'}}
+                                   onChangeText={(text)=>{this.setState({ memberAddress: text })}}
+                        />
                     </View>
                     <View style={styles.inputViewStyle}>
                         <Text style={styles.textTitle}>备注</Text>
-                        <View style={{flex:1,height:39}}>
+                        <View style={{flex:1,}}>
                             <TextInput value={this.state.memberRemark}
                                        editable={this.state.enable}
                                        underlineColorAndroid={'transparent'}
                                        keyboardType={'default'}
-                                       style={{borderWidth:0,}}
+                                       style={{borderWidth:0,color:'black'}}
                                        onChangeText={(text)=>{this.setState({ memberRemark: text })}}
                             />
                         </View>
@@ -474,7 +481,7 @@ const styles = StyleSheet.create({
         color: '#CC0033',
     },
     inputViewStyle: {
-        flex: 1,
+        flex:1,
         flexDirection: 'row',
         padding: 10,
         justifyContent: 'center',
