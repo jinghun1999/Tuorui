@@ -25,8 +25,8 @@ class AppointListInfo extends React.Component {
         this.state = {
             appointSource: [],
             loaded: false,
-            dateFrom:Util.GetDateStr(0),
-            dateTo:Util.GetDateStr(0),
+            dateFrom: Util.GetDateStr(0),
+            dateTo: Util.GetDateStr(0),
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
         }
     }
@@ -64,7 +64,7 @@ class AppointListInfo extends React.Component {
                 "Title": null,
                 "Operator": {"Name": ">", "Title": "大于", "Expression": null},
                 "DataType": 0,
-                "Value": _this.state.dateFrom +" 00:00:00",
+                "Value": _this.state.dateFrom + " 00:00:00",
                 "Conn": 1
             }, {
                 "Childrens": null,
@@ -117,9 +117,10 @@ class AppointListInfo extends React.Component {
             })
         }
     }
-    _search(){
-        let _this =this;
-       _this._onFetchData();
+
+    _search() {
+        let _this = this;
+        _this._onFetchData();
     }
 
     _onRenderRow(a) {
@@ -145,7 +146,7 @@ class AppointListInfo extends React.Component {
     render() {
         let body = <Loading type="text"/>
         if (this.state.loaded) {
-            if(this.state.appointSource!=null){
+            if (this.state.appointSource.length != 0) {
                 body = (
                     <ListView dataSource={this.state.ds.cloneWithRows(this.state.appointSource)}
                               enableEmptySections={true}
@@ -154,11 +155,11 @@ class AppointListInfo extends React.Component {
                               renderRow={this._onRenderRow.bind(this)}
                     />
                 )
-            }else{
+            } else {
                 body = (
                     <View style={styles.noResultContainer}>
                         <View style={styles.noResult}>
-                            <Text>暂无筛选数据，请修改查询条件后重试！</Text>
+                            <Text>无数据~您所选日期没有预约信息!</Text>
                         </View>
                     </View>
                 )
@@ -186,7 +187,7 @@ class AppointListInfo extends React.Component {
                       borderWidth:StyleSheet.hairlineWidth,
                     },
                   }} onDateChange={(date) => {this.setState({dateFrom: date})}}/>
-                    <Text>  到  </Text>
+                    <Text> 到 </Text>
                     <DatePicker
                         date={this.state.dateTo}
                         mode="date"

@@ -153,7 +153,7 @@ class ChooseVaccineInfo extends Component {
                 style={{ flexDirection:'row',marginLeft:15, marginRight:15, paddingTop:10, paddingBottom:10, borderBottomWidth:StyleSheet.hairlineWidth, borderBottomColor:'#ccc'}}
                 onPress={()=>this.pressRow(vaccine)}>
                 <View style={{flex:1}}>
-                    <Text style={{fontSize:14, fontWeight:'bold'}}>名称: {vaccine.ItemName}</Text>
+                    <Text style={{flex:1, fontSize:16, color:'#27408B',fontWeight:'bold'}}>名称: {vaccine.ItemName}</Text>
                     <View style={{flexDirection:'row'}}>
                         <Text style={{flex: 1,}}>编号: {vaccine.ItemCode}</Text>
                         <Text style={{flex: 1,}}>单价: ￥{vaccine.SellPrice}</Text>

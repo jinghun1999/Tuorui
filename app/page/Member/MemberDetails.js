@@ -143,15 +143,17 @@ class MemberDetails extends Component {
         }
     }
 
-    _editInfo(g) {
+    _editInfo() {
         let _this = this;
         let edit = _this.state.edit;
         if (edit == '编辑') {
+            //可修改状态
             _this.setState({
                 enable: true,
+                disabled:false,
                 edit: '保存',
             })
-        } else {
+        } else if(edit == '保存'){
             if (_this.state.memberName == null) {
                 alert("请输入姓名");
                 return false;
@@ -207,7 +209,7 @@ class MemberDetails extends Component {
                     if (data.Sign) {
                         alert('修改成功');
                         if (_this.props.getResult) {
-                            let id = _this.props.member.memberID;
+                            let id = _this.props.memberInfo.ID;
                             _this.props.getResult(id);
                         }
                         _this._onBack()
@@ -220,6 +222,7 @@ class MemberDetails extends Component {
             })
             _this.setState({
                 enable: false,
+                disabled:true,
                 edit: '编辑',
             })
         }
@@ -293,16 +296,11 @@ class MemberDetails extends Component {
                         <Text style={styles.titleText}>会员信息</Text>
                     </View>
                     <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>登记日期</Text>
-                        <View style={{flex:1,height:39}}>
-                            <TextInput value={this.props.memberInfo.CreatedOn.replace('T', ' ')}
-                                       editable={false}
-                                       underlineColorAndroid={'transparent'}
-                            />
-                        </View>
+                        <Text style={styles.textTitle}>登记日期</Text>
+                        <Text style={{flex:1,color:'black'}}>{this.props.memberInfo.CreatedOn.replace('T', ' ')}</Text>
                     </View>
                     <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>会员名</Text>
+                        <Text style={styles.textTitle}>会员名</Text>
                         <View style={{flex:1,height:39}}>
                             <TextInput value={this.state.memberName}
                                        editable={this.state.enable}
@@ -314,7 +312,7 @@ class MemberDetails extends Component {
                         </View>
                     </View>
                     <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>生日</Text>
+                        <Text style={styles.textTitle}>生日</Text>
                         <View style={{flex:1,height:39}}>
                             <DatePicker
                                 date={this.state.birthDate}
@@ -335,7 +333,7 @@ class MemberDetails extends Component {
                                       marginLeft: 0
                                     },
                                     dateInput: {
-                                      marginRight: 45,
+                                      marginRight: 70,
                                       borderWidth:0,
                                     },
                                   }}
@@ -343,7 +341,7 @@ class MemberDetails extends Component {
                         </View>
                     </View>
                     <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>电话</Text>
+                        <Text style={styles.textTitle}>电话</Text>
                         <View style={{flex:1,height:39}}>
                             <TextInput value={this.state.memberPhone}
                                        editable={this.state.enable}
@@ -355,12 +353,11 @@ class MemberDetails extends Component {
                         </View>
                     </View>
                     <TouchableOpacity onPress={this._onChooseSex.bind(this)} style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>性别</Text>
-                        <Text
-                            style={{flex:1,height:39,}}>{this.state.memberSex == 'DM00001' ? '男' : '女'}</Text>
+                        <Text style={styles.textTitle}>性别</Text>
+                        <Text style={{flex:1,height:39,}}>{this.state.memberSex == 'DM00001' ? '男' : '女'}</Text>
                     </TouchableOpacity>
                     <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>地址</Text>
+                        <Text style={styles.textTitle}>地址</Text>
                         <View style={{flex:1,height:39}}>
                             <TextInput value={this.state.memberAddress}
                                        editable={this.state.enable}
@@ -372,7 +369,7 @@ class MemberDetails extends Component {
                         </View>
                     </View>
                     <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>备注</Text>
+                        <Text style={styles.textTitle}>备注</Text>
                         <View style={{flex:1,height:39}}>
                             <TextInput value={this.state.memberRemark}
                                        editable={this.state.enable}
@@ -460,11 +457,22 @@ const styles = StyleSheet.create({
         backgroundColor: '#e7e7e7',
     },
     titleStyle: {
-        padding: 5,
-        paddingLeft: 10,
+        margin: 5,
+        borderLeftWidth: 3,
+        borderLeftColor: '#CC0033',
+        paddingLeft: 5,
         flexDirection: 'row',
     },
-    titleText: {marginLeft: 10, fontSize: 16, flex: 1,},
+    textTitle: {
+        width: 100,
+        fontSize: 16,
+    },
+    titleText: {
+        marginLeft: 10,
+        fontSize: 16,
+        flex: 1,
+        color: '#CC0033',
+    },
     inputViewStyle: {
         flex: 1,
         flexDirection: 'row',

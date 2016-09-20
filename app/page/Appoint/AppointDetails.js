@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#e7e7e7',
     },
     textTitle:{
-        width:100,
+        width:150,
         fontSize:16,
     },
     titleStyle: {
@@ -94,7 +94,6 @@ const styles = StyleSheet.create({
         color:'#CC0033',
     },
     inputViewStyle: {
-        flex: 1,
         flexDirection: 'row',
         padding: 10,
         justifyContent: 'center',

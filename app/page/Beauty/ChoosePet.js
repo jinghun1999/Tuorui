@@ -63,7 +63,7 @@ class ChoosePet extends Component {
                 style={{ flexDirection:'row',marginLeft:15, marginRight:15, paddingTop:10, paddingBottom:10, borderBottomWidth:StyleSheet.hairlineWidth, borderBottomColor:'#ccc'}}
                 onPress={()=>this._pressRow(pet)}>
                 <View style={{flex:1}}>
-                    <Text style={{fontSize:14, fontWeight:'bold'}}> {pet.PetName}</Text>
+                    <Text style={{flex:1, fontSize:16, color:'#27408B',fontWeight:'bold'}}> {pet.PetName}</Text>
                     <View style={{flexDirection:'row'}}>
                         <Text style={{flex: 1,}}>宠物卡: {pet.PetCode}</Text>
                         <Text style={{flex: 1,}}>品种: {pet.PetBreed}</Text>

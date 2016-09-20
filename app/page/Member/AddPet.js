@@ -385,26 +385,15 @@ class AddPet extends Component {
                         <Text  style={styles.titleText}>宠物信息</Text>
                     </View>
                     <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>宠物编号</Text>
-                        <TextInput
-                            value={this.state.petID}
-                            editable={false}
-                            underlineColorAndroid={'transparent'}
-                            keyboardType={'default'}
-                            style={{height: 40, borderWidth:0, flex:1}}
-                        />
+                        <Text style={styles.textTitle}>宠物编号</Text>
+                        <Text style={{flex:1,color:'black'}}>{this.state.petID}</Text>
                     </View>
                     <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>宠物病历号</Text>
-                        <TextInput value={this.state.petSickID}
-                                   editable={false}
-                                   underlineColorAndroid={'transparent'}
-                                   keyboardType={'default'}
-                                   style={{height: 40, borderWidth:0, flex:1}}
-                        />
+                        <Text style={styles.textTitle}>宠物病历号</Text>
+                        <Text style={{flex:1,color:'black'}}>{this.state.petSickID}</Text>
                     </View>
                     <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>宠物昵称</Text>
+                        <Text style={styles.textTitle}>宠物昵称</Text>
                         <TextInput
                             value={this.state.petName}
                             editable={this.state.enabled}
@@ -415,7 +404,7 @@ class AddPet extends Component {
                         />
                     </View>
                     <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>出生日期</Text>
+                        <Text style={styles.textTitle}>出生日期</Text>
                         <View style={{flex:1,height:39}}>
                             <DatePicker
                                 date={this.state.petBirthday}
@@ -436,7 +425,7 @@ class AddPet extends Component {
                                       marginLeft: 0
                                     },
                                     dateInput: {
-                                      marginRight: 36,
+                                      marginRight: 70,
                                       borderWidth:0,
                                     },
                                   }}
@@ -444,15 +433,15 @@ class AddPet extends Component {
                         </View>
                     </View>
                     <TouchableOpacity onPress={this._onChooseSex.bind(this)} style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>宠物性别</Text>
+                        <Text style={styles.textTitle}>宠物性别</Text>
                         <Text style={{flex:1,}}>{this.state.petSex}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={this._onChooseState.bind(this)} style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>宠物状态</Text>
+                        <Text style={styles.textTitle}>宠物状态</Text>
                         <Text style={{flex:1,}}>{this.state.petState}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={this._onChooseRace.bind(this)} style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>宠物种类</Text>
+                        <Text style={styles.textTitle}>宠物种类</Text>
                         <Text
                             style={{flex:1,}}>{this.state.petRace}</Text>
                     </TouchableOpacity>
@@ -513,11 +502,22 @@ const styles = StyleSheet.create({
         backgroundColor: '#e7e7e7',
     },
     titleStyle: {
-        padding: 5,
-        paddingLeft: 10,
+        margin: 5,
+        borderLeftWidth: 3,
+        borderLeftColor: '#CC0033',
+        paddingLeft: 5,
         flexDirection: 'row',
     },
-    titleText: {marginLeft: 10, fontSize: 16, flex: 1,},
+    titleText: {
+        marginLeft: 10,
+        fontSize: 16,
+        flex: 1,
+        color: '#CC0033',
+    },
+    textTitle: {
+        width: 100,
+        fontSize: 16,
+    },
     inputViewStyle: {
         flex: 1,
         flexDirection: 'row',

@@ -83,8 +83,14 @@ class AddMemberInfo extends Component {
         NetUtil.getAuth(function (user, hos) {
             //POST /service/Api/Gest/AddGest 保存会员信息
             //DM00001 男 DM00002 女
-            if(_this.state.memberItem.GestCode ==null ){alert('GestCode null');return false;}
-            if(_this.state.memberID ==null){alert('memberID null');return false;}
+            if (_this.state.memberItem.GestCode == null) {
+                alert('GestCode null');
+                return false;
+            }
+            if (_this.state.memberID == null) {
+                alert('memberID null');
+                return false;
+            }
             var item = {
                 "ID": _this.state.memberID,
                 "GestCode": _this.state.memberItem.GestCode,
@@ -146,10 +152,12 @@ class AddMemberInfo extends Component {
                 component: AddPet,
                 params: {
                     headTitle: '新增宠物',
-                    member: {name: _this.state.memberName,
+                    member: {
+                        name: _this.state.memberName,
                         phone: _this.state.memberPhone,
-                        memberID:_this.state.memberID,
-                        gestCode:_this.state.memberItem.GestCode},
+                        memberID: _this.state.memberID,
+                        gestCode: _this.state.memberItem.GestCode
+                    },
                 }
             })
         }
@@ -214,40 +222,30 @@ class AddMemberInfo extends Component {
             <View style={styles.container}>
                 <Head title={this.props.headTitle}
                       canBack={true} onPress={this._onBack.bind(this)}
+                      canAdd={true} edit='保存' editInfo={this._save.bind(this, true)}
                 />
                 <ScrollView key={'scrollView'}
                             horizontal={false}
                             showsVerticalScrollIndicator={true}
                             scrollEnabled={true}>
                     <View style={styles.titleStyle}>
-                        <Text  style={styles.titleText}>基本信息</Text>
+                        <Text style={styles.titleText}>基本信息</Text>
                     </View>
                     <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>编号</Text>
-                        <TextInput placeholder={this.state.memberItem.GestCode}
-                                   editable={false}
-                                   underlineColorAndroid={'transparent'}
-                                   keyboardType={'default'}
-                                   style={{height: 40, borderWidth:0, flex:1}}
-                        />
+                        <Text style={styles.textTitle}>编号</Text>
+                        <Text style={{flex:1,color:'black'}}>{this.state.memberItem.GestCode}</Text>
                     </View>
                     <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>登记日期</Text>
-                        <View style={{flex:1,height:39}}>
-                            <TextInput value={this.state.memberRegistrationTime}
-                                       editable={false}
-                                       underlineColorAndroid={'transparent'}
-                                       style={{height: 39, borderWidth:0, flex:1}}
-                            />
-                        </View>
+                        <Text style={styles.textTitle}>登记日期</Text>
+                        <Text style={{flex:1,color:'black'}}>{this.state.memberRegistrationTime}</Text>
                     </View>
                     <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>姓名</Text>
+                        <Text style={styles.textTitle}>姓名</Text>
                         <TextInput value={this.state.memberName}
                                    editable={this.state.enable}
                                    underlineColorAndroid={'transparent'}
                                    keyboardType={'default'}
-                                   style={{height: 40, borderWidth:0, flex:1}}
+                                   style={{height: 40, borderWidth:0, flex:1,color:'black'}}
                                    onChangeText={(text)=>{
                                         this.setState({
                                             memberName:text
@@ -256,7 +254,7 @@ class AddMemberInfo extends Component {
                         />
                     </View>
                     <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>生日</Text>
+                        <Text style={styles.textTitle}>生日</Text>
                         <View style={{flex:1,height:39}}>
                             <DatePicker
                                 date={this.state.memberBirthday}
@@ -277,7 +275,7 @@ class AddMemberInfo extends Component {
                                       marginLeft: 0
                                     },
                                     dateInput: {
-                                      marginRight: 36,
+                                      marginRight: 70,
                                       borderWidth:0,
                                     },
                                   }}
@@ -285,49 +283,49 @@ class AddMemberInfo extends Component {
                         </View>
                     </View>
                     <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>电话</Text>
+                        <Text style={styles.textTitle}>电话</Text>
                         <TextInput value={this.state.memberPhone}
                                    editable={this.state.enable}
                                    underlineColorAndroid={'transparent'}
                                    keyboardType={'default'}
-                                   style={{height: 40, borderWidth:0, flex:1}}
+                                   style={{height: 40, borderWidth:0, flex:1,color:'black'}}
                                    onChangeText={(text)=>{this.setState({ memberPhone:text })}}
                         />
                     </View>
                     <TouchableOpacity onPress={this._onChooseSex.bind(this)} style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>性别</Text>
-                        <Text style={{flex:1,}}>{this.state.memberSex}</Text>
+                        <Text style={styles.textTitle}>性别</Text>
+                        <Text style={{flex:1,color:'black'}}>{this.state.memberSex}</Text>
                     </TouchableOpacity>
                     <View style={styles.titleStyle}>
-                        <Text  style={styles.titleText}>会员信息</Text>
+                        <Text style={styles.titleText}>会员信息</Text>
                     </View>
                     <TouchableOpacity onPress={this._onChooseLevel.bind(this)} style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>会员等级</Text>
-                        <Text style={{flex:1,}}>{this.state.memberLevel}</Text>
+                        <Text style={styles.textTitle}>会员等级</Text>
+                        <Text style={{flex:1,color:'black'}}>{this.state.memberLevel}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={this._onChooseState.bind(this)} style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>会员状态</Text>
-                        <Text style={{flex:1,}}>{this.state.memberState}</Text>
+                        <Text style={styles.textTitle}>会员状态</Text>
+                        <Text style={{flex:1,color:'black'}}>{this.state.memberState}</Text>
                     </TouchableOpacity>
                     <View style={styles.inputViewStyle}>
-                        <Text style={{width:100,}}>备注</Text>
+                        <Text style={styles.textTitle}>备注</Text>
                         <TextInput value={this.state.memberRemarks}
                                    editable={this.state.enable}
                                    underlineColorAndroid={'transparent'}
                                    keyboardType={'default'}
-                                   style={{height: 40, borderWidth:0, flex:1}}
+                                   style={{height: 40, borderWidth:0, flex:1,color:'black'}}
                                    onChangeText={(text)=>{this.setState({ memberRemarks:text })}}
                         />
                     </View>
-                    <View style={{height:130, flexDirection:'row'}}>
+                    {/*<View style={{height:130, flexDirection:'row'}}>
                         <View style={{flex:1}}>
                             <NButton onPress={this._save.bind(this, true)} backgroundColor={'#87CEFA'} text="保存"/>
                         </View>
-                        {/*<View style={{flex:1}}>
-                            <NButton onPress={this._saveAndAddPet.bind(this)} backgroundColor={'#87CEFA'}
-                                     text="保存并添加宠物"/>
-                        </View>*/}
-                    </View>
+                        <View style={{flex:1}}>
+                         <NButton onPress={this._saveAndAddPet.bind(this)} backgroundColor={'#87CEFA'}
+                         text="保存并添加宠物"/>
+                         </View>
+                    </View>*/}
                 </ScrollView>
                 <Picker
                     style={{height: 300}}
@@ -385,11 +383,22 @@ const styles = StyleSheet.create({
         backgroundColor: '#e7e7e7',
     },
     titleStyle: {
-        padding: 5,
-        paddingLeft: 10,
+        margin: 5,
+        borderLeftWidth: 3,
+        borderLeftColor: '#CC0033',
+        paddingLeft: 5,
         flexDirection: 'row',
     },
-    titleText: {marginLeft: 10, fontSize: 16, flex: 1,},
+    titleText: {
+        marginLeft: 10,
+        fontSize: 16,
+        flex: 1,
+        color: '#CC0033',
+    },
+    textTitle: {
+        width: 100,
+        fontSize: 16,
+    },
     inputViewStyle: {
         flex: 1,
         flexDirection: 'row',

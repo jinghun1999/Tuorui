@@ -311,38 +311,38 @@ class BeautyServices extends React.Component {
                     <Text style={styles.titleText}>宠物信息</Text>
                 </View>
                 <View style={styles.inputViewStyle}>
-                    <Text style={{width:100,}}>会员名称</Text>
-                    <Text style={{flex:1}}>{this.state.petSource.GestName}</Text>
+                    <Text style={styles.textTitle}>会员名称</Text>
+                    <Text style={{flex:1,color:'black'}}>{this.state.petSource.GestName}</Text>
                 </View>
                 <View style={styles.inputViewStyle}>
-                    <Text style={{width:100,}}>手机号码</Text>
-                    <Text style={{flex:1}}>{this.state.petSource.MobilePhone}</Text>
+                    <Text style={styles.textTitle}>手机号码</Text>
+                    <Text style={{flex:1,color:'black'}}>{this.state.petSource.MobilePhone}</Text>
                 </View>
                 <TouchableOpacity onPress={this._onChoosePet.bind(this)}
                                   style={styles.inputViewStyle}>
-                    <Text style={{width:100,}}>宠物名称</Text>
-                    <Text style={{flex:1}}>{this.state.petSource.PetName}</Text>
+                    <Text style={styles.textTitle}>宠物名称</Text>
+                    <Text style={{flex:1,color:'black'}}>{this.state.petSource.PetName}</Text>
                     <Icon name={'angle-right'} size={20} color={'#ccc'} style={{marginRight:10}}/>
                 </TouchableOpacity>
                 <View style={styles.titleStyle}>
                     <Text style={styles.titleText}>服务信息</Text>
                 </View>
                 <View style={styles.inputViewStyle}>
-                    <Text style={{width:100,}}>服务单号</Text>
-                    <Text style={{flex:1}}>{this.state.servicesFWID}</Text>
+                    <Text style={styles.textTitle}>服务单号</Text>
+                    <Text style={{flex:1,color:'black'}}>{this.state.servicesFWID}</Text>
                 </View>
                 <TouchableOpacity onPress={this._onChooseService.bind(this)} style={styles.inputViewStyle}>
-                    <Text style={{width:100,}}>服务师</Text>
-                    <Text style={{flex:1}}>{this.state.serviceName}</Text>
+                    <Text style={styles.textTitle}>服务师</Text>
+                    <Text style={{flex:1,color:'black'}}>{this.state.serviceName}</Text>
                     <Icon name={'angle-right'} size={20} color={'#ccc'} style={{marginRight:10}}/>
                 </TouchableOpacity>
                 <View style={styles.inputViewStyle}>
-                    <Text style={{width:100,}}>总项</Text>
-                    <Text style={{flex:1}}>{this.state.totalNum.toString()}</Text>
+                    <Text style={styles.textTitle}>总项</Text>
+                    <Text style={{flex:1,color:'black'}}>{this.state.totalNum.toString()}</Text>
                 </View>
                 <View style={styles.inputViewStyle}>
-                    <Text style={{width:100,}}>总金额</Text>
-                    <Text style={{flex:1}}>¥{this.state.totalAmount.toString()}</Text>
+                    <Text style={styles.textTitle}>总金额</Text>
+                    <Text style={{flex:1,color:'black'}}>¥{this.state.totalAmount.toString()}</Text>
                 </View>
                 <View style={styles.titleStyle}>
                     <Text style={styles.titleText}>美容项目</Text>
@@ -359,8 +359,8 @@ class BeautyServices extends React.Component {
     _onRenderRow(beauty) {
         return (
             <TouchableOpacity style={styles.row} onPress={()=>this._onBeautyDetails(beauty)}>
-                <Text style={{flex: 1,fontSize:14, fontWeight:'bold'}}>{beauty.ItemName}</Text>
-                <Text style={{flex: 1,fontSize:14,}}>单价: ¥{beauty.SellPrice}</Text>
+                <Text style={{flex: 1,fontSize:14,color:'#27408B', fontWeight:'bold'}}>{beauty.ItemName}</Text>
+                <Text style={{flex: 1,fontSize:14,color:'#8B0000'}}>单价: ¥{beauty.SellPrice}</Text>
             </TouchableOpacity>
         )
     }
@@ -407,11 +407,22 @@ const styles = StyleSheet.create({
         backgroundColor: '#e7e7e7',
     },
     titleStyle: {
-        padding: 5,
-        paddingLeft: 10,
+        margin: 5,
+        borderLeftWidth: 3,
+        borderLeftColor: '#CC0033',
+        paddingLeft: 5,
         flexDirection: 'row',
     },
-    titleText: {marginLeft: 10, fontSize: 16, flex: 1,},
+    titleText: {
+        marginLeft: 10,
+        fontSize: 16,
+        flex: 1,
+        color: '#CC0033',
+    },
+    textTitle: {
+        width: 100,
+        fontSize: 16,
+    },
     inputViewStyle: {
         flex: 1,
         flexDirection: 'row',

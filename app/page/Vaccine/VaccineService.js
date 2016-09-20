@@ -269,6 +269,7 @@ class VaccineService extends Component {
     _onChoosePet() {
         //选择宠物
         let _this = this;
+        if(_this.props.isLook){return false;}
         const {navigator} =_this.props;
         if (navigator) {
             navigator.push({
@@ -289,7 +290,7 @@ class VaccineService extends Component {
     chooseVaccine() {
         //疫苗添加
         let _this = this;
-        if(_this.state.canEdit==false){return false;}
+        if(_this.props.isLook){return false;}
         const {navigator} = _this.props;
         if (navigator) {
             navigator.push({
@@ -319,7 +320,9 @@ class VaccineService extends Component {
     }
 
     _onChoosePerson() {
-        this.picker.toggle();
+        let _this =this;
+        if(_this.props.isLook){return false;}
+        _this.picker.toggle();
     }
 
     _renderHeader() {
