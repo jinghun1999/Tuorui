@@ -165,12 +165,6 @@ class AddPet extends Component {
                 } else if (_sex == '其他') {
                     sexCode = 'DM00035'
                 }
-                let _petState = _this.state.petState, _petCode = null;
-                if (_petState == '未绝育') {
-                    _petCode = 'SM00003'
-                } else if (_petState == '已绝育') {
-                    _petCode = 'SM00004'
-                }
                 if (_this.props.member.gestCode == null) {
                     alert('gestCode null');
                     return false
@@ -198,7 +192,7 @@ class AddPet extends Component {
                     "PetSWidth": null,
                     "PetBodyLong": null,
                     "SickFileCode": _this.state.petSickID,
-                    "BirthStatus": _petCode,
+                    "BirthStatus": _this.state.petState,
                     "Status": "SM00052",
                     "PetHead": null,
                     "PetHeadID": null,
@@ -472,7 +466,7 @@ class AddPet extends Component {
                     selectedValue={this.state.petState}
                     onPickerDone={(state)=>{
                         this.setState({
-                            petState: state,
+                            petState: state[0]!=null?state[0]:'',
                         })
                     }}
                 />

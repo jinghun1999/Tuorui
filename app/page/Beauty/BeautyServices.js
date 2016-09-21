@@ -42,9 +42,9 @@ class BeautyServices extends React.Component {
             serviceSource: [],
             servicesID: null,
             edit: '保存',
-            canAdd: true,
             serviceName: '',
-            canChoose: true,
+            canChoose: false,
+            isEdit: true,
             ServicerNameData: [''],
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
         }
@@ -75,6 +75,7 @@ class BeautyServices extends React.Component {
                 if (_this.state.servicesFWID == null) {
                     _this.setState({
                         servicesFWID: data.Message,
+                        canChoose: true,
                     });
                 }
             })
@@ -102,8 +103,11 @@ class BeautyServices extends React.Component {
                     servicesID: _this.props.beautyInfo.HairdresserID,
                     totalNum: _this.props.beautyInfo.TotalNum,
                     totalAmount: _this.props.beautyInfo.TotalCost,
-                    canAdd: false,
+                    edit: '编辑',
                 })
+                if (_this.props.beautyInfo.PaidStatus == 'SM00051') {
+                    _this.setState({isEdit: false,})
+                }
                 var postdata = [{
                     "Childrens": null,
                     "Field": "IsDeleted",
@@ -142,7 +146,7 @@ class BeautyServices extends React.Component {
     }
 
     chooseBeauty() {
-        if (this.props.canEdit) {
+        if (this.state.canChoose) {
             let _this = this;
             const {navigator} = _this.props;
             if (navigator) {
@@ -175,8 +179,9 @@ class BeautyServices extends React.Component {
 
     _onBeautyDetails(beauty) {
         let _this = this;
-        //PaidStatus=SM00040 未付款
-        if (beauty.PaidStatus != 'SM00040'){alert('此项目已缴费!'); return false;}
+        if (_this.state.edit == '编辑') {
+            return false;
+        }
         Alert.alert(
             '删除提示',
             '您确定要删除此条信息吗？',
@@ -184,31 +189,23 @@ class BeautyServices extends React.Component {
                 {text: '取消', onPress: () => console.log('Cancel Pressed!')},
                 {
                     text: '确定', onPress: () => {
-                    //删除此条数据
-                    if (_this.props.canEdit) {
-                        //true为新增服务，删除数据无需删除数据库
-                        _this.state.beautySource.forEach((item, index, array)=> {
-                            if (beauty.ItemName == item.ItemName) {
-                                _this.setState({
-                                    beautySource: _this.state.beautySource.filter((elem, i) => index !== i)
-                                })
-                            }
-                        })
-                    } else {
-                        //删除数据库中的美容数据 前提为未付款未使用状态
-                        NetUtil.getAuth(function (user, hos) {
-                            let header = {
-                                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-                            }
-                            //http://test.tuoruimed.com/service/Api/Service/UpdateIsDelete?id=ba7d8952-8a45-4344-8670-58638c4c3296
-                                NetUtil.get(CONSTAPI.HOST + '/Service/UpdateIsDelete?id='+beauty.ID, header, function (data) {
-                                    //删除数据
-                                    if(data.Sign && data.Message){
-                                        alert('删除成功');
-                                    }
-                                })
-                        })
+                    //删除此条数据、PaidStatus=SM00040 未付款
+                    if (beauty.PaidStatus != 'SM00040') {
+                        Alert.alert('提示', '此项目已缴费,不可删除!', [{text: '确定'}]);
+                        return false;
                     }
+                    //beautySource: _this.state.beautySource.filter((elem, i) => index !== i)
+                    let newSource = [];
+                    _this.state.beautySource.forEach((item, index, array)=> {
+                        if (beauty.ItemCode === item.ItemCode) {
+                            //var _beauty=_this.state.beautySource.splice(0,index);
+                            item.IsDeleted =1;
+                        }
+                        newSource.push(item);
+                    });
+                    _this.setState({
+                        beautySource: newSource
+                    })
                 }
                 }
             ]
@@ -217,7 +214,7 @@ class BeautyServices extends React.Component {
 
     _onChoosePet() {
         let _this = this;
-        if (!_this.state.canAdd) {
+        if (!_this.state.canChoose) {
             return false;
         }
         const {navigator} =_this.props;
@@ -239,104 +236,205 @@ class BeautyServices extends React.Component {
 
     _onEditInfo() {
         let _this = this;
-        if (_this.state.petSource.PetCode == null) {
-            ToastAndroid.show("请选择宠物", ToastAndroid.SHORT);
-            return false;
-        } else if (_this.state.serviceName == null) {
-            ToastAndroid.show('请选择服务师', ToastAndroid.SHORT);
-            return false;
-        } else if (_this.state.beautySource.length == 0) {
-            ToastAndroid.show('请选择美容项目', ToastAndroid.SHORT);
-            return false;
-        }
-        NetUtil.getAuth(function (user, hos) {
-            var service = _this.state.serviceSource;
-            var servicesID = 0;
-            service.forEach((item, index, array)=> {
-                if (item.PersonName == _this.state.serviceName) {
-                    servicesID = item.ID;
-                }
-            });
-            var _petSource = _this.state.petSource;
-            var totalNum = _this.state.totalNum;
-            var totalAmount = _this.state.totalAmount;
-            var items = {
-                "ID": "00000000-0000-0000-0000-000000000000",
-                "ServiceCode": _this.state.servicesFWID,
-                "GestID": _petSource.GestID,
-                "GestName": _petSource.GestName,
-                "PetID": _petSource.PetID,
-                "PetName": _petSource.PetName,
-                "GestCode": _petSource.GestCode,
-                "MobilePhone": _petSource.MobilePhone,
-                "HairdresserID": servicesID,
-                "AssistantID": null,
-                "AssistantName": "",
-                "HairdresserName": _this.state.serviceName,
-                "TotalNum": totalNum,
-                "TotalCost": totalAmount,
-                "PaidStatus": "SM00040",
-                "PaidTime": null,
-                "Remark": "",
-                "CreatedBy": null,
-                "CreatedOn": "0001-01-01T00:00:00",
-                "ModifiedBy": null,
-                "ModifiedOn": "0001-01-01T00:00:00",
-                "IsDeleted": 0,
-                "EntID": "00000000-0000-0000-0000-000000000000"
-            };
-            let beautyItems = [];
-            let _beauty = _this.state.beautySource;
-            for (let i = 0; i < _beauty.length; i++) {
-                var item = {
-                    "ID": "00000000-0000-0000-0000-000000000000",
-                    "ServiceID": null,
-                    "ItemCode": _beauty[i].ItemCode,
-                    "ItemName": _beauty[i].ItemName,
-                    "ItemStandard": "",
-                    "BarCode": _beauty[i].BarCode,
-                    "SellPrice": _beauty[i].SellPrice,
-                    "InputCount": 1,
-                    "TotalCost": _beauty[i].TotalCost,
-                    "PackageUnit": _beauty[i].PackageUnit,
-                    "PaidStatus": "SM00040",
-                    "PaidTime": null,
-                    "Remark": null,
-                    "CreatedBy": null,
-                    "CreatedOn": "0001-01-01T00:00:00",
-                    "ModifiedBy": null,
-                    "ModifiedOn": "0001-01-01T00:00:00",
-                    "IsDeleted": 0,
-                    "EntID": "00000000-0000-0000-0000-000000000000"
-                };
-                beautyItems.push(item);
+        if (_this.state.edit == '编辑') {
+            _this.setState({
+                edit: '保存',
+                canChoose: true,
+            })
+        } else if (_this.state.edit == '保存') {
+            if (_this.state.petSource.PetID == null) {
+                Alert.alert('提示', '请选择宠物', [{text: '确定'}]);
+                return false;
+            } else if (_this.state.serviceName == null) {
+                Alert.alert('提示', '请选择服务师', [{text: '确定'}]);
+                return false;
+            } else if (_this.state.beautySource.length == 0) {
+                Alert.alert('提示', '请选择美容项目', [{text: '确定'}]);
+                return false;
             }
-            let postjson = {
-                item: items,
-                details: beautyItems,
-            }
-            let header = {
-                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-            };
-            ////save http://petservice.tuoruimed.com/service/Api/Service/AddList
-            NetUtil.postJson(CONSTAPI.HOST + '/Service/AddList', postjson, header, function (data) {
-                if (data.Sign && data.Message) {
-                    ToastAndroid.show("保存成功", ToastAndroid.SHORT);
-                    if (_this.props.getResult) {
-                        _this.props.getResult();
+            if (_this.props.beautyID == 1) {
+                //1为新增美容服务
+                NetUtil.getAuth(function (user, hos) {
+                    var service = _this.state.serviceSource;
+                    var servicesID = 0;
+                    service.forEach((item, index, array)=> {
+                        if (item.PersonName == _this.state.serviceName) {
+                            servicesID = item.ID;
+                        }
+                    });
+                    var _petSource = _this.state.petSource;
+                    var totalNum = _this.state.totalNum;
+                    var totalAmount = _this.state.totalAmount;
+                    var items = {
+                        "ID": "00000000-0000-0000-0000-000000000000",
+                        "ServiceCode": _this.state.servicesFWID,
+                        "GestID": _petSource.GestID,
+                        "GestName": _petSource.GestName,
+                        "PetID": _petSource.PetID,
+                        "PetName": _petSource.PetName,
+                        "GestCode": _petSource.GestCode,
+                        "MobilePhone": _petSource.MobilePhone,
+                        "HairdresserID": servicesID,
+                        "AssistantID": null,
+                        "AssistantName": "",
+                        "HairdresserName": _this.state.serviceName,
+                        "TotalNum": totalNum,
+                        "TotalCost": totalAmount,
+                        "PaidStatus": "SM00040",
+                        "PaidTime": null,
+                        "Remark": "",
+                        "CreatedBy": null,
+                        "CreatedOn": "0001-01-01T00:00:00",
+                        "ModifiedBy": null,
+                        "ModifiedOn": "0001-01-01T00:00:00",
+                        "IsDeleted": 0,
+                        "EntID": "00000000-0000-0000-0000-000000000000"
+                    };
+                    let beautyItems = [];
+                    let _beauty = _this.state.beautySource;
+                    for (let i = 0; i < _beauty.length; i++) {
+                        var item = {
+                            "ID": "00000000-0000-0000-0000-000000000000",
+                            "ServiceID": null,
+                            "ItemCode": _beauty[i].ItemCode,
+                            "ItemName": _beauty[i].ItemName,
+                            "ItemStandard": "",
+                            "BarCode": _beauty[i].BarCode,
+                            "SellPrice": _beauty[i].SellPrice,
+                            "InputCount": 1,
+                            "TotalCost": _beauty[i].TotalCost,
+                            "PackageUnit": _beauty[i].PackageUnit,
+                            "PaidStatus": "SM00040",
+                            "PaidTime": null,
+                            "Remark": null,
+                            "CreatedBy": null,
+                            "CreatedOn": "0001-01-01T00:00:00",
+                            "ModifiedBy": null,
+                            "ModifiedOn": "0001-01-01T00:00:00",
+                            "IsDeleted": 0,
+                            "EntID": "00000000-0000-0000-0000-000000000000"
+                        };
+                        beautyItems.push(item);
                     }
-                    _this._onBack();
-                } else {
-                    ToastAndroid.show("获取数据错误" + data.Exception, ToastAndroid.SHORT);
-                }
-            });
-        }, function (err) {
-            alert(err);
-        })
+                    let postjson = {
+                        item: items,
+                        details: beautyItems,
+                    }
+                    let header = {
+                        'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
+                    };
+                    ////save http://petservice.tuoruimed.com/service/Api/Service/AddList
+                    NetUtil.postJson(CONSTAPI.HOST + '/Service/AddList', postjson, header, function (data) {
+                        if (data.Sign && data.Message) {
+                            ToastAndroid.show("保存成功", ToastAndroid.SHORT);
+                            if (_this.props.getResult) {
+                                _this.props.getResult();
+                            }
+                            _this._onBack();
+                        } else {
+                            ToastAndroid.show("获取数据错误" + data.Exception, ToastAndroid.SHORT);
+                        }
+                    });
+                }, function (err) {
+                    alert(err);
+                })
+            }
+            else if (_this.props.beautyID == 2) {
+                //2为详情 修改
+                NetUtil.getAuth(function (user, hos) {
+                    var service = _this.state.serviceSource;
+                    var servicesID = 0;
+                    service.forEach((item, index, array)=> {
+                        if (item.PersonName == _this.state.serviceName) {
+                            servicesID = item.ID;
+                        }
+                    });
+                    var _petSource = _this.state.petSource;
+                    var totalNum = _this.state.totalNum;
+                    var totalAmount = _this.state.totalAmount;
+                    var items = {
+                        "ID": _petSource.ID,
+                        "ServiceCode": _this.state.servicesFWID,
+                        "GestID": _petSource.GestID,
+                        "GestName": _petSource.GestName,
+                        "PetID": _petSource.PetID,
+                        "PetName": _petSource.PetName,
+                        "GestCode": _petSource.GestCode,
+                        "MobilePhone": _petSource.MobilePhone,
+                        "HairdresserID": servicesID,
+                        "AssistantID": _petSource.AssistantID,
+                        "AssistantName": _petSource.AssistantName,
+                        "HairdresserName": _this.state.serviceName,
+                        "TotalNum": totalNum,
+                        "TotalCost": totalAmount,
+                        "PaidStatus": _petSource.PaidStatus,
+                        "PaidTime": _petSource.PaidTime,
+                        "Remark": _petSource.Remark,
+                        "CreatedBy": _petSource.CreatedBy,
+                        "CreatedOn": _petSource.CreatedOn,
+                        "ModifiedBy": user.user.mobile,
+                        "ModifiedOn": Util.getTime(),
+                        "IsDeleted": _petSource.IsDeleted,
+                        "EntID": _petSource.EntID
+                    };
+                    let beautyItems = [];
+                    let _beauty = _this.state.beautySource;
+                    for (let i = 0; i < _beauty.length; i++) {
+                        var item = {
+                            "ID": _beauty[i].ID,
+                            "ServiceID": _beauty[i].ServiceID ? _beauty[i].ServiceID : null,
+                            "ItemCode": _beauty[i].ItemCode,
+                            "ItemName": _beauty[i].ItemName,
+                            "ItemStandard": _beauty[i].ItemStandard,
+                            "BarCode": _beauty[i].BarCode,
+                            "SellPrice": _beauty[i].SellPrice,
+                            "InputCount": _beauty[i].InputCount,
+                            "TotalCost": _beauty[i].TotalCost,
+                            "PackageUnit": _beauty[i].PackageUnit,
+                            "PaidStatus": _beauty[i].PaidStatus,
+                            "PaidTime": _beauty[i].PaidTime,
+                            "Remark":  _beauty[i].Remark,
+                            "CreatedBy": _beauty[i].CreatedBy,
+                            "CreatedOn": _beauty[i].CreatedOn,
+                            "ModifiedBy": user.user.mobile,
+                            "ModifiedOn": Util.getTime(),
+                            "IsDeleted": _beauty[i].IsDeleted,
+                            "EntID": _beauty[i].EntID
+                        };
+                        beautyItems.push(item);
+                    }
+                    let postjson = {
+                        item: items,
+                        details: beautyItems,
+                    }
+                    let header = {
+                        'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
+                    };
+                    ////update //http://test.tuoruimed.com/service/Api/Service/UpdateList
+                    NetUtil.postJson(CONSTAPI.HOST + '/Service/UpdateList', postjson, header, function (data) {
+                        if (data.Sign) {
+                            if (_this.props.getResult) {
+                                _this.props.getResult();
+                            }
+                            _this._onBack();
+                        } else {
+                            Alert.alert('提示', '获取数据错误'+ data.Exception, [{text: '确定'}]);
+                        }
+                    });
+                }, function (err) {
+                    alert(err);
+                })
+            }
+            _this.setState({
+                edit: '编辑',
+                canChoose: false,
+            })
+        }
+
     }
 
     _onChooseService() {
-        if (this.props.canEdit) {
+        if (this.state.canChoose) {
             this.picker.toggle();
         }
     }
@@ -345,7 +443,7 @@ class BeautyServices extends React.Component {
         return (
             <View style={{flex:1,}}>
                 <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}
-                      canAdd={this.props.canEdit} edit={this.state.edit} editInfo={this._onEditInfo.bind(this)}/>
+                      canAdd={this.state.isEdit} edit={this.state.edit} editInfo={this._onEditInfo.bind(this)}/>
                 <View style={styles.titleStyle}>
                     <Text style={styles.titleText}>宠物信息</Text>
                 </View>
@@ -396,12 +494,16 @@ class BeautyServices extends React.Component {
     }
 
     _onRenderRow(beauty) {
-        return (
-            <TouchableOpacity style={styles.row} onPress={()=>this._onBeautyDetails(beauty)}>
-                <Text style={{flex: 1,fontSize:14,color:'#27408B', fontWeight:'bold'}}>{beauty.ItemName}</Text>
-                <Text style={{flex: 1,fontSize:14,color:'#8B0000'}}>单价: ¥{beauty.SellPrice}</Text>
-            </TouchableOpacity>
-        )
+        if (beauty.IsDeleted === 1) {
+            return null;
+        } else {
+            return (
+                <TouchableOpacity style={styles.row} onPress={()=>this._onBeautyDetails(beauty)}>
+                    <Text style={{flex: 1,fontSize:14,color:'#27408B', fontWeight:'bold'}}>{beauty.ItemName}</Text>
+                    <Text style={{flex: 1,fontSize:14,color:'#8B0000'}}>单价: ¥{beauty.SellPrice}</Text>
+                </TouchableOpacity>
+            );
+        }
     }
 
     render() {

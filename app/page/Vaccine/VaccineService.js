@@ -39,9 +39,9 @@ class VaccineService extends Component {
             VaccineGroupCode: '',
             executorName: '',
             executorNameData: [''],
-            totalAmount:0,
-            totalNum:0,
-            edit:'保存',
+            totalAmount: 0,
+            totalNum: 0,
+            edit: '保存',
         }
     }
 
@@ -91,8 +91,8 @@ class VaccineService extends Component {
                     PetName: _this.props.vaccine.PetName,
                 },
                 enable: false,
-                canEdit:false,
-                edit:'',
+                canEdit: false,
+                edit: '',
                 VaccineGroupCode: _this.props.vaccine.VaccineGroupCode,
                 executorName: _this.props.vaccine.ExecutorName,
             });
@@ -129,18 +129,18 @@ class VaccineService extends Component {
                 NetUtil.postJson(CONSTAPI.HOST + '/Medic_Vaccine/GetModelListWithSort', postdata, header, function (data) {
                     if (data.Sign && data.Message != null) {
                         var _totalAmount = 0
-                        var _totalNum =0
-                        data.Message.forEach((item,index,array)=>{
-                            _totalAmount+=item.ItemCost;
-                            _totalNum+=1;
+                        var _totalNum = 0
+                        data.Message.forEach((item, index, array)=> {
+                            _totalAmount += item.ItemCost;
+                            _totalNum += 1;
                         })
                         _this.setState({
                             vaccine: data.Message,
-                            totalAmount:_totalAmount,
-                            totalNum:_totalNum,
+                            totalAmount: _totalAmount,
+                            totalNum: _totalNum,
                             loaded: true,
                         });
-                    }else {
+                    } else {
                         alert("获取数据失败：" + data.Message);
                         _this.setState({
                             loaded: true,
@@ -161,7 +161,7 @@ class VaccineService extends Component {
                 NetUtil.get(CONSTAPI.HOST + '/BusinessInvoices/VaccineGroupCode?', header, function (data) {
                     _this.setState({
                         VaccineGroupCode: data.Message,
-                        canEdit:true,
+                        canEdit: true,
                         loaded: true,
                     });
                 })
@@ -172,7 +172,7 @@ class VaccineService extends Component {
 
     }
 
-    _onSaveInfo(){
+    _onSaveInfo() {
         //保存疫苗信息
         let _this = this;
         if (_this.state.petSource.GestCode == null) {
@@ -186,7 +186,7 @@ class VaccineService extends Component {
             return false;
         }
         NetUtil.getAuth(function (user, hos) {
-           var vaccineGroupCode =_this.state.VaccineGroupCode;
+            var vaccineGroupCode = _this.state.VaccineGroupCode;
             let vaccineItems = [];
             let _vaccine = _this.state.vaccine;
             var executorID = 0;
@@ -198,48 +198,48 @@ class VaccineService extends Component {
             let name = _this.state.executorName;
             for (let i = 0; i < _vaccine.length; i++) {
                 var items = {
-                    "ID":"00000000-0000-0000-0000-000000000000",
-                    "VaccineGroupCode":vaccineGroupCode,
-                    "PetName":_this.state.petSource.PetName,
-                    "GestID":_this.state.petSource.GestID,
-                    "GestName":_this.state.petSource.GestName,
-                    "GestCode":_this.state.petSource.GestCode,
-                    "PetID":_this.state.petSource.PetID,
-                    "MobilePhone":_this.state.petSource.MobilePhone,
-                    "ItemName":_vaccine[i].ItemName,
-                    "ItemCode":_vaccine[i].ItemCode,
-                    "ItemCost":_vaccine[i].SellPrice?_vaccine[i].SellPrice:_vaccine[i].TotalCost,
-                    "ItemStandard":_vaccine[i].ItemStandard,
-                    "EstimateTime":null,
-                    "FactShootTime":"2016-09-19T16:20:08.6973497+08:00",
-                    "ShootLevelNum":null,
-                    "ShootProcess":"首免",
-                    "IntervalDay":null,
-                    "AddType":null,
-                    "Remark":null,
-                    "PaidStatus":"SM00040",
-                    "WarnStatus":"SM00027",
-                    "ShootStatus":"SM00029",
-                    "PaidTime":null,
-                    "CreatedBy":null,
-                    "CreatedOn":"0001-01-01T00:00:00",
-                    "ModifiedBy":null,
-                    "ModifiedOn":"0001-01-01T00:00:00",
-                    "IsDeleted":0,
-                    "BatchNumber":"",
-                    "OutDateTime":null,
-                    "ManufacturerCode":_vaccine[i].ManufacturerCode,
-                    "ManufacturerName":_vaccine[i].ManufacturerName,
-                    "ExecutorID":executorID,
-                    "ExecutorName":name,
-                    "DoctorID":null,
-                    "DoctorName":null,
-                    "AssistantDoctorID":null,
-                    "AssistantDoctorName":"",
-                    "ItemNum":_vaccine[i].ItemCountNum,
-                    "TotalCost":_vaccine[i].SellPrice?_vaccine[i].SellPrice:_vaccine[i].TotalCost,
-                    "Sign":null,
-                    "EntID":"00000000-0000-0000-0000-000000000000"
+                    "ID": "00000000-0000-0000-0000-000000000000",
+                    "VaccineGroupCode": vaccineGroupCode,
+                    "PetName": _this.state.petSource.PetName,
+                    "GestID": _this.state.petSource.GestID,
+                    "GestName": _this.state.petSource.GestName,
+                    "GestCode": _this.state.petSource.GestCode,
+                    "PetID": _this.state.petSource.PetID,
+                    "MobilePhone": _this.state.petSource.MobilePhone,
+                    "ItemName": _vaccine[i].ItemName,
+                    "ItemCode": _vaccine[i].ItemCode,
+                    "ItemCost": _vaccine[i].SellPrice ? _vaccine[i].SellPrice : _vaccine[i].TotalCost,
+                    "ItemStandard": _vaccine[i].ItemStandard,
+                    "EstimateTime": null,
+                    "FactShootTime": "2016-09-19T16:20:08.6973497+08:00",
+                    "ShootLevelNum": null,
+                    "ShootProcess": "首免",
+                    "IntervalDay": null,
+                    "AddType": null,
+                    "Remark": null,
+                    "PaidStatus": "SM00040",
+                    "WarnStatus": "SM00027",
+                    "ShootStatus": "SM00029",
+                    "PaidTime": null,
+                    "CreatedBy": null,
+                    "CreatedOn": "0001-01-01T00:00:00",
+                    "ModifiedBy": null,
+                    "ModifiedOn": "0001-01-01T00:00:00",
+                    "IsDeleted": 0,
+                    "BatchNumber": "",
+                    "OutDateTime": null,
+                    "ManufacturerCode": _vaccine[i].ManufacturerCode,
+                    "ManufacturerName": _vaccine[i].ManufacturerName,
+                    "ExecutorID": executorID,
+                    "ExecutorName": name,
+                    "DoctorID": null,
+                    "DoctorName": null,
+                    "AssistantDoctorID": null,
+                    "AssistantDoctorName": "",
+                    "ItemNum": _vaccine[i].ItemCountNum,
+                    "TotalCost": _vaccine[i].SellPrice ? _vaccine[i].SellPrice : _vaccine[i].TotalCost,
+                    "Sign": null,
+                    "EntID": "00000000-0000-0000-0000-000000000000"
                 };
                 vaccineItems.push(items);
             }
@@ -248,7 +248,7 @@ class VaccineService extends Component {
                 list: vaccineItems,
             };
             let header = {
-                'Authorization': NetUtil.headerAuthorization(user.user.Mobile,hos.hospital.Registration, user.user.Token)
+                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
             };
             ////save http://test.tuoruimed.com/service/Api/Medic_Vaccine/AddOrUpdate
             NetUtil.postJson(CONSTAPI.HOST + '/Medic_Vaccine/AddOrUpdate', postjson, header, function (data) {
@@ -259,7 +259,7 @@ class VaccineService extends Component {
                     }
                     _this._onBack();
                 } else {
-                    alert('获取数据错误'+data.Message);
+                    alert('获取数据错误' + data.Message);
                 }
             });
         }, function (err) {
@@ -270,7 +270,9 @@ class VaccineService extends Component {
     _onChoosePet() {
         //选择宠物
         let _this = this;
-        if(_this.props.isLook){return false;}
+        if (_this.props.isLook) {
+            return false;
+        }
         const {navigator} =_this.props;
         if (navigator) {
             navigator.push({
@@ -291,7 +293,9 @@ class VaccineService extends Component {
     chooseVaccine() {
         //疫苗添加
         let _this = this;
-        if(_this.props.isLook){return false;}
+        if (_this.props.isLook) {
+            return false;
+        }
         const {navigator} = _this.props;
         if (navigator) {
             navigator.push({
@@ -321,8 +325,10 @@ class VaccineService extends Component {
     }
 
     _onChoosePerson() {
-        let _this =this;
-        if(_this.props.isLook){return false;}
+        let _this = this;
+        if (_this.props.isLook) {
+            return false;
+        }
         _this.picker.toggle();
     }
 
@@ -382,7 +388,7 @@ class VaccineService extends Component {
     }
 
     _onVaccineDetails(vaccine) {
-        let _this= this;
+        let _this = this;
         Alert.alert(
             '删除提示',
             '您确定要删除此条信息吗？',
@@ -391,19 +397,14 @@ class VaccineService extends Component {
                 {
                     text: '确定', onPress: () => {
                     //删除此条数据
-                    if(!_this.props.isLook){
-                        //false为新增服务，删除数据无需删除数据库
-                        _this.state.vaccine.forEach((item,index,array)=>{
-                            if(vaccine.ItemName==item.ItemName){
-                                _this.setState({
-                                    vaccine:_this.state.vaccine.filter((elem, i) => index !== i)
-                                })
-                            }
-                        })
-                    }else{
-                        //http://test.tuoruimed.com/service/Api/Medic_Vaccine/UpdateIsDelete?IDlist=55fab855-de0f-4517-8a26-49c833d193e4
-                        return false;
-                    }
+                    _this.state.vaccine.forEach((item, index, array)=> {
+                        if (vaccine.ItemName == item.ItemName) {
+
+                            _this.setState({
+                                vaccine: _this.state.vaccine.filter((elem, i) => index !== i)
+                            })
+                        }
+                    })
                 }
                 },
             ]
@@ -414,7 +415,8 @@ class VaccineService extends Component {
         return (
             <TouchableOpacity style={styles.row} onPress={()=>this._onVaccineDetails(vaccine)}>
                 <Text style={{flex: 1,fontSize:14, color:'#27408B',fontWeight:'bold'}}>{vaccine.ItemName}</Text>
-                <Text style={{flex: 1,fontSize:14,color:'#8B0000'}}>单价:¥ {vaccine.SellPrice?vaccine.SellPrice:vaccine.TotalCost}</Text>
+                <Text
+                    style={{flex: 1,fontSize:14,color:'#8B0000'}}>单价:¥ {vaccine.SellPrice ? vaccine.SellPrice : vaccine.TotalCost}</Text>
             </TouchableOpacity>
         )
     }
@@ -451,22 +453,22 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#e7e7e7',
     },
-    textTitle:{
-        width:100,
-        fontSize:16,
+    textTitle: {
+        width: 100,
+        fontSize: 16,
     },
     titleStyle: {
         margin: 5,
         borderLeftWidth: 3,
         borderLeftColor: '#CC0033',
         paddingLeft: 5,
-        flexDirection:'row',
+        flexDirection: 'row',
     },
     titleText: {
         marginLeft: 10,
         fontSize: 16,
         flex: 1,
-        color:'#CC0033',
+        color: '#CC0033',
     },
     inputViewStyle: {
         flex: 1,

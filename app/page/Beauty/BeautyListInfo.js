@@ -132,6 +132,7 @@ class BeautyListInfo extends React.Component {
                 params: {
                     headTitle: '新增服务',
                     canEdit: true,
+                    beautyID:1,
                     getResult: function () {
                         _this.fetchData(1, false);
                     }
@@ -150,6 +151,7 @@ class BeautyListInfo extends React.Component {
                 params: {
                     headTitle: '美容服务详情',
                     canEdit: false,
+                    beautyID:2,
                     beautyInfo: beauty,
                     getResult: function () {
                         _this.fetchData(1, false);
