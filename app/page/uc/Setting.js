@@ -11,8 +11,6 @@ import{
     } from 'react-native';
 import Head from '../../commonview/Head';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
-
 import ModalPicker from 'react-native-modal-picker'
 class MyAccount extends React.Component {
     constructor(props) {
@@ -86,8 +84,8 @@ class MyAccount extends React.Component {
                         editable={false}
                         placeholder="Select something yummy!"
                         value={this.state.textInputValue} />
-
                 </ModalPicker>
+
             </View>
         );
     }

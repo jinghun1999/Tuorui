@@ -10,6 +10,7 @@ import {
     TextInput,
     View,
     ListView,
+    Alert,
     TouchableOpacity,
     ToastAndroid,
     InteractionManager,
@@ -173,7 +174,45 @@ class BeautyServices extends React.Component {
     }
 
     _onBeautyDetails(beauty) {
-        alert(beauty.ItemName);
+        let _this = this;
+        //PaidStatus=SM00040 未付款
+        if (beauty.PaidStatus != 'SM00040'){alert('此项目已缴费!'); return false;}
+        Alert.alert(
+            '删除提示',
+            '您确定要删除此条信息吗？',
+            [
+                {text: '取消', onPress: () => console.log('Cancel Pressed!')},
+                {
+                    text: '确定', onPress: () => {
+                    //删除此条数据
+                    if (_this.props.canEdit) {
+                        //true为新增服务，删除数据无需删除数据库
+                        _this.state.beautySource.forEach((item, index, array)=> {
+                            if (beauty.ItemName == item.ItemName) {
+                                _this.setState({
+                                    beautySource: _this.state.beautySource.filter((elem, i) => index !== i)
+                                })
+                            }
+                        })
+                    } else {
+                        //删除数据库中的美容数据 前提为未付款未使用状态
+                        NetUtil.getAuth(function (user, hos) {
+                            let header = {
+                                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
+                            }
+                            //http://test.tuoruimed.com/service/Api/Service/UpdateIsDelete?id=ba7d8952-8a45-4344-8670-58638c4c3296
+                                NetUtil.get(CONSTAPI.HOST + '/Service/UpdateIsDelete?id='+beauty.ID, header, function (data) {
+                                    //删除数据
+                                    if(data.Sign && data.Message){
+                                        alert('删除成功');
+                                    }
+                                })
+                        })
+                    }
+                }
+                }
+            ]
+        )
     }
 
     _onChoosePet() {
@@ -382,20 +421,20 @@ class BeautyServices extends React.Component {
                           renderRow={this._onRenderRow.bind(this)}
                 />
                 <Picker
-                style={{height: 300}}
-                showDuration={300}
-                showMask={true}
-                pickerBtnText={'确认'}
-                pickerCancelBtnText={'取消'}
-                ref={picker => this.picker = picker}
-                pickerData={this.state.ServicerNameData}
-                selectedValue={this.state.serviceName}
-                onPickerDone={(text)=>{
+                    style={{height: 300}}
+                    showDuration={300}
+                    showMask={true}
+                    pickerBtnText={'确认'}
+                    pickerCancelBtnText={'取消'}
+                    ref={picker => this.picker = picker}
+                    pickerData={this.state.ServicerNameData}
+                    selectedValue={this.state.serviceName}
+                    onPickerDone={(text)=>{
                  this.setState({
                      serviceName: text!==null?text[0]:'',
                  })
                  }}
-            />
+                />
             </View>
         )
     }

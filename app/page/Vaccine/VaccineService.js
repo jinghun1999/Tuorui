@@ -11,6 +11,7 @@ import{
     View,
     TouchableOpacity,
     Image,
+    Alert,
     ListView,
     ScrollView,
     InteractionManager,
@@ -381,7 +382,32 @@ class VaccineService extends Component {
     }
 
     _onVaccineDetails(vaccine) {
-        return false;
+        let _this= this;
+        Alert.alert(
+            '删除提示',
+            '您确定要删除此条信息吗？',
+            [
+                {text: '取消', onPress: () => console.log('Cancel Pressed!')},
+                {
+                    text: '确定', onPress: () => {
+                    //删除此条数据
+                    if(!_this.props.isLook){
+                        //false为新增服务，删除数据无需删除数据库
+                        _this.state.vaccine.forEach((item,index,array)=>{
+                            if(vaccine.ItemName==item.ItemName){
+                                _this.setState({
+                                    vaccine:_this.state.vaccine.filter((elem, i) => index !== i)
+                                })
+                            }
+                        })
+                    }else{
+                        //http://test.tuoruimed.com/service/Api/Medic_Vaccine/UpdateIsDelete?IDlist=55fab855-de0f-4517-8a26-49c833d193e4
+                        return false;
+                    }
+                }
+                },
+            ]
+        )
     }
 
     _onRenderRow(vaccine) {

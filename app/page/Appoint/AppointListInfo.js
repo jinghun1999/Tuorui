@@ -175,7 +175,7 @@ class AppointListInfo extends React.Component {
                         mode="date"
                         placeholder="选择日期"
                         format="YYYY-MM-DD"
-                        minDate="2010-01-01"
+                        minDate="2015-01-01"
                         maxDate="2020-01-01"
                         confirmBtnText="Confirm"
                         cancelBtnText="Cancel"
