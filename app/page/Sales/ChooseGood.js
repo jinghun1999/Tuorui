@@ -36,7 +36,7 @@ class Goods extends Component {
             pageIndex: 0,
             recordCount: 0,
             nomore: false,
-            sellStoreId: null,
+            sellStoreId: this.props.storeId,
         };
     }
 
@@ -66,24 +66,26 @@ class Goods extends Component {
             _this.setState({nomore: false});
         }
         NetUtil.getAuth(function (user, hos) {
+            let header = {
+                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
+            };
+            /*if (_this.state.sellStoreId == null) {
+                NetUtil.get(CONSTAPI.HOST + '/Store_DirectSell/GetDirectSellPageConfig', header, function (data) {
+                    if (data.Sign && data.Message) {
+                        _this.setState({
+                            sellStoreId: data.Message.SellStoreID,
+                        });
+                    }
+                });
+            }*/
             let postjson = {
-                WarehouseID: 'a574a9fb-038a-4221-8f33-675d5b305b30',
+                WarehouseID: _this.state.sellStoreId,
                 CateNo: null,
                 InputTxt: _this.state.kw,
                 BusiTypeCodes: [1, 2, 3, 7, 8, 9, 12],
                 pageSize: _this.state.pageSize,
                 pageIndex: page
             };
-            let header = {
-                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-            };
-            if(_this.state.sellStoreId==null){
-                NetUtil.get(CONSTAPI.HOST+'/Store_DirectSell/GetDirectSellPageConfig', header, function(data){
-                    if(data.Sign && data.Message){
-                         data.Message.SellStoreID;
-                    }
-                });
-            }
             NetUtil.postJson(CONSTAPI.HOST + '/ItemTypeLeftJoinItemCount/SearchSellListByPage', postjson, header, function (data) {
                 if (data.Sign && data.Message != null) {
                     let dataSource = _this.state.dataSource;

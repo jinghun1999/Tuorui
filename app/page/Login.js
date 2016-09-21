@@ -33,11 +33,17 @@ class Login extends React.Component {
 
     _Login() {
         if (!this.state.user || this.state.user.length == 0) {
-            ToastAndroid.show("请输入用户名", ToastAndroid.SHORT);
+            Alert.alert('错误',"请输入用户名",
+                [
+                    {text: '确定', onPress: () => {}},
+                ]);
             return;
         }
         if (!this.state.pwd || this.state.pwd.length == 0) {
-            ToastAndroid.show("请输入密码", ToastAndroid.SHORT);
+            Alert.alert('错误',"请输入密码",
+                [
+                    {text: '确定', onPress: () => {}},
+                ]);
             return;
         }
 
@@ -63,11 +69,17 @@ class Login extends React.Component {
                         });
                     }
                 } else {
-                    Alert.alert('登陆失败', data.Exception);
+                    Alert.alert('登陆失败', data.Exception,
+                        [
+                            {text: '确定', onPress: () => {}},
+                        ]);
                 }
             });
         } catch (e) {
-            Alert.alert('登陆失败', "错误信息：" + e);
+            Alert.alert('登陆失败', "错误信息：" + e,
+                [
+                    {text: '确定', onPress: () => {}},
+                ]);
         }
     }
 

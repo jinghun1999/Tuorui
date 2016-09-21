@@ -106,7 +106,7 @@ class SaleList extends Component {
                     "Conn": 1
                 }],
                 "sorts": [{
-                    "Field": "PaidStatus,CreatedOn",
+                    "Field": "CreatedOn",
                     "Title": null,
                     "Sort": {"Name": "Desc", "Title": "降序"},
                     "Conn": 0
