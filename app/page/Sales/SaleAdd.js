@@ -138,7 +138,7 @@ export default class SaleAdd extends React.Component {
         if (_this.state.Guest.ID == null) {
             Alert.alert('提示', "请选择会员", [
                 {
-                    text: 'OK', onPress: () => {
+                    text: '确定', onPress: () => {
                 }
                 },
             ]);
@@ -146,7 +146,7 @@ export default class SaleAdd extends React.Component {
         } else if (_this.state.SelectedGoods.items.length == 0) {
             Alert.alert('提示', "请选择商品", [
                 {
-                    text: 'OK', onPress: () => {
+                    text: '确定', onPress: () => {
                 }
                 },
             ]);
@@ -154,7 +154,7 @@ export default class SaleAdd extends React.Component {
         } else if (!_this.state.SelectedGoods.RealPay || isNaN(_this.state.SelectedGoods.RealPay)) {
             Alert.alert('提示', "请输入付款金额", [
                 {
-                    text: 'OK', onPress: () => {
+                    text: '确定', onPress: () => {
                 }
                 },
             ]);

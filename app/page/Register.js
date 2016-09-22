@@ -50,8 +50,7 @@ class Register extends Component {
     render() {
         return (
             <View style={{backgroundColor: '#f4f4f4', flex: 1}}>
-                <Head title={'用户注册'} canAdd={true} canBack={true}
-                      onPress={this._onBack.bind(this)}/>
+                <Head title={'用户注册'} canBack={true} onPress={this._onBack.bind(this)}/>
                 <TextInput
                     style={styles._input}
                     placeholder='手机号'
@@ -71,7 +70,7 @@ class Register extends Component {
                         textAlignVertical='center'
                         textAlign='center'
                     />
-                    <View style={{flex:3,paddingLeft:10}}>
+                    <View style={{flex:3, paddingLeft:10, paddingRight:10,}}>
                         <TouchableHighlight style={styles.button} underlayColor="#B5B5B5">
                             <Text style={styles.buttonText}>获取验证码</Text>
                         </TouchableHighlight>

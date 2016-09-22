@@ -33,16 +33,22 @@ class Login extends React.Component {
 
     _Login() {
         if (!this.state.user || this.state.user.length == 0) {
-            Alert.alert('错误',"请输入用户名",
+            Alert.alert('错误', "请输入用户名",
                 [
-                    {text: '确定', onPress: () => {}},
+                    {
+                        text: '确定', onPress: () => {
+                    }
+                    },
                 ]);
             return;
         }
         if (!this.state.pwd || this.state.pwd.length == 0) {
-            Alert.alert('错误',"请输入密码",
+            Alert.alert('错误', "请输入密码",
                 [
-                    {text: '确定', onPress: () => {}},
+                    {
+                        text: '确定', onPress: () => {
+                    }
+                    },
                 ]);
             return;
         }
@@ -54,12 +60,34 @@ class Login extends React.Component {
                 if (data.Sign && data.Message) {
                     //Alert.alert('登录成功', "Token:" + data.Message.Token);
                     storage.save({
+                        key: 'LoginData',
+                        rawData: {
+                            identity: _this.state.user,
+                            password: _this.state.pwd,
+                        },
+                    });
+                    storage.save({
                         key: 'USER',
                         rawData: {
                             user: data.Message,
-                            pwd: _this.state.pwd,
-                        }
+                        },
+                        expires: 1000 * 60,
                     });
+                    if (data.Message.HospitalId != null) {
+                        let hos = {};
+                        data.Message.Hospitals.forEach(function (v, i, d) {
+                            if (v.ID === data.Message.HospitalId) {
+                                hos = v;
+                            }
+                        });
+                        storage.save({
+                            key: 'HOSPITAL',
+                            rawData: {
+                                hospital: hos,
+                            }
+                        });
+                    }
+
                     if (navigator) {
                         navigator.pop();
                         navigator.push({
@@ -71,14 +99,18 @@ class Login extends React.Component {
                 } else {
                     Alert.alert('登陆失败', data.Exception,
                         [
-                            {text: '确定', onPress: () => {}},
+                            {
+                                text: '确定'
+                            },
                         ]);
                 }
             });
         } catch (e) {
             Alert.alert('登陆失败', "错误信息：" + e,
                 [
-                    {text: '确定', onPress: () => {}},
+                    {
+                        text: '确定'
+                    },
                 ]);
         }
     }

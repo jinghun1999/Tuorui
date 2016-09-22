@@ -38,7 +38,9 @@ class Demo extends Component {
     }
 
     componentWillMount() {
+        this.checkUpdate();
         if (isFirstTime) {
+            /*
             Alert.alert('提示', '这是当前版本第一次启动,是否要模拟启动失败?失败将回滚到上一版本', [
                 {
                     text: '是', onPress: ()=> {
@@ -50,9 +52,13 @@ class Demo extends Component {
                     markSuccess()
                 }
                 },
-            ]);
+            ]);*/
+            markSuccess();
         } else if (isRolledBack) {
             Alert.alert('提示', '刚刚更新失败了,版本被回滚.');
+        }
+        else {
+            //Alert.alert('提示', 'other');
         }
     }
 
@@ -86,7 +92,7 @@ class Demo extends Component {
                     },
                 ]);
             } else if (info.upToDate) {
-                Alert.alert('提示', '您的应用版本已是最新.');
+                //Alert.alert('提示', '您的应用版本已是最新.');
             } else {
                 Alert.alert('提示', '检查到新的版本' + info.name + ',是否下载?\n' + info.description, [
                     {

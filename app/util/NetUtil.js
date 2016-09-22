@@ -76,19 +76,47 @@ class NetUtil extends React.Component {
     }
 
     static getAuth(success, error) {
-        storage.getBatchData([{
+        storage.load({
             key: 'USER',
-            autoSync: false,
-            syncInBackground: false,
-        }, {
-            key: 'HOSPITAL',
-            autoSync: false,
-            syncInBackground: false,
-        }]).then(rets => {
-            success(rets[0], rets[1]);
+            autoSync: true,
+            syncInBackground: true
+        }).then(user => {
+            storage.load({
+                key: 'HOSPITAL',
+                autoSync: false,
+                syncInBackground: false
+            }).then(hos=> {
+                success(user, hos);
+            }).catch(e=> {
+                success(user, {});
+            })
         }).catch(err => {
-            error(err.message);
+            switch (err.name) {
+                case 'NotFoundError':
+                    error('not found user');
+                    break;
+                case 'ExpiredError':
+                    error('user login expired');
+                    break;
+                default :
+                    error('请重新登陆应用');
+                    break;
+            }
         });
+        /*
+         storage.getBatchData([{
+         key: 'USER',
+         autoSync: true,
+         syncInBackground: false,
+         }, {
+         key: 'HOSPITAL',
+         autoSync: true,
+         syncInBackground: false,
+         }]).then(rets => {
+         success(rets[0], rets[1]);
+         }).catch(e => {
+         error(e.message);
+         });*/
     }
 
     static url_healthmonitnorm(checkItemCode) {

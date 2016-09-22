@@ -8,11 +8,13 @@ import {
     AppRegistry,
     StyleSheet,
     Text,
+    Alert,
     Navigator,
     Image,
     ToastAndroid,
     View
     } from 'react-native';
+import Storage from './app/util/Storage';
 import MainPage from './MainPage';
 import Login from './app/page/Login';
 import NetWorkTool from './app/util/NetWorkTool'
@@ -48,12 +50,9 @@ class Index extends React.Component {
 
     _initState() {
         var _this = this;
-        /*storage.remove({
-         key: 'USER'
-         });*/
         storage.load({
             key: 'USER',
-            autoSync: false,
+            autoSync: true,
             syncInBackground: false
         }).then(ret => {
             _this.setState({
@@ -61,7 +60,7 @@ class Index extends React.Component {
                 loaded: true,
             });
         }).catch(err => {
-            //alert('error:' + err.name);
+            Alert.alert('提示', '登陆过期，请重新登陆', [{text:'确定'}]);
             _this.setState({
                 loaded: true,
             });

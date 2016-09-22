@@ -56,7 +56,7 @@ class App extends Component {
 
     _loadData() {
         var _this = this;
-        storage.load({key: 'USER', autoSync: false, syncInBackground: false}).then(ret => {
+        storage.load({key: 'USER', autoSync: true, syncInBackground: false}).then(ret => {
             _this.setState({
                 user: ret.user,
                 infoLoaded: true,
@@ -66,7 +66,7 @@ class App extends Component {
             });
         }).catch(err => {
             _this.setState({userloaded: true,});
-            alert('请登录' + err);
+            alert('请登录' + err.message);
         });
         storage.load({key: 'HOSPITAL', autoSync: false, syncInBackground: false}).then(ret => {
             _this.setState({

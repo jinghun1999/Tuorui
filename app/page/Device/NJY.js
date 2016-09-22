@@ -6,6 +6,7 @@ import{
     StyleSheet,
     Text,
     View,
+    Alert,
     ListView,
     InteractionManager,
     TouchableHighlight
@@ -40,41 +41,20 @@ class NJY extends Component {
     _search() {
         let _this = this;
         if (_this.state.deviceId != null) {
-            storage.getBatchData([{
-                key: 'USER',
-                autoSync: false,
-                syncInBackground: false,
-            }, {
-                key: 'HOSPITAL',
-                autoSync: false,
-                syncInBackground: false,
-            }]).then(rets => {
-                    let header = {
-                        'Authorization': NetUtil.headerAuthorization(rets[0].user.Mobile, rets[0].pwd, rets[1].hospital.Registration, rets[0].user.Token)
-                    };
-                    let querystr = 'deviceid=' + _this.state.deviceId + '&starttime=' + _this.state.startDate + '&endtime=' + _this.state.endDate + ' 23:59:59';
-                    NetUtil.get('http://wx.tuoruimed.com/Device/njy/getchecklist?' + querystr, header, function (data) {
-                        if (data.result) {
-                            _this.setState({
-                                dataSource: data.lists,
-                                loaded: true,
-                            });
-                        } else {
-                            alert("获取数据失败：" + data.message);
-                            _this.setState({
-                                loaded: true,
-                            });
-                        }
-                    });
-                }
-            ).catch(err => {
+            let querystr = 'deviceid=' + _this.state.deviceId + '&starttime=' + _this.state.startDate + '&endtime=' + _this.state.endDate + ' 23:59:59';
+            NetUtil.get('http://wx.tuoruimed.com/Device/njy/getchecklist?' + querystr, null, function (data) {
+                if (data.result) {
                     _this.setState({
-                        dataSource: null,
+                        dataSource: data.lists,
                         loaded: true,
                     });
-                    alert('error:' + err.message);
+                } else {
+                    Alert.alert('提示', "获取数据失败：" + data.message, [{text: '确定'}]);
+                    _this.setState({
+                        loaded: true,
+                    });
                 }
-            );
+            });
         }
     }
 
@@ -82,7 +62,7 @@ class NJY extends Component {
         let _this = this;
         storage.load({
             key: 'USER',
-            autoSync: false,
+            autoSync: true,
             syncInBackground: false,
         }).then(ret => {
                 //获取设备号
@@ -119,7 +99,8 @@ class NJY extends Component {
         obj.data.forEach((item, i, a)=> {
             inspectBody.push(
                 <View key={i} style={{flexDirection: 'row',marginTop:5, flex: 1}}>
-                    <View style={{alignItems:'center', justifyContent:'center',width: 30, height: 25, marginLeft: 10}}>
+                    <View
+                        style={{alignItems:'center', justifyContent:'center',width: 30, height: 25, marginLeft: 10}}>
                         <Text>{item.item}.</Text>
                     </View>
                     <View
@@ -228,14 +209,15 @@ class NJY extends Component {
         )
     }
 }
+
 const styles = StyleSheet.create({
     noResult: {
         alignItems: 'center',
         justifyContent: 'center',
-        marginLeft:10,
-        marginRight:10,
-        borderTopWidth:1,
-        borderTopColor:'#e7e7e7',
+        marginLeft: 10,
+        marginRight: 10,
+        borderTopWidth: 1,
+        borderTopColor: '#e7e7e7',
         padding: 10,
     },
     searchBtn: {
@@ -249,4 +231,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     }
 });
-module.exports = NJY;
+module
+    .
+    exports = NJY;

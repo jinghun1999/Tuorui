@@ -9,6 +9,7 @@ import {
     Text,
     TextInput,
     View,
+    Alert,
     TouchableOpacity,
     ListView,
     ActivityIndicator,
@@ -169,8 +170,8 @@ class SaleList extends Component {
                     }
                 });
             }
-        }, function (err) {
-
+        }, function (e) {
+            Alert.alert('提示', e,[{text:'确定'}])
         });
     }
 

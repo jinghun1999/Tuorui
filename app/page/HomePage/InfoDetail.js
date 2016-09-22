@@ -126,18 +126,18 @@ class InfoDetail extends React.Component {
                              javaScriptEnabled={true}
                              decelerationRate="normal"/>
                     <View style={styles.bottomContainer}>
-                        <View style={{flex: 1, flexDirection: 'row', backgroundColor: '#ccc'}}>
-                            <View style={styles.readInfo}>
-                                <Icon name={'ios-eye'} size={30} color={'#999'} style={{marginRight: 5}}/>
+                        <View style={{flex: 1, flexDirection: 'row'}}>
+                            {/*<View style={styles.readInfo}>
+                                <Icon name={'ios-eye'} size={20} color={'#999'} style={{marginRight: 5}}/>
                                 <Text>{this.state.readNum}</Text>
-                            </View>
+                            </View>*/}
                             <View style={styles.readInfo}>
-                                <Icon name={'ios-star'} size={30} color={'#999'} style={{marginRight: 5}}/>
+                                <Icon name={'ios-star'} size={20} color={'#999'} style={{marginRight: 5}}/>
                                 <Text>{this.state.collectNum}</Text>
                             </View>
                         </View>
                         <TouchableOpacity style={styles.viewCount} onPress={this._onCollect.bind(this)}>
-                            <Icon name={'ios-star'} size={40} color={this.state.isCollect ? '#993399' : '#ccc'}/>
+                            <Icon name={'ios-star'} size={30} color={this.state.isCollect ? '#ffd575' : '#fff'}/>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
     bottomContainer: {
         flexDirection: 'row',
         height: 35,
-        backgroundColor: '#ccc',
+        backgroundColor: '#f8f8f8',
     },
     readInfo: {
         height: 35,
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     },
     viewCount: {
         width: 80,
-        backgroundColor: '#99CCFF',
+        backgroundColor: '#ececec',
         justifyContent: 'center',
         alignItems: 'center',
         height: 35,

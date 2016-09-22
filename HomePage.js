@@ -256,7 +256,7 @@ class HomePage extends Component {
         return (
             <View>
                 {this.state.focusLoaded ?
-                    <ViewPager style={{height:200}}
+                    <ViewPager style={{height:150}}
                                dataSource={this.state.dsImage.cloneWithPages(this.state.imageSource)}
                                renderPage={this.renderPage}
                                isLoop={true}
