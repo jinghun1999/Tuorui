@@ -296,65 +296,63 @@ class MemberDetails extends Component {
                     </View>
                     <View style={styles.inputViewStyle}>
                         <Text style={styles.textTitle}>登记日期</Text>
-                        <TextInput value={this.props.memberInfo.CreatedOn.replace('T', ' ')}
-                                   editable={false}
-                                   underlineColorAndroid={'transparent'}
-                                   keyboardType={'default'}
-                                   style={{borderWidth:0,flex:1,color:'black'}}
-                        />
+                        <Text style={styles.rowVal}>{this.props.memberInfo.CreatedOn.replace('T', ' ')}</Text>
                     </View>
                     <View style={styles.inputViewStyle}>
                         <Text style={styles.textTitle}>会员名</Text>
-                        <TextInput value={this.state.memberName}
-                                   editable={this.state.enable}
-                                   underlineColorAndroid={'transparent'}
-                                   keyboardType={'default'}
-                                   style={{borderWidth:0,flex:1,color:'black'}}
-                                   onChangeText={(text)=>{this.setState({ memberName: text })}}
-                        />
-                    </View>
-                    <View style={styles.inputViewStyle}>
-                        <Text style={styles.textTitle}>生日</Text>
-                        <View style={{flex:1,}}>
-                            <DatePicker
-                                date={this.state.birthDate}
-                                mode="date"
-                                placeholder="选择日期"
-                                format="YYYY-MM-DD"
-                                minDate="1900-01-01"
-                                maxDate="2020-01-01"
-                                confirmBtnText="Confirm"
-                                cancelBtnText="Cancel"
-                                showIcon={false}
-                                disabled={this.state.edit!=='编辑'}
-                                customStyles={{
-                                    dateIcon: {
-                                      position: 'absolute',
-                                      right: 0,
-                                      top: 4,
-                                      marginLeft: 0
-                                    },
-                                    dateInput: {
-                                      marginRight: 50,
-                                      borderWidth:0,
-                                    },
-                                  }}
-                                onDateChange={(date) => {
-                                if(this.state.edit=='编辑'){return false;}
-                                this.setState({birthDate: date})}
-                                }
+                        <View style={styles.rowView}>
+                            <TextInput value={this.state.memberName}
+                                       editable={this.state.enable}
+                                       underlineColorAndroid={'transparent'}
+                                       keyboardType={'default'}
+                                       style={[styles.rowVal,{height:30}]}
+                                       onChangeText={(text)=>{this.setState({ memberName: text })}}
                             />
                         </View>
                     </View>
                     <View style={styles.inputViewStyle}>
-                        <Text style={styles.textTitle}>电话</Text>
-                        <TextInput value={this.state.memberPhone}
-                                   editable={this.state.enable}
-                                   underlineColorAndroid={'transparent'}
-                                   keyboardType={'default'}
-                                   style={{flex:1,borderWidth:0,color:'black'}}
-                                   onChangeText={(text)=>{this.setState({ memberPhone: text })}}
+                        <Text style={styles.textTitle}>生日</Text>
+                        <DatePicker
+                            date={this.state.birthDate}
+                            mode="date"
+                            placeholder="选择日期"
+                            format="YYYY-MM-DD"
+                            minDate="1900-01-01"
+                            maxDate="2020-01-01"
+                            confirmBtnText="Confirm"
+                            cancelBtnText="Cancel"
+                            showIcon={false}
+                            disabled={this.state.edit!=='编辑'}
+                            style={{padding:0, margin:0,}}
+                            customStyles={{
+                                    dateInput: {
+                                        alignItems:'flex-start',
+                                        height:30,
+                                        padding:0,
+                                        margin:0,
+                                      borderWidth:0,
+                                    },
+                                    dateTouchBody:{
+                                        height:30,
+                                    }
+                                  }}
+                            onDateChange={(date) => {
+                                if(this.state.edit=='编辑'){return false;}
+                                this.setState({birthDate: date})}
+                                }
                         />
+                    </View>
+                    <View style={styles.inputViewStyle}>
+                        <Text style={styles.textTitle}>电话</Text>
+                        <View style={styles.rowView}>
+                            <TextInput value={this.state.memberPhone}
+                                       editable={this.state.enable}
+                                       underlineColorAndroid={'transparent'}
+                                       keyboardType={'default'}
+                                       style={[styles.rowVal,{height:30}]}
+                                       onChangeText={(text)=>{this.setState({ memberPhone: text })}}
+                            />
+                        </View>
                     </View>
                     <TouchableOpacity onPress={this._onChooseSex.bind(this)} style={styles.inputViewStyle}>
                         <Text style={styles.textTitle}>性别</Text>
@@ -362,27 +360,29 @@ class MemberDetails extends Component {
                                    editable={this.state.enable}
                                    underlineColorAndroid={'transparent'}
                                    keyboardType={'default'}
-                                   style={{flex:1,borderWidth:0,color:'black'}}
+                                   style={[styles.rowVal,{height:30}]}
                         />
                     </TouchableOpacity>
                     <View style={styles.inputViewStyle}>
                         <Text style={styles.textTitle}>地址</Text>
-                        <TextInput value={this.state.memberAddress}
-                                   editable={this.state.enable}
-                                   underlineColorAndroid={'transparent'}
-                                   keyboardType={'default'}
-                                   style={{flex:1,borderWidth:0,color:'black'}}
-                                   onChangeText={(text)=>{this.setState({ memberAddress: text })}}
-                        />
+                        <View style={styles.rowView}>
+                            <TextInput value={this.state.memberAddress}
+                                       editable={this.state.enable}
+                                       underlineColorAndroid={'transparent'}
+                                       keyboardType={'default'}
+                                       style={[styles.rowVal,{height:30}]}
+                                       onChangeText={(text)=>{this.setState({ memberAddress: text })}}
+                            />
+                        </View>
                     </View>
                     <View style={styles.inputViewStyle}>
                         <Text style={styles.textTitle}>备注</Text>
-                        <View style={{flex:1,}}>
+                        <View style={styles.rowView}>
                             <TextInput value={this.state.memberRemark}
                                        editable={this.state.enable}
                                        underlineColorAndroid={'transparent'}
                                        keyboardType={'default'}
-                                       style={{borderWidth:0,color:'black'}}
+                                       style={[styles.rowVal,{height:30}]}
                                        onChangeText={(text)=>{this.setState({ memberRemark: text })}}
                             />
                         </View>
@@ -473,6 +473,9 @@ const styles = StyleSheet.create({
     textTitle: {
         width: 100,
         fontSize: 16,
+        marginLeft: 10,
+        alignSelf: 'center',
+        justifyContent: 'center',
     },
     titleText: {
         marginLeft: 10,
@@ -480,14 +483,25 @@ const styles = StyleSheet.create({
         flex: 1,
         color: '#CC0033',
     },
+    rowVal: {
+        borderWidth: 0,
+        flex: 1,
+        color: 'black'
+    },
     inputViewStyle: {
         flexDirection: 'row',
-        padding: 5,
-        justifyContent: 'center',
-        alignItems: 'center',
         backgroundColor: '#fff',
-        borderBottomColor: '#ccc',
+        alignItems: 'center',
+        height: 40,
         borderBottomWidth: StyleSheet.hairlineWidth,
+        borderBottomColor: '#ccc'
+    },
+    rowView: {
+        flex: 1,
+        height: 30,
+        borderWidth: 1,
+        borderColor: '#e7e7e7',
+        marginRight: 10,
     },
     row: {
         flexDirection: 'row',

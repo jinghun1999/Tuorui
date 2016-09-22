@@ -162,8 +162,9 @@ class VaccineListInfo extends Component {
                     headTitle: '疫苗详情',
                     isLook: true,
                     vaccine: vacc,
+                    id:2,
                     getResult: function () {
-                        //_this._onFetchData(1, false);
+                        _this.onFetchData(1, false);
                     }
                 }
             })
@@ -221,6 +222,10 @@ class VaccineListInfo extends Component {
                 params: {
                     headTitle: '添加疫苗',
                     isLook:false,
+                    id:1,
+                    getResult: function () {
+                        _this.onFetchData(1, false);
+                    }
                 }
             })
         }

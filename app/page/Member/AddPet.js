@@ -31,10 +31,11 @@ class AddPet extends Component {
             loaded: false,
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
             enabled: true,
-            petState: '未绝育',
-            petSex: '雌性',
+            petState: '',
+            petSex: '',
             petID: null,
             edit: '',
+            petRace:'',
             isUpdate: false,
             petSickID: null,
             disabled: false,
@@ -50,32 +51,19 @@ class AddPet extends Component {
     _onFetchBasicData() {
         let _this = this;
         if (!this.props.isAdd) {
-            let _state = '';
-            if (_this.props.petSource.BirthStatus == 'SM00003') {
-                _state = '未绝育';
-            } else if (_this.props.petSource.BirthStatus == 'SM00004') {
-                _state = '已绝育';
-            }
-            let _sex = '';
-            if (_this.props.petSource.PetSex == 'DM00004') {
-                _sex = '雌性'
-            } else if (_this.props.petSource.PetSex == 'DM00003') {
-                _sex = '雄性'
-            } else if (_this.props.petSource.PetSex == 'DM00035') {
-                _sex = '其他'
-            }
             _this.setState({
                 edit: '编辑',
                 enabled: false,
                 disabled: true,
-                petSex: _sex,
+                petSex: _this.props.petSource.PetSex,
                 petName: _this.props.petSource.PetName,
                 petID: _this.props.petSource.PetCode,
                 petSickID: _this.props.petSource.SickFileCode,
                 petRace: _this.props.petSource.PetRace,
-                petState: _state,
+                petState: _this.props.petSource.BirthStatus,
                 petBirthday: _this.props.petSource.PetBirthday,
                 isUpdate:true,
+                petDataSource:_this.props.petSource,
             })
         } else {
             _this.setState({
@@ -125,7 +113,6 @@ class AddPet extends Component {
                     _this.setState({
                         typeSource: typeSource,
                         typeSelectData: _type,
-                        petRace: _type[0],
                         loaded: true,
                     })
                 }
@@ -157,14 +144,6 @@ class AddPet extends Component {
                 let header = {
                     'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
                 };
-                let _sex = _this.state.petSex, sexCode = null;
-                if (_sex == '雄性') {
-                    sexCode = 'DM00003'
-                } else if (_sex == '雌性') {
-                    sexCode = 'DM00004'
-                } else if (_sex == '其他') {
-                    sexCode = 'DM00035'
-                }
                 if (_this.props.member.gestCode == null) {
                     alert('gestCode null');
                     return false
@@ -181,7 +160,7 @@ class AddPet extends Component {
                     "GestCode": _this.props.member.GestCode,
                     "GestName": _this.props.member.name,
                     "PetName": _this.state.petName,
-                    "PetSex": sexCode,
+                    "PetSex": _this.state.petSex,
                     "PetBirthday": _this.state.petBirthday,
                     "Age": null,
                     "PetSkinColor": null,
@@ -228,29 +207,12 @@ class AddPet extends Component {
                 let header = {
                     'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
                 };
-                let _sex = _this.state.petSex, sexCode = null;
-                if (_sex == '雄性') {
-                    sexCode = 'DM00003'
-                } else if (_sex == '雌性') {
-                    sexCode = 'DM00004'
-                } else if (_sex == '其他') {
-                    sexCode = 'DM00035'
-                }
-                let _petState = _this.state.petState, _petCode = null;
-                if (_petState == '未绝育') {
-                    _petCode = 'SM00003'
-                } else if (_petState == '已绝育') {
-                    _petCode = 'SM00004'
-                }
                 if (_this.props.member.gestCode == null) {
-                    alert('gestCode null');
                     return false
                 }
                 if (_this.props.member.memberID == null) {
-                    alert('ID null');
                     return false
                 }
-                let date = Util.getTime();
                 let item = {
                     "ID": _this.props.petSource.PetID,
                     "PetCode": _this.state.petID,
@@ -258,29 +220,29 @@ class AddPet extends Component {
                     "GestCode": _this.props.member.GestCode,
                     "GestName": _this.props.member.name,
                     "PetName": _this.state.petName,
-                    "PetSex": sexCode,
+                    "PetSex": _this.state.petSex,
                     "PetBirthday": _this.state.petBirthday,
-                    "Age": null,
-                    "PetSkinColor": null,
+                    "Age": _this.state.petDataSource.Age,
+                    "PetSkinColor": _this.state.petDataSource.PetSkinColor?_this.state.petDataSource.PetSkinColor:'',
                     "PetRace": _this.state.petRace,
-                    "PetBreed": "",
-                    "PetWeight": null,
-                    "PetHeight": null,
-                    "PetSWidth": null,
-                    "PetBodyLong": null,
+                    "PetBreed": _this.state.petDataSource.PetBreed?_this.state.petDataSource.PetBreed:'',
+                    "PetWeight": _this.state.petDataSource.PetWeight?_this.state.petDataSource.PetWeight:'',
+                    "PetHeight": _this.state.petDataSource.PetHeight?_this.state.petDataSource.PetHeight:'',
+                    "PetSWidth": _this.state.petDataSource.PetSWidth?_this.state.petDataSource.PetSWidth:'',
+                    "PetBodyLong": _this.state.petDataSource.PetBodyLong?_this.state.petDataSource.PetBodyLong:'',
                     "SickFileCode": _this.state.petSickID,
-                    "BirthStatus": _petCode,
-                    "Status": "SM00052",
-                    "PetHead": null,
-                    "PetHeadID": null,
-                    "DogBandID": null,
-                    "MdicTypeName": '',
-                    "Remark": null,
+                    "BirthStatus": _this.state.petState,
+                    "Status": _this.state.petDataSource.Status?_this.state.petDataSource.Status:'',
+                    "PetHead": _this.state.petDataSource.PetHead?_this.state.petDataSource.PetHead:'',
+                    "PetHeadID": _this.state.petDataSource.PetHeadID?_this.state.petDataSource.PetHeadID:'',
+                    "DogBandID": _this.state.petDataSource.DogBandID?_this.state.petDataSource.DogBandID:'',
+                    "MdicTypeName": _this.state.petDataSource.MdicTypeName?_this.state.petDataSource.MdicTypeName:'',
+                    "Remark": _this.state.petDataSource.Remark?_this.state.petDataSource.Remark:'',
                     "CreatedBy": _this.props.member.createdBy,
                     "CreatedOn": _this.props.member.createdOn,
                     "ModifiedBy": user.user.user,
-                    "ModifiedOn": date,
-                    "IsDeleted": 0,
+                    "ModifiedOn": Util.getTime(),
+                    "IsDeleted": _this.state.petDataSource.IsDeleted?_this.state.petDataSource.IsDeleted:0,
                     "EntID": hos.hospital.ID
                 };
                 NetUtil.postJson(CONSTAPI.HOST + '/Pet/UpdateAndReturn', item, header, function (data) {
@@ -451,7 +413,7 @@ class AddPet extends Component {
                     selectedValue={this.state.petSex}
                     onPickerDone={(sex)=>{
                         this.setState({
-                            petSex: sex,
+                            petSex: sex[0]?sex[0]:'',
                         })
                     }}
                 />
@@ -466,7 +428,7 @@ class AddPet extends Component {
                     selectedValue={this.state.petState}
                     onPickerDone={(state)=>{
                         this.setState({
-                            petState: state[0]!=null?state[0]:'',
+                            petState: state[0]?state[0]:'',
                         })
                     }}
                 />
@@ -481,7 +443,7 @@ class AddPet extends Component {
                     selectedValue={this.state.petRace}
                     onPickerDone={(type)=>{
                         this.setState({
-                            petRace: type[0]!=null?type[0]:'',
+                            petRace: type[0]?type[0]:'',
                         })
                     }}
                 />

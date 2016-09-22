@@ -200,11 +200,14 @@ class BeautyServices extends React.Component {
                         if (beauty.ItemCode === item.ItemCode) {
                             //var _beauty=_this.state.beautySource.splice(0,index);
                             item.IsDeleted =1;
+                            _this.state.totalAmount -= beauty.SellPrice;
+                            _this.state.totalNum -= 1;
                         }
                         newSource.push(item);
                     });
                     _this.setState({
-                        beautySource: newSource
+                        beautySource: newSource,
+
                     })
                 }
                 }
