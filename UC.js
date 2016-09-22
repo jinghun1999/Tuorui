@@ -71,6 +71,7 @@ class UC extends React.Component {
                 {
                     text: '确定', onPress: () => {
                     storage.remove({key: 'USER'});
+                    storage.remove({key: 'LoginData'});
                     const { navigator } = _this.props;
                     if (navigator) {
                         //navigator.pop();

@@ -13,8 +13,8 @@ var storage = new Storage({
         USER(params) {
             let {id, resolve, reject } = params;
             storage.load({key: 'LoginData'}).then(l=> {
-                let url = CONSTAPI.LOGIN + '?identity=' + l.identity + '&password=' + l.password + '&type=m';
-                //let url = CONSTAPI.LOGIN + '?identity=18307722503&password=abc123&type=m';
+                let url = CONSTAPI.Auth + '/ad?identity=' + l.identity + '&password=' + l.password + '&type=m';
+                //    let url = CONSTAPI.Auth + '?identity=18307722503&password=abc123&type=m';
                 fetch(url)
                     .then((response) => response.text())
                     .then((responseText) => {
@@ -30,7 +30,7 @@ var storage = new Storage({
                                     expires: 1000 * 60,
                                 });
                                 resolve && resolve({user: r.Message});
-                            }else{
+                            } else {
                                 reject && reject(new Error('登陆信息已过期，请重新登陆'));
                             }
                         } catch (e) {
@@ -42,4 +42,5 @@ var storage = new Storage({
             });
         }
     }
-});global.storage = storage;
+});
+global.storage = storage;

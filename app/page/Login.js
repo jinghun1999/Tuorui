@@ -18,7 +18,7 @@ import {
     } from 'react-native';
 import Util from '../util/Util';
 import NetUtil from '../util/NetUtil';
-import MainPage from '../../Index';
+import Index from '../../Index';
 import NButton from '../commonview/NButton';
 import Register  from './Register';
 
@@ -56,7 +56,7 @@ class Login extends React.Component {
         var _this = this;
         const { navigator } = _this.props;
         try {
-            NetUtil.get(CONSTAPI.LOGIN + "?identity=" + _this.state.user + "&password=" + _this.state.pwd + "&type=m", false, function (data) {
+            NetUtil.get(CONSTAPI.Auth + "/ad?identity=" + _this.state.user + "&password=" + _this.state.pwd + "&type=m", false, function (data) {
                 if (data.Sign && data.Message) {
                     //Alert.alert('登录成功', "Token:" + data.Message.Token);
                     storage.save({
@@ -91,8 +91,8 @@ class Login extends React.Component {
                     if (navigator) {
                         navigator.pop();
                         navigator.push({
-                            name: 'MainPage',
-                            component: MainPage,
+                            name: 'Index',
+                            component: Index,
                             params: {}
                         });
                     }

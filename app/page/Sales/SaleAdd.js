@@ -333,12 +333,31 @@ export default class SaleAdd extends React.Component {
     }
 
     pressRow(good) {
+        let _this = this;
         Alert.alert(
             '删除提醒',
             '确定要移除' + good.ItemName + '吗？',
             [
-                {text: '取消', onPress: () => console.log('Cancel Pressed!')},
-                {text: '确定', onPress: () => console.log('OK Pressed!')},
+                {text: '取消'},
+                {
+                    text: '确定', onPress: () => {
+                    let gs = [];
+                    let selectedgoods = _this.state.SelectedGoods;
+                    selectedgoods.items.forEach(function (item, i) {
+                        if (good.ID !== item.ID) {
+                            gs.push(item);
+                        }
+                    });
+                    selectedgoods.items = gs;
+                    selectedgoods.DisCount = 0;
+                    selectedgoods.MustPay = 0;
+                    selectedgoods.RealPay = 0;
+                    _this.setState({
+                        SelectedGoods: selectedgoods,
+                        goodAmountInput:0,
+                    });
+                }
+                },
             ]
         );
         //alert(good.ItemName);

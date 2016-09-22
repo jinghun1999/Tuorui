@@ -15,6 +15,7 @@ import com.eguma.barcodescanner.BarcodeScannerPackage;
 import java.util.Arrays;
 import java.util.List;
 import com.rnfs.RNFSPackage;
+import com.commonTools.RCTCommonToolsPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -31,7 +32,8 @@ public class MainApplication extends Application implements ReactApplication {
             new UpdatePackage(),
           new RCTCameraPackage(),
           new BarcodeScannerPackage(),
-          new RNFSPackage()
+          new RNFSPackage(),
+          new RCTCommonToolsPackage()
       );
     }
 

@@ -14,7 +14,6 @@ import {
     ToastAndroid,
     View
     } from 'react-native';
-import Storage from './app/util/Storage';
 import MainPage from './MainPage';
 import Login from './app/page/Login';
 import NetWorkTool from './app/util/NetWorkTool'
@@ -34,10 +33,6 @@ class Index extends React.Component {
 
     handleNetConnect(isConnected) {
         //console.log('test', (isConnected ? 'online' : 'offline'));
-    }
-
-    shouldComponentUpdate() {
-        return true;
     }
 
     componentWillMount() {
@@ -60,7 +55,7 @@ class Index extends React.Component {
                 loaded: true,
             });
         }).catch(err => {
-            Alert.alert('提示', '登陆过期，请重新登陆', [{text:'确定'}]);
+            //Alert.alert('提示', '登陆过期，请重新登陆', [{text:'确定'}]);
             _this.setState({
                 loaded: true,
             });

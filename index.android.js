@@ -29,6 +29,7 @@ import {
     switchVersionLater,
     markSuccess,
     } from 'react-native-update';
+import Storage from './app/util/Storage';
 import _updateConfig from './update.json';
 const {appKey} = _updateConfig[Platform.OS];
 class Demo extends Component {

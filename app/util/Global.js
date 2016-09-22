@@ -12,7 +12,7 @@ var GLOBAL = {
     WEB: WEB_HOST,
     HOST: API_Service,
     APIAPP: API_APP,
-    LOGIN: API_Auth + '/ad',
+    Auth: API_Auth,
     SAVESALES: API_Service + '/Store_DirectSell/DirectSellBillSave',
     GETGUEST: API_Service + '/gest/GetModelListWithSort',
 };

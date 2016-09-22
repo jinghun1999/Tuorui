@@ -16,15 +16,14 @@ import {
     ToastAndroid,
     WebView,
     BackAndroid,
-    View
+    View,
     } from 'react-native';
-
 import Head from './app/commonview/Head';
 import HomePage from './HomePage';
 import BBS  from './BBS';
 import App from './App';
 import UC from './UC';
-
+import BackAndroidTool from './app/util/BackAndroidTool';
 import TabNavigator from 'react-native-tab-navigator';
 import Icon from 'react-native-vector-icons/Ionicons';
 const TAB_HOMEPAGE = '首页';
@@ -43,7 +42,16 @@ class MainPage extends React.Component {
         this._renderTabItem = this._renderTabItem.bind(this);
         this._navigator = this.props.navigator;
     }
+    componentDidMount(){
+        // 添加返回键监听
+        BackAndroidTool.addBackAndroidListener(this.props.navigator);
+    }
 
+    componentWillUnmount(){
+        // 移除返回键监听
+        BackAndroidTool.removeBackAndroidListener();
+    }
+    /*
     componentDidMount() {
         var nav = this._navigator;
         BackAndroid.addEventListener('hardwareBackPress', function () {
@@ -51,14 +59,27 @@ class MainPage extends React.Component {
                 nav.pop();
                 return true;
             }
-            return false;
+            //return false;
+            // 当前页面为root页面时的处理
+            if (this.lastBackPressed && (this.lastBackPressed + 2000 >= Date.now())) {
+                //最近2秒内按过back键，可以退出应用。
+                NativeCommonTools.onBackPressed();
+                if (nav && nav.getCurrentRoutes().length > 1) {
+                    nav.pop();
+                    return true;
+                }
+                return true;
+            }
+            this.lastBackPressed = Date.now();
+            ToastAndroid.show('再按一次退出应用', ToastAndroid.SHORT);
+            return true;
         });
     }
 
     componentWillUnmount() {
         BackAndroid.removeEventListener('hardwareBackPress');
     }
-
+*/
     _renderTabItem(ico, tag, childView) {
         return (
             <TabNavigator.Item
@@ -79,13 +100,13 @@ class MainPage extends React.Component {
                 renderView = <HomePage navigator={this._navigator}/>;
                 break;
             case TAB_BBS:
-                renderView = <BBS navigator={this._navigator} />;
+                renderView = <BBS navigator={this._navigator}/>;
                 break;
             case TAB_APP:
-                renderView = <App navigator={this._navigator} />;
+                renderView = <App navigator={this._navigator}/>;
                 break;
             case TAB_UC:
-                renderView = <UC navigator={this._navigator} />;
+                renderView = <UC navigator={this._navigator}/>;
                 break;
             default:
                 break;
@@ -131,7 +152,7 @@ const styles = StyleSheet.create({
     },
 
     tabIcon: {
-        flex:1,
+        flex: 1,
         height: 25,
         alignItems: 'center',
         //resizeMode: 'stretch',
