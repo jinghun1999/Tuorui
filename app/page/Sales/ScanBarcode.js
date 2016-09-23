@@ -24,6 +24,7 @@ class ScanBarcode extends Component {
             torchMode: 'off',
             type: '',
             loaded: false,
+            scaned: false,
         };
     }
 
@@ -50,18 +51,23 @@ class ScanBarcode extends Component {
     }
 
     barcodeReceived(e) {
-        if (e.data !== this.state.barcode || e.type !== this.state.type) Vibration.vibrate();
-        this.setState({
-            barcode: e.data,
-            text: e.data,
-            type: e.type,
-        });
         let _this = this;
-        if (this.props.onSucess) {
-            this.timer = setTimeout(() => {
-                _this.props.onSucess(e.data);
-                _this._onBack();
-            }, 500);
+        if (e.data !== _this.state.barcode || e.type !== _this.state.type){
+            Vibration.vibrate();
+            _this.setState({
+                barcode: e.data,
+                text: e.data,
+                type: e.type,
+            });
+            if(_this.state.scaned){
+                if (this.props.onSucess) {
+                    this.timer = setTimeout(() => {
+                        _this.props.onSucess(e.data);
+                        _this._onBack();
+                    }, 500);
+                }
+            }
+            _this.setState({scaned: true});
         }
     }
 

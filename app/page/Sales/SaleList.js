@@ -9,6 +9,7 @@ import {
     Text,
     TextInput,
     View,
+    Alert,
     TouchableOpacity,
     ListView,
     ActivityIndicator,
@@ -76,9 +77,7 @@ class SaleList extends Component {
     _fetchData(page, isNext) {
         let _this = this;
         NetUtil.getAuth(function (user, hos) {
-            let header = {
-                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-            };
+            let header = NetUtil.headerClientAuth(user, hos);
             let postdata = {
                 "items": [{
                     "Childrens": null,
@@ -106,7 +105,7 @@ class SaleList extends Component {
                     "Conn": 1
                 }],
                 "sorts": [{
-                    "Field": "PaidStatus,CreatedOn",
+                    "Field": "CreatedOn",
                     "Title": null,
                     "Sort": {"Name": "Desc", "Title": "降序"},
                     "Conn": 0
@@ -129,7 +128,7 @@ class SaleList extends Component {
                         pageIndex: page,
                     });
                 } else {
-                    alert("获取数据失败：" + data.Message);
+                    //Alert.alert('错误',"获取数据失败：" + data.Message, [{text:'确定'}]);
                 }
             });
             postdata = [{
@@ -165,12 +164,12 @@ class SaleList extends Component {
                             loaded: true,
                         });
                     } else {
-                        alert("获取记录数失败：" + data.Message);
+                        //Alert.alert('错误',"获取记录数失败：" + data.Message, [{text:'确定'}]);
                     }
                 });
             }
-        }, function (err) {
-
+        }, function (e) {
+            Alert.alert('提示', e,[{text:'确定'}])
         });
     }
 

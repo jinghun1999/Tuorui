@@ -117,9 +117,7 @@ class ChooseGuest extends Component {
                 };
                 postjson.items.push(query);
             }
-            let header = {
-                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-            };
+            let header = NetUtil.headerClientAuth(user, hos);
             NetUtil.postJson(CONSTAPI.HOST + '/Gest/GetPageRecord', postjson, header, function (data) {
                 if (data.Sign && data.Message) {
                     let dataSource = _this.state.dataSource;

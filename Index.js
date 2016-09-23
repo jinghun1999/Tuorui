@@ -8,6 +8,7 @@ import {
     AppRegistry,
     StyleSheet,
     Text,
+    Alert,
     Navigator,
     Image,
     ToastAndroid,
@@ -34,10 +35,6 @@ class Index extends React.Component {
         //console.log('test', (isConnected ? 'online' : 'offline'));
     }
 
-    shouldComponentUpdate() {
-        return true;
-    }
-
     componentWillMount() {
         this._initState();
     }
@@ -48,12 +45,9 @@ class Index extends React.Component {
 
     _initState() {
         var _this = this;
-        /*storage.remove({
-         key: 'USER'
-         });*/
         storage.load({
             key: 'USER',
-            autoSync: false,
+            autoSync: true,
             syncInBackground: false
         }).then(ret => {
             _this.setState({
@@ -61,7 +55,7 @@ class Index extends React.Component {
                 loaded: true,
             });
         }).catch(err => {
-            //alert('error:' + err.name);
+            Alert.alert('提示', '登陆过期，请重新登陆', [{text:'确定'}]);
             _this.setState({
                 loaded: true,
             });
@@ -71,7 +65,7 @@ class Index extends React.Component {
     render() {
         var defaultName = 'Login';
         var defaultComponent = Login;
-        if (this.state.user && this.state.user.Token && this.state.user.Token.length > 0) {
+        if (this.state.user && this.state.user.Token && this.state.user.Token.token.length > 0) {
             defaultName = 'MainPage';
             defaultComponent = MainPage;
         }

@@ -7,6 +7,7 @@ import{
     StyleSheet,
     Text,
     View,
+    Alert,
     ListView,
     TouchableOpacity,
     ActivityIndicator,
@@ -137,7 +138,7 @@ class MemberListInfo extends Component {
                         }
                     });
                 }
-            },function(err){alert(err)})
+            },function(err){Alert.alert('错误', err)})
     }
 
     _addInfo() {

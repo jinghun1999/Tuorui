@@ -4,6 +4,8 @@ import android.app.Application;
 import android.util.Log;
 
 import com.facebook.react.ReactApplication;
+import cn.reactnative.modules.update.UpdatePackage;
+import cn.reactnative.modules.update.UpdateContext;
 import com.lwansbrough.RCTCamera.RCTCameraPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
@@ -13,6 +15,7 @@ import com.eguma.barcodescanner.BarcodeScannerPackage;
 import java.util.Arrays;
 import java.util.List;
 import com.rnfs.RNFSPackage;
+import com.commonTools.RCTCommonToolsPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -26,10 +29,17 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new UpdatePackage(),
           new RCTCameraPackage(),
           new BarcodeScannerPackage(),
-          new RNFSPackage()
+          new RNFSPackage(),
+          new RCTCommonToolsPackage()
       );
+    }
+
+    @Override
+    protected String getJSBundleFile() {
+        return UpdateContext.getBundleUrl(MainApplication.this);
     }
   };
 

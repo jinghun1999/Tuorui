@@ -61,9 +61,7 @@ class StockCapital extends React.Component {
                     "Value": "0",
                     "Conn": 0
                 }];
-                let header = {
-                    'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-                };
+                let header = NetUtil.headerClientAuth(user, hos);
                 NetUtil.postJson(CONSTAPI.HOST + '/ItemCount/GetModelList', postdata, header, function (data) {
                     let dt = data.Message;
                     if (data.Sign && dt != null) {

@@ -18,7 +18,7 @@ import {
     } from 'react-native';
 import Util from '../util/Util';
 import NetUtil from '../util/NetUtil';
-import MainPage from '../../Index';
+import Index from '../../Index';
 import NButton from '../commonview/NButton';
 import Register  from './Register';
 
@@ -33,41 +33,85 @@ class Login extends React.Component {
 
     _Login() {
         if (!this.state.user || this.state.user.length == 0) {
-            ToastAndroid.show("请输入用户名", ToastAndroid.SHORT);
+            Alert.alert('错误', "请输入用户名",
+                [
+                    {
+                        text: '确定', onPress: () => {
+                    }
+                    },
+                ]);
             return;
         }
         if (!this.state.pwd || this.state.pwd.length == 0) {
-            ToastAndroid.show("请输入密码", ToastAndroid.SHORT);
+            Alert.alert('错误', "请输入密码",
+                [
+                    {
+                        text: '确定', onPress: () => {
+                    }
+                    },
+                ]);
             return;
         }
 
         var _this = this;
         const { navigator } = _this.props;
         try {
-            NetUtil.get(CONSTAPI.LOGIN + "?identity=" + _this.state.user + "&password=" + _this.state.pwd + "&type=m", false, function (data) {
+            NetUtil.get(CONSTAPI.Auth + "/ad?identity=" + _this.state.user + "&password=" + _this.state.pwd + "&type=m", false, function (data) {
                 if (data.Sign && data.Message) {
-                    //Alert.alert('登录成功', "Token:" + data.Message.Token);
+                    storage.save({
+                        key: 'LoginData',
+                        rawData: {
+                            identity: _this.state.user,
+                            password: _this.state.pwd,
+                        },
+                    });
+                    let _expires = 1000 * (data.Message.Token.expires_in-17990);
                     storage.save({
                         key: 'USER',
                         rawData: {
                             user: data.Message,
-                            pwd: _this.state.pwd,
-                        }
+                        },
+                        expires: _expires,
                     });
+                    if (data.Message.HospitalId != null) {
+                        let hos = {};
+                        data.Message.Hospitals.forEach(function (v, i, d) {
+                            if (v.ID === data.Message.HospitalId) {
+                                hos = v;
+                            }
+                        });
+                        storage.save({
+                            key: 'HOSPITAL',
+                            rawData: {
+                                hospital: hos,
+                            }
+                        });
+                    }
+
                     if (navigator) {
                         navigator.pop();
                         navigator.push({
-                            name: 'MainPage',
-                            component: MainPage,
+                            name: 'Index',
+                            component: Index,
                             params: {}
                         });
                     }
                 } else {
-                    Alert.alert('登陆失败', data.Exception);
+                    Alert.alert('登陆失败', data.Exception,
+                        [
+                            {
+                                text: '确定'
+                            },
+                        ]);
                 }
             });
         } catch (e) {
-            Alert.alert('登陆失败', "错误信息：" + e);
+            Alert.alert('登陆失败', "错误信息：" + e,
+                [
+                    {
+                        text: '确定'
+                    },
+                ]);
         }
     }
 

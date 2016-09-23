@@ -76,18 +76,32 @@ class NetUtil extends React.Component {
     }
 
     static getAuth(success, error) {
-        storage.getBatchData([{
+        storage.load({
             key: 'USER',
-            autoSync: false,
-            syncInBackground: false,
-        }, {
-            key: 'HOSPITAL',
-            autoSync: false,
-            syncInBackground: false,
-        }]).then(rets => {
-            success(rets[0], rets[1]);
+            autoSync: true,
+            syncInBackground: true
+        }).then(user => {
+            storage.load({
+                key: 'HOSPITAL',
+                autoSync: false,
+                syncInBackground: false
+            }).then(hos=> {
+                success(user.user, hos);
+            }).catch(e=> {
+                success(user.user, {});
+            })
         }).catch(err => {
-            error(err.message);
+            switch (err.name) {
+                case 'NotFoundError':
+                    error('not found user');
+                    break;
+                case 'ExpiredError':
+                    error('user login expired');
+                    break;
+                default :
+                    error('请重新登陆应用');
+                    break;
+            }
         });
     }
 
@@ -99,6 +113,16 @@ class NetUtil extends React.Component {
 
     static headerAuthorization(mobile, hospitalcode, token) {
         return 'Mobile ' + Util.base64Encode(mobile + ':' + hospitalcode + ":" + token);
+    }
+
+    static headerClientAuth(user, hos) {
+        let hoscode = '';
+        if (hos && hos.hospital) {
+            hoscode = hos.hospital.Registration
+        }
+        return {
+            'Authorization': 'Mobile ' + Util.base64Encode(user.Mobile + ':' + hoscode + ":" + user.Token.token)
+        }
     }
 
 }

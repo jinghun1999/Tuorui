@@ -75,9 +75,7 @@ class GoodsAdd extends Component {
                 pageSize: 1,
                 pageIndex: 1
             };
-            let header = {
-                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-            };
+            let header = NetUtil.headerClientAuth(user, hos);
             NetUtil.postJson(CONSTAPI.HOST + '/ItemTypeLeftJoinItemCount/SearchSellListByPage', postjson, header, function (data) {
                 if (data.Sign && data.Message && data.Message.length > 0) {
                     var good = data.Message[0];

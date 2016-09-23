@@ -60,9 +60,7 @@ class Income extends React.Component {
             loaded: false,
         })
         NetUtil.getAuth(function (user, hos) {
-                let header = {
-                    'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-                };
+                let header = NetUtil.headerClientAuth(user, hos);
                 let postdata = [{
                     "Childrens": null,
                     "Field": "1",
