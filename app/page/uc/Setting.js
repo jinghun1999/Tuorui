@@ -19,7 +19,7 @@ class MyAccount extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            version:'V 1.0'
         };
     }
 
@@ -85,6 +85,7 @@ class MyAccount extends React.Component {
                 </TouchableOpacity>
                 <TouchableOpacity style={[Style.rowBox,{marginTop:10,}]} onPress={()=>this.checkInfo('b')}>
                     <Text style={Style.titleText}>检查更新</Text>
+                    <Text style={{color:'#ccc'}}>当前版本:{this.state.version}</Text>
                     <Icon name={'chevron-right'} size={20} color={'#888'}/>
                 </TouchableOpacity>
             </View>

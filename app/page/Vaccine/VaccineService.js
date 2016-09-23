@@ -490,10 +490,13 @@ class VaccineService extends Component {
                 {
                     text: '确定', onPress: () => {
                     //删除此条数据
-                    if (vaccine.PaidStatus !== 'SM00040') {
-                        Alert.alert('提示', '此项已收费', [{text: '确定'}]);
-                        return false;
+                    if(_this.props.id === 2){
+                        if (vaccine.PaidStatus !== 'SM00040') {
+                            Alert.alert('提示', '此项已收费', [{text: '确定'}]);
+                            return false;
+                        }
                     }
+
                     var _vaccine = _this.state.vaccine;
                     let newSource = [];
                     _vaccine.forEach((item, index, array)=> {
