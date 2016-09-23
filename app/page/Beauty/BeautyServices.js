@@ -478,10 +478,10 @@ class BeautyServices extends React.Component {
                     <Text style={styles.textTitle}>总金额</Text>
                     <Text style={{flex:1,color:'black'}}>¥{this.state.totalAmount.toString()}</Text>
                 </View>
-                <View style={styles.titleStyle}>
-                    <Text style={styles.titleText}>美容项目</Text>
+                <View style={[styles.titleStyle,{flexDirection:'row'}]}>
+                    <Text style={[styles.titleText,{flex:1}]}>美容项目</Text>
                     <TouchableOpacity
-                        style={{width:50,alignItems:'center', backgroundColor:'#99CCFF', justifyContent:'center'}}
+                        style={{width:50,alignItems:'center', backgroundColor:'#99CCFF',}}
                         onPress={this.chooseBeauty.bind(this)}>
                         <Text>添加</Text>
                     </TouchableOpacity>
@@ -549,13 +549,9 @@ const styles = StyleSheet.create({
         borderLeftWidth: 3,
         borderLeftColor: '#CC0033',
         paddingLeft: 5,
-        flexDirection: 'row',
     },
     titleText: {
-        marginLeft: 10,
-        fontSize: 16,
-        flex: 1,
-        color: '#CC0033',
+        color:'#CC0033'
     },
     textTitle: {
         width: 100,
