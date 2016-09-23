@@ -27,14 +27,14 @@ class MyAccount extends React.Component {
         super(props);
         this.state = {
             user: {},
-            memberMobile:'',
+            memberMobile: '',
             memberSex: '男',
             memberSexKey: 0,
             memberNickName: '',
             memberEmail: '',
             memberAddress: '',
             memberSchool: '',
-            birthDay:'',
+            birthDay: '',
             dataSource: [],
             loaded: false,
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
@@ -69,7 +69,7 @@ class MyAccount extends React.Component {
                 memberSex: user.Sex == 0 ? '男' : '女',
                 memberSexKey: user.Sex,
                 memberNickName: user.FullName,
-                birthDay: Util.cutString(user.Birthday,10, ''),
+                birthDay: Util.cutString(user.Birthday, 10, ''),
                 memberEmail: '@',
                 memberAddress: user.Address,
                 memberSchool: user.School,
@@ -107,12 +107,12 @@ class MyAccount extends React.Component {
         let postjson = {
             Name: 'mo',
             data: {
-                Mobile : _this.state.memberMobile,
-                Name : _this.state.memberNickName,
-                Sex  : _this.state.memberSexKey,
-                Birthday : _this.state.birthDay,
-                School  : _this.state.memberAddress,
-                Address  : _this.state.memberSchool,
+                Mobile: _this.state.memberMobile,
+                Name: _this.state.memberNickName,
+                Sex: _this.state.memberSexKey,
+                Birthday: _this.state.birthDay,
+                School: _this.state.memberAddress,
+                Address: _this.state.memberSchool,
             }
         };
         let header = NetUtil.headerClientAuth(_this.state.user, null)
@@ -185,14 +185,12 @@ class MyAccount extends React.Component {
                         <View style={styles.ititle}>
                             <Text style={styles.ititletxt}>姓名</Text>
                         </View>
-                        <View style={styles.contentStyle}>
-                            <TextInput
-                                style={{flex:1, textAlign:'right', alignItems:'center',}}
-                                onChangeText={(text) => this.setState({memberNickName: text})}
-                                value={this.state.memberNickName}
-                                maxLength={20}
-                                underlineColorAndroid={'transparent'}/>
-                        </View>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(text) => this.setState({memberNickName: text})}
+                            value={this.state.memberNickName}
+                            maxLength={20}
+                            underlineColorAndroid={'transparent'}/>
                     </View>
                     <View style={styles.headBox}>
                         <View style={styles.ititle}>
@@ -200,8 +198,7 @@ class MyAccount extends React.Component {
                         </View>
                         <View style={styles.contentStyle}>
                             <ModalPicker
-                                style={{alignItems:'flex-end', borderWidth:0, borderColor:'#fff',}}
-                                selectStyle={{padding:0,borderWidth:0}}
+                                selectStyle={{paddingRight:0,borderWidth:0,}}
                                 data={sexdata}
                                 initValue={this.state.memberSex}
                                 cancelText={'取消'}
@@ -221,27 +218,27 @@ class MyAccount extends React.Component {
                         </View>
                         <View style={styles.contentStyle}>
                             {/*<TextInput
-                                style={{flex:1, textAlign:'right', alignItems:'center',}}
-                                onChangeText={(text) => this.setState({memberMobile: text})}
-                                value={this.state.memberMobile}
-                                maxLength={20}
-                                underlineColorAndroid={'transparent'}/>*/}
+                             style={{flex:1, textAlign:'right', alignItems:'center',}}
+                             onChangeText={(text) => this.setState({memberMobile: text})}
+                             value={this.state.memberMobile}
+                             maxLength={20}
+                             underlineColorAndroid={'transparent'}/>*/}
                             <Text style={{color:'#000'}}>{this.state.memberMobile}</Text>
                         </View>
                     </View>
                     {/*<View style={styles.headBox}>
-                        <View style={styles.ititle}>
-                            <Text style={styles.ititletxt}>邮箱</Text>
-                        </View>
-                        <View style={styles.contentStyle}>
-                            <TextInput
-                                style={{flex:1, textAlign:'right', alignItems:'center',}}
-                                onChangeText={(text) => this.setState({memberEmail: text})}
-                                value={this.state.memberEmail}
-                                maxLength={50}
-                                underlineColorAndroid={'transparent'}/>
-                        </View>
-                    </View>*/}
+                     <View style={styles.ititle}>
+                     <Text style={styles.ititletxt}>邮箱</Text>
+                     </View>
+                     <View style={styles.contentStyle}>
+                     <TextInput
+                     style={{flex:1, textAlign:'right', alignItems:'center',}}
+                     onChangeText={(text) => this.setState({memberEmail: text})}
+                     value={this.state.memberEmail}
+                     maxLength={50}
+                     underlineColorAndroid={'transparent'}/>
+                     </View>
+                     </View>*/}
                     <View style={styles.headBox}>
                         <View style={styles.ititle}>
                             <Text style={styles.ititletxt}>生日</Text>
@@ -272,27 +269,25 @@ class MyAccount extends React.Component {
                         <View style={styles.ititle}>
                             <Text style={styles.ititletxt}>毕业学校</Text>
                         </View>
-                        <View style={styles.contentStyle}>
-                            <TextInput
-                                style={{flex:1, textAlign:'right', alignItems:'center',}}
-                                onChangeText={(text) => this.setState({memberSchool: text})}
-                                value={this.state.memberSchool}
-                                maxLength={50}
-                                underlineColorAndroid={'transparent'}/>
-                        </View>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(text) => this.setState({memberSchool: text})}
+                            value={this.state.memberSchool}
+                            maxLength={50}
+                            underlineColorAndroid={'transparent'}/>
                     </View>
                     <View style={styles.headBox}>
                         <View style={styles.ititle}>
                             <Text style={styles.ititletxt}>地址</Text>
                         </View>
-                        <View style={styles.contentStyle}>
-                            <TextInput
-                                style={{flex:1, textAlign:'right', alignItems:'center',}}
-                                onChangeText={(text) => this.setState({memberAddress: text})}
-                                value={this.state.memberAddress}
-                                maxLength={120}
-                                underlineColorAndroid={'transparent'}/>
-                        </View>
+
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(text) => this.setState({memberAddress: text})}
+                            value={this.state.memberAddress}
+                            maxLength={120}
+                            underlineColorAndroid={'transparent'}/>
+
                     </View>
                     <View style={styles.title}>
                         <Text>我的医院</Text>
@@ -327,7 +322,7 @@ const styles = StyleSheet.create({
         flex: 1,
         //backgroundColor:'#ccf',
         alignItems: 'flex-end',
-        justifyContent:'center',
+        justifyContent: 'center',
         height: 50,
         //alignItems:'center'
     },
@@ -356,6 +351,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderBottomWidth: StyleSheet.hairlineWidth,
         borderBottomColor: '#ccc',
+    },
+    input: {
+        flex: 1,
+        textAlign: 'right',
+        paddingRight: 0,
+        alignItems: 'center',
     },
     loadingBox: {
         justifyContent: 'center',
