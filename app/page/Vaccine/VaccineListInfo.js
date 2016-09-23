@@ -91,9 +91,7 @@ class VaccineListInfo extends Component {
                 "pageSize":_this.state.pageSize
             }
             //let hospitalcode = 'aa15-740d-4e6d-a6ca-0ebf-81f1';
-            let header = {
-                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-            };
+            let header = NetUtil.headerClientAuth(user, hos);
             //http://test.tuoruimed.com/service/Api/Medic_Vaccine/GetPageRecord
             NetUtil.postJson(CONSTAPI.HOST + '/Medic_Vaccine/GetPageRecord', postdata, header, function (data) {
                 if (data.Sign && data.Message != null) {
@@ -162,8 +160,9 @@ class VaccineListInfo extends Component {
                     headTitle: '疫苗详情',
                     isLook: true,
                     vaccine: vacc,
+                    id:2,
                     getResult: function () {
-                        //_this._onFetchData(1, false);
+                        _this.onFetchData(1, false);
                     }
                 }
             })
@@ -221,6 +220,10 @@ class VaccineListInfo extends Component {
                 params: {
                     headTitle: '添加疫苗',
                     isLook:false,
+                    id:1,
+                    getResult: function () {
+                        _this.onFetchData(1, false);
+                    }
                 }
             })
         }
