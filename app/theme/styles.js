@@ -1,22 +1,27 @@
 /**
  * Created by User on 2016-09-19.
  */
-import React, {Component} from 'react';
 import { StyleSheet, } from 'react-native';
-//var theme = require("./theme");
 import theme from './theme';
-module.exports = StyleSheet.create({
+let style = StyleSheet.create({
+    container:{
+        flex:1,
+        backgroundColor:'#e7e7e7'
+    },
+    rowBox:{
+        backgroundColor:'#fff',
+        flexDirection:'row',
+        padding:10,
+        alignItems:'center',
+        borderBottomWidth:StyleSheet.hairlineWidth,
+        borderBottomColor:'#ccc',
+    },
     titleText: {
-        fontWeight: 'bold',
-        //...theme.title,
+        //fontWeight: 'bold',
+        flex:1,
+        fontSize:18
     },
-    container1: {
-        background: theme.backgroundColor,
-    },
-    container2: {
-        background: theme.backgroundColor,
-    },
-    content: {
-        //...theme.content,
+    rowRight: {
     },
 });
+export default style;
