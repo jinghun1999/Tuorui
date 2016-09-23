@@ -417,10 +417,10 @@ class MemberDetails extends Component {
                      placeholder={this.state.memberPoint}
                      onChangeText={(text)=>{this.setState({ memberPoint: text })}}
                      />*/}
-                    <View style={styles.titleStyle}>
-                        <Text style={styles.titleText}>宠物信息</Text>
+                    <View style={[styles.titleStyle,{ flexDirection:'row',}]}>
+                        <Text style={[styles.titleText,{flex:1}]}>宠物信息</Text>
                         <TouchableOpacity
-                            style={{width:50,alignItems:'center', backgroundColor:'#99CCFF', justifyContent:'center'}}
+                            style={{width:50,alignItems:'center',backgroundColor:'#99CCFF',}}
                             onPress={this._onAddPet.bind(this)}>
                             <Text>添加</Text>
                         </TouchableOpacity>
@@ -458,20 +458,17 @@ const styles = StyleSheet.create({
         borderLeftWidth: 3,
         borderLeftColor: '#CC0033',
         paddingLeft: 5,
-        flexDirection: 'row',
     },
+    titleText: {
+        color:'#CC0033'
+    },
+
     textTitle: {
         width: 100,
         fontSize: 16,
         marginLeft: 10,
         alignSelf: 'center',
         justifyContent: 'center',
-    },
-    titleText: {
-        marginLeft: 10,
-        fontSize: 16,
-        flex: 1,
-        color: '#CC0033',
     },
     rowVal: {
         borderWidth: 0,

@@ -455,13 +455,9 @@ const styles = StyleSheet.create({
         borderLeftWidth: 3,
         borderLeftColor: '#CC0033',
         paddingLeft: 5,
-        flexDirection: 'row',
     },
     titleText: {
-        marginLeft: 10,
-        fontSize: 16,
-        flex: 1,
-        color: '#CC0033',
+        color:'#CC0033'
     },
     textTitle: {
         width: 100,
