@@ -58,7 +58,6 @@ class Login extends React.Component {
         try {
             NetUtil.get(CONSTAPI.Auth + "/ad?identity=" + _this.state.user + "&password=" + _this.state.pwd + "&type=m", false, function (data) {
                 if (data.Sign && data.Message) {
-                    //Alert.alert('登录成功', "Token:" + data.Message.Token);
                     storage.save({
                         key: 'LoginData',
                         rawData: {
@@ -66,12 +65,13 @@ class Login extends React.Component {
                             password: _this.state.pwd,
                         },
                     });
+                    let _expires = 1000 * (data.Message.Token.expires_in-17990);
                     storage.save({
                         key: 'USER',
                         rawData: {
                             user: data.Message,
                         },
-                        expires: 1000 * 60,
+                        expires: _expires,
                     });
                     if (data.Message.HospitalId != null) {
                         let hos = {};

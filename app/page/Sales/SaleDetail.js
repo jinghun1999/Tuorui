@@ -63,9 +63,7 @@ class SaleDetail extends Component {
                 "Value": _this.state.sale.DirectSellCode,
                 "Conn": 1
             }];
-            let header = {
-                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-            };
+            let header = NetUtil.headerClientAuth(user, hos);
             NetUtil.postJson(CONSTAPI.HOST + '/Store_DirectSellDetail/GetModelListByQitems', postdata, header, function (data) {
                 if (data.Sign && data.Message != null) {
                     _this.setState({

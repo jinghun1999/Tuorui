@@ -99,48 +99,55 @@ class Register extends Component {
         };
         NetUtil.postJson(CONSTAPI.Auth + '/Member', postjson, null, function (data) {
             if (data.Sign) {
-                NetUtil.get(CONSTAPI.Auth + "/ad?identity=" + _this.state.phone + "&password=" + _this.state.pwd + "&type=m", false, function (lg) {
-                    if (lg.Sign && lg.Message) {
-                        storage.save({
-                            key: 'LoginData',
-                            rawData: {
-                                identity: _this.state.phone,
-                                password: _this.state.pwd,
-                            },
-                        });
-                        storage.save({
-                            key: 'USER',
-                            rawData: {
-                                user: lg.Message,
-                            },
-                            expires: 1000 * 60,
-                        });
-                        if (lg.Message.HospitalId != null) {
-                            let hos = {};
-                            lg.Message.Hospitals.forEach(function (v, i, d) {
-                                if (v.ID === lg.Message.HospitalId) {
-                                    hos = v;
+                fetch(CONSTAPI.Auth + '/ad', {
+                    method: 'PUT',
+                    body: JSON.stringify(postjson)
+                }).then((response) => response.text())
+                    .then((responseText) => {
+                        try {
+                            let lg = JSON.parse(responseText);
+                            if (lg.Sign && lg.Message) {
+                                storage.save({
+                                    key: 'LoginData',
+                                    rawData: {
+                                        identity: _this.state.phone,
+                                        password: _this.state.pwd,
+                                    },
+                                });
+                                storage.save({
+                                    key: 'USER',
+                                    rawData: {
+                                        user: lg.Message,
+                                    },
+                                    expires: 1000 * 10,
+                                });
+                                if (lg.Message.HospitalId != null) {
+                                    let hos = {};
+                                    lg.Message.Hospitals.forEach(function (v, i, d) {
+                                        if (v.ID === lg.Message.HospitalId) {
+                                            hos = v;
+                                        }
+                                    });
+                                    storage.save({
+                                        key: 'HOSPITAL',
+                                        rawData: {
+                                            hospital: hos,
+                                        }
+                                    });
                                 }
-                            });
-                            storage.save({
-                                key: 'HOSPITAL',
-                                rawData: {
-                                    hospital: hos,
+                                if (navigator) {
+                                    navigator.replace({
+                                        name: 'Index',
+                                        component: Index,
+                                        params: {}
+                                    });
                                 }
-                            });
+                            }
+                        } catch (e) {
+                            Alert.alert('注册提示', '注册失败，请重试', [{text: '确定'}]);
                         }
-                        if (navigator) {
-                            //navigator.pop();
-                            navigator.replace({
-                                name: 'Index',
-                                component: Index,
-                                params: {}
-                            });
-                        }
-                    } else {
-                        Alert.alert('提示', data.Message, [{text: '确定'}]);
-                    }
-                });
+                    }).done();
+
             } else {
                 Alert.alert('提示', data.Exception, [{text: '确定'}]);
             }

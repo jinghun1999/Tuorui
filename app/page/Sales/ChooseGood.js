@@ -66,18 +66,7 @@ class Goods extends Component {
             _this.setState({nomore: false});
         }
         NetUtil.getAuth(function (user, hos) {
-            let header = {
-                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-            };
-            /*if (_this.state.sellStoreId == null) {
-                NetUtil.get(CONSTAPI.HOST + '/Store_DirectSell/GetDirectSellPageConfig', header, function (data) {
-                    if (data.Sign && data.Message) {
-                        _this.setState({
-                            sellStoreId: data.Message.SellStoreID,
-                        });
-                    }
-                });
-            }*/
+            let header = NetUtil.headerClientAuth(user, hos);
             let postjson = {
                 WarehouseID: _this.state.sellStoreId,
                 CateNo: null,

@@ -17,7 +17,6 @@ import {
     Platform,
     Linking,
     } from 'react-native';
-import Index from './Index';
 import {
     isFirstTime,
     isRolledBack,
@@ -29,7 +28,9 @@ import {
     switchVersionLater,
     markSuccess,
     } from 'react-native-update';
+import Global from './app/util/Global';
 import Storage from './app/util/Storage';
+import Index from './Index';
 import _updateConfig from './update.json';
 const {appKey} = _updateConfig[Platform.OS];
 class Demo extends Component {
@@ -39,7 +40,7 @@ class Demo extends Component {
     }
 
     componentWillMount() {
-        this.checkUpdate();
+        //this.checkUpdate();
         if (isFirstTime) {
             /*
             Alert.alert('提示', '这是当前版本第一次启动,是否要模拟启动失败?失败将回滚到上一版本', [

@@ -1,8 +1,6 @@
 'use strict';
 import React, { Component, } from 'react';
 
-import Storage from './Storage';
-
 let API_Service = 'http://test.tuoruimed.com/service/api';
 let API_Auth = 'http://test.tuoruimed.com/auth/api';
 

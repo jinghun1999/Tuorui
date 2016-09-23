@@ -86,9 +86,9 @@ class NetUtil extends React.Component {
                 autoSync: false,
                 syncInBackground: false
             }).then(hos=> {
-                success(user, hos);
+                success(user.user, hos);
             }).catch(e=> {
-                success(user, {});
+                success(user.user, {});
             })
         }).catch(err => {
             switch (err.name) {
@@ -103,20 +103,6 @@ class NetUtil extends React.Component {
                     break;
             }
         });
-        /*
-         storage.getBatchData([{
-         key: 'USER',
-         autoSync: true,
-         syncInBackground: false,
-         }, {
-         key: 'HOSPITAL',
-         autoSync: true,
-         syncInBackground: false,
-         }]).then(rets => {
-         success(rets[0], rets[1]);
-         }).catch(e => {
-         error(e.message);
-         });*/
     }
 
     static url_healthmonitnorm(checkItemCode) {
@@ -127,6 +113,16 @@ class NetUtil extends React.Component {
 
     static headerAuthorization(mobile, hospitalcode, token) {
         return 'Mobile ' + Util.base64Encode(mobile + ':' + hospitalcode + ":" + token);
+    }
+
+    static headerClientAuth(user, hos) {
+        let hoscode = '';
+        if (hos && hos.hospital) {
+            hoscode = hos.hospital.Registration
+        }
+        return {
+            'Authorization': 'Mobile ' + Util.base64Encode(user.Mobile + ':' + hoscode + ":" + user.Token.token)
+        }
     }
 
 }

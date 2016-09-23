@@ -53,9 +53,7 @@ class ChooseStore extends Component {
                 items: [],
                 sorts: []
             };
-            let header = {
-                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-            };
+            let header = NetUtil.headerClientAuth(user, hos);
             NetUtil.postJson(CONSTAPI.HOST+'/Warehouse/GetModelList', postjson, header, function (data) {
                 if (data.Sign && data.Message) {
                     _this.setState({

@@ -54,9 +54,7 @@ export default class SaleAdd extends React.Component {
         let _this = this;
         if (_this.state.sellStoreId == null) {
             NetUtil.getAuth(function (user, hos) {
-                let header = {
-                    'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-                };
+                let header = NetUtil.headerClientAuth(user, hos);
                 NetUtil.get(CONSTAPI.HOST + '/Store_DirectSell/GetDirectSellPageConfig', header, function (data) {
                     if (data.Sign && data.Message) {
                         _this.setState({
@@ -200,9 +198,7 @@ export default class SaleAdd extends React.Component {
                     gest: _this.state.Guest,
                     sellItemList: items,
                 }
-                let header = {
-                    'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-                };
+                let header = NetUtil.headerClientAuth(user, hos);
                 //添加销售单
                 //销售库
                 NetUtil.postJson(CONSTAPI.HOST + '/Store_DirectSell/DirectSellBillSave', addpost, header, function (adddata) {

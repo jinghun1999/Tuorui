@@ -56,9 +56,7 @@ class GoodSales extends React.Component {
             loaded: false,
         })
         NetUtil.getAuth(function (user, hos) {
-            let header = {
-                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-            };
+            let header = NetUtil.headerClientAuth(user, hos);
             let querystr = 'startDate=' + _this.state.dateFrom + '&endDate=' + _this.state.dateTo + ' 23:59:59&itemName=' + _this.state.kw;
             NetUtil.get(CONSTAPI.HOST + '/Report/GetCountItemSellDataTable?' + querystr, header, function (data) {
                 if (data.Sign && data.Message != null) {
