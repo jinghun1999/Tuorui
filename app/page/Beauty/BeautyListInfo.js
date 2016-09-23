@@ -63,9 +63,7 @@ class BeautyListInfo extends React.Component {
                 pageSize: _this.state.pageSize
             };
             //let hospitalcode = 'aa15-740d-4e6d-a6ca-0ebf-81f1';
-            let header = {
-                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-            };
+            let header = NetUtil.headerClientAuth(user, hos);
             NetUtil.postJson(CONSTAPI.HOST + '/Service/GetPageRecord', postdata, header, function (data) {
                 if (data.Sign && data.Message != null) {
                     let dataSource = _this.state.dataSource;

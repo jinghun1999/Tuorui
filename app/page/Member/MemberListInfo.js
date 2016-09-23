@@ -56,89 +56,89 @@ class MemberListInfo extends Component {
     fetchData(page, isnext) {
         let _this = this;
         NetUtil.getAuth(function (user, hos) {
-                let postdata = {
-                    items: [{
-                        Childrens: null,
-                        Field: "isVIP",
-                        Title: null,
-                        Operator: {"Name": "=", "Title": "等于", "Expression": null},
-                        DataType: 0,
-                        Value: "SM00054",
-                        Conn: 0
-                    }, {
-                        Childrens: null,
-                        Field: "IsDeleted",
-                        Title: null,
-                        Operator: {"Name": "=", "Title": "等于", "Expression": null},
-                        DataType: 0,
-                        Value: "0",
-                        Conn: 1
-                    }],
-                    sorts: [{
-                        Field: "ModifiedOn",
-                        Title: null,
-                        Sort: {"Name": "Desc", "Title": "降序"},
-                        Conn: 0
-                    }],
-                    index: page,
-                    pageSize: _this.state.pageSize
-                };
-                //let hospitalcode = 'aa15-740d-4e6d-a6ca-0ebf-81f1';
-                let header = {
-                    'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-                };
-                NetUtil.postJson(CONSTAPI.HOST + '/Gest/GetPageRecord', postdata, header, function (data) {
-                    if (data.Sign && data.Message != null) {
-                        let dataSource = _this.state.dataSource;
-                        if (isnext) {
-                            data.Message.forEach((d)=> {
-                                dataSource.push(d);
-                            });
-                        } else {
-                            dataSource = data.Message;
-                        }
-                        _this.setState({
-                            dataSource: dataSource,
-                            memberLoaded: true,
-                            pageIndex: page,
+            let postdata = {
+                items: [{
+                    Childrens: null,
+                    Field: "isVIP",
+                    Title: null,
+                    Operator: {"Name": "=", "Title": "等于", "Expression": null},
+                    DataType: 0,
+                    Value: "SM00054",
+                    Conn: 0
+                }, {
+                    Childrens: null,
+                    Field: "IsDeleted",
+                    Title: null,
+                    Operator: {"Name": "=", "Title": "等于", "Expression": null},
+                    DataType: 0,
+                    Value: "0",
+                    Conn: 1
+                }],
+                sorts: [{
+                    Field: "ModifiedOn",
+                    Title: null,
+                    Sort: {"Name": "Desc", "Title": "降序"},
+                    Conn: 0
+                }],
+                index: page,
+                pageSize: _this.state.pageSize
+            };
+            //let hospitalcode = 'aa15-740d-4e6d-a6ca-0ebf-81f1';
+            let header = NetUtil.headerClientAuth(user, hos);
+            NetUtil.postJson(CONSTAPI.HOST + '/Gest/GetPageRecord', postdata, header, function (data) {
+                if (data.Sign && data.Message != null) {
+                    let dataSource = _this.state.dataSource;
+                    if (isnext) {
+                        data.Message.forEach((d)=> {
+                            dataSource.push(d);
                         });
                     } else {
-                        alert("获取数据失败：" + data.Message);
-                        _this.setState({
-                            memberLoaded: true,
-                        });
+                        dataSource = data.Message;
                     }
-                });
-                /*get recordCount from the api*/
-                postdata = [{
-                    "Childrens": null,
-                    "Field": "isVIP",
-                    "Title": null,
-                    "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                    "DataType": 0,
-                    "Value": "SM00054",
-                    "Conn": 0
-                }, {
-                    "Childrens": null,
-                    "Field": "IsDeleted",
-                    "Title": null,
-                    "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                    "DataType": 0,
-                    "Value": "0",
-                    "Conn": 1
-                }];
-                if (!isnext) {
-                    NetUtil.postJson(CONSTAPI.HOST + '/Gest/GetRecordCount', postdata, header, function (data) {
-                        if (data.Sign && data.Message != null) {
-                            _this.setState({
-                                recordCount: data.Message,
-                            });
-                        } else {
-                            alert("获取记录数失败：" + data.Message);
-                        }
+                    _this.setState({
+                        dataSource: dataSource,
+                        memberLoaded: true,
+                        pageIndex: page,
+                    });
+                } else {
+                    alert("获取数据失败：" + data.Message);
+                    _this.setState({
+                        memberLoaded: true,
                     });
                 }
-            },function(err){Alert.alert('错误', err)})
+            });
+            /*get recordCount from the api*/
+            postdata = [{
+                "Childrens": null,
+                "Field": "isVIP",
+                "Title": null,
+                "Operator": {"Name": "=", "Title": "等于", "Expression": null},
+                "DataType": 0,
+                "Value": "SM00054",
+                "Conn": 0
+            }, {
+                "Childrens": null,
+                "Field": "IsDeleted",
+                "Title": null,
+                "Operator": {"Name": "=", "Title": "等于", "Expression": null},
+                "DataType": 0,
+                "Value": "0",
+                "Conn": 1
+            }];
+            if (!isnext) {
+                NetUtil.postJson(CONSTAPI.HOST + '/Gest/GetRecordCount', postdata, header, function (data) {
+                    if (data.Sign && data.Message != null) {
+                        _this.setState({
+                            recordCount: data.Message,
+                        });
+                    } else {
+                        alert("获取记录数失败：" + data.Message);
+                    }
+                });
+            }
+        }, function (err) {
+            Alert.alert('错误', err)
+        })
     }
 
     _addInfo() {
@@ -150,8 +150,8 @@ class MemberListInfo extends Component {
                 component: AddMemberInfo,
                 params: {
                     headTitle: '新增会员',
-                    getResult:function(){
-                        _this.fetchData(1,false);
+                    getResult: function () {
+                        _this.fetchData(1, false);
                     }
                 }
             })
@@ -168,7 +168,7 @@ class MemberListInfo extends Component {
                 params: {
                     headTitle: '会员详情',
                     memberInfo: g,
-                    getResult:function(data){
+                    getResult: function (data) {
                         _this.fetchData(1, false);
                     }
                 }

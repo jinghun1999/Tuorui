@@ -75,9 +75,7 @@ class AddPet extends Component {
             })
         }
         NetUtil.getAuth(function (user, hos) {
-            let header = {
-                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-            };
+            let header = NetUtil.headerClientAuth(user, hos);
             //宠物ID http://test.tuoruimed.com/service/Api/BusinessInvoices/PetCode? 宠物编号自增加
             NetUtil.get(CONSTAPI.HOST + '/BusinessInvoices/PetCode?', header, function (data) {
                 if (_this.state.petID == null) {
@@ -141,9 +139,7 @@ class AddPet extends Component {
             }
             //保存宠物信息
             NetUtil.getAuth(function (user, hos) {
-                let header = {
-                    'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-                };
+                let header = NetUtil.headerClientAuth(user, hos);
                 if (_this.props.member.gestCode == null) {
                     alert('gestCode null');
                     return false
@@ -204,9 +200,7 @@ class AddPet extends Component {
         } else if (_this.state.edit == '保存' && _this.state.isUpdate == true) {
             //修改http://test.tuoruimed.com/service/Api/Pet/UpdateAndReturn
             NetUtil.getAuth(function (user, hos) {
-                let header = {
-                    'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-                };
+                let header = NetUtil.headerClientAuth(user, hos);
                 if (_this.props.member.gestCode == null) {
                     return false
                 }

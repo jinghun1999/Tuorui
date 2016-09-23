@@ -30,9 +30,9 @@ class ChooseVaccineInfo extends Component {
             vaccineDataSource: [],
             loaded: false,
             value: '',
-            pageIndex:1,
-            pageSize:15,
-            recordCount:null,
+            pageIndex: 1,
+            pageSize: 15,
+            recordCount: null,
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
         }
     }
@@ -54,74 +54,74 @@ class ChooseVaccineInfo extends Component {
         //http://petservice.tuoruimed.com/service/Api/ItemTypeWithBranchDefine/GetPageRecord
         var _this = this;
         NetUtil.getAuth(function (user, hos) {
-                let postdata = [{
-                    "Childrens":null,
-                    "Field":"BusiTypeCode",
-                    "Title":null,
-                    "Operator":{"Name":"=", "Title":"等于", "Expression":null},
-                    "DataType":0,
-                    "Value":"9",
-                    "Conn":0
-                    }, {
-                    "Childrens":null,
-                    "Field":"WarehouseID",
-                    "Title":null,
-                    "Operator":{"Name":"=", "Title":"等于", "Expression":null},
-                    "DataType":0,
-                    "Value":"a574a9fb-038a-4221-8f33-675d5b305b30",
-                    "Conn":1
-                    }, {
-                    "Childrens":[{
-                        "Childrens":null,
-                        "Field":"ItemName",
-                        "Title":null,
-                        "Operator":{"Name":"like", "Title":"相似", "Expression":" @File like '%' + @Value + '%' "},
-                        "DataType":0,
-                        "Value":value,
-                        "Conn":0
-                    }, {
-                        "Childrens":null,
-                        "Field":"InputCode",
-                        "Title":null,
-                        "Operator":{"Name":"like", "Title":"相似", "Expression":" @File like '%' + @Value + '%' "},
-                        "DataType":0,
-                        "Value":value,
-                        "Conn":2
-                    }, {
-                        "Childrens":null,
-                        "Field":"BarCode",
-                        "Title":null,
-                        "Operator":{"Name":"like", "Title":"相似", "Expression":" @File like '%' + @Value + '%' "},
-                        "DataType":0,
-                        "Value":value,
-                        "Conn":2
-                    }],
-                    "Field":null,
-                    "Title":null,
-                    "Operator":null,
-                    "DataType":0,
-                    "Value":null,
-                    "Conn":1
-                }]
-                //let hospitalcode = 'aa15-740d-4e6d-a6ca-0ebf-81f1';
-                let header = {
-                    'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-                };
+            let postdata = [{
+                "Childrens": null,
+                "Field": "BusiTypeCode",
+                "Title": null,
+                "Operator": {"Name": "=", "Title": "等于", "Expression": null},
+                "DataType": 0,
+                "Value": "9",
+                "Conn": 0
+            }, {
+                "Childrens": null,
+                "Field": "WarehouseID",
+                "Title": null,
+                "Operator": {"Name": "=", "Title": "等于", "Expression": null},
+                "DataType": 0,
+                "Value": "a574a9fb-038a-4221-8f33-675d5b305b30",
+                "Conn": 1
+            }, {
+                "Childrens": [{
+                    "Childrens": null,
+                    "Field": "ItemName",
+                    "Title": null,
+                    "Operator": {"Name": "like", "Title": "相似", "Expression": " @File like '%' + @Value + '%' "},
+                    "DataType": 0,
+                    "Value": value,
+                    "Conn": 0
+                }, {
+                    "Childrens": null,
+                    "Field": "InputCode",
+                    "Title": null,
+                    "Operator": {"Name": "like", "Title": "相似", "Expression": " @File like '%' + @Value + '%' "},
+                    "DataType": 0,
+                    "Value": value,
+                    "Conn": 2
+                }, {
+                    "Childrens": null,
+                    "Field": "BarCode",
+                    "Title": null,
+                    "Operator": {"Name": "like", "Title": "相似", "Expression": " @File like '%' + @Value + '%' "},
+                    "DataType": 0,
+                    "Value": value,
+                    "Conn": 2
+                }],
+                "Field": null,
+                "Title": null,
+                "Operator": null,
+                "DataType": 0,
+                "Value": null,
+                "Conn": 1
+            }]
+            //let hospitalcode = 'aa15-740d-4e6d-a6ca-0ebf-81f1';
+            let header = NetUtil.headerClientAuth(user, hos);
             //http://test.tuoruimed.com/service/Api/ItemTypeAndItemCount/GetModelList
-                NetUtil.postJson(CONSTAPI.HOST + '/ItemTypeAndItemCount/GetModelList', postdata, header, function (data) {
-                    if (data.Sign && data.Message != null) {
-                        _this.setState({
-                            vaccineDataSource: data.Message,
-                            loaded: true,
-                        });
-                    } else {
-                        alert("获取数据失败：" + data.Message);
-                        _this.setState({
-                            loaded: true,
-                        });
-                    }
-                });
-            },function(err){alert(err)})
+            NetUtil.postJson(CONSTAPI.HOST + '/ItemTypeAndItemCount/GetModelList', postdata, header, function (data) {
+                if (data.Sign && data.Message != null) {
+                    _this.setState({
+                        vaccineDataSource: data.Message,
+                        loaded: true,
+                    });
+                } else {
+                    alert("获取数据失败：" + data.Message);
+                    _this.setState({
+                        loaded: true,
+                    });
+                }
+            });
+        }, function (err) {
+            alert(err)
+        })
     }
 
     _onBack() {
@@ -135,7 +135,7 @@ class ChooseVaccineInfo extends Component {
     search(txt) {
         this._fetchData(txt);
         this.setState({
-            value:txt,
+            value: txt,
             loaded: false,
         });
     }

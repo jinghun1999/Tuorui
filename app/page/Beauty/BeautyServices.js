@@ -68,9 +68,7 @@ class BeautyServices extends React.Component {
         let _this = this;
         //新增
         NetUtil.getAuth(function (user, hos) {
-            let header = {
-                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-            };
+            let header = NetUtil.headerClientAuth(user, hos);
             NetUtil.get(CONSTAPI.HOST + '/BusinessInvoices/ServiceCode?', header, function (data) {
                 if (_this.state.servicesFWID == null) {
                     _this.setState({
@@ -323,9 +321,7 @@ class BeautyServices extends React.Component {
                         item: items,
                         details: beautyItems,
                     }
-                    let header = {
-                        'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-                    };
+                    let header = NetUtil.headerClientAuth(user, hos);
                     ////save http://petservice.tuoruimed.com/service/Api/Service/AddList
                     NetUtil.postJson(CONSTAPI.HOST + '/Service/AddList', postjson, header, function (data) {
                         if (data.Sign && data.Message) {
@@ -410,9 +406,7 @@ class BeautyServices extends React.Component {
                         item: items,
                         details: beautyItems,
                     }
-                    let header = {
-                        'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-                    };
+                    let header = NetUtil.headerClientAuth(user, hos);
                     ////update //http://test.tuoruimed.com/service/Api/Service/UpdateList
                     NetUtil.postJson(CONSTAPI.HOST + '/Service/UpdateList', postjson, header, function (data) {
                         if (data.Sign) {

@@ -64,9 +64,7 @@ class VaccineService extends Component {
         NetUtil.getAuth(function (user, hos) {
             //执行人初始化
             //http://test.tuoruimed.com/service/Api/Persons/GetPersonsByAppconfigID?appconfigID=97
-            let header = {
-                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-            };
+            let header = NetUtil.headerClientAuth(user, hos);
             NetUtil.get(CONSTAPI.HOST + '/Persons/GetPersonsByAppconfigID?appconfigID=97', header, function (data) {
                 var serviceData = data.Message;
                 var _data = [];
@@ -121,9 +119,7 @@ class VaccineService extends Component {
                 }]
             };
             NetUtil.getAuth(function (user, hos) {
-                let header = {
-                    'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-                };
+                let header = NetUtil.headerClientAuth(user, hos);
                 ///service/Api/Medic_Vaccine/GetModelListWithSort
                 NetUtil.postJson(CONSTAPI.HOST + '/Medic_Vaccine/GetModelListWithSort', postdata, header, function (data) {
                     if (data.Sign && data.Message != null) {
@@ -153,9 +149,7 @@ class VaccineService extends Component {
         } else if (_this.props.id === 1) {
             //新增疫苗详情
             NetUtil.getAuth(function (user, hos) {
-                let header = {
-                    'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-                };
+                let header = NetUtil.headerClientAuth(user, hos);
                 //http://test.tuoruimed.com/service/Api/BusinessInvoices/VaccineGroupCode?
                 NetUtil.get(CONSTAPI.HOST + '/BusinessInvoices/VaccineGroupCode?', header, function (data) {
                     _this.setState({
@@ -255,9 +249,7 @@ class VaccineService extends Component {
                         vaccineGroupCode: vaccineGroupCode,
                         list: vaccineItems,
                     };
-                    let header = {
-                        'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-                    };
+                    let header = NetUtil.headerClientAuth(user, hos);
                     ////save http://test.tuoruimed.com/service/Api/Medic_Vaccine/AddOrUpdate
                     NetUtil.postJson(CONSTAPI.HOST + '/Medic_Vaccine/AddOrUpdate', postjson, header, function (data) {
                         if (data.Sign && data.Message) {
@@ -339,9 +331,7 @@ class VaccineService extends Component {
                         vaccineGroupCode: vaccineGroupCode,
                         list: vaccineItems,
                     };
-                    let header = {
-                        'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-                    };
+                    let header = NetUtil.headerClientAuth(user, hos);
                     ////save http://test.tuoruimed.com/service/Api/Medic_Vaccine/AddOrUpdate
                     NetUtil.postJson(CONSTAPI.HOST + '/Medic_Vaccine/AddOrUpdate', postjson, header, function (data) {
                         if (data.Sign && data.Message) {
@@ -509,11 +499,11 @@ class VaccineService extends Component {
                     _vaccine.forEach((item, index, array)=> {
                         if (vaccine.ItemCode !== item.ItemCode) {
                             newSource.push(item);
-                        }else{
-                            let amount = _this.state.totalAmount-(vaccine.SellPrice?vaccine.SellPrice:vaccine.TotalCost);
+                        } else {
+                            let amount = _this.state.totalAmount - (vaccine.SellPrice ? vaccine.SellPrice : vaccine.TotalCost);
                             _this.setState({
-                                totalAmount:amount,
-                                totalNum:_this.state.totalNum-1,
+                                totalAmount: amount,
+                                totalNum: _this.state.totalNum - 1,
                             })
                         }
                     });

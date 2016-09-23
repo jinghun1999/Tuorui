@@ -120,9 +120,7 @@ class AddMemberInfo extends Component {
                 "EntID": "00000000-0000-0000-0000-000000000000",
                 "LevelName": null
             };
-            let header = {
-                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-            };
+            let header = NetUtil.headerClientAuth(user, hos);
             ////save http://test.tuoruimed.com/service/Api/Gest/AddGest
             NetUtil.postJson(CONSTAPI.HOST + '/Gest/AddGest', item, header, function (data) {
                 if (data.Sign) {
@@ -166,9 +164,7 @@ class AddMemberInfo extends Component {
     fetchData() {
         let _this = this;
         NetUtil.getAuth(function (user, hos) {
-            let header = {
-                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-            };
+            let header = NetUtil.headerClientAuth(user, hos);
             //http://test.tuoruimed.com/service/Api/Gest/GetVipAddPageConfig?
             NetUtil.get(CONSTAPI.HOST + '/Gest/GetVipAddPageConfig?', header, function (data) {
                 if (data.Sign && data.Message != null) {
@@ -247,7 +243,7 @@ class AddMemberInfo extends Component {
                                        editable={this.state.enable}
                                        underlineColorAndroid={'transparent'}
                                        keyboardType={'default'}
-                                       style={[styles.rowVal,{height:30,}]}
+                                       style={[styles.rowVal,{height:30,padding:0,margin:0,}]}
                                        onChangeText={(text)=>{
                                         this.setState({
                                             memberName:text
@@ -292,7 +288,7 @@ class AddMemberInfo extends Component {
                                        editable={this.state.enable}
                                        underlineColorAndroid={'transparent'}
                                        keyboardType={'default'}
-                                       style={[styles.rowVal,{height:30,}]}
+                                       style={[styles.rowVal,{height:30,padding:0,margin:0,}]}
                                        onChangeText={(text)=>{this.setState({ memberPhone:text })}}
                             />
                         </View>
@@ -319,7 +315,7 @@ class AddMemberInfo extends Component {
                                        editable={this.state.enable}
                                        underlineColorAndroid={'transparent'}
                                        keyboardType={'default'}
-                                       style={[styles.rowVal,{height:30}]}
+                                       style={[styles.rowVal,{height:30,padding:0,margin:0,}]}
                                        onChangeText={(text)=>{this.setState({ memberRemarks:text })}}/>
 
                         </View>

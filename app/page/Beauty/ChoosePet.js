@@ -25,15 +25,16 @@ class ChoosePet extends Component {
             petDataSource: [],
             loaded: false,
             kw: '',
-            pageIndex:1,
-            pageSize:15,
+            pageIndex: 1,
+            pageSize: 15,
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
         };
     }
-    _onBack(){
-        let _this=this;
-        const{navigator}=_this.props;
-        if(navigator){
+
+    _onBack() {
+        let _this = this;
+        const {navigator}=_this.props;
+        if (navigator) {
             navigator.pop();
         }
     }
@@ -42,7 +43,7 @@ class ChoosePet extends Component {
         var _this = this;
         _this.timer = setTimeout(
             () => {
-                _this._fetchData(_this.state.kw,1,false);
+                _this._fetchData(_this.state.kw, 1, false);
             }, 500
         )
     }
@@ -51,14 +52,15 @@ class ChoosePet extends Component {
         this.timer && clearTimeout(this.timer);
     }
 
-    _pressRow(pet){
+    _pressRow(pet) {
         if (this.props.getResult) {
             this.props.getResult(pet);
         }
         this._onBack();
     }
-    _renderPet(pet){
-        return(
+
+    _renderPet(pet) {
+        return (
             <TouchableOpacity
                 style={{ flexDirection:'row',marginLeft:15, marginRight:15, paddingTop:10, paddingBottom:10, borderBottomWidth:StyleSheet.hairlineWidth, borderBottomColor:'#ccc'}}
                 onPress={()=>this._pressRow(pet)}>
@@ -79,80 +81,13 @@ class ChoosePet extends Component {
             </TouchableOpacity>
         )
     }
-    _fetchData(value,page,isNext){
-        let _this =this;
+
+    _fetchData(value, page, isNext) {
+        let _this = this;
         //http://petservice.tuoruimed.com/service/Api/GestAndPet/GetPageRecord
         NetUtil.getAuth(function (user, hos) {
-                let postdata = {
-                    "items": [{
-                        "Childrens": null,
-                        "Field": "PetStatus",
-                        "Title": null,
-                        "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                        "DataType": 0,
-                        "Value": "SM00052",
-                        "Conn": 0
-                        },{
-                        "Childrens": null,
-                        "Field": "GestStatus",
-                        "Title": null,
-                        "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                        "DataType": 0,
-                        "Value": "SM00001",
-                        "Conn": 1
-                        }, {
-                        "Childrens": null,
-                        "Field": "PetName",
-                        "Title": null,
-                        "Operator": {"Name": "like", "Title": "相似", "Expression": " @File like '%' + @Value + '%' "},
-                        "DataType": 0,
-                        "Value": value,
-                        "Conn": 1
-                        },
-                    ],
-                    "sorts": [{
-                        "Field": "CreatedOn",
-                        "Title": null,
-                        "Sort": {"Name": "Desc", "Title": "降序"},
-                        "Conn": 0
-                        }, {
-                        "Field": "CreatedOn",
-                        "Title": null,
-                        "Sort": {"Name": "Desc", "Title": "降序"},
-                        "Conn": 0
-                        }
-                    ],
-                    index: page,
-                    pageSize: _this.state.pageSize
-                };
-                //let hospitalcode = 'aa15-740d-4e6d-a6ca-0ebf-81f1';
-                let header = {
-                    'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-                };
-                NetUtil.postJson(CONSTAPI.HOST + '/GestAndPet/GetPageRecord', postdata, header, function (data) {
-                    if (data.Sign && data.Message != null) {
-                        let dataSource = _this.state.dataSource;
-                        if (isNext) {
-                            data.Message.forEach((d)=> {
-                                dataSource.push(d);
-                            });
-                        } else {
-                            dataSource = data.Message;
-                        }
-                        _this.setState({
-                            petDataSource: dataSource,
-                            loaded: true,
-                            pageIndex: page,
-                        });
-                    } else {
-                        alert("获取数据失败：" + data.Message);
-                        _this.setState({
-                            loaded: true,
-                        });
-                    }
-                });
-                /*get recordCount from the api*/
-                postdata = [{
+            let postdata = {
+                "items": [{
                     "Childrens": null,
                     "Field": "PetStatus",
                     "Title": null,
@@ -160,7 +95,7 @@ class ChoosePet extends Component {
                     "DataType": 0,
                     "Value": "SM00052",
                     "Conn": 0
-                    }, {
+                }, {
                     "Childrens": null,
                     "Field": "GestStatus",
                     "Title": null,
@@ -168,7 +103,7 @@ class ChoosePet extends Component {
                     "DataType": 0,
                     "Value": "SM00001",
                     "Conn": 1
-                    }, {
+                }, {
                     "Childrens": null,
                     "Field": "PetName",
                     "Title": null,
@@ -176,39 +111,106 @@ class ChoosePet extends Component {
                     "DataType": 0,
                     "Value": value,
                     "Conn": 1
-                }]
-                if (!isNext) {
-                    NetUtil.postJson(CONSTAPI.HOST + '/GestAndPet/GetRecordCount', postdata, header, function (data) {
-                        if (data.Sign && data.Message != null) {
-                            _this.setState({
-                                recordCount: data.Message,
-                            });
-                        } else {
-                            alert("获取记录数失败：" + data.Message);
-                        }
+                },
+                ],
+                "sorts": [{
+                    "Field": "CreatedOn",
+                    "Title": null,
+                    "Sort": {"Name": "Desc", "Title": "降序"},
+                    "Conn": 0
+                }, {
+                    "Field": "CreatedOn",
+                    "Title": null,
+                    "Sort": {"Name": "Desc", "Title": "降序"},
+                    "Conn": 0
+                }
+                ],
+                index: page,
+                pageSize: _this.state.pageSize
+            };
+            //let hospitalcode = 'aa15-740d-4e6d-a6ca-0ebf-81f1';
+            let header = NetUtil.headerClientAuth(user, hos);
+            NetUtil.postJson(CONSTAPI.HOST + '/GestAndPet/GetPageRecord', postdata, header, function (data) {
+                if (data.Sign && data.Message != null) {
+                    let dataSource = _this.state.dataSource;
+                    if (isNext) {
+                        data.Message.forEach((d)=> {
+                            dataSource.push(d);
+                        });
+                    } else {
+                        dataSource = data.Message;
+                    }
+                    _this.setState({
+                        petDataSource: dataSource,
+                        loaded: true,
+                        pageIndex: page,
+                    });
+                } else {
+                    alert("获取数据失败：" + data.Message);
+                    _this.setState({
+                        loaded: true,
                     });
                 }
-            },function(err){
+            });
+            /*get recordCount from the api*/
+            postdata = [{
+                "Childrens": null,
+                "Field": "PetStatus",
+                "Title": null,
+                "Operator": {"Name": "=", "Title": "等于", "Expression": null},
+                "DataType": 0,
+                "Value": "SM00052",
+                "Conn": 0
+            }, {
+                "Childrens": null,
+                "Field": "GestStatus",
+                "Title": null,
+                "Operator": {"Name": "=", "Title": "等于", "Expression": null},
+                "DataType": 0,
+                "Value": "SM00001",
+                "Conn": 1
+            }, {
+                "Childrens": null,
+                "Field": "PetName",
+                "Title": null,
+                "Operator": {"Name": "like", "Title": "相似", "Expression": " @File like '%' + @Value + '%' "},
+                "DataType": 0,
+                "Value": value,
+                "Conn": 1
+            }]
+            if (!isNext) {
+                NetUtil.postJson(CONSTAPI.HOST + '/GestAndPet/GetRecordCount', postdata, header, function (data) {
+                    if (data.Sign && data.Message != null) {
+                        _this.setState({
+                            recordCount: data.Message,
+                        });
+                    } else {
+                        alert("获取记录数失败：" + data.Message);
+                    }
+                });
+            }
+        }, function (err) {
             alert(err);
         })
     }
 
     search(txt) {
-        this._fetchData(txt,1,false);
+        this._fetchData(txt, 1, false);
         this.setState({
             kw: txt,
             loaded: false,
         });
     }
-    render(){
-        var body=<Loading />
+
+    render() {
+        var body = <Loading />
         if (this.state.loaded) {
             body = <ListView dataSource={this.state.ds.cloneWithRows(this.state.petDataSource)}
                              enableEmptySections={true}
                              renderRow={this._renderPet.bind(this)}
             />
         }
-        return(
+        return (
             <View style={{flex:1}}>
                 <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
                 <ScrollView key={'scrollView'}
@@ -232,7 +234,7 @@ class ChoosePet extends Component {
         )
     }
 }
-const styles=StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'row',
@@ -255,4 +257,4 @@ const styles=StyleSheet.create({
     },
 
 })
-module.exports=ChoosePet;
+module.exports = ChoosePet;

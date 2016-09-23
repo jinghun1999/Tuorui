@@ -20,7 +20,6 @@ import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
 import Icon from 'react-native-vector-icons/Ionicons';
-import PetDetails from './PetDetails';
 import AddPet from './AddPet';
 import Loading from '../../commonview/Loading';
 import DatePicker from 'react-native-datepicker';
@@ -73,9 +72,7 @@ class MemberDetails extends Component {
                 }
             ];
             //let hospitalcode = 'aa15-740d-4e6d-a6ca-0ebf-81f1';
-            let header = {
-                'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-            };
+            let header = NetUtil.headerClientAuth(user, hos);
             NetUtil.postJson(CONSTAPI.HOST + '/GestAndPet/GetModelList', postdata, header, function (data) {
                 if (data.Sign && data.Message != null) {
                     let dataSource = _this.state.dataSource;
@@ -160,9 +157,7 @@ class MemberDetails extends Component {
                 return false;
             }
             NetUtil.getAuth(function (user, hos) {
-                let header = {
-                    'Authorization': NetUtil.headerAuthorization(user.user.Mobile, hos.hospital.Registration, user.user.Token)
-                };
+                let header = NetUtil.headerClientAuth(user, hos);
                 var _sex;
                 if (_this.state.memberSex == '男') {
                     _sex = 'DM00001'
@@ -305,7 +300,7 @@ class MemberDetails extends Component {
                                        editable={this.state.enable}
                                        underlineColorAndroid={'transparent'}
                                        keyboardType={'default'}
-                                       style={[styles.rowVal,{height:30}]}
+                                       style={[styles.rowVal,{height:30,padding:0,margin:0,}]}
                                        onChangeText={(text)=>{this.setState({ memberName: text })}}
                             />
                         </View>
@@ -349,19 +344,14 @@ class MemberDetails extends Component {
                                        editable={this.state.enable}
                                        underlineColorAndroid={'transparent'}
                                        keyboardType={'default'}
-                                       style={[styles.rowVal,{height:30}]}
+                                       style={[styles.rowVal,{height:30,padding:0,margin:0,}]}
                                        onChangeText={(text)=>{this.setState({ memberPhone: text })}}
                             />
                         </View>
                     </View>
                     <TouchableOpacity onPress={this._onChooseSex.bind(this)} style={styles.inputViewStyle}>
                         <Text style={styles.textTitle}>性别</Text>
-                        <TextInput value={this.state.memberSex == 'DM00001' ? '男' : '女'}
-                                   editable={this.state.enable}
-                                   underlineColorAndroid={'transparent'}
-                                   keyboardType={'default'}
-                                   style={[styles.rowVal,{height:30}]}
-                        />
+                        <Text style={styles.rowVal}>{this.state.memberSex == 'DM00001' ? '男' : '女'}</Text>
                     </TouchableOpacity>
                     <View style={styles.inputViewStyle}>
                         <Text style={styles.textTitle}>地址</Text>
@@ -370,7 +360,7 @@ class MemberDetails extends Component {
                                        editable={this.state.enable}
                                        underlineColorAndroid={'transparent'}
                                        keyboardType={'default'}
-                                       style={[styles.rowVal,{height:30}]}
+                                       style={[styles.rowVal,{height:30,padding:0,margin:0,}]}
                                        onChangeText={(text)=>{this.setState({ memberAddress: text })}}
                             />
                         </View>
@@ -382,7 +372,7 @@ class MemberDetails extends Component {
                                        editable={this.state.enable}
                                        underlineColorAndroid={'transparent'}
                                        keyboardType={'default'}
-                                       style={[styles.rowVal,{height:30}]}
+                                       style={[styles.rowVal,{height:30,padding:0,margin:0,}]}
                                        onChangeText={(text)=>{this.setState({ memberRemark: text })}}
                             />
                         </View>
