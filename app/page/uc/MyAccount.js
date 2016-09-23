@@ -13,6 +13,7 @@ import{
     ListView,
     TextInput,
     } from 'react-native';
+import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -20,18 +21,20 @@ import Loading from '../../commonview/Loading';
 import FormPicker from '../../commonview/FormPicker';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 import ModalPicker from 'react-native-modal-picker'
-
+import DatePicker from 'react-native-datepicker';
 class MyAccount extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             user: {},
+            memberMobile:'',
             memberSex: '男',
             memberSexKey: 0,
             memberNickName: '',
             memberEmail: '',
             memberAddress: '',
             memberSchool: '',
+            birthDay:'',
             dataSource: [],
             loaded: false,
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
@@ -58,7 +61,7 @@ class MyAccount extends React.Component {
                 }
             });
             _this.setState({
-                user: user.user,
+                user: user,
                 isRefreshing: false,
                 dataSource: hospitals,
                 loaded: true,
@@ -66,12 +69,13 @@ class MyAccount extends React.Component {
                 memberSex: user.Sex == 0 ? '男' : '女',
                 memberSexKey: user.Sex,
                 memberNickName: user.FullName,
+                birthDay: Util.cutString(user.Birthday,10, ''),
                 memberEmail: '@',
-                memberAddress: '',
-                memberSchool: '',
+                memberAddress: user.Address,
+                memberSchool: user.School,
             });
         }, function (msg) {
-            alert(msg)
+            Alert.alert('提示', msg, [{text: '确定'}]);
             _this.setState({
                 loaded: true,
             });
@@ -92,20 +96,34 @@ class MyAccount extends React.Component {
                     hospital: hos
                 }
             });
-            Alert.alert('提示', '设置默认医院成功', [{
-                text: '确定', onPress: () => {
-                }
-            },]);
+            Alert.alert('提示', '设置默认医院成功', [{text: '确定'}]);
         } catch (e) {
-            Alert.alert('提示', '设置失败', [{
-                text: '确定', onPress: () => {
-                }
-            },]);
+            Alert.alert('提示', '设置失败', [{text: '确定'}]);
         }
     }
 
-    _onEdit() {
-        Alert.alert('提示', '保存成功');
+    _onSave() {
+        let _this = this;
+        let postjson = {
+            Name: 'mo',
+            data: {
+                Mobile : _this.state.memberMobile,
+                Name : _this.state.memberNickName,
+                Sex  : _this.state.memberSexKey,
+                Birthday : _this.state.birthDay,
+                School  : _this.state.memberAddress,
+                Address  : _this.state.memberSchool,
+            }
+        };
+        let header = NetUtil.headerClientAuth(_this.state.user, null)
+        NetUtil.postJson(CONSTAPI.Auth + '/ad', postjson, header, function (data) {
+            if (data.Sign) {
+                Alert.alert('提示', '修改成功', [{text: '确定'}]);
+            } else {
+                Alert.alert('提示', data.Exception, [{text: '确定'}]);
+            }
+        });
+
     }
 
     _onRenderRow(h) {
@@ -147,7 +165,7 @@ class MyAccount extends React.Component {
                       onPress={this._onBack.bind(this)}
                       canAdd={true}
                       edit="保存"
-                      editInfo={this._onEdit.bind(this)}/>
+                      editInfo={this._onSave.bind(this)}/>
                 <ScrollView key={'scrollView'}
                             horizontal={false}
                             style={{flex:1, backgroundColor:'#efefef'}}>
@@ -182,18 +200,19 @@ class MyAccount extends React.Component {
                         </View>
                         <View style={styles.contentStyle}>
                             <ModalPicker
-                                style={{alignItems:'flex-end', borderWidth:0, borderColor:'#fff', marginRight:10,}}
+                                style={{alignItems:'flex-end', borderWidth:0, borderColor:'#fff',}}
+                                selectStyle={{padding:0,borderWidth:0}}
                                 data={sexdata}
                                 initValue={this.state.memberSex}
                                 cancelText={'取消'}
                                 onChange={(option)=>{ this.setState({memberSex: option.label, memberSexKey:option.key});}}/>
                             {/*<Picker
-                                style={{alignItems:'flex-end', borderWidth:0, borderColor:'#fff', marginRight:10,}}
-                                selectedValue={this.state.memberSex}
-                                onValueChange={(lang) => this.setState({language: lang})}>
-                                <Picker.Item label="男" value="0" />
-                                <Picker.Item label="女" value="1" />
-                            </Picker>*/}
+                             style={{alignItems:'flex-end', borderWidth:0, borderColor:'#fff', marginRight:10,}}
+                             selectedValue={this.state.memberSex}
+                             onValueChange={(lang) => this.setState({language: lang})}>
+                             <Picker.Item label="男" value="0" />
+                             <Picker.Item label="女" value="1" />
+                             </Picker>*/}
                         </View>
                     </View>
                     <View style={styles.headBox}>
@@ -201,15 +220,16 @@ class MyAccount extends React.Component {
                             <Text style={styles.ititletxt}>手机</Text>
                         </View>
                         <View style={styles.contentStyle}>
-                            <TextInput
+                            {/*<TextInput
                                 style={{flex:1, textAlign:'right', alignItems:'center',}}
                                 onChangeText={(text) => this.setState({memberMobile: text})}
                                 value={this.state.memberMobile}
                                 maxLength={20}
-                                underlineColorAndroid={'transparent'}/>
+                                underlineColorAndroid={'transparent'}/>*/}
+                            <Text style={{color:'#000'}}>{this.state.memberMobile}</Text>
                         </View>
                     </View>
-                    <View style={styles.headBox}>
+                    {/*<View style={styles.headBox}>
                         <View style={styles.ititle}>
                             <Text style={styles.ititletxt}>邮箱</Text>
                         </View>
@@ -220,6 +240,32 @@ class MyAccount extends React.Component {
                                 value={this.state.memberEmail}
                                 maxLength={50}
                                 underlineColorAndroid={'transparent'}/>
+                        </View>
+                    </View>*/}
+                    <View style={styles.headBox}>
+                        <View style={styles.ititle}>
+                            <Text style={styles.ititletxt}>生日</Text>
+                        </View>
+                        <View style={styles.contentStyle}>
+                            <DatePicker
+                                date={this.state.birthDay}
+                                mode="date"
+                                placeholder="选择日期"
+                                format="YYYY-MM-DD"
+                                minDate="1910-01-01"
+                                maxDate={Util.GetDateStr(0)}
+                                confirmBtnText="Confirm"
+                                cancelBtnText="Cancel"
+                                showIcon={false}
+                                style={{width:100}}
+                                customStyles={{
+                                    dateInput: {
+                                      height:30,
+                                      alignItems:'flex-end',
+                                      borderWidth:0,
+                                    },
+                                  }}
+                                onDateChange={(date) => {this.setState({birthDay: date})}}/>
                         </View>
                     </View>
                     <View style={styles.headBox}>
@@ -280,7 +326,8 @@ const styles = StyleSheet.create({
     contentStyle: {
         flex: 1,
         //backgroundColor:'#ccf',
-        justifyContent: 'center',
+        alignItems: 'flex-end',
+        justifyContent:'center',
         height: 50,
         //alignItems:'center'
     },

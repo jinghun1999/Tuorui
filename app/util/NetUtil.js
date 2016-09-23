@@ -114,7 +114,7 @@ class NetUtil extends React.Component {
     }
 
     static headerClientAuth(user, hos) {
-        let hoscode = '';
+        let hoscode = '*';
         if (hos && hos.hospital) {
             hoscode = hos.hospital.Registration
         }
