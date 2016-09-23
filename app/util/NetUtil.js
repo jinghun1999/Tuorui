@@ -25,18 +25,16 @@ class NetUtil extends React.Component {
             headers: header,
             body: JSON.stringify(data)
         };
-
-        fetch(url, fetchOptions)
-            .then((response) => response.text())
-            .then((responseText) => {
-                let result = {};
-                try {
-                    result = JSON.parse(responseText);
-                } catch (e) {
-                    result = {Sign: false, Message: '【解析远程数据失败】' + responseText};
-                }
-                callback(result);
-            }).done();
+        try {
+            fetch(url, fetchOptions)
+                .then((response) => response.text())
+                .then((responseText) => {
+                    let result = JSON.parse(responseText);
+                    callback(result);
+                }).done();
+        } catch (e) {
+            result = {Sign: false, Message: '【解析远程数据失败】'};
+        }
     }
 
     //get请求
@@ -124,7 +122,46 @@ class NetUtil extends React.Component {
             'Authorization': 'Mobile ' + Util.base64Encode(user.Mobile + ':' + hoscode + ":" + user.Token.token)
         }
     }
-
+    static login(phone, pwd, callback){
+        NetUtil.get(CONSTAPI.Auth + "/ad?identity=" + phone + "&password=" + pwd + "&type=m", false, function (lg) {
+            if (lg.Sign && lg.Message) {
+                /*保存登陆信息*/
+                storage.save({
+                    key: 'LoginData',
+                    rawData: {
+                        identity: phone,
+                        password: pwd,
+                    },
+                });
+                /*保存用户信息*/
+                storage.save({
+                    key: 'USER',
+                    rawData: {
+                        user: lg.Message,
+                    },
+                    expires: 1000 * 60,
+                });
+                /*保存用户默认医院*/
+                if (lg.Message.HospitalId != null) {
+                    let hos = {};
+                    lg.Message.Hospitals.forEach(function (v, i, d) {
+                        if (v.ID === lg.Message.HospitalId) {
+                            hos = v;
+                        }
+                    });
+                    storage.save({
+                        key: 'HOSPITAL',
+                        rawData: {
+                            hospital: hos,
+                        }
+                    });
+                }
+                callback(true)
+            } else {
+                callback(false, lg.Exception)
+            }
+        });
+    }
 }
 
 module.exports = NetUtil;

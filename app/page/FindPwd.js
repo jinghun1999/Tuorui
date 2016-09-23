@@ -1,5 +1,5 @@
 /**
- * Created by tuorui on 2016/9/8.
+ * Created by User on 2016-09-23.
  */
 'use strict';
 import React,{Component,} from 'react';
@@ -19,7 +19,7 @@ import Index from '../../Index';
 import NButton from '../commonview/NButton';
 import Head from '../commonview/Head';
 
-class Register extends Component {
+class FindPwd extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -74,7 +74,7 @@ class Register extends Component {
 
     _register() {
         let _this = this;
-        const {navigator}= _this.props;
+        const {navigator} = _this.props;
         if (_this.state.phone.length !== 11) {
             Alert.alert('提示', "请输入正确的手机号", [{text: '确定'}]);
             return;
@@ -88,7 +88,7 @@ class Register extends Component {
             return;
         }
         if (_this.state.pwd.indexOf('12345') > -1) {
-            Alert.alert('提示', '密码太简单啦，请重新设置', [{text: '确定'}]);
+            Alert.alert('提示', '密码太简单，请重新设置', [{text: '确定'}]);
             return false;
         }
         let postjson = {
@@ -96,10 +96,10 @@ class Register extends Component {
             Mobile: _this.state.phone,
             Password: _this.state.pwd,
             VerCode: _this.state.code,
-        };
+        }
         //submit reg info
         try {
-            NetUtil.postJson(CONSTAPI.Auth + '/ad?o=reg', postjson, false, function (data) {
+            NetUtil.postJson(CONSTAPI.Auth + '/ad?o=findpwd', postjson, false, function (data) {
                 if (data.Sign) {
                     //direct login
                     NetUtil.login(_this.state.phone, _this.state.pwd, function (ok, msg) {
@@ -121,7 +121,7 @@ class Register extends Component {
                 }
             });
         } catch (e) {
-            Alert.alert('错误', '注册失败(500)' + e, [{text: '确定'}]);
+            Alert.alert('错误', '找回密码失败(500)' + e, [{text: '确定'}]);
         }
     }
 
@@ -136,7 +136,7 @@ class Register extends Component {
     render() {
         return (
             <View style={{backgroundColor: '#f4f4f4', flex: 1}}>
-                <Head title={'用户注册'} canBack={true} onPress={this._onBack.bind(this)}/>
+                <Head title={'找回密码'} canBack={true} onPress={this._onBack.bind(this)}/>
                 <TextInput
                     style={styles._input}
                     placeholder='手机号'
@@ -174,7 +174,7 @@ class Register extends Component {
                 </View>
                 <TextInput
                     style={styles._input}
-                    placeholder='设置登陆密码'
+                    placeholder='新密码'
                     numberOfLines={1}
                     maxLength={16}
                     underlineColorAndroid={'transparent'}
@@ -191,7 +191,7 @@ class Register extends Component {
                     <NButton
                         underlayColor='#4169e1'
                         style={styles.register_button}
-                        text='注册'
+                        text='确定'
                         onPress={this._register.bind(this)}
                         />
                 </View>
@@ -239,4 +239,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Register
+export default FindPwd

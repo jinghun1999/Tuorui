@@ -35,7 +35,7 @@ class Index extends React.Component {
         //console.log('test', (isConnected ? 'online' : 'offline'));
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this._initState();
     }
 
@@ -46,8 +46,21 @@ class Index extends React.Component {
     _initState() {
         var _this = this;
         storage.load({
+            key: 'LoginData',
+            autoSync: false,
+            syncInBackground: false
+        }).then(ret=> {
+            _this._getUser(true);
+        }).catch(err=> {
+            _this._getUser(false);
+        });
+    }
+
+    _getUser(sync = false) {
+        var _this = this;
+        storage.load({
             key: 'USER',
-            autoSync: true,
+            autoSync: sync,
             syncInBackground: false
         }).then(ret => {
             _this.setState({
@@ -55,7 +68,7 @@ class Index extends React.Component {
                 loaded: true,
             });
         }).catch(err => {
-            Alert.alert('提示', '登陆过期，请重新登陆', [{text:'确定'}]);
+            Alert.alert('提示', '登陆过期，请重新登陆', [{text: '确定'}]);
             _this.setState({
                 loaded: true,
             });

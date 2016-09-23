@@ -20,7 +20,8 @@ import Util from '../util/Util';
 import NetUtil from '../util/NetUtil';
 import Index from '../../Index';
 import NButton from '../commonview/NButton';
-import Register  from './Register';
+import Register from './Register';
+import FindPwd from './FindPwd';
 
 class Login extends React.Component {
     constructor(props) {
@@ -56,38 +57,8 @@ class Login extends React.Component {
         var _this = this;
         const { navigator } = _this.props;
         try {
-            NetUtil.get(CONSTAPI.Auth + "/ad?identity=" + _this.state.user + "&password=" + _this.state.pwd + "&type=m", false, function (data) {
-                if (data.Sign && data.Message) {
-                    storage.save({
-                        key: 'LoginData',
-                        rawData: {
-                            identity: _this.state.user,
-                            password: _this.state.pwd,
-                        },
-                    });
-                    let _expires = 1000 * (data.Message.Token.expires_in-17990);
-                    storage.save({
-                        key: 'USER',
-                        rawData: {
-                            user: data.Message,
-                        },
-                        expires: _expires,
-                    });
-                    if (data.Message.HospitalId != null) {
-                        let hos = {};
-                        data.Message.Hospitals.forEach(function (v, i, d) {
-                            if (v.ID === data.Message.HospitalId) {
-                                hos = v;
-                            }
-                        });
-                        storage.save({
-                            key: 'HOSPITAL',
-                            rawData: {
-                                hospital: hos,
-                            }
-                        });
-                    }
-
+            NetUtil.login(_this.state.user, _this.state.pwd, function (ok, msg) {
+                if (ok) {
                     if (navigator) {
                         navigator.pop();
                         navigator.push({
@@ -97,7 +68,7 @@ class Login extends React.Component {
                         });
                     }
                 } else {
-                    Alert.alert('登陆失败', data.Exception,
+                    Alert.alert('提示', msg,
                         [
                             {
                                 text: '确定'
@@ -106,17 +77,13 @@ class Login extends React.Component {
                 }
             });
         } catch (e) {
-            Alert.alert('登陆失败', "错误信息：" + e,
+            Alert.alert('错误', "登陆失败.(500)" + e,
                 [
                     {
                         text: '确定'
                     },
                 ]);
         }
-    }
-
-    _cantLogin() {
-        ToastAndroid.show("完善中", ToastAndroid.SHORT);
     }
 
     _register() {
@@ -126,7 +93,18 @@ class Login extends React.Component {
             navigator.push({
                 name: 'Register',
                 component: Register
-            })
+            });
+        }
+    }
+
+    _findpwd() {
+        let _this = this;
+        const {navigator} = _this.props;
+        if (navigator) {
+            navigator.push({
+                name: 'FindPwd',
+                component: FindPwd
+            });
         }
     }
 
@@ -169,7 +147,7 @@ class Login extends React.Component {
                 </View>
 
                 <View style={{flex:1,flexDirection:'row',alignItems: 'flex-end',bottom:10}}>
-                    <Text style={styles.style_view_unlogin} onPress={this._cantLogin.bind(this)}>
+                    <Text style={styles.style_view_unlogin} onPress={this._findpwd.bind(this)}>
                         无法登录?
                     </Text>
                     <Text style={styles.style_view_register} onPress={this._register.bind(this)}>

@@ -49,7 +49,7 @@ class MyAccount extends React.Component {
     _loadData() {
         let _this = this;
         NetUtil.getAuth(function (user, hos) {
-            let hospitals = user.user.Hospitals;
+            let hospitals = user.Hospitals;
             hospitals.forEach(v => {
                 if (hos != null && hos.hospital != null && v.ID === hos.hospital.ID) {
                     v.IsBind = true;
@@ -62,10 +62,10 @@ class MyAccount extends React.Component {
                 isRefreshing: false,
                 dataSource: hospitals,
                 loaded: true,
-                memberMobile: user.user.Mobile,
-                memberSex: user.user.Sex == 0 ? '男' : '女',
-                memberSexKey: user.user.Sex,
-                memberNickName: user.user.FullName,
+                memberMobile: user.Mobile,
+                memberSex: user.Sex == 0 ? '男' : '女',
+                memberSexKey: user.Sex,
+                memberNickName: user.FullName,
                 memberEmail: '@',
                 memberAddress: '',
                 memberSchool: '',
