@@ -3,7 +3,6 @@
  */
 import React, { Component } from 'react';
 import {
-    AppRegistry,
     StyleSheet,
     Text,
     ScrollView,
@@ -11,14 +10,15 @@ import {
     View,
     ListView,
     TouchableOpacity,
-}from 'react-native';
+    }from 'react-native';
 import Util from '../../util/Util';
 import Head from '../../commonview/Head';
+import AppStyle from '../../theme/appstyle';
 class AppointDetails extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            enable:false,
+            enable: false,
         }
     }
 
@@ -31,73 +31,49 @@ class AppointDetails extends React.Component {
     }
 
     render() {
-        var starTime = Util.getFormateTime(this.props.appointInfo.StartTime,'min');
-        var endTime = Util.getFormateTime(this.props.appointInfo.EndTime,'min');
-        var regTime = Util.getFormateTime(this.props.appointInfo.ModifiedOn,'min');
+        var starTime = Util.getFormateTime(this.props.appointInfo.StartTime, 'min');
+        var endTime = Util.getFormateTime(this.props.appointInfo.EndTime, 'min');
+        var regTime = Util.getFormateTime(this.props.appointInfo.ModifiedOn, 'min');
         return (
-            <View style={styles.container}>
+            <View style={AppStyle.container}>
                 <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
-                <View style={styles.titleStyle}>
-                    <Text style={styles.titleText}>宠物信息</Text>
+                <View style={AppStyle.groupTitle}>
+                    <Text style={AppStyle.groupText}>宠物信息</Text>
                 </View>
-                <View style={styles.inputViewStyle}>
-                    <Text style={styles.textTitle}>宠物名称</Text>
-                    <Text style={{flex:1,color:'black'}}>{this.props.appointInfo.PetName}</Text>
+                <View style={AppStyle.row}>
+                    <Text style={AppStyle.titleText}>宠物名称</Text>
+                    <Text style={AppStyle.rowVal}>{this.props.appointInfo.PetName}</Text>
                 </View>
-                <View style={styles.titleStyle}>
-                    <Text style={styles.titleText}>预约信息</Text>
+                <View style={AppStyle.groupTitle}>
+                    <Text style={AppStyle.groupText}>预约信息</Text>
                 </View>
-                <View style={styles.inputViewStyle}>
-                    <Text style={styles.textTitle}>预约人</Text>
-                    <Text style={{flex:1,color:'black'}}>{this.props.appointInfo.GestName}</Text>
+                <View style={AppStyle.row}>
+                    <Text style={AppStyle.titleText}>预约人</Text>
+                    <Text style={AppStyle.rowVal}>{this.props.appointInfo.GestName}</Text>
                 </View>
-                <View style={styles.inputViewStyle}>
-                    <Text style={styles.textTitle}>预约医生</Text>
-                    <Text style={{flex:1,color:'black'}}>{this.props.appointInfo.DoctorName}</Text>
+                <View style={AppStyle.row}>
+                    <Text style={AppStyle.titleText}>预约医生</Text>
+                    <Text style={AppStyle.rowVal}>{this.props.appointInfo.DoctorName}</Text>
                 </View>
-                <View style={styles.inputViewStyle}>
-                    <Text style={styles.textTitle}>预约开始时间</Text>
-                    <Text style={{flex:1,color:'black'}}>{starTime}</Text>
+                <View style={AppStyle.row}>
+                    <Text style={AppStyle.titleText}>开始时间</Text>
+                    <Text style={AppStyle.rowVal}>{starTime}</Text>
                 </View>
-                <View style={styles.inputViewStyle}>
-                    <Text style={styles.textTitle}>预约结束时间</Text>
-                    <Text style={{flex:1,color:'black'}}>{endTime}</Text>
+                <View style={AppStyle.row}>
+                    <Text style={AppStyle.titleText}>结束时间</Text>
+                    <Text style={AppStyle.rowVal}>{endTime}</Text>
                 </View>
-                <View style={styles.inputViewStyle}>
-                    <Text style={styles.textTitle}>登记时间</Text>
-                    <Text style={{flex:1,color:'black'}}>{regTime}</Text>
+                <View style={AppStyle.row}>
+                    <Text style={AppStyle.titleText}>登记时间</Text>
+                    <Text style={AppStyle.rowVal}>{regTime}</Text>
                 </View>
             </View>
         )
     }
 }
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#e7e7e7',
-    },
-    textTitle:{
+    width150:{
         width:150,
-        fontSize:16,
-    },
-    titleStyle: {
-        margin: 5,
-        borderLeftWidth: 3,
-        borderLeftColor: '#CC0033',
-        paddingLeft: 5,
-    },
-    titleText: {
-        color:'#CC0033'
-    },
-    inputViewStyle: {
-        flexDirection: 'row',
-        padding: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#fff',
-        borderBottomColor: '#ccc',
-        borderBottomWidth: StyleSheet.hairlineWidth,
-    },
-
-})
+    }
+});
 module.exports = AppointDetails;

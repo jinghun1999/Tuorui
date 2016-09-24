@@ -140,7 +140,7 @@ class NetUtil extends React.Component {
                     rawData: {
                         user: lg.Message,
                     },
-                    expires: 1000 * (lg.Message.Token.expires_in - 17990),
+                    expires: 1000 * (lg.Message.Token.expires_in - 60),
                 });
                 /*保存用户默认医院*/
                 if (lg.Message.HospitalId != null) {

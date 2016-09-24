@@ -4,18 +4,17 @@
 'use strict';
 import React, {Component} from 'react';
 import{
-    AppRegistry,
     StyleSheet,
+    View,
     Text,
     TextInput,
-    View,
     TouchableOpacity,
     Image,
     Alert,
     ListView,
     ScrollView,
     InteractionManager,
-} from 'react-native';
+    } from 'react-native';
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
@@ -24,11 +23,11 @@ import ChoosePet from '../Beauty/ChoosePet';
 import Picker from 'react-native-picker';
 import ChooseVaccineInfo from './ChooseVaccineInfo';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import AppStyle from '../../theme/appstyle';
 class VaccineService extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            enabled: false,
             vaccine: [],
             petSource: {
                 PetName: '', PetCode: '', PetBreed: '', BarCode: '', SellPrice: 0, PetStatus: '',
@@ -41,7 +40,7 @@ class VaccineService extends Component {
             executorNameData: [''],
             totalAmount: 0,
             totalNum: 0,
-            edit: '保存',
+            edit: this.props.canEdit ? '保存' : '',
         }
     }
 
@@ -171,7 +170,6 @@ class VaccineService extends Component {
         if (_this.state.edit == '编辑') {
             _this.setState({
                 edit: '保存',
-                enabled: true,
             })
         }
         else if (_this.state.edit == '保存') {
@@ -182,7 +180,7 @@ class VaccineService extends Component {
                 Alert.alert('提示', '请选择执行人', [{text: '确定'}]);
                 return false;
             } else if (_this.state.vaccine.length == 0) {
-                Alert.alert('提示', '请选择美容项目', [{text: '确定'}]);
+                Alert.alert('提示', '请选择疫苗', [{text: '确定'}]);
                 return false;
             }
             if (_this.props.id == 1) {
@@ -307,7 +305,7 @@ class VaccineService extends Component {
                             "PaidTime": _vaccine[i].PaidTime,
                             "CreatedBy": _vaccine[i].CreatedBy,
                             "CreatedOn": _vaccine[i].CreatedOn,
-                            "ModifiedBy": user.user.MobilePhone,
+                            "ModifiedBy": user.FullName,
                             "ModifiedOn": Util.getTime(),
                             "IsDeleted": _vaccine[i].IsDeleted,
                             "BatchNumber": _vaccine[i].BatchNumber,
@@ -350,7 +348,6 @@ class VaccineService extends Component {
             }
             _this.setState({
                 edit: '编辑',
-                enabled: false,
             })
         }
 
@@ -360,7 +357,7 @@ class VaccineService extends Component {
     _onChoosePet() {
         //选择宠物
         let _this = this;
-        if (_this.props.isLook) {
+        if (!_this.props.canEdit || _this.state.edit != '保存') {
             return false;
         }
         const {navigator} =_this.props;
@@ -380,10 +377,18 @@ class VaccineService extends Component {
         }
     }
 
+    _onChoosePerson() {
+        let _this = this;
+        if (!_this.props.canEdit || _this.state.edit != '保存') {
+            return false;
+        }
+        _this.picker.toggle();
+    }
+
     chooseVaccine() {
         //疫苗添加
         let _this = this;
-        if (_this.props.isLook) {
+        if (!_this.props.canEdit) {
             return false;
         }
         const {navigator} = _this.props;
@@ -414,70 +419,7 @@ class VaccineService extends Component {
         }
     }
 
-    _onChoosePerson() {
-        let _this = this;
-        if (_this.props.isLook) {
-            return false;
-        }
-        _this.picker.toggle();
-    }
-
-    _renderHeader() {
-        return (
-            <View style={{flex:1}}>
-                <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}
-                      canAdd={true} edit={this.state.edit} editInfo={this._onSaveInfo.bind(this)}/>
-                <View style={styles.titleStyle}>
-                    <Text style={styles.titleText}>宠物信息</Text>
-                </View>
-                <View style={styles.inputViewStyle}>
-                    <Text style={styles.textTitle}>会员编号</Text>
-                    <Text style={{flex:1,color:'black'}}>{this.state.petSource.GestCode}</Text>
-                </View>
-                <View style={styles.inputViewStyle}>
-                    <Text style={styles.textTitle}>会员名称</Text>
-                    <Text style={{flex:1,color:'black'}}>{this.state.petSource.GestName}</Text>
-                </View>
-                <TouchableOpacity onPress={this._onChoosePet.bind(this)}
-                                  style={styles.inputViewStyle}>
-                    <Text style={styles.textTitle}>宠物名称</Text>
-                    <Text style={{flex:1,color:'black'}}>{this.state.petSource.PetName}</Text>
-                    <Icon name={'angle-right'} size={20} color={'#ccc'} style={{marginRight:10}}/>
-                </TouchableOpacity>
-                <View style={styles.titleStyle}>
-                    <Text style={styles.titleText}>服务信息</Text>
-                </View>
-                <View style={styles.inputViewStyle}>
-                    <Text style={styles.textTitle}>组号</Text>
-                    <Text style={{flex:1,color:'black'}}>{this.state.VaccineGroupCode}</Text>
-                </View>
-                <TouchableOpacity onPress={this._onChoosePerson.bind(this)}
-                                  style={styles.inputViewStyle}>
-                    <Text style={styles.textTitle}>执行人</Text>
-                    <Text style={{flex:1,color:'black'}}>{this.state.executorName}</Text>
-                    <Icon name={'angle-right'} size={20} color={'#ccc'} style={{marginRight:10}}/>
-                </TouchableOpacity>
-                <View style={styles.inputViewStyle}>
-                    <Text style={styles.textTitle}>数量</Text>
-                    <Text style={{flex:1,color:'black'}}>{this.state.totalNum.toString()}</Text>
-                </View>
-                <View style={styles.inputViewStyle}>
-                    <Text style={styles.textTitle}>金额</Text>
-                    <Text style={{flex:1,color:'black'}}>¥{this.state.totalAmount.toString()}</Text>
-                </View>
-                <View style={[styles.titleStyle,{ flexDirection:'row',}]}>
-                    <Text style={[styles.titleText,{flex:1}]}>疫苗信息</Text>
-                    <TouchableOpacity
-                        style={{width:50,alignItems:'center', backgroundColor:'#99CCFF',}}
-                        onPress={this.chooseVaccine.bind(this)}>
-                        <Text>添加</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-        )
-    }
-
-    _onVaccineDetails(vaccine) {
+    _remove(vaccine) {
         let _this = this;
         if (_this.state.edit == '编辑') {
             return false;
@@ -490,7 +432,7 @@ class VaccineService extends Component {
                 {
                     text: '确定', onPress: () => {
                     //删除此条数据
-                    if(_this.props.id === 2){
+                    if (_this.props.id === 2) {
                         if (vaccine.PaidStatus !== 'SM00040') {
                             Alert.alert('提示', '此项已收费', [{text: '确定'}]);
                             return false;
@@ -517,12 +459,68 @@ class VaccineService extends Component {
         )
     }
 
-    _onRenderRow(vaccine) {
+    _renderHeader() {
         return (
-            <TouchableOpacity style={styles.row} onPress={()=>this._onVaccineDetails(vaccine)}>
-                <Text style={{flex: 1,fontSize:14, color:'#27408B',fontWeight:'bold'}}>{vaccine.ItemName}</Text>
+            <View>
+                <View style={AppStyle.groupTitle}>
+                    <Text style={AppStyle.groupText}>宠物信息</Text>
+                </View>
+                <View style={AppStyle.row}>
+                    <Text style={AppStyle.titleText}>会员编号</Text>
+                    <Text style={AppStyle.rowVal}>{this.state.petSource.GestCode}</Text>
+                </View>
+                <View style={AppStyle.row}>
+                    <Text style={AppStyle.titleText}>会员名称</Text>
+                    <Text style={AppStyle.rowVal}>{this.state.petSource.GestName}</Text>
+                </View>
+                <TouchableOpacity onPress={this._onChoosePet.bind(this)}
+                                  style={AppStyle.row}>
+                    <Text style={AppStyle.titleText}>宠物名称</Text>
+                    <Text style={AppStyle.rowVal}>{this.state.petSource.PetName}</Text>
+                    <Icon name={'angle-right'} size={20} color={'#ccc'}/>
+                </TouchableOpacity>
+                <View style={AppStyle.groupTitle}>
+                    <Text style={AppStyle.groupText}>服务信息</Text>
+                </View>
+                <View style={AppStyle.row}>
+                    <Text style={AppStyle.titleText}>组号</Text>
+                    <Text style={AppStyle.rowVal}>{this.state.VaccineGroupCode}</Text>
+                </View>
+                <TouchableOpacity onPress={this._onChoosePerson.bind(this)}
+                                  style={AppStyle.row}>
+                    <Text style={AppStyle.titleText}>执行人</Text>
+                    <Text style={AppStyle.rowVal}>{this.state.executorName}</Text>
+                    <Icon name={'angle-right'} size={20} color={'#ccc'}/>
+                </TouchableOpacity>
+                <View style={AppStyle.row}>
+                    <Text style={AppStyle.titleText}>数量</Text>
+                    <Text style={AppStyle.rowVal}>{this.state.totalNum.toString()}</Text>
+                </View>
+                <View style={AppStyle.row}>
+                    <Text style={AppStyle.titleText}>金额</Text>
+                    <Text style={AppStyle.rowVal}>¥{this.state.totalAmount.toString()}</Text>
+                </View>
+                <View style={AppStyle.groupTitle}>
+                    <Text style={AppStyle.groupText}>疫苗信息</Text>
+                    {this.state.canEdit ?
+                        <TouchableOpacity
+                            style={AppStyle.smallBtn}
+                            onPress={this.chooseVaccine.bind(this)}>
+                            <Text>添加</Text>
+                        </TouchableOpacity>
+                        : null
+                    }
+                </View>
+            </View>
+        )
+    }
+
+    _renderRow(vaccine) {
+        return (
+            <TouchableOpacity style={AppStyle.row} onPress={()=>this._remove(vaccine)}>
+                <Text style={AppStyle.mpName}>{vaccine.ItemName}</Text>
                 <Text
-                    style={{flex: 1,fontSize:14,color:'#8B0000'}}>单价:¥ {vaccine.SellPrice ? vaccine.SellPrice : vaccine.TotalCost}</Text>
+                    style={{fontSize:14,color:'#8B0000'}}>单价:¥ {vaccine.SellPrice ? vaccine.SellPrice : vaccine.TotalCost}</Text>
             </TouchableOpacity>
         )
 
@@ -530,12 +528,18 @@ class VaccineService extends Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <View style={AppStyle.container}>
+                <Head title={this.props.headTitle}
+                      canBack={true}
+                      onPress={this._onBack.bind(this)}
+                      canAdd={this.props.canEdit}
+                      edit={this.state.edit}
+                      editInfo={this._onSaveInfo.bind(this)}/>
                 <ListView enableEmptySections={true}
                           dataSource={this.state.ds.cloneWithRows(this.state.vaccine)}
                           renderHeader={this._renderHeader.bind(this)}
-                          renderRow={this._onRenderRow.bind(this)}
-                />
+                          renderRow={this._renderRow.bind(this)}
+                    />
                 <Picker
                     style={{height: 300}}
                     showDuration={300}
@@ -550,45 +554,10 @@ class VaccineService extends Component {
                      executorName: text!==null?text[0]:'',
                  })
                  }}
-                />
+                    />
             </View>
         )
     }
 }
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#e7e7e7',
-    },
-    textTitle: {
-        width: 100,
-        fontSize: 16,
-    },
-    titleStyle: {
-        margin: 5,
-        borderLeftWidth: 3,
-        borderLeftColor: '#CC0033',
-        paddingLeft: 5,
-    },
-    titleText: {
-        color:'#CC0033'
-    },
-    inputViewStyle: {
-        flex: 1,
-        flexDirection: 'row',
-        padding: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#fff',
-        borderBottomColor: '#ccc',
-        borderBottomWidth: StyleSheet.hairlineWidth,
-    },
-    row: {
-        flexDirection: 'row',
-        padding: 10,
-        backgroundColor: '#fff',
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: '#ccc'
-    },
-})
+const styles = StyleSheet.create({});
 module.exports = VaccineService;

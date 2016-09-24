@@ -14,7 +14,7 @@ import {
     ScrollView,
     DatePickerAndroid,
     InteractionManager,
-} from 'react-native';
+    } from 'react-native';
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
@@ -23,6 +23,7 @@ import Loading from '../../commonview/Loading';
 import DatePicker from 'react-native-datepicker';
 import Picker from 'react-native-picker';
 import NButton from '../../commonview/NButton';
+import AppStyle from '../../theme/appstyle';
 class AddPet extends Component {
     constructor(props) {
         super(props);
@@ -35,7 +36,7 @@ class AddPet extends Component {
             petSex: '',
             petID: null,
             edit: '',
-            petRace:'',
+            petRace: '',
             isUpdate: false,
             petSickID: null,
             disabled: false,
@@ -62,8 +63,8 @@ class AddPet extends Component {
                 petRace: _this.props.petSource.PetRace,
                 petState: _this.props.petSource.BirthStatus,
                 petBirthday: _this.props.petSource.PetBirthday,
-                isUpdate:true,
-                petDataSource:_this.props.petSource,
+                isUpdate: true,
+                petDataSource: _this.props.petSource,
             })
         } else {
             _this.setState({
@@ -217,26 +218,26 @@ class AddPet extends Component {
                     "PetSex": _this.state.petSex,
                     "PetBirthday": _this.state.petBirthday,
                     "Age": _this.state.petDataSource.Age,
-                    "PetSkinColor": _this.state.petDataSource.PetSkinColor?_this.state.petDataSource.PetSkinColor:'',
+                    "PetSkinColor": _this.state.petDataSource.PetSkinColor ? _this.state.petDataSource.PetSkinColor : '',
                     "PetRace": _this.state.petRace,
-                    "PetBreed": _this.state.petDataSource.PetBreed?_this.state.petDataSource.PetBreed:'',
-                    "PetWeight": _this.state.petDataSource.PetWeight?_this.state.petDataSource.PetWeight:'',
-                    "PetHeight": _this.state.petDataSource.PetHeight?_this.state.petDataSource.PetHeight:'',
-                    "PetSWidth": _this.state.petDataSource.PetSWidth?_this.state.petDataSource.PetSWidth:'',
-                    "PetBodyLong": _this.state.petDataSource.PetBodyLong?_this.state.petDataSource.PetBodyLong:'',
+                    "PetBreed": _this.state.petDataSource.PetBreed ? _this.state.petDataSource.PetBreed : '',
+                    "PetWeight": _this.state.petDataSource.PetWeight ? _this.state.petDataSource.PetWeight : '',
+                    "PetHeight": _this.state.petDataSource.PetHeight ? _this.state.petDataSource.PetHeight : '',
+                    "PetSWidth": _this.state.petDataSource.PetSWidth ? _this.state.petDataSource.PetSWidth : '',
+                    "PetBodyLong": _this.state.petDataSource.PetBodyLong ? _this.state.petDataSource.PetBodyLong : '',
                     "SickFileCode": _this.state.petSickID,
                     "BirthStatus": _this.state.petState,
-                    "Status": _this.state.petDataSource.Status?_this.state.petDataSource.Status:'',
-                    "PetHead": _this.state.petDataSource.PetHead?_this.state.petDataSource.PetHead:'',
-                    "PetHeadID": _this.state.petDataSource.PetHeadID?_this.state.petDataSource.PetHeadID:'',
-                    "DogBandID": _this.state.petDataSource.DogBandID?_this.state.petDataSource.DogBandID:'',
-                    "MdicTypeName": _this.state.petDataSource.MdicTypeName?_this.state.petDataSource.MdicTypeName:'',
-                    "Remark": _this.state.petDataSource.Remark?_this.state.petDataSource.Remark:'',
+                    "Status": _this.state.petDataSource.Status ? _this.state.petDataSource.Status : '',
+                    "PetHead": _this.state.petDataSource.PetHead ? _this.state.petDataSource.PetHead : '',
+                    "PetHeadID": _this.state.petDataSource.PetHeadID ? _this.state.petDataSource.PetHeadID : '',
+                    "DogBandID": _this.state.petDataSource.DogBandID ? _this.state.petDataSource.DogBandID : '',
+                    "MdicTypeName": _this.state.petDataSource.MdicTypeName ? _this.state.petDataSource.MdicTypeName : '',
+                    "Remark": _this.state.petDataSource.Remark ? _this.state.petDataSource.Remark : '',
                     "CreatedBy": _this.props.member.createdBy,
                     "CreatedOn": _this.props.member.createdOn,
-                    "ModifiedBy": user.user.user,
+                    "ModifiedBy": user.FullName,
                     "ModifiedOn": Util.getTime(),
-                    "IsDeleted": _this.state.petDataSource.IsDeleted?_this.state.petDataSource.IsDeleted:0,
+                    "IsDeleted": _this.state.petDataSource.IsDeleted ? _this.state.petDataSource.IsDeleted : 0,
                     "EntID": hos.hospital.ID
                 };
                 NetUtil.postJson(CONSTAPI.HOST + '/Pet/UpdateAndReturn', item, header, function (data) {
@@ -254,11 +255,11 @@ class AddPet extends Component {
             }, function (err) {
                 alert(err)
             })
-        }else if(_this.state.edit=='编辑'){
+        } else if (_this.state.edit == '编辑') {
             _this.setState({
-                edit:'保存',
-                enabled:true,
-                disabled:false,
+                edit: '保存',
+                enabled: true,
+                disabled: false,
             })
         }
     }
@@ -301,60 +302,52 @@ class AddPet extends Component {
             return load;
         }
         return (
-            <View style={styles.container}>
+            <View style={AppStyle.container}>
                 <Head title={this.props.headTitle}
-                      canBack={true} onPress={this._onBack.bind(this)}
-                      canAdd={true} edit={this.state.edit} editInfo={this._save.bind(this)}
-                />
+                      canBack={true}
+                      onPress={this._onBack.bind(this)}
+                      canAdd={true}
+                      edit={this.state.edit}
+                      editInfo={this._save.bind(this)}/>
                 <ScrollView key={'scrollView'}
                             horizontal={false}
                             showsVerticalScrollIndicator={true}
                             scrollEnabled={true}>
-                    <View style={styles.titleStyle}>
-                        <Text style={styles.titleText}>会员信息</Text>
+                    <View style={AppStyle.groupTitle}>
+                        <Text style={AppStyle.groupText}>会员信息</Text>
                     </View>
-                    <View style={styles.inputViewStyle}>
-                        <Text style={styles.textTitle}>会员名</Text>
-                        <TextInput value={this.props.member.name}
-                                   editable={false}
-                                   underlineColorAndroid={'transparent'}
-                                   keyboardType={'default'}
-                                   style={{height: 40, borderWidth:0, flex:1,color:'black'}}
-                        />
+                    <View style={AppStyle.inputViewStyle}>
+                        <Text style={AppStyle.titleText}>会员</Text>
+                        <Text style={AppStyle.rowVal}>{this.props.member.name}</Text>
                     </View>
-                    <View style={styles.inputViewStyle}>
-                        <Text style={styles.textTitle}>手机号码</Text>
-                        <TextInput value={this.props.member.phone}
-                                   editable={false}
-                                   underlineColorAndroid={'transparent'}
-                                   keyboardType={'default'}
-                                   style={{height: 40, borderWidth:0, flex:1,color:'black'}}
-                        />
+                    <View style={AppStyle.inputViewStyle}>
+                        <Text style={AppStyle.titleText}>手机</Text>
+                        <Text style={AppStyle.rowVal}>{this.props.member.phone}</Text>
                     </View>
-                    <View style={styles.titleStyle}>
-                        <Text  style={styles.titleText}>宠物信息</Text>
+                    <View style={AppStyle.groupTitle}>
+                        <Text style={AppStyle.groupText}>宠物信息</Text>
                     </View>
-                    <View style={styles.inputViewStyle}>
-                        <Text style={styles.textTitle}>宠物编号</Text>
-                        <Text style={{flex:1,color:'black'}}>{this.state.petID}</Text>
+                    <View style={AppStyle.inputViewStyle}>
+                        <Text style={AppStyle.titleText}>宠物编号</Text>
+                        <Text style={AppStyle.rowVal}>{this.state.petID}</Text>
                     </View>
-                    <View style={styles.inputViewStyle}>
-                        <Text style={styles.textTitle}>宠物病历号</Text>
+                    <View style={AppStyle.inputViewStyle}>
+                        <Text style={AppStyle.titleText}>病历号</Text>
                         <Text style={{flex:1,color:'black'}}>{this.state.petSickID}</Text>
                     </View>
-                    <View style={styles.inputViewStyle}>
-                        <Text style={styles.textTitle}>宠物昵称</Text>
+                    <View style={AppStyle.inputViewStyle}>
+                        <Text style={AppStyle.titleText}>宠物昵称</Text>
                         <TextInput
                             value={this.state.petName}
                             editable={this.state.enabled}
                             underlineColorAndroid={'transparent'}
                             keyboardType={'default'}
-                            style={{height: 40, borderWidth:0, flex:1}}
+                            style={AppStyle.input}
                             onChangeText={(text)=>{this.setState({ petName:text })}}
-                        />
+                            />
                     </View>
-                    <View style={styles.inputViewStyle}>
-                        <Text style={styles.textTitle}>出生日期</Text>
+                    <View style={AppStyle.inputViewStyle}>
+                        <Text style={AppStyle.titleText}>出生日期</Text>
                         <View style={{flex:1,height:39}}>
                             <DatePicker
                                 date={this.state.petBirthday}
@@ -365,36 +358,32 @@ class AddPet extends Component {
                                 maxDate="2020-01-01"
                                 confirmBtnText="Confirm"
                                 cancelBtnText="Cancel"
-                                showIcon={false}
                                 disabled={this.state.disabled}
+                                showIcon={false}
                                 customStyles={{
-                                    dateIcon: {
-                                      position: 'absolute',
-                                      right: 0,
-                                      top: 4,
-                                      marginLeft: 0
-                                    },
                                     dateInput: {
-                                      marginRight: 70,
+                                      alignItems:'flex-start',
                                       borderWidth:0,
                                     },
+                                    disabled:{
+                                        backgroundColor:'transparent'
+                                    }
                                   }}
                                 onDateChange={(dateBirth) => {this.setState({petBirthday:dateBirth})}}/>
                         </View>
                     </View>
-                    <TouchableOpacity onPress={this._onChooseSex.bind(this)} style={styles.inputViewStyle}>
-                        <Text style={styles.textTitle}>宠物性别</Text>
-                        <Text style={{flex:1,color:'black'}}>{this.state.petSex}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={this._onChooseState.bind(this)} style={styles.inputViewStyle}>
-                        <Text style={styles.textTitle}>宠物状态</Text>
-                        <Text style={{flex:1,color:'black'}}>{this.state.petState}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={this._onChooseRace.bind(this)} style={styles.inputViewStyle}>
-                        <Text style={styles.textTitle}>宠物种类</Text>
+                    <TouchableOpacity onPress={this._onChooseRace.bind(this)} style={AppStyle.inputViewStyle}>
+                        <Text style={AppStyle.titleText}>宠物种类</Text>
                         <Text style={{flex:1,color:'black'}}>{this.state.petRace}</Text>
                     </TouchableOpacity>
-
+                    <TouchableOpacity onPress={this._onChooseSex.bind(this)} style={AppStyle.inputViewStyle}>
+                        <Text style={AppStyle.titleText}>宠物性别</Text>
+                        <Text style={{flex:1,color:'black'}}>{this.state.petSex}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={this._onChooseState.bind(this)} style={AppStyle.inputViewStyle}>
+                        <Text style={AppStyle.titleText}>宠物状态</Text>
+                        <Text style={{flex:1,color:'black'}}>{this.state.petState}</Text>
+                    </TouchableOpacity>
                 </ScrollView>
                 <Picker
                     style={{height: 300}}
@@ -410,7 +399,7 @@ class AddPet extends Component {
                             petSex: sex[0]?sex[0]:'',
                         })
                     }}
-                />
+                    />
                 <Picker
                     style={{height: 300}}
                     showDuration={300}
@@ -425,7 +414,7 @@ class AddPet extends Component {
                             petState: state[0]?state[0]:'',
                         })
                     }}
-                />
+                    />
                 <Picker
                     style={{height: 300}}
                     showDuration={300}
@@ -440,45 +429,10 @@ class AddPet extends Component {
                             petRace: type[0]?type[0]:'',
                         })
                     }}
-                />
+                    />
             </View>
         )
     }
 }
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#e7e7e7',
-    },
-    titleStyle: {
-        margin: 5,
-        borderLeftWidth: 3,
-        borderLeftColor: '#CC0033',
-        paddingLeft: 5,
-    },
-    titleText: {
-        color:'#CC0033'
-    },
-    textTitle: {
-        width: 100,
-        fontSize: 16,
-    },
-    inputViewStyle: {
-        flex: 1,
-        flexDirection: 'row',
-        padding: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#fff',
-        borderBottomColor: '#ccc',
-        borderBottomWidth: StyleSheet.hairlineWidth,
-    },
-    row: {
-        flexDirection: 'row',
-        padding: 10,
-        backgroundColor: '#fff',
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: '#ccc'
-    },
-})
+
 module.exports = AddPet;

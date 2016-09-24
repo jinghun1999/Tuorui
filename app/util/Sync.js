@@ -15,7 +15,7 @@ var Sync = {
                     try {
                         r = JSON.parse(responseText);
                         if (r.Sign && r.Message) {
-                            let _expires = 1000 * (r.Message.Token.expires_in - 17990);
+                            let _expires = 1000 * (r.Message.Token.expires_in - 60);
                             storage.save({
                                 key: 'USER',
                                 rawData: {

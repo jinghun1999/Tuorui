@@ -9,9 +9,11 @@ import {
     ScrollView,
     Image,
     View,
+    Alert,
     ListView,
     TouchableOpacity,
-}from 'react-native';
+    InteractionManager
+    }from 'react-native';
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
@@ -32,16 +34,13 @@ class AppointListInfo extends React.Component {
     }
 
     componentDidMount() {
-        var _this = this;
-        _this.timer = setTimeout(
-            () => {
-                _this._onFetchData();
-            }, 500
-        )
+        InteractionManager.runAfterInteractions(() => {
+            this._onFetchData();
+        });
     }
 
     componentWillUnmount() {
-        this.timer && clearTimeout(this.timer);
+
     }
 
     _onFetchData() {
@@ -82,14 +81,16 @@ class AppointListInfo extends React.Component {
                     })
                 }
                 else {
-                    alert("获取数据失败：" + data.Message);
+                    Alert.alert('提示', "获取数据失败：" + data.Message, [{text: '确定'}]);
                     _this.setState({
                         loaded: true,
                     });
                 }
             })
         }, function (err) {
-            alert(err)
+            _this.setState({
+                loaded: true,
+            });
         })
     }
 
@@ -101,7 +102,7 @@ class AppointListInfo extends React.Component {
         }
     }
 
-    _onAppointDetails(a) {
+    _onDetails(a) {
         let _this = this;
         const {navigator} = _this.props;
         if (navigator) {
@@ -117,26 +118,22 @@ class AppointListInfo extends React.Component {
     }
 
     _search() {
-        let _this = this;
-        _this._onFetchData();
+        this._onFetchData();
     }
 
     _onRenderRow(a) {
-        var time = Util.getFormateTime(a.StartTime, 'min');
         return (
-            <TouchableOpacity style={styles.row} onPress={()=>this._onAppointDetails(a)}>
-                <View style={{flex:1,}}>
+            <TouchableOpacity style={styles.row} onPress={()=>this._onDetails(a)}>
+                <View style={{flex:1, marginRight:10,}}>
                     <View style={{flex:1, flexDirection:'row'}}>
-                        <Text style={{fontSize:16, color:'#27408B',fontWeight:'bold'}}>预约医生:{a.DoctorName}</Text>
+                        <Text style={{fontSize:16, color:'#27408B',fontWeight:'bold'}}>会员：{a.GestName}</Text>
                     </View>
                     <View style={{flexDirection:'row',marginTop:3}}>
-                        <Text style={{width:150}}>预约人: {a.GestName}</Text>
-                        <Text style={{flex:1,}}>预约时间:{time}</Text>
+                        <Text style={{flex:1,}}>预约医生：{a.DoctorName}</Text>
+                        <Text>时间：{Util.getFormateTime(a.StartTime, 'min')}</Text>
                     </View>
                 </View>
-                <View style={{width:20,alignItems:'center', justifyContent:'center'}}>
-                    <Text><Icon name={'angle-right'} size={20} color={'#ccc'}/></Text>
-                </View>
+                <Icon name={'angle-right'} size={20} color={'#ccc'}/>
             </TouchableOpacity>
         )
     }
@@ -151,21 +148,19 @@ class AppointListInfo extends React.Component {
                               initialListSize={5}
                               pageSize={5}
                               renderRow={this._onRenderRow.bind(this)}
-                    />
+                        />
                 )
             } else {
                 body = (
-                    <View style={styles.noResultContainer}>
-                        <View style={styles.noResult}>
-                            <Text>无数据~您所选日期没有预约信息!</Text>
-                        </View>
+                    <View style={styles.noResult}>
+                        <Text>没有符合条件的预约信息.</Text>
                     </View>
                 )
             }
         }
         return (
             <View style={styles.container}>
-                <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
+                <Head title={'预约列表'} canBack={true} onPress={this._onBack.bind(this)}/>
                 <View style={styles.searchRow}>
                     <Text>预约时间</Text>
                     <DatePicker
@@ -221,6 +216,7 @@ const styles = StyleSheet.create({
     },
     row: {
         flexDirection: 'row',
+        alignItems: 'center',
         padding: 10,
         borderBottomWidth: StyleSheet.hairlineWidth,
         borderBottomColor: '#ccc'
@@ -239,10 +235,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 5,
-    },
-    noResultContainer: {
-        flex: 1,
-        flexDirection: 'row',
     },
     noResult: {
         flex: 1,

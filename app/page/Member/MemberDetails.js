@@ -4,7 +4,6 @@
 'use strict';
 import React, {Component} from 'react';
 import{
-    AppRegistry,
     StyleSheet,
     Text,
     ScrollView,
@@ -12,10 +11,9 @@ import{
     View,
     ListView,
     TextInput,
-    DatePickerAndroid,
     TouchableOpacity,
     InteractionManager,
-} from 'react-native';
+    } from 'react-native';
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
@@ -24,6 +22,7 @@ import AddPet from './AddPet';
 import Loading from '../../commonview/Loading';
 import DatePicker from 'react-native-datepicker';
 import Picker from 'react-native-picker';
+import AppStyle from '../../theme/appstyle';
 class MemberDetails extends Component {
     constructor(props) {
         super(props);
@@ -38,7 +37,7 @@ class MemberDetails extends Component {
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
             memberSex: '男',
         }
-    };
+    }
 
     componentDidMount() {
         var _this = this;
@@ -185,7 +184,7 @@ class MemberDetails extends Component {
                     "Remark": _this.state.memberRemark,
                     "CreatedBy": _this.props.memberInfo.CreatedBy,
                     "CreatedOn": _this.props.memberInfo.CreatedOn,
-                    "ModifiedBy": user.user.Mobile,
+                    "ModifiedBy": user.FullName,
                     "ModifiedOn": Util.getTime(),
                     "IsDeleted": _this.props.memberInfo.IsDeleted,
                     "RewardPoint": _this.props.memberInfo.RewardPoint,
@@ -249,25 +248,21 @@ class MemberDetails extends Component {
         }
     }
 
-    _onRenderRow(pet) {
-        return (
-            <TouchableOpacity style={styles.inputViewStyle}
-                              onPress={()=>this._onPetDetails(pet)}>
-                <Image source={require('./../../../image/pet.jpg')}
-                       style={{width:40,height:35,marginLeft:10,justifyContent:'center'}}
-                />
-                <Text style={{flex:1,color:'#27408B',fontWeight:'bold'}}>{pet.PetName}</Text>
-                <Icon name={'ios-arrow-forward'} size={15} color={'#666'} style={{marginRight:10}}/>
-            </TouchableOpacity>
-        )
-    }
-
     _onChooseSex() {
         let _this = this;
         if (_this.state.edit == '编辑') {
-            return false
+            return false;
         }
         this.pickerSex.toggle();
+    }
+
+    _onRenderRow(pet) {
+        return (
+            <TouchableOpacity style={AppStyle.row} onPress={()=>this._onPetDetails(pet)}>
+                <Text style={AppStyle.mpName}>{pet.PetName}</Text>
+                <Icon name={'ios-arrow-forward'} size={15} color={'#666'}/>
+            </TouchableOpacity>
+        )
     }
 
     render() {
@@ -278,35 +273,37 @@ class MemberDetails extends Component {
                                  enableEmptySections={true}/>
         }
         return (
-            <View style={styles.container}>
-                <Head title={this.props.headTitle} canAdd={true} canBack={true} edit={this.state.edit}
+            <View style={AppStyle.container}>
+                <Head title={this.props.headTitle}
+                      canAdd={true}
+                      canBack={true}
+                      edit={this.state.edit}
                       onPress={this._onBack.bind(this)}
                       editInfo={this._editInfo.bind(this)}/>
                 <ScrollView key={'scrollView'}
                             horizontal={false}
                             showsVerticalScrollIndicator={true}
                             scrollEnabled={true}>
-                    <View style={styles.titleStyle}>
-                        <Text style={styles.titleText}>会员信息</Text>
+                    <View style={AppStyle.groupTitle}>
+                        <Text style={AppStyle.groupText}>会员信息</Text>
                     </View>
-                    <View style={styles.inputViewStyle}>
-                        <Text style={styles.textTitle}>登记日期</Text>
-                        <Text style={styles.rowVal}>{this.props.memberInfo.CreatedOn.replace('T', ' ')}</Text>
+                    <View style={AppStyle.row}>
+                        <Text style={AppStyle.titleText}>登记日期</Text>
+                        <Text style={AppStyle.rowVal}>{this.props.memberInfo.CreatedOn.replace('T', ' ')}</Text>
                     </View>
-                    <View style={styles.inputViewStyle}>
-                        <Text style={styles.textTitle}>会员名</Text>
-                        <View style={styles.rowView}>
-                            <TextInput value={this.state.memberName}
-                                       editable={this.state.enable}
-                                       underlineColorAndroid={'transparent'}
-                                       keyboardType={'default'}
-                                       style={[styles.rowVal,{height:30,padding:0,margin:0,}]}
-                                       onChangeText={(text)=>{this.setState({ memberName: text })}}
+                    <View style={AppStyle.row}>
+                        <Text style={AppStyle.titleText}>会员名</Text>
+                        <TextInput value={this.state.memberName}
+                                   editable={this.state.enable}
+                                   underlineColorAndroid={'transparent'}
+                                   keyboardType={'default'}
+                                   style={AppStyle.input}
+                                   onChangeText={(text)=>{this.setState({ memberName: text })}}
                             />
-                        </View>
+
                     </View>
-                    <View style={styles.inputViewStyle}>
-                        <Text style={styles.textTitle}>生日</Text>
+                    <View style={AppStyle.row}>
+                        <Text style={AppStyle.titleText}>生日</Text>
                         <DatePicker
                             date={this.state.birthDate}
                             mode="date"
@@ -327,107 +324,60 @@ class MemberDetails extends Component {
                                         margin:0,
                                       borderWidth:0,
                                     },
-                                    dateTouchBody:{
-                                        height:30,
-                                    }
+                                    disabled:{backgroundColor:'transparent'},
+                                    dateTouchBody:{height:30,}
                                   }}
                             onDateChange={(date) => {
                                 if(this.state.edit=='编辑'){return false;}
                                 this.setState({birthDate: date})}
                                 }
-                        />
-                    </View>
-                    <View style={styles.inputViewStyle}>
-                        <Text style={styles.textTitle}>电话</Text>
-                        <View style={styles.rowView}>
-                            <TextInput value={this.state.memberPhone}
-                                       editable={this.state.enable}
-                                       underlineColorAndroid={'transparent'}
-                                       keyboardType={'default'}
-                                       style={[styles.rowVal,{height:30,padding:0,margin:0,}]}
-                                       onChangeText={(text)=>{this.setState({ memberPhone: text })}}
                             />
-                        </View>
                     </View>
-                    <TouchableOpacity onPress={this._onChooseSex.bind(this)} style={styles.inputViewStyle}>
-                        <Text style={styles.textTitle}>性别</Text>
-                        <Text style={styles.rowVal}>{this.state.memberSex == 'DM00001' ? '男' : '女'}</Text>
+                    <View style={AppStyle.row}>
+                        <Text style={AppStyle.titleText}>电话</Text>
+                        <TextInput value={this.state.memberPhone}
+                                   editable={this.state.enable}
+                                   underlineColorAndroid={'transparent'}
+                                   keyboardType={'default'}
+                                   style={AppStyle.input}
+                                   onChangeText={(text)=>{this.setState({ memberPhone: text })}}
+                            />
+                    </View>
+                    <TouchableOpacity onPress={this._onChooseSex.bind(this)} style={AppStyle.row}>
+                        <Text style={AppStyle.titleText}>性别</Text>
+                        <Text style={AppStyle.rowVal}>{this.state.memberSex == 'DM00001' ? '男' : '女'}</Text>
                     </TouchableOpacity>
-                    <View style={styles.inputViewStyle}>
-                        <Text style={styles.textTitle}>地址</Text>
-                        <View style={styles.rowView}>
-                            <TextInput value={this.state.memberAddress}
-                                       editable={this.state.enable}
-                                       underlineColorAndroid={'transparent'}
-                                       keyboardType={'default'}
-                                       style={[styles.rowVal,{height:30,padding:0,margin:0,}]}
-                                       onChangeText={(text)=>{this.setState({ memberAddress: text })}}
+                    <View style={AppStyle.row}>
+                        <Text style={AppStyle.titleText}>地址</Text>
+
+                        <TextInput value={this.state.memberAddress}
+                                   editable={this.state.enable}
+                                   underlineColorAndroid={'transparent'}
+                                   keyboardType={'default'}
+                                   style={AppStyle.input}
+                                   onChangeText={(text)=>{this.setState({ memberAddress: text })}}
                             />
-                        </View>
                     </View>
-                    <View style={styles.inputViewStyle}>
-                        <Text style={styles.textTitle}>备注</Text>
-                        <View style={styles.rowView}>
-                            <TextInput value={this.state.memberRemark}
-                                       editable={this.state.enable}
-                                       underlineColorAndroid={'transparent'}
-                                       keyboardType={'default'}
-                                       style={[styles.rowVal,{height:30,padding:0,margin:0,}]}
-                                       onChangeText={(text)=>{this.setState({ memberRemark: text })}}
+                    <View style={AppStyle.row}>
+                        <Text style={AppStyle.titleText}>备注</Text>
+                        <TextInput value={this.state.memberRemark}
+                                   editable={this.state.enable}
+                                   underlineColorAndroid={'transparent'}
+                                   keyboardType={'default'}
+                                   style={AppStyle.input}
+                                   onChangeText={(text)=>{this.setState({ memberRemark: text })}}
                             />
-                        </View>
                     </View>
-                    {/*<View style={styles.optionBox}>
-                     <View style={styles.optionTxt}>
-                     <Text style={{color:'#666'}}>性别</Text>
-                     </View>
-                     <View style={styles.optionValue}>
-                     <Picker
-                     selectedValue={this.props.memberInfo.GestSex}
-                     mode="dropdown"
-                     enabled={this.state.enable}
-                     style={{flex:1,height:45,backgroundColor:'#fff',}}
-                     onValueChange={(lang) => this.setState({sex: lang})}>
-                     <Picker.Item label="男" value="DM00001"/>
-                     <Picker.Item label="女" value="DM00002"/>
-                     </Picker>
-                     </View>
-                     </View>
-                     <FormInput value={this.props.phone}
-                     title="邮箱"
-                     style={styles.pickerStyle}
-                     enabled={this.state.enable}
-                     onChangeText={(text)=>{this.setState({ memberMail: text })}}
-                     />
-                     <FormInput value={this.props.level}
-                     title="等级"
-                     enabled={false}
-                     placeholder={this.state.memberLevel}
-                     onChangeText={(text)=>{this.setState({ memberLevel: text })}}
-                     />
-                     <FormInput value={this.props.name}
-                     title="账户金额"
-                     enabled={false}
-                     placeholder={this.state.memberMoney}
-                     onChangeText={(text)=>{this.setState({ memberMoney: text })}}
-                     />
-                     <FormInput value={this.props.name}
-                     title="积分"
-                     enabled={false}
-                     placeholder={this.state.memberPoint}
-                     onChangeText={(text)=>{this.setState({ memberPoint: text })}}
-                     />*/}
-                    <View style={[styles.titleStyle,{ flexDirection:'row',}]}>
-                        <Text style={[styles.titleText,{flex:1}]}>宠物信息</Text>
-                        <TouchableOpacity
-                            style={{width:50,alignItems:'center',backgroundColor:'#99CCFF',}}
-                            onPress={this._onAddPet.bind(this)}>
-                            <Text>添加</Text>
-                        </TouchableOpacity>
+                    <View style={AppStyle.groupTitle}>
+                        <Text style={AppStyle.groupText}>宠物信息</Text>
+                        {this.state.edit === '保存' ?
+                            <TouchableOpacity style={AppStyle.smallBtn} onPress={this._onAddPet.bind(this)}>
+                                <Text>添加</Text>
+                            </TouchableOpacity>
+                            : null
+                        }
                     </View>
-                    <View>
-                        {listBody}
-                    </View>
+                    {listBody}
                 </ScrollView>
                 <Picker
                     style={{height: 300}}
@@ -443,59 +393,12 @@ class MemberDetails extends Component {
                             memberSex: sex,
                         })
                     }}
-                />
+                    />
             </View>
         )
     }
 }
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#e7e7e7',
-    },
-    titleStyle: {
-        margin: 5,
-        borderLeftWidth: 3,
-        borderLeftColor: '#CC0033',
-        paddingLeft: 5,
-    },
-    titleText: {
-        color:'#CC0033'
-    },
 
-    textTitle: {
-        width: 100,
-        fontSize: 16,
-        marginLeft: 10,
-        alignSelf: 'center',
-        justifyContent: 'center',
-    },
-    rowVal: {
-        borderWidth: 0,
-        flex: 1,
-        color: 'black'
-    },
-    inputViewStyle: {
-        flexDirection: 'row',
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        height: 40,
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: '#ccc'
-    },
-    rowView: {
-        flex: 1,
-        height: 30,
-        borderWidth: 1,
-        borderColor: '#e7e7e7',
-        marginRight: 10,
-    },
-    row: {
-        flexDirection: 'row',
-        padding: 10,
-        backgroundColor: '#fff',
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: '#ccc'
-    },
 })
 module.exports = MemberDetails;

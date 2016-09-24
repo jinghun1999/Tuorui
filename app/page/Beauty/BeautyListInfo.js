@@ -4,7 +4,6 @@
 'use strict';
 import React, { Component } from 'react';
 import {
-    AppRegistry,
     StyleSheet,
     Text,
     ScrollView,
@@ -20,7 +19,7 @@ import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
 import BeautyServices from './BeautyServices';
 import Loading from '../../commonview/Loading';
-import Icon from '../../../node_modules/react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/FontAwesome';
 class BeautyListInfo extends React.Component {
     constructor(props) {
         super(props);

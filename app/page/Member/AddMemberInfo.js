@@ -16,7 +16,7 @@ import{
     TouchableOpacity,
     ToastAndroid,
     InteractionManager,
-} from 'react-native';
+    } from 'react-native';
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
@@ -28,6 +28,7 @@ import Loading from '../../commonview/Loading';
 import AddPet from './AddPet';
 import Picker from 'react-native-picker';
 import NButton from '../../commonview/NButton';
+import AppStyle from '../../theme/appstyle';
 class AddMemberInfo extends Component {
     constructor(props) {
         super(props);
@@ -51,7 +52,9 @@ class AddMemberInfo extends Component {
             levelData: [],
             levelLoaded: false,
         }
-    };
+    }
+
+;
 
     _onBack() {
         let _this = this;
@@ -207,53 +210,50 @@ class AddMemberInfo extends Component {
     }
 
     render() {
-        var body = (<View style={styles.container}>
-            <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
-            <Loading type='text'/>
-        </View>);
         if (!this.state.levelLoaded) {
-            return body;
+            return <View style={AppStyle.container}>
+                <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
+                <Loading type='text'/>
+            </View>;
         }
         return (
-            <View style={styles.container}>
+            <View style={AppStyle.container}>
                 <Head title={this.props.headTitle}
                       canBack={true} onPress={this._onBack.bind(this)}
                       canAdd={true} edit='保存' editInfo={this._save.bind(this, true)}
-                />
+                    />
                 <ScrollView key={'scrollView'}
                             horizontal={false}
                             showsVerticalScrollIndicator={true}
                             scrollEnabled={true}>
-                    <View style={styles.titleStyle}>
-                        <Text style={styles.titleText}>基本信息</Text>
+                    <View style={AppStyle.groupTitle}>
+                        <Text style={AppStyle.groupText}>基本信息</Text>
                     </View>
-                    <View style={styles.inputViewStyle}>
-                        <Text style={styles.textTitle}>编号</Text>
-                        <Text style={styles.rowVal}>{this.state.memberItem.GestCode}</Text>
+                    <View style={AppStyle.row}>
+                        <Text style={AppStyle.titleText}>编号</Text>
+                        <Text style={AppStyle.rowVal}>{this.state.memberItem.GestCode}</Text>
                     </View>
-                    <View style={styles.inputViewStyle}>
-                        <Text style={styles.textTitle}>登记日期</Text>
+                    <View style={AppStyle.row}>
+                        <Text style={AppStyle.titleText}>登记日期</Text>
                         <Text
-                            style={styles.rowVal}>{this.state.memberRegistrationTime}</Text>
+                            style={AppStyle.rowVal}>{this.state.memberRegistrationTime}</Text>
                     </View>
-                    <View style={styles.inputViewStyle}>
-                        <Text style={styles.textTitle}>姓名</Text>
-                        <View style={styles.rowView}>
-                            <TextInput value={this.state.memberName}
-                                       editable={this.state.enable}
-                                       underlineColorAndroid={'transparent'}
-                                       keyboardType={'default'}
-                                       style={[styles.rowVal,{height:30,padding:0,margin:0,}]}
-                                       onChangeText={(text)=>{
+                    <View style={AppStyle.row}>
+                        <Text style={AppStyle.titleText}>姓名</Text>
+                        <TextInput value={this.state.memberName}
+                                   editable={this.state.enable}
+                                   underlineColorAndroid={'transparent'}
+                                   keyboardType={'default'}
+                                   style={AppStyle.input}
+                                   onChangeText={(text)=>{
                                         this.setState({
                                             memberName:text
                                         })
                                    }}
                             />
-                        </View>
                     </View>
-                    <View style={styles.inputViewStyle}>
-                        <Text style={styles.textTitle}>生日</Text>
+                    <View style={AppStyle.row}>
+                        <Text style={AppStyle.titleText}>生日</Text>
                         <DatePicker
                             date={this.state.memberBirthday}
                             mode="date"
@@ -281,54 +281,42 @@ class AddMemberInfo extends Component {
                             onDateChange={(dateBirth) => {this.setState({memberBirthday:dateBirth})}}/>
 
                     </View>
-                    <View style={styles.inputViewStyle}>
-                        <Text style={styles.textTitle}>电话</Text>
-                        <View style={styles.rowView}>
-                            <TextInput value={this.state.memberPhone}
-                                       editable={this.state.enable}
-                                       underlineColorAndroid={'transparent'}
-                                       keyboardType={'default'}
-                                       style={[styles.rowVal,{height:30,padding:0,margin:0,}]}
-                                       onChangeText={(text)=>{this.setState({ memberPhone:text })}}
+                    <View style={AppStyle.row}>
+                        <Text style={AppStyle.titleText}>电话</Text>
+                        <TextInput value={this.state.memberPhone}
+                                   editable={this.state.enable}
+                                   underlineColorAndroid={'transparent'}
+                                   keyboardType={'default'}
+                                   style={AppStyle.input}
+                                   onChangeText={(text)=>{this.setState({ memberPhone:text })}}
                             />
-                        </View>
                     </View>
-                    <TouchableOpacity onPress={this._onChooseSex.bind(this)} style={styles.inputViewStyle}>
-                        <Text style={styles.textTitle}>性别</Text>
-                        <Text style={styles.rowVal}>{this.state.memberSex}</Text>
+                    <TouchableOpacity onPress={this._onChooseSex.bind(this)} style={AppStyle.row}>
+                        <Text style={AppStyle.titleText}>性别</Text>
+                        <Text style={AppStyle.rowVal}>{this.state.memberSex}</Text>
                     </TouchableOpacity>
-                    <View style={styles.titleStyle}>
-                        <Text style={styles.titleText}>会员信息</Text>
+                    <View style={AppStyle.groupTitle}>
+                        <Text style={AppStyle.groupText}>会员信息</Text>
                     </View>
-                    <TouchableOpacity onPress={this._onChooseLevel.bind(this)} style={styles.inputViewStyle}>
-                        <Text style={styles.textTitle}>会员等级</Text>
-                        <Text style={styles.rowVal}>{this.state.memberLevel}</Text>
+                    <TouchableOpacity onPress={this._onChooseLevel.bind(this)} style={AppStyle.row}>
+                        <Text style={AppStyle.titleText}>会员等级</Text>
+                        <Text style={AppStyle.rowVal}>{this.state.memberLevel}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={this._onChooseState.bind(this)} style={styles.inputViewStyle}>
-                        <Text style={styles.textTitle}>会员状态</Text>
-                        <Text style={styles.rowVal}>{this.state.memberState}</Text>
+                    <TouchableOpacity onPress={this._onChooseState.bind(this)} style={AppStyle.row}>
+                        <Text style={AppStyle.titleText}>会员状态</Text>
+                        <Text style={AppStyle.rowVal}>{this.state.memberState}</Text>
                     </TouchableOpacity>
-                    <View style={styles.inputViewStyle}>
-                        <Text style={styles.textTitle}>备注</Text>
-                        <View style={styles.rowView}>
-                            <TextInput value={this.state.memberRemarks}
-                                       editable={this.state.enable}
-                                       underlineColorAndroid={'transparent'}
-                                       keyboardType={'default'}
-                                       style={[styles.rowVal,{height:30,padding:0,margin:0,}]}
-                                       onChangeText={(text)=>{this.setState({ memberRemarks:text })}}/>
+                    <View style={AppStyle.row}>
+                        <Text style={AppStyle.titleText}>备注</Text>
+                        <TextInput value={this.state.memberRemarks}
+                                   editable={this.state.enable}
+                                   underlineColorAndroid={'transparent'}
+                                   keyboardType={'default'}
+                                   style={AppStyle.input}
+                                   onChangeText={(text)=>{this.setState({ memberRemarks:text })}}/>
 
-                        </View>
+
                     </View>
-                    {/*<View style={{height:130, flexDirection:'row'}}>
-                     <View style={{flex:1}}>
-                     <NButton onPress={this._save.bind(this, true)} backgroundColor={'#87CEFA'} text="保存"/>
-                     </View>
-                     <View style={{flex:1}}>
-                     <NButton onPress={this._saveAndAddPet.bind(this)} backgroundColor={'#87CEFA'}
-                     text="保存并添加宠物"/>
-                     </View>
-                     </View>*/}
                 </ScrollView>
                 <Picker
                     style={{height: 300}}
@@ -344,7 +332,7 @@ class AddMemberInfo extends Component {
                             memberSex: sex,
                         })
                     }}
-                />
+                    />
                 <Picker
                     style={{height: 300}}
                     showDuration={300}
@@ -359,7 +347,7 @@ class AddMemberInfo extends Component {
                             memberLevel: level,
                         })
                     }}
-                />
+                    />
                 <Picker
                     style={{height: 300}}
                     showDuration={300}
@@ -374,59 +362,11 @@ class AddMemberInfo extends Component {
                             memberState:cardState,
                         })
                     }}
-                />
+                    />
             </View>
         )
     }
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#e7e7e7',
-    },
-    titleStyle: {
-        margin: 5,
-        borderLeftWidth: 3,
-        borderLeftColor: '#CC0033',
-        paddingLeft: 5,
-    },
-    titleText: {
-        color:'#CC0033'
-    },
-    textTitle: {
-        width: 100,
-        fontSize: 16,
-        marginLeft: 10,
-        alignSelf: 'center',
-        justifyContent: 'center',
-    },
-    inputViewStyle: {
-        flexDirection: 'row',
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        height: 40,
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: '#ccc'
-    },
-    rowVal: {
-        borderWidth: 0,
-        flex: 1,
-        color: 'black'
-    },
-    rowView: {
-        flex: 1,
-        height: 30,
-        borderWidth: 1,
-        borderColor: '#e7e7e7',
-        marginRight: 10,
-    },
-    row: {
-        flexDirection: 'row',
-        padding: 10,
-        backgroundColor: '#fff',
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: '#ccc'
-    },
-})
+const styles = StyleSheet.create({})
 module.exports = AddMemberInfo;

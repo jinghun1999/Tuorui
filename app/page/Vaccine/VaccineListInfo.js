@@ -7,11 +7,12 @@ import{
     StyleSheet,
     Text,
     View,
+    Alert,
     ListView,
     TouchableOpacity,
     ActivityIndicator,
     InteractionManager,
-} from 'react-native';
+    } from 'react-native';
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
@@ -52,43 +53,43 @@ class VaccineListInfo extends Component {
         let _this = this;
         NetUtil.getAuth(function (user, hos) {
             let postdata = {
-                "items":[
+                "items": [
                     {
-                        "Childrens":null,
-                        "Field":"IsDeleted",
-                        "Title":null,
-                        "Operator":{
-                            "Name":"=",
-                            "Title":"等于",
-                            "Expression":null
+                        "Childrens": null,
+                        "Field": "IsDeleted",
+                        "Title": null,
+                        "Operator": {
+                            "Name": "=",
+                            "Title": "等于",
+                            "Expression": null
                         },
-                        "DataType":0,
-                        "Value":"0",
-                        "Conn":0
+                        "DataType": 0,
+                        "Value": "0",
+                        "Conn": 0
                     }
                 ],
-                "sorts":[
+                "sorts": [
                     {
-                        "Field":"ShootStatus",
-                        "Title":null,
-                        "Sort":{
-                            "Name":"Asc",
-                            "Title":"升序"
+                        "Field": "ShootStatus",
+                        "Title": null,
+                        "Sort": {
+                            "Name": "Asc",
+                            "Title": "升序"
                         },
-                        "Conn":0
+                        "Conn": 0
                     },
                     {
-                        "Field":"CreatedOn",
-                        "Title":null,
-                        "Sort":{
-                            "Name":"Desc",
-                            "Title":"降序"
+                        "Field": "CreatedOn",
+                        "Title": null,
+                        "Sort": {
+                            "Name": "Desc",
+                            "Title": "降序"
                         },
-                        "Conn":0
+                        "Conn": 0
                     }
                 ],
-                "index":page,
-                "pageSize":_this.state.pageSize
+                "index": page,
+                "pageSize": _this.state.pageSize
             }
             //let hospitalcode = 'aa15-740d-4e6d-a6ca-0ebf-81f1';
             let header = NetUtil.headerClientAuth(user, hos);
@@ -109,7 +110,7 @@ class VaccineListInfo extends Component {
                         pageIndex: page,
                     });
                 } else {
-                    alert("获取数据失败：" + data.Message);
+                    Alert.alert('提示', '获取数据失败：' + data.Message, [{text: '确定'}]);
                     _this.setState({
                         loaded: true,
                     });
@@ -118,17 +119,17 @@ class VaccineListInfo extends Component {
             /*get recordCount from the api*/
             postdata = [
                 {
-                    "Childrens":null,
-                    "Field":"IsDeleted",
-                    "Title":null,
-                    "Operator":{
-                        "Name":"=",
-                        "Title":"等于",
-                        "Expression":null
+                    "Childrens": null,
+                    "Field": "IsDeleted",
+                    "Title": null,
+                    "Operator": {
+                        "Name": "=",
+                        "Title": "等于",
+                        "Expression": null
                     },
-                    "DataType":0,
-                    "Value":"0",
-                    "Conn":0
+                    "DataType": 0,
+                    "Value": "0",
+                    "Conn": 0
                 }
             ]
             //http://test.tuoruimed.com/service/Api/Medic_Vaccine/GetRecordCount
@@ -139,13 +140,32 @@ class VaccineListInfo extends Component {
                             recordCount: data.Message,
                         });
                     } else {
-                        alert("获取记录数失败：" + data.Message);
+                        //alert("获取记录数失败：" + data.Message);
                     }
                 });
             }
         }, function (err) {
-            alert(err)
+            Alert.alert('错误', err, [{text: '确定'}]);
         })
+    }
+
+    _addInfo() {
+        let _this = this;
+        const {navigator}=_this.props;
+        if (navigator) {
+            navigator.push({
+                name: 'VaccineService',
+                component: VaccineService,
+                params: {
+                    headTitle: '添加疫苗',
+                    canEdit: true,
+                    id: 1,
+                    getResult: function () {
+                        _this.onFetchData(1, false);
+                    }
+                }
+            })
+        }
     }
 
     _onVaccDetails(vacc) {
@@ -158,9 +178,9 @@ class VaccineListInfo extends Component {
                 component: VaccineService,
                 params: {
                     headTitle: '疫苗详情',
-                    isLook: true,
+                    canEdit: false,
                     vaccine: vacc,
-                    id:2,
+                    id: 2,
                     getResult: function () {
                         _this.onFetchData(1, false);
                     }
@@ -169,17 +189,22 @@ class VaccineListInfo extends Component {
         }
     }
 
+    _onEndReached() {
+        this.onFetchData(this.state.pageIndex + 1, true);
+    }
+
     _onRenderRow(vacc) {
         return (
             <TouchableOpacity style={styles.row} onPress={()=>this._onVaccDetails(vacc)}>
                 <View style={{flex:1,}}>
                     <View style={{flex:1, flexDirection:'row'}}>
                         <Text
-                            style={{flex:1, fontSize:16, color:'#27408B',fontWeight:'bold'}}>会员名: {vacc.GestName}</Text>
+                            style={{flex:1, fontSize:16, color:'#27408B',fontWeight:'bold'}}>会员: {vacc.GestName}</Text>
+                        {vacc.ShootStatus === 'SM00030' ? <Text style={{color:'#FF8247'}}>已执行</Text> : <Text style={{color:'#CDC9A5'}}>未执行</Text>}
                     </View>
                     <View style={{flexDirection:'row',marginTop:3}}>
-                        <Text style={{width:100,}}>宠物名: {vacc.PetName}</Text>
-                        <Text style={{flex:1, }}>疫苗名称: {vacc.ItemName}</Text>
+                        <Text style={{flex:1,}}>宠物: {vacc.PetName}</Text>
+                        <Text style={{}}>时间: {vacc.CreatedOn.replace('T', ' ')}</Text>
                     </View>
                 </View>
                 <View style={{width:20,marginLeft:10, alignItems:'center', justifyContent:'center'}}>
@@ -187,10 +212,6 @@ class VaccineListInfo extends Component {
                 </View>
             </TouchableOpacity>
         )
-    }
-
-    _onEndReached() {
-        this.onFetchData(this.state.pageIndex + 1, true);
     }
 
     _renderFooter() {
@@ -210,38 +231,19 @@ class VaccineListInfo extends Component {
         );
     }
 
-    _addInfo() {
-        let _this = this;
-        const {navigator}=_this.props;
-        if (navigator) {
-            navigator.push({
-                name: 'VaccineService',
-                component: VaccineService,
-                params: {
-                    headTitle: '添加疫苗',
-                    isLook:false,
-                    id:1,
-                    getResult: function () {
-                        _this.onFetchData(1, false);
-                    }
-                }
-            })
-        }
-    }
-
     render() {
         let body = (<Loading type={'text'}/>);
         if (this.state.loaded) {
-                body = (
-                    <ListView dataSource={this.state.ds.cloneWithRows(this.state.vaccine)}
-                              renderRow={this._onRenderRow.bind(this)}
-                              initialListSize={15}
-                              pageSize={15}
-                              onEndReached={this._onEndReached.bind(this)}
-                              enableEmptySections={true}
-                              renderFooter={this._renderFooter.bind(this)}
+            body = (
+                <ListView dataSource={this.state.ds.cloneWithRows(this.state.vaccine)}
+                          renderRow={this._onRenderRow.bind(this)}
+                          initialListSize={15}
+                          pageSize={15}
+                          onEndReached={this._onEndReached.bind(this)}
+                          enableEmptySections={true}
+                          renderFooter={this._renderFooter.bind(this)}
                     />
-                )
+            )
         }
         return (
             <View style={styles.container}>
@@ -256,7 +258,7 @@ class VaccineListInfo extends Component {
 }
 const styles = StyleSheet.create({
     container: {
-        flex:1,
+        flex: 1,
     },
     row: {
         flexDirection: 'row',
