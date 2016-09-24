@@ -103,7 +103,7 @@ class UC extends React.Component {
                             </Text>
                         </View>
                     </View>
-                    <View style={styles.fanBox}>
+                    {/*<View style={styles.fanBox}>
                         <View style={styles.fontViewStyle}>
                             <Text style={styles.fontStyle}>粉丝：{this.state.user.Sex}</Text>
                         </View>
@@ -111,7 +111,7 @@ class UC extends React.Component {
                             style={[styles.fontViewStyle,{borderLeftWidth:StyleSheet.hairlineWidth, borderLeftColor:'#ccc'}]}>
                             <Text style={styles.fontStyle}>关注：{this.state.user.Sex}</Text>
                         </View>
-                    </View>
+                    </View>*/}
                     <View style={{backgroundColor:'#fff', marginTop:15, marginBottom:30}}>
                         <ComIconView text="我的信息" icon={'ios-contact'} color={'#00BBFF'}
                                      onPress={this._myInfo.bind(this)}/>

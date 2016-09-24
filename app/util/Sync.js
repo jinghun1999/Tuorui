@@ -6,7 +6,7 @@ var Sync = {
     USER(params) {
         let {id, resolve, reject } = params;
         storage.load({key: 'LoginData'}).then(l=> {
-            let url = CONSTAPI.Auth + '/ad?identity=' + l.identity + '&password=' + l.password + '&type=m';
+            let url = CONSTAPI.Auth + '/ad?identity=' + l.identity + '&password=' + l.password + '&verCode=&type=m';
             //let url = CONSTAPI.Auth + '/ad?identity=18307722503&password=abc123&type=m';
             fetch(url)
                 .then((response) => response.text())

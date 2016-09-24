@@ -122,8 +122,9 @@ class NetUtil extends React.Component {
             'Authorization': 'Mobile ' + Util.base64Encode(user.Mobile + ':' + hoscode + ":" + user.Token.token)
         }
     }
-    static login(phone, pwd, callback){
-        NetUtil.get(CONSTAPI.Auth + "/ad?identity=" + phone + "&password=" + pwd + "&type=m", false, function (lg) {
+
+    static login(phone, pwd, code, callback) {
+        NetUtil.get(CONSTAPI.Auth + "/ad?identity=" + phone + "&password=" + pwd + "&verCode=" + code + "&type=m", false, function (lg) {
             if (lg.Sign && lg.Message) {
                 /*保存登陆信息*/
                 storage.save({
@@ -139,7 +140,7 @@ class NetUtil extends React.Component {
                     rawData: {
                         user: lg.Message,
                     },
-                    expires: 1000 * 60,
+                    expires: 1000 * (lg.Message.Token.expires_in - 17990),
                 });
                 /*保存用户默认医院*/
                 if (lg.Message.HospitalId != null) {

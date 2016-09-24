@@ -111,8 +111,8 @@ class MyAccount extends React.Component {
                 Name: _this.state.memberNickName,
                 Sex: _this.state.memberSexKey,
                 Birthday: _this.state.birthDay,
-                School: _this.state.memberAddress,
-                Address: _this.state.memberSchool,
+                School: _this.state.memberSchool,
+                Address: _this.state.memberAddress,
             }
         };
         let header = NetUtil.headerClientAuth(_this.state.user, null)

@@ -29,6 +29,7 @@ class Login extends React.Component {
         this.state = {
             pwd: '',
             user: '',
+            code: '',
         };
     }
 
@@ -57,7 +58,7 @@ class Login extends React.Component {
         var _this = this;
         const { navigator } = _this.props;
         try {
-            NetUtil.login(_this.state.user, _this.state.pwd, function (ok, msg) {
+            NetUtil.login(_this.state.user, _this.state.pwd, _this.state.code, function (ok, msg) {
                 if (ok) {
                     if (navigator) {
                         navigator.pop();

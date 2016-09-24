@@ -8,13 +8,18 @@ import{
     Text,
     View,
     WebView,
-} from 'react-native';
+    InteractionManager
+    } from 'react-native';
 import Head from '../../commonview/Head';
 import Style from '../../theme/styles';
+import Loading from '../../commonview/Loading';
 class SettingContent extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            url: '',
+            loaded: false,
+        };
     }
 
     _onBack() {
@@ -26,7 +31,27 @@ class SettingContent extends React.Component {
     }
 
     componentDidMount() {
-
+        InteractionManager.runAfterInteractions(() => {
+            let name = '';
+            switch (this.props.headTitle) {
+                case '服务条款':
+                    name = 'Service';
+                    break;
+                case '使用帮助':
+                    name = 'Help';
+                    break;
+                case '关于我们':
+                    name = 'About';
+                    break;
+                case '联系我们':
+                    name = 'Contact';
+                    break;
+            }
+            this.setState({
+                url: CONSTAPI.WEB + '/static/app/' + name + '.html',
+                loaded: true,
+            });
+        });
     }
 
     componentWillUnmount() {
@@ -35,50 +60,22 @@ class SettingContent extends React.Component {
 
     render() {
         var webBody;
-        if (this.props.headTitle == '服务条款') {
+        if (!this.state.loaded) {
+            webBody = (
+                <Loading type={'text'}/>
+            )
+        }
+        else {
             webBody = (
                 <WebView
                     ref="webView"
-                    style={{backgroundColor:'#ccc',flex:1,}}
-                    source={require('./html/Service.html')}
+                    style={{backgroundColor:'#e7e7e7',flex:1,}}
+                    source={{uri: this.state.url}}
                     javaScriptEnabled={true}
                     domStorageEnabled={true}
                     startInLoadingState={true}
                     scalesPageToFit={true}
-                />)
-        }else if(this.props.headTitle == '使用帮助'){
-            webBody = (
-                <WebView
-                    ref="webView"
-                    style={{backgroundColor:'#ccc',flex:1,}}
-                    source={require('./html/Help.html')}
-                    javaScriptEnabled={true}
-                    domStorageEnabled={true}
-                    startInLoadingState={true}
-                    scalesPageToFit={true}
-                />)
-        }else if(this.props.headTitle=='关于我们'){
-            webBody = (
-                <WebView
-                    ref="webView"
-                    style={{backgroundColor:'#ccc',flex:1,}}
-                    source={require('./html/About.html')}
-                    javaScriptEnabled={true}
-                    domStorageEnabled={true}
-                    startInLoadingState={true}
-                    scalesPageToFit={true}
-                />)
-        }else if(this.props.headTitle=='联系我们'){
-            webBody = (
-                <WebView
-                    ref="webView"
-                    style={{backgroundColor:'#ccc',flex:1,}}
-                    source={require('./html/Contact.html')}
-                    javaScriptEnabled={true}
-                    domStorageEnabled={true}
-                    startInLoadingState={true}
-                    scalesPageToFit={true}
-                />)
+                    />)
         }
         return (
             <View style={Style.container}>

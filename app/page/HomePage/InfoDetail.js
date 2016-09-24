@@ -46,19 +46,19 @@ class InfoDetail extends React.Component {
         let _this = this;
         storage.load({
             key: 'USER',
-            autoSync: false,
+            autoSync: true,
             syncInBackground: false,
         }).then(ret => {
                 //初始化
-                let _paramData = 'id=' + this.props.requestId + '&operateby=' + ret.user.Mobile;
-                NetUtil.get(CONSTAPI.APIAPP + "/AppInfo/GetArticleOperateInfo?" + _paramData, null, function (data) {
+                let _paramData = '?id=' + this.props.requestId + '&operateby=' + ret.Mobile;
+                NetUtil.get(CONSTAPI.APIAPP + "/AppInfo/GetArticleOperateInfo" + _paramData, null, function (data) {
                     if (data.Status) {
                         let result = data.Data;
                         _this.setState({
                             isCollect: result.IsCollect,
                             collectNum: result.CollectNumber,
                             readNum: result.ReadNumber,
-                            phone: ret.user.Mobile
+                            phone: ret.Mobile
                         });
                     } else {
                         alert(data.ErrorMessage);
@@ -132,12 +132,12 @@ class InfoDetail extends React.Component {
                                 <Text>{this.state.readNum}</Text>
                             </View>*/}
                             <View style={styles.readInfo}>
-                                <Icon name={'ios-star'} size={20} color={'#999'} style={{marginRight: 5}}/>
+                                <Icon name={'ios-star'} size={20} color={'#ffad00'} style={{marginRight: 5}}/>
                                 <Text>{this.state.collectNum}</Text>
                             </View>
                         </View>
                         <TouchableOpacity style={styles.viewCount} onPress={this._onCollect.bind(this)}>
-                            <Icon name={'ios-star'} size={30} color={this.state.isCollect ? '#ffd575' : '#fff'}/>
+                            <Icon name={'ios-star'} size={30} color={this.state.isCollect ? '#ffad00' : '#fff'}/>
                         </TouchableOpacity>
                     </View>
                 </View>
