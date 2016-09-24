@@ -9,17 +9,17 @@ let AppStyle = StyleSheet.create({
         backgroundColor: '#e7e7e7',
     },
     groupTitle: {
-        flexDirection:'row',
+        flexDirection: 'row',
         margin: 5,
         borderLeftWidth: 3,
         borderLeftColor: '#CC0033',
         paddingLeft: 5,
     },
     groupText: {
-        flex:1,
+        flex: 1,
         color: '#CC0033'
     },
-    inputViewStyle: {
+    /*inputViewStyle: {
         flex: 1,
         flexDirection: 'row',
         padding: 10,
@@ -28,11 +28,7 @@ let AppStyle = StyleSheet.create({
         backgroundColor: '#fff',
         borderBottomColor: '#ccc',
         borderBottomWidth: StyleSheet.hairlineWidth,
-    },
-    titleText: {
-        width: 100,
-        fontSize: 16,
-    },
+    },*/
     row: {
         backgroundColor: '#fff',
         flexDirection: 'row',
@@ -41,9 +37,14 @@ let AppStyle = StyleSheet.create({
         borderBottomWidth: StyleSheet.hairlineWidth,
         borderBottomColor: '#ccc',
     },
+    rowTitle: {
+        width: 100,
+        color: '#1A1A1A',
+        fontSize: 16,
+    },
     rowVal: {
         flex: 1,
-        color: 'black',
+        color: '#555',
     },
     input: {
         flex: 1,
@@ -53,7 +54,7 @@ let AppStyle = StyleSheet.create({
         borderWidth: 0,
     },
 
-    /*MemberDetail*/
+
     mpName: {
         flex: 1,
         color: '#27408B',
@@ -61,6 +62,52 @@ let AppStyle = StyleSheet.create({
     },
     smallBtn: {
         alignItems: 'center',
+    },
+    /*list style*/
+    searchRow: {
+        backgroundColor: '#eeeeee',
+        paddingTop: 15,
+        paddingLeft: 10,
+        paddingRight: 10,
+        paddingBottom: 10,
+    },
+    searchTextInput: {
+        backgroundColor: '#fff',
+        borderColor: '#cccccc',
+        borderRadius: 3,
+        borderWidth: 1,
+        height: 40,
+        paddingLeft: 8,
+    },
+    titleText: {
+        width: 100,
+        color: '#292929',
+        fontSize: 16,
+    },
+    money: {
+        color: '#CD3333',
+        marginRight: 10,
+    },
+    noMore: {
+        flex:1,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    searchBox: {
+        flexDirection: 'row',
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        padding: 10,
+    },
+    searchBtn: {
+        height: 30,
+        width: 50,
+        marginLeft: 10,
+        backgroundColor: '#0099CC',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5,
     },
 });
 export default AppStyle;

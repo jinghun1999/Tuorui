@@ -41,30 +41,30 @@ class AppointDetails extends React.Component {
                     <Text style={AppStyle.groupText}>宠物信息</Text>
                 </View>
                 <View style={AppStyle.row}>
-                    <Text style={AppStyle.titleText}>宠物名称</Text>
+                    <Text style={AppStyle.rowTitle}>宠物名称</Text>
                     <Text style={AppStyle.rowVal}>{this.props.appointInfo.PetName}</Text>
                 </View>
                 <View style={AppStyle.groupTitle}>
                     <Text style={AppStyle.groupText}>预约信息</Text>
                 </View>
                 <View style={AppStyle.row}>
-                    <Text style={AppStyle.titleText}>预约人</Text>
+                    <Text style={AppStyle.rowTitle}>预约人</Text>
                     <Text style={AppStyle.rowVal}>{this.props.appointInfo.GestName}</Text>
                 </View>
                 <View style={AppStyle.row}>
-                    <Text style={AppStyle.titleText}>预约医生</Text>
+                    <Text style={AppStyle.rowTitle}>预约医生</Text>
                     <Text style={AppStyle.rowVal}>{this.props.appointInfo.DoctorName}</Text>
                 </View>
                 <View style={AppStyle.row}>
-                    <Text style={AppStyle.titleText}>开始时间</Text>
+                    <Text style={AppStyle.rowTitle}>开始时间</Text>
                     <Text style={AppStyle.rowVal}>{starTime}</Text>
                 </View>
                 <View style={AppStyle.row}>
-                    <Text style={AppStyle.titleText}>结束时间</Text>
+                    <Text style={AppStyle.rowTitle}>结束时间</Text>
                     <Text style={AppStyle.rowVal}>{endTime}</Text>
                 </View>
                 <View style={AppStyle.row}>
-                    <Text style={AppStyle.titleText}>登记时间</Text>
+                    <Text style={AppStyle.rowTitle}>登记时间</Text>
                     <Text style={AppStyle.rowVal}>{regTime}</Text>
                 </View>
             </View>

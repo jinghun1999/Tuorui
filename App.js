@@ -24,7 +24,7 @@ import MyInspect from './app/page/Inspect/MyInspect';
 import PetListInfo from './app/page/Vaccine/VaccineListInfo';
 import Loading from './app/commonview/Loading';
 import AppointListInfo from './app/page/Appoint/AppointListInfo';
-import BeautyServices from './app/page/Beauty/BeautyListInfo';
+import BeautyList from './app/page/Beauty/BeautyList';
 import ReportIndex from './app/page/Report/ReportIndex';
 import NJY from './app/page/Device/NJY';
 
@@ -166,7 +166,7 @@ class App extends Component {
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.grid_view}
-                                          onPress={this._onPress.bind(this, BeautyServices, 'BeautyServices', '美容服务')}>
+                                          onPress={this._onPress.bind(this, BeautyList, 'BeautyList', '美容服务')}>
                             <View style={styles.iconOuter}>
                                 <Icon name={'ios-color-palette'} size={40} color={'#FF6666'}/>
                                 <Text style={{fontSize:15}}>美容服务</Text>

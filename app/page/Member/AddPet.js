@@ -316,27 +316,27 @@ class AddPet extends Component {
                     <View style={AppStyle.groupTitle}>
                         <Text style={AppStyle.groupText}>会员信息</Text>
                     </View>
-                    <View style={AppStyle.inputViewStyle}>
-                        <Text style={AppStyle.titleText}>会员</Text>
+                    <View style={AppStyle.row}>
+                        <Text style={AppStyle.rowTitle}>会员</Text>
                         <Text style={AppStyle.rowVal}>{this.props.member.name}</Text>
                     </View>
-                    <View style={AppStyle.inputViewStyle}>
-                        <Text style={AppStyle.titleText}>手机</Text>
+                    <View style={AppStyle.row}>
+                        <Text style={AppStyle.rowTitle}>手机</Text>
                         <Text style={AppStyle.rowVal}>{this.props.member.phone}</Text>
                     </View>
                     <View style={AppStyle.groupTitle}>
                         <Text style={AppStyle.groupText}>宠物信息</Text>
                     </View>
-                    <View style={AppStyle.inputViewStyle}>
-                        <Text style={AppStyle.titleText}>宠物编号</Text>
+                    <View style={AppStyle.row}>
+                        <Text style={AppStyle.rowTitle}>宠物编号</Text>
                         <Text style={AppStyle.rowVal}>{this.state.petID}</Text>
                     </View>
-                    <View style={AppStyle.inputViewStyle}>
-                        <Text style={AppStyle.titleText}>病历号</Text>
+                    <View style={AppStyle.row}>
+                        <Text style={AppStyle.rowTitle}>病历号</Text>
                         <Text style={{flex:1,color:'black'}}>{this.state.petSickID}</Text>
                     </View>
-                    <View style={AppStyle.inputViewStyle}>
-                        <Text style={AppStyle.titleText}>宠物昵称</Text>
+                    <View style={AppStyle.row}>
+                        <Text style={AppStyle.rowTitle}>宠物昵称</Text>
                         <TextInput
                             value={this.state.petName}
                             editable={this.state.enabled}
@@ -346,8 +346,8 @@ class AddPet extends Component {
                             onChangeText={(text)=>{this.setState({ petName:text })}}
                             />
                     </View>
-                    <View style={AppStyle.inputViewStyle}>
-                        <Text style={AppStyle.titleText}>出生日期</Text>
+                    <View style={AppStyle.row}>
+                        <Text style={AppStyle.rowTitle}>出生日期</Text>
                         <View style={{flex:1,height:39}}>
                             <DatePicker
                                 date={this.state.petBirthday}
@@ -372,16 +372,16 @@ class AddPet extends Component {
                                 onDateChange={(dateBirth) => {this.setState({petBirthday:dateBirth})}}/>
                         </View>
                     </View>
-                    <TouchableOpacity onPress={this._onChooseRace.bind(this)} style={AppStyle.inputViewStyle}>
-                        <Text style={AppStyle.titleText}>宠物种类</Text>
+                    <TouchableOpacity onPress={this._onChooseRace.bind(this)} style={AppStyle.row}>
+                        <Text style={AppStyle.rowTitle}>宠物种类</Text>
                         <Text style={{flex:1,color:'black'}}>{this.state.petRace}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={this._onChooseSex.bind(this)} style={AppStyle.inputViewStyle}>
-                        <Text style={AppStyle.titleText}>宠物性别</Text>
+                    <TouchableOpacity onPress={this._onChooseSex.bind(this)} style={AppStyle.row}>
+                        <Text style={AppStyle.rowTitle}>宠物性别</Text>
                         <Text style={{flex:1,color:'black'}}>{this.state.petSex}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={this._onChooseState.bind(this)} style={AppStyle.inputViewStyle}>
-                        <Text style={AppStyle.titleText}>宠物状态</Text>
+                    <TouchableOpacity onPress={this._onChooseState.bind(this)} style={AppStyle.row}>
+                        <Text style={AppStyle.rowTitle}>宠物状态</Text>
                         <Text style={{flex:1,color:'black'}}>{this.state.petState}</Text>
                     </TouchableOpacity>
                 </ScrollView>

@@ -466,16 +466,16 @@ class VaccineService extends Component {
                     <Text style={AppStyle.groupText}>宠物信息</Text>
                 </View>
                 <View style={AppStyle.row}>
-                    <Text style={AppStyle.titleText}>会员编号</Text>
+                    <Text style={AppStyle.rowTitle}>会员编号</Text>
                     <Text style={AppStyle.rowVal}>{this.state.petSource.GestCode}</Text>
                 </View>
                 <View style={AppStyle.row}>
-                    <Text style={AppStyle.titleText}>会员名称</Text>
+                    <Text style={AppStyle.rowTitle}>会员名称</Text>
                     <Text style={AppStyle.rowVal}>{this.state.petSource.GestName}</Text>
                 </View>
                 <TouchableOpacity onPress={this._onChoosePet.bind(this)}
                                   style={AppStyle.row}>
-                    <Text style={AppStyle.titleText}>宠物名称</Text>
+                    <Text style={AppStyle.rowTitle}>宠物名称</Text>
                     <Text style={AppStyle.rowVal}>{this.state.petSource.PetName}</Text>
                     <Icon name={'angle-right'} size={20} color={'#ccc'}/>
                 </TouchableOpacity>
@@ -483,21 +483,21 @@ class VaccineService extends Component {
                     <Text style={AppStyle.groupText}>服务信息</Text>
                 </View>
                 <View style={AppStyle.row}>
-                    <Text style={AppStyle.titleText}>组号</Text>
+                    <Text style={AppStyle.rowTitle}>组号</Text>
                     <Text style={AppStyle.rowVal}>{this.state.VaccineGroupCode}</Text>
                 </View>
                 <TouchableOpacity onPress={this._onChoosePerson.bind(this)}
                                   style={AppStyle.row}>
-                    <Text style={AppStyle.titleText}>执行人</Text>
+                    <Text style={AppStyle.rowTitle}>执行人</Text>
                     <Text style={AppStyle.rowVal}>{this.state.executorName}</Text>
                     <Icon name={'angle-right'} size={20} color={'#ccc'}/>
                 </TouchableOpacity>
                 <View style={AppStyle.row}>
-                    <Text style={AppStyle.titleText}>数量</Text>
+                    <Text style={AppStyle.rowTitle}>数量</Text>
                     <Text style={AppStyle.rowVal}>{this.state.totalNum.toString()}</Text>
                 </View>
                 <View style={AppStyle.row}>
-                    <Text style={AppStyle.titleText}>金额</Text>
+                    <Text style={AppStyle.rowTitle}>金额</Text>
                     <Text style={AppStyle.rowVal}>¥{this.state.totalAmount.toString()}</Text>
                 </View>
                 <View style={AppStyle.groupTitle}>

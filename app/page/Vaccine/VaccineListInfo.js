@@ -20,6 +20,8 @@ import Loading from '../../commonview/Loading';
 import Picker from 'react-native-picker';
 import VaccineService from './VaccineService';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import AppStyle from '../../theme/appstyle';
+
 class VaccineListInfo extends Component {
     constructor(props) {
         super(props);
@@ -195,21 +197,19 @@ class VaccineListInfo extends Component {
 
     _onRenderRow(vacc) {
         return (
-            <TouchableOpacity style={styles.row} onPress={()=>this._onVaccDetails(vacc)}>
-                <View style={{flex:1,}}>
+            <TouchableOpacity style={AppStyle.row} onPress={()=>this._onVaccDetails(vacc)}>
+                <View style={{flex:1, marginRight:10,}}>
                     <View style={{flex:1, flexDirection:'row'}}>
-                        <Text
-                            style={{flex:1, fontSize:16, color:'#27408B',fontWeight:'bold'}}>会员: {vacc.GestName}</Text>
-                        {vacc.ShootStatus === 'SM00030' ? <Text style={{color:'#FF8247'}}>已执行</Text> : <Text style={{color:'#CDC9A5'}}>未执行</Text>}
+                        <Text style={AppStyle.titleText}>会员: {vacc.GestName}</Text>
+                        {vacc.ShootStatus === 'SM00030' ? <Text style={{color:'#FF8247'}}>已执行</Text> :
+                            <Text style={{color:'#CDC9A5'}}>未执行</Text>}
                     </View>
                     <View style={{flexDirection:'row',marginTop:3}}>
                         <Text style={{flex:1,}}>宠物: {vacc.PetName}</Text>
                         <Text style={{}}>时间: {vacc.CreatedOn.replace('T', ' ')}</Text>
                     </View>
                 </View>
-                <View style={{width:20,marginLeft:10, alignItems:'center', justifyContent:'center'}}>
-                    <Icon name={'angle-right'} size={20} color={'#ccc'}/>
-                </View>
+                <Icon name={'angle-right'} size={20} color={'#ccc'}/>
             </TouchableOpacity>
         )
     }
@@ -246,25 +246,14 @@ class VaccineListInfo extends Component {
             )
         }
         return (
-            <View style={styles.container}>
+            <View style={AppStyle.container}>
                 <Head title={this.props.headTitle} canAdd={true} canBack={true} edit="新增"
                       onPress={this._onBack.bind(this)}
                       editInfo={this._addInfo.bind(this)}/>
-
                 {body}
             </View>
         )
     }
 }
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    row: {
-        flexDirection: 'row',
-        padding: 10,
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: '#ccc',
-    },
-})
+const styles = StyleSheet.create({})
 module.exports = VaccineListInfo;

@@ -3,7 +3,6 @@
  */
 import React, { Component } from 'react';
 import {
-    AppRegistry,
     StyleSheet,
     Text,
     ScrollView,
@@ -17,10 +16,12 @@ import {
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
-import Loading from '../../commonview/Loading';
-import Icon from '../../../node_modules/react-native-vector-icons/FontAwesome';
 import AppointDetails from './AppointDetails';
-import DatePicker from  'react-native-datepicker';
+import Loading from '../../commonview/Loading';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import DatePicker from 'react-native-datepicker';
+import AppStyle from '../../theme/appstyle';
+
 class AppointListInfo extends React.Component {
     constructor(props) {
         super(props);
@@ -123,10 +124,10 @@ class AppointListInfo extends React.Component {
 
     _onRenderRow(a) {
         return (
-            <TouchableOpacity style={styles.row} onPress={()=>this._onDetails(a)}>
+            <TouchableOpacity style={AppStyle.row} onPress={()=>this._onDetails(a)}>
                 <View style={{flex:1, marginRight:10,}}>
                     <View style={{flex:1, flexDirection:'row'}}>
-                        <Text style={{fontSize:16, color:'#27408B',fontWeight:'bold'}}>会员：{a.GestName}</Text>
+                        <Text style={AppStyle.titleText}>会员：{a.GestName}</Text>
                     </View>
                     <View style={{flexDirection:'row',marginTop:3}}>
                         <Text style={{flex:1,}}>预约医生：{a.DoctorName}</Text>
@@ -152,16 +153,16 @@ class AppointListInfo extends React.Component {
                 )
             } else {
                 body = (
-                    <View style={styles.noResult}>
+                    <View style={AppStyle.noMore}>
                         <Text>没有符合条件的预约信息.</Text>
                     </View>
                 )
             }
         }
         return (
-            <View style={styles.container}>
+            <View style={AppStyle.container}>
                 <Head title={'预约列表'} canBack={true} onPress={this._onBack.bind(this)}/>
-                <View style={styles.searchRow}>
+                <View style={AppStyle.searchBox}>
                     <Text>预约时间</Text>
                     <DatePicker
                         date={this.state.dateFrom}
@@ -175,11 +176,11 @@ class AppointListInfo extends React.Component {
                         showIcon={false}
                         style={{width:80}}
                         customStyles={{
-                    dateInput: {
-                      height:30,
-                      borderWidth:StyleSheet.hairlineWidth,
-                    },
-                  }} onDateChange={(date) => {this.setState({dateFrom: date})}}/>
+                        dateInput: {
+                          height:30,
+                          borderWidth:StyleSheet.hairlineWidth,
+                        },
+                      }} onDateChange={(date) => {this.setState({dateFrom: date})}}/>
                     <Text> 到 </Text>
                     <DatePicker
                         date={this.state.dateTo}
@@ -200,7 +201,7 @@ class AppointListInfo extends React.Component {
                   }} onDateChange={(date) => {this.setState({dateTo: date})}}/>
                     <TouchableOpacity
                         underlayColor='#4169e1'
-                        style={styles.searchBtn}
+                        style={AppStyle.searchBtn}
                         onPress={this._search.bind(this)}>
                         <Text style={{color:'#fff'}}>查询</Text>
                     </TouchableOpacity>
@@ -210,39 +211,5 @@ class AppointListInfo extends React.Component {
         )
     }
 }
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    row: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        padding: 10,
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: '#ccc'
-    },
-    searchRow: {
-        flexDirection: 'row',
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        padding: 10,
-    },
-    searchBtn: {
-        height: 30,
-        width: 50,
-        marginLeft: 10,
-        backgroundColor: '#0099CC',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 5,
-    },
-    noResult: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        margin: 10,
-        height: 50,
-        padding: 20,
-    },
-})
+const styles = StyleSheet.create({})
 module.exports = AppointListInfo;

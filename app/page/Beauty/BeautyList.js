@@ -17,10 +17,12 @@ import {
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
-import BeautyServices from './BeautyServices';
+import BeautyInfo from './BeautyInfo';
 import Loading from '../../commonview/Loading';
 import Icon from 'react-native-vector-icons/FontAwesome';
-class BeautyListInfo extends React.Component {
+import AppStyle from '../../theme/appstyle';
+
+class BeautyList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -28,7 +30,7 @@ class BeautyListInfo extends React.Component {
             pageSize: 15,
             pageIndex: 1,
             dataSource: [],
-            recordCount:0,
+            recordCount: 0,
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
         }
     }
@@ -79,7 +81,7 @@ class BeautyListInfo extends React.Component {
                         pageIndex: page,
                     });
                 } else {
-                    alert("获取数据失败：" + data.Message);
+                    //alert("获取数据失败：" + data.Message);
                     _this.setState({
                         loaded: true,
                     });
@@ -102,7 +104,7 @@ class BeautyListInfo extends React.Component {
                             recordCount: data.Message,
                         });
                     } else {
-                        alert("获取记录数失败：" + data.Message);
+                        //alert("获取记录数失败：" + data.Message);
                     }
                 });
             }
@@ -124,12 +126,12 @@ class BeautyListInfo extends React.Component {
         const {navigator}=_this.props;
         if (navigator) {
             navigator.push({
-                name: 'BeautyServices',
-                component: BeautyServices,
+                name: 'BeautyInfo',
+                component: BeautyInfo,
                 params: {
-                    headTitle: '新增服务',
+                    headTitle: '新增美容服务',
                     canEdit: true,
-                    beautyID:1,
+                    beautyID: 1,
                     getResult: function () {
                         _this.fetchData(1, false);
                     }
@@ -143,12 +145,12 @@ class BeautyListInfo extends React.Component {
         const {navigator}=_this.props;
         if (navigator) {
             navigator.push({
-                name: 'BeautyServices',
-                component: BeautyServices,
+                name: 'BeautyInfo',
+                component: BeautyInfo,
                 params: {
                     headTitle: '美容服务详情',
                     canEdit: false,
-                    beautyID:2,
+                    beautyID: 2,
                     beautyInfo: beauty,
                     getResult: function () {
                         _this.fetchData(1, false);
@@ -157,6 +159,7 @@ class BeautyListInfo extends React.Component {
             })
         }
     }
+
     _onEndReached() {
         this.fetchData(this.state.pageIndex + 1, true);
     }
@@ -164,7 +167,7 @@ class BeautyListInfo extends React.Component {
     _renderFooter() {
         if (this.state.pageIndex >= this.state.recordCount / this.state.pageSize) {
             return (
-                <View style={{height: 40, justifyContent:'center', alignItems:'center'}}>
+                <View style={AppStyle.noMore}>
                     <Text>没有更多数据了~</Text>
                 </View>
             )
@@ -175,22 +178,21 @@ class BeautyListInfo extends React.Component {
             </View>
         );
     }
+
     _onRenderRow(beauty) {
         return (
-            <TouchableOpacity style={styles.row} onPress={()=>this._onBeautyDetails(beauty)}>
-                <View style={{flex:1,}}>
+            <TouchableOpacity style={AppStyle.row} onPress={()=>this._onBeautyDetails(beauty)}>
+                <View style={{flex:1, marginRight:10,}}>
                     <View style={{flex:1, flexDirection:'row'}}>
-                        <Text style={{flex:1, fontSize:16, color:'#27408B',fontWeight:'bold'}}>会员: {beauty.GestName}</Text>
-                        <Text style={{flex:1, textAlign:'right'}}>{beauty.CreatedOn.replace('T', ' ')}</Text>
+                        <Text style={AppStyle.titleText}>会员: {beauty.GestName}</Text>
+                        <Text style={{flex:1, textAlign:'right'}}>手机: {beauty.MobilePhone}</Text>
                     </View>
                     <View style={{flexDirection:'row',marginTop:3}}>
-                        <Text style={{flex:1,}}>手机: {beauty.MobilePhone}</Text>
-                        <Text style={{flex:1, textAlign:'right' }}>宠物: {beauty.PetName}</Text>
+                        <Text style={{flex:1}}>宠物: {beauty.PetName}</Text>
+                        <Text style={{flex:1, textAlign:'right'}}>{beauty.CreatedOn.replace('T', ' ')}</Text>
                     </View>
                 </View>
-                <View style={{width:20,marginLeft:10, alignItems:'center', justifyContent:'center'}}>
-                    <Icon name={'angle-right'} size={20} color={'#ccc'}/>
-                </View>
+                <Icon name={'angle-right'} size={20} color={'#ccc'}/>
             </TouchableOpacity>
         )
     }
@@ -205,23 +207,17 @@ class BeautyListInfo extends React.Component {
                              renderFooter={this._renderFooter.bind(this)}/>
         }
         return (
-            <View style={styles.container}>
-                <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}
-                      canAdd={true} edit="添加" editInfo={this._onAdd.bind(this)}/>
+            <View style={AppStyle.container}>
+                <Head title={this.props.headTitle}
+                      canBack={true}
+                      onPress={this._onBack.bind(this)}
+                      canAdd={true}
+                      edit="新增"
+                      editInfo={this._onAdd.bind(this)}/>
                 {body}
             </View>
         )
     }
 }
-const styles = StyleSheet.create({
-    container: {
-        flex: 1
-    },
-    row: {
-        flexDirection: 'row',
-        padding: 10,
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: '#ccc'
-    },
-})
-module.exports = BeautyListInfo;
+const styles = StyleSheet.create({})
+module.exports = BeautyList;

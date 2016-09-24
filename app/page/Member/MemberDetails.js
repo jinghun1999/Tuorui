@@ -288,11 +288,11 @@ class MemberDetails extends Component {
                         <Text style={AppStyle.groupText}>会员信息</Text>
                     </View>
                     <View style={AppStyle.row}>
-                        <Text style={AppStyle.titleText}>登记日期</Text>
+                        <Text style={AppStyle.rowTitle}>登记日期</Text>
                         <Text style={AppStyle.rowVal}>{this.props.memberInfo.CreatedOn.replace('T', ' ')}</Text>
                     </View>
                     <View style={AppStyle.row}>
-                        <Text style={AppStyle.titleText}>会员名</Text>
+                        <Text style={AppStyle.rowTitle}>会员名</Text>
                         <TextInput value={this.state.memberName}
                                    editable={this.state.enable}
                                    underlineColorAndroid={'transparent'}
@@ -303,7 +303,7 @@ class MemberDetails extends Component {
 
                     </View>
                     <View style={AppStyle.row}>
-                        <Text style={AppStyle.titleText}>生日</Text>
+                        <Text style={AppStyle.rowTitle}>生日</Text>
                         <DatePicker
                             date={this.state.birthDate}
                             mode="date"
@@ -334,7 +334,7 @@ class MemberDetails extends Component {
                             />
                     </View>
                     <View style={AppStyle.row}>
-                        <Text style={AppStyle.titleText}>电话</Text>
+                        <Text style={AppStyle.rowTitle}>电话</Text>
                         <TextInput value={this.state.memberPhone}
                                    editable={this.state.enable}
                                    underlineColorAndroid={'transparent'}
@@ -344,11 +344,11 @@ class MemberDetails extends Component {
                             />
                     </View>
                     <TouchableOpacity onPress={this._onChooseSex.bind(this)} style={AppStyle.row}>
-                        <Text style={AppStyle.titleText}>性别</Text>
+                        <Text style={AppStyle.rowTitle}>性别</Text>
                         <Text style={AppStyle.rowVal}>{this.state.memberSex == 'DM00001' ? '男' : '女'}</Text>
                     </TouchableOpacity>
                     <View style={AppStyle.row}>
-                        <Text style={AppStyle.titleText}>地址</Text>
+                        <Text style={AppStyle.rowTitle}>地址</Text>
 
                         <TextInput value={this.state.memberAddress}
                                    editable={this.state.enable}
@@ -359,7 +359,7 @@ class MemberDetails extends Component {
                             />
                     </View>
                     <View style={AppStyle.row}>
-                        <Text style={AppStyle.titleText}>备注</Text>
+                        <Text style={AppStyle.rowTitle}>备注</Text>
                         <TextInput value={this.state.memberRemark}
                                    editable={this.state.enable}
                                    underlineColorAndroid={'transparent'}

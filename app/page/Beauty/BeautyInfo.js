@@ -21,7 +21,7 @@ import Head from '../../commonview/Head';
 import Loading from '../../commonview/Loading';
 import ChooseBeautyServices from './ChooseBeautyServices';
 import ChoosePet from './ChoosePet';
-import BeautyListInfo from './BeautyListInfo';
+import BeautyListInfo from './BeautyList';
 import Picker from 'react-native-picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AppStyle from '../../theme/appstyle';
@@ -77,22 +77,21 @@ class BeautyServices extends React.Component {
                         canChoose: true,
                     });
                 }
-            })
+            });
             //http://petservice.tuoruimed.com/service/Api/Persons/GetPersonsByAppconfigID?appconfigID=82
             NetUtil.get(CONSTAPI.HOST + '/Persons/GetPersonsByAppconfigID?appconfigID=82', header, function (data) {
-                    var serviceData = data.Message;
-                    var _data = [];
-                    serviceData.forEach((item, index, array)=> {
-                        _data.push(item.PersonName);
-                    })
-                    _this.setState({
-                        serviceSource: serviceData,
-                        ServicerNameData: _data,
-                        serviceName: _data[0],
-                        loaded: true,
-                    });
-                }
-            )
+                var serviceData = data.Message;
+                var _data = [];
+                serviceData.forEach((item, index, array)=> {
+                    _data.push(item.PersonName);
+                })
+                _this.setState({
+                    serviceSource: serviceData,
+                    ServicerNameData: _data,
+                    serviceName: _data[0],
+                    loaded: true,
+                });
+            });
             //查看
             if (!_this.props.canEdit) {
                 _this.setState({
@@ -123,7 +122,7 @@ class BeautyServices extends React.Component {
                     "DataType": 0,
                     "Value": _this.props.beautyInfo.ID,
                     "Conn": 1
-                }]
+                }];
                 NetUtil.postJson(CONSTAPI.HOST + '/ServiceDetail/GetModelList', postdata, header, function (data) {
                     if (data.Sign && data.Message != null) {
                         _this.setState({
@@ -140,7 +139,7 @@ class BeautyServices extends React.Component {
                 })
             }
         }, function (err) {
-            alert(err)
+            //alert(err)
         });
     }
 
@@ -450,16 +449,21 @@ class BeautyServices extends React.Component {
                 <View style={AppStyle.groupTitle}>
                     <Text style={AppStyle.groupText}>宠物信息</Text>
                 </View>
-                <View style={AppStyle.row}>
-                    <Text style={AppStyle.titleText}>会员名称</Text>
-                    <Text style={AppStyle.rowVal}>{this.state.petSource.GestName}</Text>
-                </View>
-                <View style={AppStyle.row}>
-                    <Text style={AppStyle.titleText}>手机号码</Text>
-                    <Text style={AppStyle.rowVal}>{this.state.petSource.MobilePhone}</Text>
-                </View>
+                {this.state.petSource.PetName != null && this.state.petSource.PetName != '' ?
+                    <View>
+                        <View style={AppStyle.row}>
+                            <Text style={AppStyle.rowTitle}>会员</Text>
+                            <Text style={AppStyle.rowVal}>{this.state.petSource.GestName}</Text>
+                        </View>
+                        <View style={AppStyle.row}>
+                            <Text style={AppStyle.rowTitle}>手机</Text>
+                            <Text style={AppStyle.rowVal}>{this.state.petSource.MobilePhone}</Text>
+                        </View>
+                    </View>
+                    : null
+                }
                 <TouchableOpacity onPress={this._onChoosePet.bind(this)} style={AppStyle.row}>
-                    <Text style={AppStyle.titleText}>宠物名称</Text>
+                    <Text style={AppStyle.rowTitle}>宠物</Text>
                     <Text style={AppStyle.rowVal}>{this.state.petSource.PetName}</Text>
                     <Icon name={'angle-right'} size={20} color={'#ccc'}/>
                 </TouchableOpacity>
@@ -467,20 +471,20 @@ class BeautyServices extends React.Component {
                     <Text style={AppStyle.groupText}>服务信息</Text>
                 </View>
                 <View style={AppStyle.row}>
-                    <Text style={AppStyle.titleText}>服务单号</Text>
+                    <Text style={AppStyle.rowTitle}>服务单号</Text>
                     <Text style={AppStyle.rowVal}>{this.state.servicesFWID}</Text>
                 </View>
                 <TouchableOpacity onPress={this._onChooseService.bind(this)} style={AppStyle.row}>
-                    <Text style={AppStyle.titleText}>服务师</Text>
+                    <Text style={AppStyle.rowTitle}>服务师</Text>
                     <Text style={AppStyle.rowVal}>{this.state.serviceName}</Text>
                     <Icon name={'angle-right'} size={20} color={'#ccc'}/>
                 </TouchableOpacity>
                 <View style={AppStyle.row}>
-                    <Text style={AppStyle.titleText}>总项</Text>
+                    <Text style={AppStyle.rowTitle}>项目数</Text>
                     <Text style={AppStyle.rowVal}>{this.state.totalNum.toString()}</Text>
                 </View>
                 <View style={AppStyle.row}>
-                    <Text style={AppStyle.titleText}>总金额</Text>
+                    <Text style={AppStyle.rowTitle}>总金额</Text>
                     <Text style={AppStyle.rowVal}>¥{this.state.totalAmount.toString()}</Text>
                 </View>
                 <View style={AppStyle.groupTitle}>

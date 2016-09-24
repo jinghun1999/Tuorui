@@ -12,7 +12,7 @@ import{
     TouchableOpacity,
     ActivityIndicator,
     InteractionManager
-} from 'react-native';
+    } from 'react-native';
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
@@ -21,6 +21,8 @@ import MyHomeIcon from '../../commonview/ComIconView';
 import Loading from '../../commonview/Loading';
 import MemberDetails from './MemberDetails';
 import Icon from 'react-native-vector-icons/Ionicons';
+import AppStyle from '../../theme/appstyle';
+
 class MemberListInfo extends Component {
     constructor(props) {
         super(props);
@@ -178,18 +180,18 @@ class MemberListInfo extends Component {
 
     _onRenderRow(g) {
         return (
-            <TouchableOpacity style={styles.touchStyle} onPress={()=>this._memberShipDetails(g)}>
+            <TouchableOpacity style={AppStyle.row} onPress={()=>this._memberShipDetails(g)}>
                 <Icon name={'ios-person'} size={50} color={'#00BBFF'}/>
-                <View style={{flex:1, marginLeft:15,}}>
+                <View style={{flex:1, marginLeft:10, marginRight:10}}>
                     <View style={{flexDirection:'row'}}>
-                        <Text style={{flex:1, fontSize:16, color:'#27408B',fontWeight:'bold'}}>{g.GestName}</Text>
+                        <Text style={AppStyle.titleText}>{g.GestName}</Text>
                     </View>
                     <View style={{flexDirection:'row'}}>
-                        <Text style={{width:150}}>手机: {g.MobilePhone}</Text>
-                        <Text style={{flex:1}}>地址: {g.GestAddress}</Text>
+                        <Text style={{flex:1}}>手机: {g.MobilePhone}</Text>
+                        <Text style={{flex:2}}>地址: {g.GestAddress}</Text>
                     </View>
                 </View>
-                <Icon name={'ios-arrow-forward'} size={15} color={'#666'}/>
+                <Icon name={'ios-arrow-forward'} size={15} color={'#333'}/>
             </TouchableOpacity>
         )
     }
@@ -222,12 +224,15 @@ class MemberListInfo extends Component {
                           onEndReached={this._onEndReached.bind(this)}
                           enableEmptySections={true}
                           renderFooter={this._renderFooter.bind(this)}
-                />
+                    />
             )
         }
         return (
-            <View style={styles.container}>
-                <Head title={this.props.headTitle} canAdd={true} canBack={true} edit="新增"
+            <View style={AppStyle.container}>
+                <Head title={this.props.headTitle}
+                      canAdd={true}
+                      canBack={true}
+                      edit="新增"
                       onPress={this._onBack.bind(this)}
                       editInfo={this._addInfo.bind(this)}/>
                 {body}
@@ -235,21 +240,5 @@ class MemberListInfo extends Component {
         )
     }
 }
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    touchStyle: {
-        flex: 1,
-        flexDirection: 'row',
-        height: 50,
-        borderBottomColor: '#ccc',
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        justifyContent: 'center',
-        alignSelf: 'center',
-        alignItems: 'center',
-        paddingLeft: 10,
-        paddingRight: 10,
-    },
-});
+const styles = StyleSheet.create({});
 module.exports = MemberListInfo;

@@ -4,20 +4,22 @@
 'use strict';
 import React, {Component} from 'react';
 import {
-    AppRegistry,
     StyleSheet,
     Text,
     TextInput,
     View,
+    Alert,
     TouchableOpacity,
     ListView,
     ScrollView,
-} from 'react-native';
+    } from 'react-native';
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Loading from '../../commonview/Loading';
+import AppStyle from '../../theme/appstyle';
+
 class ChoosePet extends Component {
     constructor(props) {
         super(props);
@@ -57,29 +59,6 @@ class ChoosePet extends Component {
             this.props.getResult(pet);
         }
         this._onBack();
-    }
-
-    _renderPet(pet) {
-        return (
-            <TouchableOpacity
-                style={{ flexDirection:'row',marginLeft:15, marginRight:15, paddingTop:10, paddingBottom:10, borderBottomWidth:StyleSheet.hairlineWidth, borderBottomColor:'#ccc'}}
-                onPress={()=>this._pressRow(pet)}>
-                <View style={{flex:1}}>
-                    <Text style={{flex:1, fontSize:16, color:'#27408B',fontWeight:'bold'}}> {pet.PetName}</Text>
-                    <View style={{flexDirection:'row'}}>
-                        <Text style={{flex: 1,}}>宠物卡: {pet.PetCode}</Text>
-                        <Text style={{flex: 1,}}>品种: {pet.PetBreed}</Text>
-                    </View>
-                    <View style={{flexDirection:'row'}}>
-                        <Text style={{flex: 1,}}>会员名: {pet.GestName}</Text>
-                        <Text style={{flex: 1,}}>会员手机: {pet.MobilePhone}</Text>
-                    </View>
-                </View>
-                <View style={{width:20,alignItems:'center', justifyContent:'center'}}>
-                    <Icon name={'angle-right'} size={20} color={'#ccc'}/>
-                </View>
-            </TouchableOpacity>
-        )
     }
 
     _fetchData(value, page, isNext) {
@@ -185,12 +164,12 @@ class ChoosePet extends Component {
                             recordCount: data.Message,
                         });
                     } else {
-                        alert("获取记录数失败：" + data.Message);
+                        //alert("获取记录数失败：" + data.Message);
                     }
                 });
             }
         }, function (err) {
-            alert(err);
+            //alert(err);
         })
     }
 
@@ -202,22 +181,37 @@ class ChoosePet extends Component {
         });
     }
 
+    _renderPet(pet) {
+        return (
+            <TouchableOpacity style={AppStyle.row} onPress={()=>this._pressRow(pet)}>
+                <View style={{flex:1, marginRight:10,}}>
+                    <Text style={AppStyle.titleText}> {pet.PetName}</Text>
+                    <View style={{flexDirection:'row',}}>
+                        <Text style={{flex: 1,}}>会员: {pet.GestName}</Text>
+                        <Text style={{flex: 2,}}>手机: {pet.MobilePhone}</Text>
+                    </View>
+                </View>
+                <Icon name={'angle-right'} size={20} color={'#ccc'}/>
+            </TouchableOpacity>
+        )
+    }
+
     render() {
         var body = <Loading />
         if (this.state.loaded) {
             body = <ListView dataSource={this.state.ds.cloneWithRows(this.state.petDataSource)}
                              enableEmptySections={true}
                              renderRow={this._renderPet.bind(this)}
-            />
+                />
         }
         return (
-            <View style={{flex:1}}>
+            <View style={AppStyle.container}>
                 <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
                 <ScrollView key={'scrollView'}
                             horizontal={false}
                             showsVerticalScrollIndicator={true}
                             scrollEnabled={true}>
-                    <View style={styles.searchRow}>
+                    <View style={AppStyle.searchRow}>
                         <TextInput
                             autoCapitalize="none"
                             autoCorrect={false}
@@ -225,8 +219,8 @@ class ChoosePet extends Component {
                             onChangeText={this.search.bind(this)}
                             placeholder="输入宠物名称..."
                             value={this.state.kw}
-                            style={styles.searchTextInput}
-                        />
+                            style={AppStyle.searchTextInput}
+                            />
                     </View>
                     {body}
                 </ScrollView>
@@ -234,27 +228,5 @@ class ChoosePet extends Component {
         )
     }
 }
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        flexDirection: 'row',
-        backgroundColor: '#fff',
-    },
-    searchRow: {
-        backgroundColor: '#eeeeee',
-        paddingTop: 15,
-        paddingLeft: 10,
-        paddingRight: 10,
-        paddingBottom: 10,
-    },
-    searchTextInput: {
-        backgroundColor: '#fff',
-        borderColor: '#cccccc',
-        borderRadius: 3,
-        borderWidth: 1,
-        height: 40,
-        paddingLeft: 8,
-    },
-
-})
+const styles = StyleSheet.create({})
 module.exports = ChoosePet;

@@ -230,16 +230,16 @@ class AddMemberInfo extends Component {
                         <Text style={AppStyle.groupText}>基本信息</Text>
                     </View>
                     <View style={AppStyle.row}>
-                        <Text style={AppStyle.titleText}>编号</Text>
+                        <Text style={AppStyle.rowTitle}>编号</Text>
                         <Text style={AppStyle.rowVal}>{this.state.memberItem.GestCode}</Text>
                     </View>
                     <View style={AppStyle.row}>
-                        <Text style={AppStyle.titleText}>登记日期</Text>
+                        <Text style={AppStyle.rowTitle}>登记日期</Text>
                         <Text
                             style={AppStyle.rowVal}>{this.state.memberRegistrationTime}</Text>
                     </View>
                     <View style={AppStyle.row}>
-                        <Text style={AppStyle.titleText}>姓名</Text>
+                        <Text style={AppStyle.rowTitle}>姓名</Text>
                         <TextInput value={this.state.memberName}
                                    editable={this.state.enable}
                                    underlineColorAndroid={'transparent'}
@@ -253,7 +253,7 @@ class AddMemberInfo extends Component {
                             />
                     </View>
                     <View style={AppStyle.row}>
-                        <Text style={AppStyle.titleText}>生日</Text>
+                        <Text style={AppStyle.rowTitle}>生日</Text>
                         <DatePicker
                             date={this.state.memberBirthday}
                             mode="date"
@@ -282,7 +282,7 @@ class AddMemberInfo extends Component {
 
                     </View>
                     <View style={AppStyle.row}>
-                        <Text style={AppStyle.titleText}>电话</Text>
+                        <Text style={AppStyle.rowTitle}>电话</Text>
                         <TextInput value={this.state.memberPhone}
                                    editable={this.state.enable}
                                    underlineColorAndroid={'transparent'}
@@ -292,22 +292,22 @@ class AddMemberInfo extends Component {
                             />
                     </View>
                     <TouchableOpacity onPress={this._onChooseSex.bind(this)} style={AppStyle.row}>
-                        <Text style={AppStyle.titleText}>性别</Text>
+                        <Text style={AppStyle.rowTitle}>性别</Text>
                         <Text style={AppStyle.rowVal}>{this.state.memberSex}</Text>
                     </TouchableOpacity>
                     <View style={AppStyle.groupTitle}>
                         <Text style={AppStyle.groupText}>会员信息</Text>
                     </View>
                     <TouchableOpacity onPress={this._onChooseLevel.bind(this)} style={AppStyle.row}>
-                        <Text style={AppStyle.titleText}>会员等级</Text>
+                        <Text style={AppStyle.rowTitle}>会员等级</Text>
                         <Text style={AppStyle.rowVal}>{this.state.memberLevel}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={this._onChooseState.bind(this)} style={AppStyle.row}>
-                        <Text style={AppStyle.titleText}>会员状态</Text>
+                        <Text style={AppStyle.rowTitle}>会员状态</Text>
                         <Text style={AppStyle.rowVal}>{this.state.memberState}</Text>
                     </TouchableOpacity>
                     <View style={AppStyle.row}>
-                        <Text style={AppStyle.titleText}>备注</Text>
+                        <Text style={AppStyle.rowTitle}>备注</Text>
                         <TextInput value={this.state.memberRemarks}
                                    editable={this.state.enable}
                                    underlineColorAndroid={'transparent'}
