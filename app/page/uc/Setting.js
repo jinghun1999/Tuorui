@@ -80,7 +80,7 @@ class MyAccount extends React.Component {
              ]);*/
             markSuccess();
         } else if (isRolledBack) {
-            Alert.alert('提示', '刚刚更新失败了,版本被回滚.');
+            Alert.alert('提示', '刚刚更新失败了,版本被回滚.', [{text: '知道了'}]);
         }
         else {
             //Alert.alert('提示', 'other');
@@ -103,7 +103,7 @@ class MyAccount extends React.Component {
                 },
             ]);
         }).catch(err => {
-            Alert.alert('提示', '更新失败.');
+            Alert.alert('提示', '更新失败.', [{text: '知道了'}]);
         });
     };
     checkUpdate = () => {
@@ -117,7 +117,7 @@ class MyAccount extends React.Component {
                     },
                 ]);
             } else if (info.upToDate) {
-                Alert.alert('提示', '您的应用版本已是最新.');
+                Alert.alert('提示', '您的应用版本已是最新.', [{text: '知道了'}]);
             } else {
                 Alert.alert('提示', '检查到新的版本' + info.name + ',是否下载?\n' + info.description, [
                     {
@@ -129,7 +129,7 @@ class MyAccount extends React.Component {
                 ]);
             }
         }).catch(err => {
-            Alert.alert('提示', '更新失败.' + err);
+            Alert.alert('提示', '更新失败.' + err, [{text: '知道了'}]);
         });
     };
 
