@@ -4,7 +4,6 @@
 'use strict';
 import React, {Component} from 'react';
 import{
-    AppRegistry,
     StyleSheet,
     Text,
     TextInput,
@@ -13,15 +12,18 @@ import{
     ToastAndroid,
     TouchableOpacity,
     Image,
+    InteractionManager,
     ListView,
     ScrollView,
-} from 'react-native';
+    } from 'react-native';
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
 import Loading from '../../commonview/Loading';
-import Icon from '../../../node_modules/react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
+import AppStyle from '../../theme/AppStyle';
+
 class ChooseVaccineInfo extends Component {
     constructor(props) {
         super(props);
@@ -38,16 +40,12 @@ class ChooseVaccineInfo extends Component {
     }
 
     componentDidMount() {
-        var _this = this;
-        _this.timer = setTimeout(
-            () => {
-                _this._fetchData(_this.state.value);
-            }, 500
-        )
+        InteractionManager.runAfterInteractions(() => {
+            this._fetchData(this.state.value);
+        });
     }
 
     componentWillUnmount() {
-        this.timer && clearTimeout(this.timer);
     }
 
     _fetchData(value) {
@@ -149,19 +147,15 @@ class ChooseVaccineInfo extends Component {
 
     _renderVaccine(vaccine) {
         return (
-            <TouchableOpacity
-                style={{ flexDirection:'row',marginLeft:15, marginRight:15, paddingTop:10, paddingBottom:10, borderBottomWidth:StyleSheet.hairlineWidth, borderBottomColor:'#ccc'}}
-                onPress={()=>this.pressRow(vaccine)}>
-                <View style={{flex:1}}>
-                    <Text style={{flex:1, fontSize:16, color:'#27408B',fontWeight:'bold'}}>名称: {vaccine.ItemName}</Text>
+            <TouchableOpacity style={AppStyle.row} onPress={()=>this.pressRow(vaccine)}>
+                <View style={{flex:1, marginRight:10,}}>
+                    <Text style={[AppStyle.titleText,{width:200,}]}>{vaccine.ItemName}</Text>
                     <View style={{flexDirection:'row'}}>
                         <Text style={{flex: 1,}}>编号: {vaccine.ItemCode}</Text>
-                        <Text style={{flex: 1,}}>单价: ￥{vaccine.SellPrice}</Text>
+                        <Text style={AppStyle.money}>单价: ￥{vaccine.SellPrice}</Text>
                     </View>
                 </View>
-                <View style={{width:20,alignItems:'center', justifyContent:'center'}}>
-                    <Text><Icon name={'angle-right'} size={20} color={'#ccc'}/></Text>
-                </View>
+                <Icon name={'angle-right'} size={20} color={'#ccc'}/>
             </TouchableOpacity>
         )
     }
@@ -174,13 +168,13 @@ class ChooseVaccineInfo extends Component {
                              renderRow={this._renderVaccine.bind(this)}/>
         }
         return (
-            <View style={{flex:1}}>
+            <View style={AppStyle.container}>
                 <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
                 <ScrollView key={'scrollView'}
                             horizontal={false}
                             showsVerticalScrollIndicator={true}
                             scrollEnabled={true}>
-                    <View style={styles.searchRow}>
+                    <View style={AppStyle.searchRow}>
                         <TextInput
                             autoCapitalize="none"
                             autoCorrect={false}
@@ -188,8 +182,8 @@ class ChooseVaccineInfo extends Component {
                             onChangeText={this.search.bind(this)}
                             placeholder="输入疫苗名称..."
                             value={this.state.value}
-                            style={styles.searchTextInput}
-                        />
+                            style={AppStyle.searchTextInput}
+                            />
                     </View>
                     {body}
                 </ScrollView>
@@ -197,26 +191,5 @@ class ChooseVaccineInfo extends Component {
         )
     }
 }
-const styles = StyleSheet.create({
-    container: {},
-    loadingBox: {
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    searchRow: {
-        backgroundColor: '#eeeeee',
-        paddingTop: 15,
-        paddingLeft: 10,
-        paddingRight: 10,
-        paddingBottom: 10,
-    },
-    searchTextInput: {
-        backgroundColor: '#fff',
-        borderColor: '#cccccc',
-        borderRadius: 3,
-        borderWidth: 1,
-        height: 40,
-        paddingLeft: 8,
-    },
-})
+const styles = StyleSheet.create({})
 module.exports = ChooseVaccineInfo;

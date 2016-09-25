@@ -10,6 +10,7 @@ import {
     View,
     Alert,
     TouchableOpacity,
+    InteractionManager,
     ListView,
     ScrollView,
     } from 'react-native';
@@ -18,7 +19,7 @@ import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Loading from '../../commonview/Loading';
-import AppStyle from '../../theme/appstyle';
+import AppStyle from '../../theme/AppStyle';
 
 class ChoosePet extends Component {
     constructor(props) {
@@ -42,16 +43,12 @@ class ChoosePet extends Component {
     }
 
     componentDidMount() {
-        var _this = this;
-        _this.timer = setTimeout(
-            () => {
-                _this._fetchData(_this.state.kw, 1, false);
-            }, 500
-        )
+        InteractionManager.runAfterInteractions(() => {
+            this._fetchData(this.state.kw, 1, false);
+        });
     }
 
     componentWillUnmount() {
-        this.timer && clearTimeout(this.timer);
     }
 
     _pressRow(pet) {

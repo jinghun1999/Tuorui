@@ -20,7 +20,7 @@ import Head from '../../commonview/Head';
 import BeautyInfo from './BeautyInfo';
 import Loading from '../../commonview/Loading';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import AppStyle from '../../theme/appstyle';
+import AppStyle from '../../theme/AppStyle';
 
 class BeautyList extends React.Component {
     constructor(props) {

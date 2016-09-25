@@ -22,7 +22,7 @@ import AddPet from './AddPet';
 import Loading from '../../commonview/Loading';
 import DatePicker from 'react-native-datepicker';
 import Picker from 'react-native-picker';
-import AppStyle from '../../theme/appstyle';
+import AppStyle from '../../theme/AppStyle';
 class MemberDetails extends Component {
     constructor(props) {
         super(props);
@@ -398,7 +398,5 @@ class MemberDetails extends Component {
         )
     }
 }
-const styles = StyleSheet.create({
-
-})
+const styles = StyleSheet.create({})
 module.exports = MemberDetails;

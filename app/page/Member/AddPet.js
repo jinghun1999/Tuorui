@@ -23,7 +23,7 @@ import Loading from '../../commonview/Loading';
 import DatePicker from 'react-native-datepicker';
 import Picker from 'react-native-picker';
 import NButton from '../../commonview/NButton';
-import AppStyle from '../../theme/appstyle';
+import AppStyle from '../../theme/AppStyle';
 class AddPet extends Component {
     constructor(props) {
         super(props);

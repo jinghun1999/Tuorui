@@ -15,7 +15,7 @@ var Sync = {
                     try {
                         r = JSON.parse(responseText);
                         if (r.Sign && r.Message) {
-                            let _expires = 1000 * (r.Message.Token.expires_in - 60);
+                            let _expires = 1000 * (r.Message.Token.expires_in - 6000);
                             storage.save({
                                 key: 'USER',
                                 rawData: {
@@ -24,7 +24,7 @@ var Sync = {
                                 expires: _expires,
                             });
                             resolve && resolve({user: r.Message});
-                            alert('自动登陆成功，' + _expires + 'ms后过期')
+                            //alert('自动登陆成功，' + _expires + 'ms后过期')
                         } else {
                             alert('自动登陆失败！')
                             reject && reject(new Error('登陆信息已过期，请重新登陆'));

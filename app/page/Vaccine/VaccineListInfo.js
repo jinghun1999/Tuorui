@@ -20,7 +20,7 @@ import Loading from '../../commonview/Loading';
 import Picker from 'react-native-picker';
 import VaccineService from './VaccineService';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import AppStyle from '../../theme/appstyle';
+import AppStyle from '../../theme/AppStyle';
 
 class VaccineListInfo extends Component {
     constructor(props) {
@@ -200,7 +200,7 @@ class VaccineListInfo extends Component {
             <TouchableOpacity style={AppStyle.row} onPress={()=>this._onVaccDetails(vacc)}>
                 <View style={{flex:1, marginRight:10,}}>
                     <View style={{flex:1, flexDirection:'row'}}>
-                        <Text style={AppStyle.titleText}>会员: {vacc.GestName}</Text>
+                        <Text style={[AppStyle.titleText,{flex:1,}]}>会员: {vacc.GestName}</Text>
                         {vacc.ShootStatus === 'SM00030' ? <Text style={{color:'#FF8247'}}>已执行</Text> :
                             <Text style={{color:'#CDC9A5'}}>未执行</Text>}
                     </View>
@@ -219,7 +219,7 @@ class VaccineListInfo extends Component {
         let totalPage = this.state.recordCount / this.state.pageSize;
         if (this.state.pageIndex >= totalPage) {
             return (
-                <View style={{height: 40, justifyContent:'center', alignItems:'center'}}>
+                <View style={AppStyle.noMore}>
                     <Text>没有更多数据了~</Text>
                 </View>
             )

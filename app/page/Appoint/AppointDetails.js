@@ -13,7 +13,7 @@ import {
     }from 'react-native';
 import Util from '../../util/Util';
 import Head from '../../commonview/Head';
-import AppStyle from '../../theme/appstyle';
+import AppStyle from '../../theme/AppStyle';
 class AppointDetails extends React.Component {
     constructor(props) {
         super(props);

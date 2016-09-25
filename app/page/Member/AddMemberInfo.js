@@ -28,7 +28,7 @@ import Loading from '../../commonview/Loading';
 import AddPet from './AddPet';
 import Picker from 'react-native-picker';
 import NButton from '../../commonview/NButton';
-import AppStyle from '../../theme/appstyle';
+import AppStyle from '../../theme/AppStyle';
 class AddMemberInfo extends Component {
     constructor(props) {
         super(props);

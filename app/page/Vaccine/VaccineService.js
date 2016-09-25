@@ -23,7 +23,7 @@ import ChoosePet from '../Beauty/ChoosePet';
 import Picker from 'react-native-picker';
 import ChooseVaccineInfo from './ChooseVaccineInfo';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import AppStyle from '../../theme/appstyle';
+import AppStyle from '../../theme/AppStyle';
 class VaccineService extends Component {
     constructor(props) {
         super(props);

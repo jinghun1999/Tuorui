@@ -21,7 +21,7 @@ import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
 import Loading from '../../commonview/Loading';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import AppStyle from '../../theme/appstyle';
+import AppStyle from '../../theme/AppStyle';
 
 class ChooseBeautyServices extends React.Component {
     constructor(props) {

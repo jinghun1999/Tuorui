@@ -21,7 +21,7 @@ import MyHomeIcon from '../../commonview/ComIconView';
 import Loading from '../../commonview/Loading';
 import MemberDetails from './MemberDetails';
 import Icon from 'react-native-vector-icons/Ionicons';
-import AppStyle from '../../theme/appstyle';
+import AppStyle from '../../theme/AppStyle';
 
 class MemberListInfo extends Component {
     constructor(props) {
@@ -201,7 +201,7 @@ class MemberListInfo extends Component {
         let totalPage = this.state.recordCount / this.state.pageSize;
         if (this.state.pageIndex >= totalPage) {
             return (
-                <View style={{height: 40, justifyContent:'center', alignItems:'center'}}>
+                <View style={AppStyle.noMore}>
                     <Text>没有更多数据了~</Text>
                 </View>
             )
