@@ -20,7 +20,7 @@ import Loading from '../../commonview/Loading';
 import Picker from 'react-native-picker';
 import VaccineService from './VaccineService';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import AppStyle from '../../theme/AppStyle';
+import AppStyle from '../../theme/appstyle';
 
 class VaccineListInfo extends Component {
     constructor(props) {

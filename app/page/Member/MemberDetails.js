@@ -22,7 +22,7 @@ import AddPet from './AddPet';
 import Loading from '../../commonview/Loading';
 import DatePicker from 'react-native-datepicker';
 import Picker from 'react-native-picker';
-import AppStyle from '../../theme/AppStyle';
+import AppStyle from '../../theme/appstyle';
 class MemberDetails extends Component {
     constructor(props) {
         super(props);

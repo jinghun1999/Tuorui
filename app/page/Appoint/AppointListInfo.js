@@ -20,7 +20,7 @@ import AppointDetails from './AppointDetails';
 import Loading from '../../commonview/Loading';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DatePicker from 'react-native-datepicker';
-import AppStyle from '../../theme/AppStyle';
+import AppStyle from '../../theme/appstyle';
 
 class AppointListInfo extends React.Component {
     constructor(props) {

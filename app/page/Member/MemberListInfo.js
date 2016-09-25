@@ -21,7 +21,7 @@ import MyHomeIcon from '../../commonview/ComIconView';
 import Loading from '../../commonview/Loading';
 import MemberDetails from './MemberDetails';
 import Icon from 'react-native-vector-icons/Ionicons';
-import AppStyle from '../../theme/AppStyle';
+import AppStyle from '../../theme/appstyle';
 
 class MemberListInfo extends Component {
     constructor(props) {

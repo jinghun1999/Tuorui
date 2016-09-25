@@ -24,7 +24,7 @@ import ChoosePet from './ChoosePet';
 import BeautyListInfo from './BeautyList';
 import Picker from 'react-native-picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import AppStyle from '../../theme/AppStyle';
+import AppStyle from '../../theme/appstyle';
 class BeautyServices extends React.Component {
     constructor(props) {
         super(props);

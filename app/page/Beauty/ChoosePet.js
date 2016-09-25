@@ -19,7 +19,7 @@ import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Loading from '../../commonview/Loading';
-import AppStyle from '../../theme/AppStyle';
+import AppStyle from '../../theme/appstyle';
 
 class ChoosePet extends Component {
     constructor(props) {

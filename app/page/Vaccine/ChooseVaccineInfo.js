@@ -22,7 +22,7 @@ import Head from '../../commonview/Head';
 import Loading from '../../commonview/Loading';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
-import AppStyle from '../../theme/AppStyle';
+import AppStyle from '../../theme/appstyle';
 
 class ChooseVaccineInfo extends Component {
     constructor(props) {

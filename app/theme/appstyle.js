@@ -89,10 +89,13 @@ let AppStyle = StyleSheet.create({
         marginRight: 10,
     },
     noMore: {
-        flex:1,
         height: 40,
+        marginTop:10,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        borderTopWidth:1,
+        borderTopColor:'#ccc',
+        backgroundColor:'#EDEDED'
     },
     searchBox: {
         flexDirection: 'row',
