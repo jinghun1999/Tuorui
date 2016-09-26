@@ -57,37 +57,37 @@ class VaccineListInfo extends Component {
             let postdata = {
                 "items": [
                     {
-                        "Childrens": null,
-                        "Field": "IsDeleted",
-                        "Title": null,
-                        "Operator": {
-                            "Name": "=",
-                            "Title": "等于",
-                            "Expression": null
+                        "Childrens":null,
+                        "Field":"1",
+                        "Title":null,
+                        "Operator":{
+                            "Name":"=",
+                            "Title":"等于",
+                            "Expression":null
                         },
-                        "DataType": 0,
-                        "Value": "0",
-                        "Conn": 0
+                        "DataType":0,
+                        "Value":"1",
+                        "Conn":0
                     }
                 ],
                 "sorts": [
                     {
-                        "Field": "ShootStatus",
-                        "Title": null,
-                        "Sort": {
-                            "Name": "Asc",
-                            "Title": "升序"
+                        "Field":"ShootStatus",
+                        "Title":null,
+                        "Sort":{
+                            "Name":"Asc",
+                            "Title":"升序"
                         },
-                        "Conn": 0
+                        "Conn":0
                     },
                     {
-                        "Field": "CreatedOn",
-                        "Title": null,
-                        "Sort": {
-                            "Name": "Desc",
-                            "Title": "降序"
+                        "Field":"CreatedOn",
+                        "Title":null,
+                        "Sort":{
+                            "Name":"Desc",
+                            "Title":"降序"
                         },
-                        "Conn": 0
+                        "Conn":0
                     }
                 ],
                 "index": page,

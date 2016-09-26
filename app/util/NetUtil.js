@@ -37,7 +37,7 @@ class NetUtil extends React.Component {
                 }
                 callback(result);
             }).catch(error => {
-                React.AlertIOS.alert(
+                React.Alert.alert(
                     'Error',
                     error
                 );
@@ -74,7 +74,7 @@ class NetUtil extends React.Component {
                 }
                 callback(result);
             }).catch(error => {
-                React.AlertIOS.alert(
+                React.Alert.alert(
                     'Error',
                     error
                 );
