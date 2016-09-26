@@ -178,7 +178,7 @@ class App extends Component {
                                           onPress={this._onPress.bind(this, AppointListInfo, 'AppointListInfo', '我的预约')}>
                             <View style={styles.iconOuter}>
                                 <Icon name={'ios-clock'} size={40} color={'#0066CC'}/>
-                                <Text style={{fontSize:15}}>我的预约</Text>
+                                <Text style={{fontSize:15}}>会员预约</Text>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.grid_view}

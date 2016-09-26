@@ -50,20 +50,12 @@ class AppointListInfo extends React.Component {
             let header = NetUtil.headerClientAuth(user, hos);
             let postdata = [{
                 "Childrens": null,
-                "Field": "IsDeleted",
-                "Title": null,
-                "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                "DataType": 0,
-                "Value": "0",
-                "Conn": 0
-            }, {
-                "Childrens": null,
                 "Field": "StartTime",
                 "Title": null,
                 "Operator": {"Name": ">", "Title": "大于", "Expression": null},
                 "DataType": 0,
                 "Value": _this.state.dateFrom + " 00:00:00",
-                "Conn": 1
+                "Conn": 0
             }, {
                 "Childrens": null,
                 "Field": "StartTime",
@@ -73,7 +65,6 @@ class AppointListInfo extends React.Component {
                 "Value": _this.state.dateTo + " 23:59:59",
                 "Conn": 1
             }]
-            //预约信息接口 http://test.tuoruimed.com/service/Api/Appoint/GetModelList
             NetUtil.postJson(CONSTAPI.HOST + '/Appoint/GetModelList', postdata, header, function (data) {
                 if (data.Sign && data.Message != null) {
                     _this.setState({
@@ -82,16 +73,14 @@ class AppointListInfo extends React.Component {
                     })
                 }
                 else {
-                    Alert.alert('提示', "获取数据失败：" + data.Message, [{text: '确定'}]);
+                    Alert.alert('提示', "获取数据失败：" + data.Exception, [{text: '确定'}]);
                     _this.setState({
                         loaded: true,
                     });
                 }
             })
         }, function (err) {
-            _this.setState({
-                loaded: true,
-            });
+            Alert.alert('提示', err, [{text: '确定'}]);
         })
     }
 
@@ -126,12 +115,10 @@ class AppointListInfo extends React.Component {
         return (
             <TouchableOpacity style={AppStyle.row} onPress={()=>this._onDetails(a)}>
                 <View style={{flex:1, marginRight:10,}}>
-                    <View style={{flex:1, flexDirection:'row'}}>
-                        <Text style={AppStyle.titleText}>会员：{a.GestName}</Text>
-                    </View>
+                    <Text style={[AppStyle.titleText, {width:300,}]}>{a.GestName}</Text>
                     <View style={{flexDirection:'row',marginTop:3}}>
                         <Text style={{flex:1,}}>预约医生：{a.DoctorName}</Text>
-                        <Text>时间：{Util.getFormateTime(a.StartTime, 'min')}</Text>
+                        <Text>预约时间：{Util.getFormateTime(a.StartTime, 'min')}</Text>
                     </View>
                 </View>
                 <Icon name={'angle-right'} size={20} color={'#ccc'}/>
@@ -140,7 +127,7 @@ class AppointListInfo extends React.Component {
     }
 
     render() {
-        let body = <Loading type="text"/>
+        let body = <Loading type={'text'}/>
         if (this.state.loaded) {
             if (this.state.appointSource.length != 0) {
                 body = (
@@ -154,7 +141,7 @@ class AppointListInfo extends React.Component {
             } else {
                 body = (
                     <View style={AppStyle.noMore}>
-                        <Text>没有符合条件的预约信息.</Text>
+                        <Text>没有符合条件的预约信息~</Text>
                     </View>
                 )
             }

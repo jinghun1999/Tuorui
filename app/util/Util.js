@@ -1,15 +1,15 @@
 'use strict';
-import React, {
-    Component
-} from 'react';
 
-import Md5Util from './Md5Util';
+import React, {Component} from 'react';
 var base64 = require('base-64');
-
 class Util extends React.Component {
+    static md5(data) {
+        var md5 = require('md5');
+        return md5(data);
+    }
 
     static getToken(time) {
-        return Md5Util.md5(time + '0010000app');
+        return md5(time + '0010000app');
     }
 
     static getTime() {

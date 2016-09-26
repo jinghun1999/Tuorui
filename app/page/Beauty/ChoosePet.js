@@ -120,7 +120,7 @@ class ChoosePet extends Component {
                         pageIndex: page,
                     });
                 } else {
-                    Alert.alert('提示', "获取数据失败：" + data.Message, [{text: '确定'}]);
+                    Alert.alert('提示', "获取数据失败：" + data.Exception, [{text: '确定'}]);
                     _this.setState({
                         loaded: true,
                     });
@@ -159,7 +159,7 @@ class ChoosePet extends Component {
                             recordCount: data.Message,
                         });
                     } else {
-                        Alert.alert('提示', "获取记录数失败：" + data.Message, [{text: '确定'}]);
+                        Alert.alert('提示', "获取记录数失败：" + data.Exception, [{text: '确定'}]);
                     }
                 });
             }
@@ -192,7 +192,7 @@ class ChoosePet extends Component {
     }
 
     render() {
-        var body = <Loading />
+        var body = <Loading type={'text'}/>
         if (this.state.loaded) {
             body = <ListView dataSource={this.state.ds.cloneWithRows(this.state.petDataSource)}
                              enableEmptySections={true}

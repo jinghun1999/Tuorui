@@ -148,7 +148,7 @@ export default class SaleAdd extends React.Component {
                         ModifiedOn: now,
                         DirectSellCode: null,
                         DirectSellID: null,
-                        EntID: '00000000-0000-0000-0000-000000000000',
+                        EntID: null,
                         ID: Util.guid(),
                         IsBulk: '否',
                         ItemCode: _goods[i].ItemCode,
@@ -187,7 +187,7 @@ export default class SaleAdd extends React.Component {
                                 if (findata.Sign && findata.Message != null) {
                                     let finishpost = {
                                         "newSA": {
-                                            "ID": "00000000-0000-0000-0000-000000000000",
+                                            "ID": null,
                                             "SettleCode": null,
                                             "GestID": findata.Message.CurrentGest.ID,
                                             "GestCode": findata.Message.CurrentGest.GestCode,
@@ -215,7 +215,7 @@ export default class SaleAdd extends React.Component {
                                         },
                                         "fSADetalList": findata.Message.FSADetalList,
                                         "gprList": [{
-                                            "ID": "00000000-0000-0000-0000-000000000000",
+                                            "ID": null,
                                             "GestID": null,
                                             "GestName": null,
                                             "OperateAction": "现金",
@@ -225,9 +225,9 @@ export default class SaleAdd extends React.Component {
                                             "CreatedOn": null,
                                             "ModifiedBy": null,
                                             "ModifiedOn": null,
-                                            "EntID": "00000000-0000-0000-0000-000000000000"
+                                            "EntID": null
                                         }, {
-                                            "ID": "00000000-0000-0000-0000-000000000000",
+                                            "ID": null,
                                             "GestID": null,
                                             "GestName": null,
                                             "OperateAction": "折扣",
@@ -237,7 +237,7 @@ export default class SaleAdd extends React.Component {
                                             "CreatedOn": null,
                                             "ModifiedBy": null,
                                             "ModifiedOn": null,
-                                            "EntID": "00000000-0000-0000-0000-000000000000"
+                                            "EntID": null
                                         }]
                                     };
                                     //结算

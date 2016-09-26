@@ -21,7 +21,6 @@ class AppointDetails extends React.Component {
             enable: false,
         }
     }
-
     _onBack() {
         let _this = this;
         const {navigator}= _this.props;
@@ -56,6 +55,11 @@ class AppointDetails extends React.Component {
                     <Text style={AppStyle.rowVal}>{this.props.appointInfo.DoctorName}</Text>
                 </View>
                 <View style={AppStyle.row}>
+                    <Text style={AppStyle.rowTitle}>登记时间</Text>
+                    <Text style={AppStyle.rowVal}>{regTime}</Text>
+                </View>
+
+                <View style={[AppStyle.row, {marginTop:10,}]}>
                     <Text style={AppStyle.rowTitle}>开始时间</Text>
                     <Text style={AppStyle.rowVal}>{starTime}</Text>
                 </View>
@@ -63,17 +67,9 @@ class AppointDetails extends React.Component {
                     <Text style={AppStyle.rowTitle}>结束时间</Text>
                     <Text style={AppStyle.rowVal}>{endTime}</Text>
                 </View>
-                <View style={AppStyle.row}>
-                    <Text style={AppStyle.rowTitle}>登记时间</Text>
-                    <Text style={AppStyle.rowVal}>{regTime}</Text>
-                </View>
             </View>
         )
     }
 }
-const styles = StyleSheet.create({
-    width150:{
-        width:150,
-    }
-});
+const styles = StyleSheet.create({});
 module.exports = AppointDetails;

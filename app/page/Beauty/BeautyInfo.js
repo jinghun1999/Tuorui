@@ -78,7 +78,6 @@ class BeautyServices extends React.Component {
                     });
                 }
             });
-            //http://petservice.tuoruimed.com/service/Api/Persons/GetPersonsByAppconfigID?appconfigID=82
             NetUtil.get(CONSTAPI.HOST + '/Persons/GetPersonsByAppconfigID?appconfigID=82', header, function (data) {
                 var serviceData = data.Message;
                 var _data = [];
@@ -113,7 +112,7 @@ class BeautyServices extends React.Component {
                     "Operator": {"Name": "=", "Title": "等于", "Expression": null},
                     "DataType": 0,
                     "Value": _this.props.beautyInfo.ID,
-                    "Conn": 1
+                    "Conn": 0
                 }];
                 NetUtil.postJson(CONSTAPI.HOST + '/ServiceDetail/GetModelList', postdata, header, function (data) {
                     if (data.Sign && data.Message != null) {
@@ -123,15 +122,15 @@ class BeautyServices extends React.Component {
                         })
                     }
                     else {
-                        Alert.alert('提示', "获取数据失败：" + data.Message, [{text: '确定'}]);
                         _this.setState({
                             loaded: true,
                         });
+                        Alert.alert('提示', "获取数据失败：" + data.Exception, [{text: '确定'}]);
                     }
                 })
             }
         }, function (err) {
-            //alert(err)
+            Alert.alert('提示', err, [{text: '确定'}]);
         });
     }
 
@@ -183,7 +182,6 @@ class BeautyServices extends React.Component {
                         Alert.alert('提示', '此项目已缴费,不可删除!', [{text: '确定'}]);
                         return false;
                     }
-                    //beautySource: _this.state.beautySource.filter((elem, i) => index !== i)
                     let newSource = [];
                     _this.state.beautySource.forEach((item, index, array)=> {
                         if (beauty.ItemCode === item.ItemCode) {
