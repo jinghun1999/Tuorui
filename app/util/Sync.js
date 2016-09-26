@@ -24,9 +24,9 @@ var Sync = {
                                 expires: _expires,
                             });
                             resolve && resolve({user: r.Message});
-                            alert('自动登陆成功，' + _expires + 'ms后过期')
+                            //alert('自动登陆成功，' + _expires + 'ms后过期')
                         } else {
-                            alert('自动登陆失败！')
+                            //alert('自动登陆失败！')
                             reject && reject(new Error('登陆信息已过期，请重新登陆'));
                         }
                     } catch (e) {

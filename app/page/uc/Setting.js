@@ -90,12 +90,12 @@ class MyAccount extends React.Component {
     doUpdate = info => {
         downloadUpdate(info).then(hash => {
             Alert.alert('提示', '下载完毕,是否重启应用?', [
+                {text: '取消',},
                 {
-                    text: '是', onPress: ()=> {
+                    text: '现在重启', onPress: ()=> {
                     switchVersion(hash);
                 }
                 },
-                {text: '否',},
                 {
                     text: '下次启动时', onPress: ()=> {
                     switchVersionLater(hash);
@@ -120,12 +120,12 @@ class MyAccount extends React.Component {
                 Alert.alert('提示', '您的应用版本已是最新.', [{text: '知道了'}]);
             } else {
                 Alert.alert('提示', '检查到新的版本' + info.name + ',是否下载?\n' + info.description, [
+                    {text: '取消',},
                     {
-                        text: '是', onPress: ()=> {
+                        text: '现在下载', onPress: ()=> {
                         this.doUpdate(info)
                     }
                     },
-                    {text: '否',},
                 ]);
             }
         }).catch(err => {

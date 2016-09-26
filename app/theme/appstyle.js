@@ -89,11 +89,11 @@ let AppStyle = StyleSheet.create({
         marginRight: 10,
     },
     noMore: {
-        height: 40,
+        padding:10,
         marginTop:10,
         justifyContent: 'center',
         alignItems: 'center',
-        borderTopWidth:1,
+        borderTopWidth:StyleSheet.hairlineWidth,
         borderTopColor:'#ccc',
         backgroundColor:'#EDEDED'
     },

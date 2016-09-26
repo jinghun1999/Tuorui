@@ -89,7 +89,7 @@ android {
     lintOptions { checkReleaseBuilds false }
 
     defaultConfig {
-        applicationId "com.demo"
+        applicationId "com.tuorui"
         minSdkVersion 16
         targetSdkVersion 22
         versionCode 1

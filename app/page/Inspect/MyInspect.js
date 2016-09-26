@@ -16,7 +16,9 @@ import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
 import MyHomeIcon from '../../commonview/ComIconView';
 import Loading from '../../commonview/Loading';
-import Icon from '../../../node_modules/react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Ionicons';
+import AppStyle from '../../theme/appstyle';
+
 class MyInspect extends Component {
     constructor(props) {
         super(props);
@@ -136,7 +138,9 @@ class MyInspect extends Component {
             <View style={styles.container}>
                 <Head title={this.props.headTitle} canBack={true}
                       onPress={this._onBack.bind(this)}/>
-                {body}
+                <View style={AppStyle.noMore}>
+                    <Text>没有检测申请~</Text>
+                </View>
             </View>
         )
     }

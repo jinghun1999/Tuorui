@@ -1,4 +1,4 @@
-package com.demo;
+package com.tuorui;
 
 import android.app.Application;
 import android.util.Log;
