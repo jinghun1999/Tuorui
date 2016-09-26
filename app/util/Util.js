@@ -21,6 +21,7 @@ class Util extends React.Component {
         if (time == null) {
             return '';
         } else {
+            time = time.toString();
             time = time.replace('T', ' ');
         }
         if (t == 'day') {

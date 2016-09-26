@@ -8,6 +8,9 @@ import {
     StyleSheet,
     View,
     Text,
+    Image,
+    Dimensions,
+    Animated
     } from 'react-native';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 class Loading extends React.Component {
@@ -22,7 +25,7 @@ class Loading extends React.Component {
             body = <Text>ヽ(≧Д≦)ノ 努力加载中...</Text>
         }
         return (
-            <View style={{flexDirection:'column', justifyContent: 'center', marginTop:5, alignItems: 'center',}}>
+            <View style={{flexDirection:'column', flex:1, marginTop:5, justifyContent: 'center', alignItems: 'center',}}>
                 {body}
             </View>
         );

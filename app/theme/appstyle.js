@@ -44,7 +44,7 @@ let AppStyle = StyleSheet.create({
     },
     rowVal: {
         flex: 1,
-        color: '#555',
+        color: '#696969',
     },
     input: {
         flex: 1,

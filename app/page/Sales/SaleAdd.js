@@ -23,6 +23,7 @@ import AddGood from './AddGood';
 import ChooseGuest from './ChooseGuest';
 import FormPicker from '../../commonview/FormPicker';
 import FormInput from '../../commonview/FormInput';
+import { toastShort } from '../../util/ToastUtil';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default class SaleAdd extends React.Component {
@@ -124,13 +125,13 @@ export default class SaleAdd extends React.Component {
     _onSave() {
         let _this = this;
         if (_this.state.Guest.ID == null) {
-            Alert.alert('提示', "请选择会员", [{text: '确定'},]);
+            toastShort("请选择会员");
             return false;
         } else if (_this.state.SelectedGoods.items.length == 0) {
-            Alert.alert('提示', "请选择商品", [{text: '确定'},]);
+            toastShort("请选择商品");
             return false;
         } else if (!_this.state.SelectedGoods.RealPay || isNaN(_this.state.SelectedGoods.RealPay)) {
-            Alert.alert('提示', "请输入付款金额", [{text: '确定'}]);
+            toastShort("请输入付款金额");
             return false;
         }
         NetUtil.getAuth(function (user, hos) {
@@ -185,6 +186,15 @@ export default class SaleAdd extends React.Component {
                             //获取销售单信息
                             NetUtil.postJson(CONSTAPI.HOST + '/Finance_SettleAccounts/GetFinaceInfo', getfinpost, header, function (findata) {
                                 if (findata.Sign && findata.Message != null) {
+                                    let fsas = findata.Message.FSADetalList;
+                                    let fsasp = [];
+                                    fsas.forEach(function (v, i, a) {
+                                        ids.forEach(function (vv, ii, aa) {
+                                            if (vv === v.RelationDetailID) {
+                                                fsasp.push(v);
+                                            }
+                                        });
+                                    });
                                     let finishpost = {
                                         "newSA": {
                                             "ID": null,
@@ -213,7 +223,7 @@ export default class SaleAdd extends React.Component {
                                             "OriginalDiscountMoney": 0.0,
                                             "FactTotalMoney": _this.state.goodAmountInput
                                         },
-                                        "fSADetalList": findata.Message.FSADetalList,
+                                        "fSADetalList": fsasp,
                                         "gprList": [{
                                             "ID": null,
                                             "GestID": null,
@@ -244,29 +254,29 @@ export default class SaleAdd extends React.Component {
 
                                     NetUtil.postJson(CONSTAPI.HOST + '/Finance_SettleAccounts/Finish', finishpost, header, function (okdata) {
                                         if (okdata.Sign && okdata.Message != null) {
-                                            Alert.alert('提示', '销售成功', [{text: '确定'},]);
+                                            toastShort('销售成功');
                                             if (_this.props.getResult) {
                                                 _this.props.getResult();
                                             }
                                             _this._onBack();
                                         } else {
-                                            Alert.alert('提示', '结算失败', [{text: '确定'}]);
+                                            toastShort('结算失败');
                                         }
                                     });
                                 }
                                 else {
-                                    Alert.alert('提示', '获取销售单失败', [{text: '确定'}]);
+                                    toastShort('获取销售单失败');
                                 }
                             });
                         }
                         else {
-                            Alert.alert('提示', '获取数据错误' + adddata.Exception, [{text: '确定'}]);
+                            toastShort('获取数据错误' + adddata.Exception);
                         }
                     }
                 )
                 ;
             }, function (err) {
-                Alert.alert('提示', err, [{text: '确定'}]);
+                toastShort(err);
             }
         );
     }

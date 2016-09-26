@@ -18,7 +18,7 @@ import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
 import Loading from '../../commonview/Loading';
-
+import { toastShort } from '../../util/ToastUtil';
 import Icon from 'react-native-vector-icons/FontAwesome';
 class ChooseStore extends Component {
     constructor(props) {
@@ -61,7 +61,7 @@ class ChooseStore extends Component {
                         loaded: true,
                     });
                 } else {
-                    Alert.alert('提示', "获取数据错误：" + data.Message, [{text: '确定'}]);
+                    toastShort("获取数据错误：" + data.Message);
                     _this.setState({
                         storeDataSource: ds.cloneWithRows([]),
                         loaded: true,
@@ -69,7 +69,7 @@ class ChooseStore extends Component {
                 }
             });
         }, function (err) {
-            Alert.alert('提示', err, [{text: '确定'}]);
+            toastShort(err);
         });
     }
 

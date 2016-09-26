@@ -20,6 +20,8 @@ import Head from '../../commonview/Head';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AddPet from './AddPet';
 import Loading from '../../commonview/Loading';
+import { toastShort } from '../../util/ToastUtil';
+
 import DatePicker from 'react-native-datepicker';
 import Picker from 'react-native-picker';
 import AppStyle from '../../theme/appstyle';
@@ -90,14 +92,14 @@ class MemberDetails extends Component {
                         memberRemark: _this.props.memberInfo.Remark,
                     });
                 } else {
-                    Alert.alert('提示', "获取数据错误，" + data.Exception, [{text: '确定'}]);
+                    toastShort("获取数据错误，" + data.Exception);
                     _this.setState({
                         memberLoaded: true,
                     });
                 }
             });
         }, function (err) {
-            Alert.alert('提示', err, [{text: '确定'}]);
+            toastShort(er);
         })
     }
 
@@ -145,7 +147,7 @@ class MemberDetails extends Component {
             })
         } else if (edit == '保存') {
             if (_this.state.memberName == null || _this.state.memberPhone == null) {
-                Alert.alert('提示', "会员不存在", [{text: '确定'}]);
+                toastShort("会员不存在");
                 return false;
             }
             NetUtil.getAuth(function (user, hos) {
@@ -191,11 +193,11 @@ class MemberDetails extends Component {
                         }
                         _this._onBack()
                     } else {
-                        Alert.alert('提示', "保存失败，" + data.Exception, [{text: '确定'}]);
+                        toastShort("保存失败，" + data.Exception);
                     }
                 });
             }, function (err) {
-                Alert.alert('提示', err, [{text: '确定'}]);
+                toastShort(err);
             })
             _this.setState({
                 enable: false,
@@ -275,7 +277,7 @@ class MemberDetails extends Component {
                         <Text style={AppStyle.rowVal}>{this.props.memberInfo.CreatedOn.replace('T', ' ')}</Text>
                     </View>
                     <View style={AppStyle.row}>
-                        <Text style={AppStyle.rowTitle}>会员名</Text>
+                        <Text style={AppStyle.rowTitle}>姓名</Text>
                         <TextInput value={this.state.memberName}
                                    editable={this.state.enable}
                                    underlineColorAndroid={'transparent'}
@@ -287,19 +289,19 @@ class MemberDetails extends Component {
                     </View>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>生日</Text>
-                        <DatePicker
-                            date={this.state.birthDate}
-                            mode="date"
-                            placeholder="选择日期"
-                            format="YYYY-MM-DD"
-                            minDate="1900-01-01"
-                            maxDate="2020-01-01"
-                            confirmBtnText="Confirm"
-                            cancelBtnText="Cancel"
-                            showIcon={false}
-                            disabled={this.state.edit!=='编辑'}
-                            style={{padding:0, margin:0,}}
-                            customStyles={{
+                        {this.state.edit === '保存' ?
+                            <DatePicker
+                                date={this.state.birthDate}
+                                mode="date"
+                                placeholder="选择生日"
+                                format="YYYY-MM-DD"
+                                minDate="1921-01-01"
+                                maxDate={Util.GetDateStr(0)}
+                                confirmBtnText="Confirm"
+                                cancelBtnText="Cancel"
+                                showIcon={false}
+                                style={{padding:0, margin:0,}}
+                                customStyles={{
                                     dateInput: {
                                         alignItems:'flex-start',
                                         height:30,
@@ -310,11 +312,15 @@ class MemberDetails extends Component {
                                     disabled:{backgroundColor:'transparent'},
                                     dateTouchBody:{height:30,}
                                   }}
-                            onDateChange={(date) => {
-                                if(this.state.edit=='编辑'){return false;}
-                                this.setState({birthDate: date})}
+                                onDateChange={(date) => {
+                                        if(this.state.edit=='编辑'){return false;}
+                                        this.setState({birthDate: date})
+                                    }
                                 }
-                            />
+                                />
+                            :
+                            <Text style={AppStyle.rowVal}>{Util.getFormateTime(this.state.birthDate, 'day')}</Text>
+                        }
                     </View>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>电话</Text>
