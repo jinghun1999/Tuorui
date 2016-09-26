@@ -9,7 +9,7 @@ class Util extends React.Component {
     }
 
     static getToken(time) {
-        return md5(time + '0010000app');
+        return md5(time + 'xx');
     }
 
     static getTime() {

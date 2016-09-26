@@ -196,16 +196,15 @@ class App extends Component {
                             </View>
                         </TouchableOpacity>
                     </View>
-                    <View style={styles.iconViewStyle}>
-
-                        <TouchableOpacity style={[styles.grid_view]}
+                    <View style={[styles.iconViewStyle, ]}>
+                        <TouchableOpacity style={[styles.grid_view, styles.borderRight]}
                                           onPress={this._onPress.bind(this, ReportIndex, 'ReportIndex', '数据报表')}>
                             <View style={styles.iconOuter}>
                                 <Icon name={'ios-podium'} size={40} color={'#99CCFF'}/>
                                 <Text style={{fontSize:15}}>数据报表</Text>
                             </View>
                         </TouchableOpacity>
-                        {/*<TouchableOpacity style={[styles.grid_view, {borderRightWidth:StyleSheet.hairlineWidth, borderRightColor:'#ccc'}]}
+                        {/*<TouchableOpacity style={styles.grid_view}
                                           onPress={this._onPress.bind(this, MyInspect, 'MyInspect', '拓瑞检测')}>
                             <View style={styles.iconOuter}>
                                 <Icon name={'ios-paper'} size={40} color={'#FF6666'}/>
@@ -261,6 +260,10 @@ const styles = StyleSheet.create({
         borderLeftColor: '#ccc',
         //borderRightWidth: StyleSheet.hairlineWidth,
         //borderRightColor: '#ccc',
+    },
+    borderRight:{
+        borderRightWidth:StyleSheet.hairlineWidth,
+        borderRightColor:'#ccc'
     },
     iconOuter: {
         flex: 1,

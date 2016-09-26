@@ -52,15 +52,7 @@ class StockCapital extends React.Component {
             loaded: false,
         })
         NetUtil.getAuth(function (user, hos) {
-                let postdata = [{
-                    "Childrens": null,
-                    "Field": "IsDeleted",
-                    "Title": null,
-                    "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                    "DataType": 0,
-                    "Value": "0",
-                    "Conn": 0
-                }];
+                let postdata = [];
                 let header = NetUtil.headerClientAuth(user, hos);
                 NetUtil.postJson(CONSTAPI.HOST + '/ItemCount/GetModelList', postdata, header, function (data) {
                     let dt = data.Message;
@@ -81,22 +73,23 @@ class StockCapital extends React.Component {
                             totalLR: _lr.toFixed(2),
                         });
                     } else {
-                        alert("获取数据失败：" + dt);
+                        Alert.alert('提示', "获取数据失败：" + dt, [{text: '确定'}]);
                         _this.setState({
                             loaded: true,
                         });
                     }
                 });
             }, function (err) {
-
+                Alert.alert('提示', err, [{text: '确定'}]);
             }
         );
     }
 
-    _search() {
-        this.fetchData();
-    }
-
+    /*
+     _search() {
+     this.fetchData();
+     }
+     */
     _renderHeader() {
         return (
             <View style={{backgroundColor:'#e7e7e7'}}>

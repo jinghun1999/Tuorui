@@ -80,7 +80,7 @@ class Tuorui extends Component {
                 },
             ]);
         }).catch(err => {
-            Alert.alert('提示', '更新失败.');
+            Alert.alert('提示', '更新失败.', [{text: '知道了'}]);
         });
     };
     checkUpdate = () => {
@@ -94,10 +94,10 @@ class Tuorui extends Component {
                     },
                 ]);
             } else if (info.upToDate) {
-                //Alert.alert('提示', '您的应用版本已是最新.');
+                //Alert.alert('提示', '您的应用版本已是最新.', [{text: '知道了'}]);
             } else {
                 Alert.alert('提示', '检查到新的版本' + info.name + ',是否下载?\n' + info.description, [
-                    {text: '否',},
+                    {text: '取消',},
                     {
                         text: '现在下载', onPress: ()=> {
                         this.doUpdate(info)
@@ -106,7 +106,7 @@ class Tuorui extends Component {
                 ]);
             }
         }).catch(err => {
-            Alert.alert('提示', '更新失败.', [{text: '知道了'}]);
+            Alert.alert('提示', '更新失败.' + err, [{text: '知道了'}]);
         });
     };
 

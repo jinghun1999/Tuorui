@@ -10,6 +10,7 @@ import{
     Alert,
     TextInput,
     Platform,
+    Linking,
     TouchableOpacity
     } from 'react-native';
 import Head from '../../commonview/Head';
