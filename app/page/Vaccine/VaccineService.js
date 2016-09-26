@@ -25,6 +25,8 @@ import ChooseVaccineInfo from './ChooseVaccineInfo';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AppStyle from '../../theme/appstyle';
 import DatePicker from 'react-native-datepicker';
+import VaccineSettlement from './VaccineSettlement';
+import NButton from '../../commonview/NButton';
 class VaccineService extends Component {
     constructor(props) {
         super(props);
@@ -98,27 +100,20 @@ class VaccineService extends Component {
             });
             //获取疫苗信息列表
             var postdata = {
-                "items": [{
-                    "Childrens": null,
-                    "Field": "VaccineGroupCode",
-                    "Title": null,
-                    "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                    "DataType": 0,
-                    "Value": _this.state.VaccineGroupCode,
-                    "Conn": 0
-                }, {
-                    "Childrens": null,
-                    "Field": "IsDeleted",
-                    "Title": null,
-                    "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                    "DataType": 0,
-                    "Value": "0",
-                    "Conn": 1
+                "items":[{
+                    "Childrens":null,
+                    "Field":"VaccineGroupCode",
+                    "Title":null,
+                    "Operator":{"Name":"=","Title":"等于","Expression":null},
+                    "DataType":0,
+                    "Value":_this.state.VaccineGroupCode,
+                    "Conn":0
                 }],
-                "sorts": [{
-                    "Field": "EstimateTime",
-                    "Title": null,
-                    "Sort": {"Name": "Asc", "Title": "升序"}, "Conn": 0
+                "sorts":[{
+                    "Field":"EstimateTime",
+                    "Title":null,
+                    "Sort":{"Name":"Asc","Title":"升序"},
+                    "Conn":0
                 }]
             };
             NetUtil.getAuth(function (user, hos) {
@@ -168,6 +163,27 @@ class VaccineService extends Component {
 
     }
 
+    _saveAndSet(isResult){
+        let _this=this;
+        if(isResult){_this._onSaveInfo();}
+        const {navigator}=_this.props;
+        if(navigator){
+            navigator.push({
+                name:'VaccineSettlement',
+                component:VaccineSettlement,
+                params:{
+                    vaccine:_this.state.vaccine,
+                    member:{
+                        ID:_this.state.petSource.GestID,
+                        memberCode: _this.state.petSource.GestCode,
+                        memberName:_this.state.petSource.GestName,
+                    },
+                    headTitle:'疫苗结算',
+                }
+            })
+        }
+    }
+
     _onSaveInfo() {
         //保存疫苗信息
         let _this = this;
@@ -212,7 +228,7 @@ class VaccineService extends Component {
                             "MobilePhone": _this.state.petSource.MobilePhone,
                             "ItemName": _vaccine[i].ItemName,
                             "ItemCode": _vaccine[i].ItemCode,
-                            "ItemCost": _vaccine[i].SellPrice ? _vaccine[i].SellPrice : _vaccine[i].TotalCost,
+                            "ItemCost": _vaccine[i].SellPrice,
                             "ItemStandard": _vaccine[i].ItemStandard,
                             "EstimateTime": _vaccine[i].EstimateTime,
                             "FactShootTime": _vaccine[i].FactShootTime,
@@ -241,7 +257,7 @@ class VaccineService extends Component {
                             "AssistantDoctorID": null,
                             "AssistantDoctorName": "",
                             "ItemNum": _vaccine[i].ItemNum,
-                            "TotalCost": _vaccine[i].SellPrice ? _vaccine[i].SellPrice : _vaccine[i].TotalCost,
+                            "TotalCost":_vaccine[i].TotalCost,
                             "Sign": null,
                             "EntID": "00000000-0000-0000-0000-000000000000"
                         };
@@ -322,7 +338,7 @@ class VaccineService extends Component {
                             "DoctorName": _vaccine[i].DoctorName,
                             "AssistantDoctorID": _vaccine[i].AssistantDoctorID,
                             "AssistantDoctorName": _vaccine[i].AssistantDoctorName,
-                            "ItemNum": _vaccine[i].ItemCountNum,
+                            "ItemNum": _vaccine[i].ItemNum,
                             "TotalCost": _vaccine[i].SellPrice ? _vaccine[i].SellPrice : _vaccine[i].TotalCost,
                             "Sign": null,
                             "EntID": "00000000-0000-0000-0000-000000000000"
@@ -526,16 +542,17 @@ class VaccineService extends Component {
                     <View style={{flexDirection:'row',alignItems:'center'}}>
                         <Text style={AppStyle.mpName}>{vaccine.ItemName}</Text>
                         <Text
-                            style={AppStyle.mpTitle}>单价:¥ {vaccine.SellPrice ? vaccine.SellPrice : vaccine.TotalCost}</Text>
+                            style={AppStyle.mpTitle}>单价:¥ {vaccine.ItemCost ? vaccine.ItemCost : vaccine.TotalCost}</Text>
                         <Text style={AppStyle.mpTitle}>数量</Text>
                         <View style={AppStyle.mpBorder}>
-                            <TextInput value={vaccine.ItemNum}
-                                       defaultValue={this.state.num.toString()}
-                                       editable={true}
-                                       underlineColorAndroid={'transparent'}
-                                       keyboardType={'numeric'}
-                                       style={AppStyle.input}
-                                       onChangeText={(text)=>{
+                            {this.state.canEdit ?
+                                <TextInput value={vaccine.ItemNum}
+                                           defaultValue={this.state.num.toString()}
+                                           editable={true}
+                                           underlineColorAndroid={'transparent'}
+                                           keyboardType={'numeric'}
+                                           style={AppStyle.input}
+                                           onChangeText={(text)=>{
                                        vaccine.ItemNum=text;
                                        let _price=vaccine.SellPrice ? vaccine.SellPrice : vaccine.TotalCost;
                                        vaccine.TotalCost=_price*text;
@@ -548,10 +565,14 @@ class VaccineService extends Component {
                                        }
                                         this.setState({totalAmount:_countAmount+(_price*text)})
                                        }}/>
+                                : <Text style={AppStyle.mpTitle}>{vaccine.ItemNum?vaccine.ItemNum:1}</Text>
+                            }
+
                         </View>
                     </View>
                     <View style={{flexDirection:'row',alignItems:'center'}}>
                         <Text style={{fontSize: 14,color: '#8B0000',}}>执行日期</Text>
+                        {this.state.canEdit ?
                         <DatePicker
                             date={vaccine.FactShootTime?vaccine.FactShootTime:Util.getTime()}
                             mode="date"
@@ -573,7 +594,10 @@ class VaccineService extends Component {
                                        dateTouchBody:{ height:30,}
                                   }}
                             onDateChange={(date) => {vaccine.FactShootTime=date;this.setState({loaded:true,})  }}/>
+                            :<Text style={AppStyle.mpTitle}>{vaccine.FactShootTime?vaccine.FactShootTime.replace('T', ' '):Util.getTime('YYYY-MM-dd')}</Text>
+                        }
                         <Text style={AppStyle.mpTitle}>下次执行日期</Text>
+                        {this.state.canEdit ?
                         <DatePicker
                             date={vaccine.EstimateTime}
                             mode="date"
@@ -599,6 +623,8 @@ class VaccineService extends Component {
                                     }
                                   }}
                             onDateChange={(date) => {vaccine.EstimateTime=date;this.setState({loaded:false})}}/>
+                            :<Text style={AppStyle.mpTitle}>{vaccine.EstimateTime?vaccine.EstimateTime.replace('T', ' '):null}</Text>
+                        }
                     </View>
                 </View>
                 {this.state.canEdit ?
@@ -628,6 +654,14 @@ class VaccineService extends Component {
                           renderHeader={this._renderHeader.bind(this)}
                           renderRow={this._renderRow.bind(this)}
                 />
+                {this.state.canEdit ?
+                    <View style={{padding:10,}}>
+                        <NButton onPress={this._saveAndSet.bind(this,true)} backgroundColor={'#1E90FF'} text="保存并结算"/>
+                    </View>
+                    : <View style={{padding:10,}}>
+                    <NButton onPress={this._saveAndSet.bind(this,false)} backgroundColor={'#1E90FF'} text="结算"/>
+                </View>
+                }
                 <Picker
                     style={{height: 300}}
                     showDuration={300}

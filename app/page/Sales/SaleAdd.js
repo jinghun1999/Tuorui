@@ -260,7 +260,7 @@ export default class SaleAdd extends React.Component {
                             });
                         }
                         else {
-                            Alert.alert('提示', '获取数据错误' + data.Exception, [{text: '确定'}]);
+                            Alert.alert('提示', '获取数据错误' + adddata.Exception, [{text: '确定'}]);
                         }
                     }
                 )
