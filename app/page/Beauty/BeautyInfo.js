@@ -108,14 +108,6 @@ class BeautyServices extends React.Component {
                 }
                 var postdata = [{
                     "Childrens": null,
-                    "Field": "IsDeleted",
-                    "Title": null,
-                    "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                    "DataType": 0,
-                    "Value": "0",
-                    "Conn": 0
-                }, {
-                    "Childrens": null,
                     "Field": "ServiceID",
                     "Title": null,
                     "Operator": {"Name": "=", "Title": "等于", "Expression": null},
@@ -131,7 +123,7 @@ class BeautyServices extends React.Component {
                         })
                     }
                     else {
-                        alert("获取数据失败：" + data.Message);
+                        Alert.alert('提示', "获取数据失败：" + data.Message, [{text: '确定'}]);
                         _this.setState({
                             loaded: true,
                         });
@@ -182,13 +174,12 @@ class BeautyServices extends React.Component {
         }
         Alert.alert(
             '删除提示',
-            '您确定要删除此条信息吗？',
+            '您确定要删除' + beauty.ItemName + '吗？',
             [
-                {text: '取消', onPress: () => console.log('Cancel Pressed!')},
+                {text: '取消'},
                 {
                     text: '确定', onPress: () => {
-                    //删除此条数据、PaidStatus=SM00040 未付款
-                    if (beauty.PaidStatus != 'SM00040') {
+                    if (beauty.PaidStatus === 'SM00051') {
                         Alert.alert('提示', '此项目已缴费,不可删除!', [{text: '确定'}]);
                         return false;
                     }
@@ -196,17 +187,15 @@ class BeautyServices extends React.Component {
                     let newSource = [];
                     _this.state.beautySource.forEach((item, index, array)=> {
                         if (beauty.ItemCode === item.ItemCode) {
-                            //var _beauty=_this.state.beautySource.splice(0,index);
-                            item.IsDeleted = 1;
                             _this.state.totalAmount -= beauty.SellPrice;
                             _this.state.totalNum -= 1;
+                        } else {
+                            newSource.push(item);
                         }
-                        newSource.push(item);
                     });
                     _this.setState({
                         beautySource: newSource,
-
-                    })
+                    });
                 }
                 }
             ]
@@ -288,7 +277,6 @@ class BeautyServices extends React.Component {
                         "CreatedOn": "0001-01-01T00:00:00",
                         "ModifiedBy": null,
                         "ModifiedOn": "0001-01-01T00:00:00",
-                        "IsDeleted": 0,
                         "EntID": "00000000-0000-0000-0000-000000000000"
                     };
                     let beautyItems = [];
@@ -312,7 +300,6 @@ class BeautyServices extends React.Component {
                             "CreatedOn": "0001-01-01T00:00:00",
                             "ModifiedBy": null,
                             "ModifiedOn": "0001-01-01T00:00:00",
-                            "IsDeleted": 0,
                             "EntID": "00000000-0000-0000-0000-000000000000"
                         };
                         beautyItems.push(item);
@@ -373,7 +360,6 @@ class BeautyServices extends React.Component {
                         "CreatedOn": _petSource.CreatedOn,
                         "ModifiedBy": user.FullName,
                         "ModifiedOn": Util.getTime(),
-                        "IsDeleted": _petSource.IsDeleted,
                         "EntID": _petSource.EntID
                     };
                     let beautyItems = [];
@@ -397,7 +383,6 @@ class BeautyServices extends React.Component {
                             "CreatedOn": _beauty[i].CreatedOn,
                             "ModifiedBy": user.FullName,
                             "ModifiedOn": Util.getTime(),
-                            "IsDeleted": _beauty[i].IsDeleted,
                             "EntID": _beauty[i].EntID
                         };
                         beautyItems.push(item);
@@ -500,16 +485,12 @@ class BeautyServices extends React.Component {
     }
 
     _onRenderRow(beauty) {
-        if (beauty.IsDeleted === 1) {
-            return null;
-        } else {
-            return (
-                <TouchableOpacity style={AppStyle.row} onPress={()=>this._onBeautyDetails(beauty)}>
-                    <Text style={AppStyle.mpName}>{beauty.ItemName}</Text>
-                    <Text style={{fontSize:14,color:'#8B0000'}}>单价: ¥{beauty.SellPrice}</Text>
-                </TouchableOpacity>
-            );
-        }
+        return (
+            <TouchableOpacity style={AppStyle.row} onPress={()=>this._onBeautyDetails(beauty)}>
+                <Text style={AppStyle.mpName}>{beauty.ItemName}</Text>
+                <Text style={{fontSize:14,color:'#8B0000'}}>单价: ¥{beauty.SellPrice}</Text>
+            </TouchableOpacity>
+        );
     }
 
     render() {

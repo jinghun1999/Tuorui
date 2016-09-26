@@ -4,17 +4,14 @@
 'use strict';
 import React, {Component} from 'react';
 import{
-    AppRegistry,
     StyleSheet,
     Text,
     ScrollView,
-    Image,
     View,
+    Alert,
     ListView,
     TextInput,
-    DatePickerAndroid,
     TouchableOpacity,
-    ToastAndroid,
     InteractionManager,
     } from 'react-native';
 import Util from '../../util/Util';
@@ -22,12 +19,14 @@ import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
 import FormInput from '../../commonview/FormInput';
 import FormPicker from '../../commonview/FormPicker';
+import Loading from '../../commonview/Loading';
+import NButton from '../../commonview/NButton';
+import AddPet from './AddPet';
+
+import Picker from 'react-native-picker';
 import DatePicker from 'react-native-datepicker';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import Loading from '../../commonview/Loading';
-import AddPet from './AddPet';
-import Picker from 'react-native-picker';
-import NButton from '../../commonview/NButton';
+
 import AppStyle from '../../theme/appstyle';
 class AddMemberInfo extends Component {
     constructor(props) {
@@ -50,11 +49,8 @@ class AddMemberInfo extends Component {
             pageSize: 15,
             pageIndex: 1,
             levelData: [],
-            levelLoaded: false,
         }
     }
-
-;
 
     _onBack() {
         let _this = this;
@@ -64,34 +60,68 @@ class AddMemberInfo extends Component {
         }
     }
 
-    _onPetDetails(pet) {
-        alert(pet.PetName);
-    }
-
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
             this.fetchData();
         });
     }
 
+    fetchData() {
+        let _this = this;
+        NetUtil.getAuth(function (user, hos) {
+            let header = NetUtil.headerClientAuth(user, hos);
+            NetUtil.get(CONSTAPI.HOST + '/Gest/GetVipAddPageConfig?', header, function (data) {
+                if (data.Sign && data.Message != null) {
+                    var levelData = data.Message.Levels, _level = [];
+                    levelData.forEach((item, index, array)=> {
+                        _level.push(item.LevelName);
+                    });
+                    _this.setState({
+                        levelData: _level,
+                        memberItem: data.Message.Item,//vip编号
+                        memberLevelData: data.Message.Levels,//普通，金卡会员
+                        memberSexData: data.Message.SexTypes,//男，女
+                        memberStatusData: data.Message.GestStatus,//正常，停用
+                        memberType: data.Message.GestTypes,//会员，散客
+                        loaded: true,
+                    });
+                } else {
+                    Alert.alert('提示', "获取数据失败：" + data.Message, [{text: '确定'}]);
+                    _this.setState({
+                        loaded: true,
+                    });
+                }
+            }, function (err) {
+                Alert.alert('提示', err, [{text: '确定'}]);
+            })
+        })
+    }
+
+    _onChooseSex() {
+        this.picker.toggle();
+    }
+
+    _onChooseLevel() {
+        this.pickerLevel.toggle();
+    }
+
+    _onChooseState() {
+        this.pickerState.toggle();
+    }
+
     _save(needback) {
         let _this = this;
         if (_this.state.memberName == null) {
-            alert("请输入姓名");
+            Alert.alert('提示', "请输入姓名", [{text: '确定'}]);
             return false;
         } else if (_this.state.memberPhone == null) {
-            alert("请输入手机号码");
+            Alert.alert('提示', "请输入手机号码", [{text: '确定'}]);
             return false;
         }
         NetUtil.getAuth(function (user, hos) {
-            //POST /service/Api/Gest/AddGest 保存会员信息
             //DM00001 男 DM00002 女
-            if (_this.state.memberItem.GestCode == null) {
-                alert('GestCode null');
-                return false;
-            }
-            if (_this.state.memberID == null) {
-                alert('memberID null');
+            if (_this.state.memberItem.GestCode == null || _this.state.memberID == null) {
+                Alert.alert('提示', '初始化会员信息错误，请稍后重试', [{text: '确定'}]);
                 return false;
             }
             var item = {
@@ -117,17 +147,14 @@ class AddMemberInfo extends Component {
                 "CreatedOn": _this.state.memberRegistrationTime,
                 "ModifiedBy": null,
                 "ModifiedOn": "0001-01-01T00:00:00",
-                "IsDeleted": 0,
                 "RewardPoint": null,
                 "PrepayMoney": null,
                 "EntID": "00000000-0000-0000-0000-000000000000",
                 "LevelName": null
             };
             let header = NetUtil.headerClientAuth(user, hos);
-            ////save http://test.tuoruimed.com/service/Api/Gest/AddGest
             NetUtil.postJson(CONSTAPI.HOST + '/Gest/AddGest', item, header, function (data) {
                 if (data.Sign) {
-                    alert('保存成功');
                     if (_this.props.getResult) {
                         _this.props.getResult();
                     }
@@ -135,82 +162,16 @@ class AddMemberInfo extends Component {
                         _this._onBack();
                     }
                 } else {
-                    alert("获取数据错误" + data.Exception);
+                    Alert.alert('提示', "获取数据错误" + data.Exception, [{text: '确定'}]);
                 }
             });
         }, function (err) {
-            alert(err);
+            Alert.alert('提示', err, [{text: '确定'}]);
         });
     }
 
-    _saveAndAddPet() {
-        let _this = this;
-        _this._save(false);
-        const {navigator}=_this.props;
-        if (navigator) {
-            navigator.push({
-                name: 'AddPet',
-                component: AddPet,
-                params: {
-                    headTitle: '新增宠物',
-                    member: {
-                        name: _this.state.memberName,
-                        phone: _this.state.memberPhone,
-                        memberID: _this.state.memberID,
-                        gestCode: _this.state.memberItem.GestCode
-                    },
-                }
-            })
-        }
-    }
-
-    fetchData() {
-        let _this = this;
-        NetUtil.getAuth(function (user, hos) {
-            let header = NetUtil.headerClientAuth(user, hos);
-            //http://test.tuoruimed.com/service/Api/Gest/GetVipAddPageConfig?
-            NetUtil.get(CONSTAPI.HOST + '/Gest/GetVipAddPageConfig?', header, function (data) {
-                if (data.Sign && data.Message != null) {
-                    var levelData = data.Message.Levels, _level = [];
-                    levelData.forEach((item, index, array)=> {
-                        _level.push(item.LevelName);
-                    })
-                    _this.setState({
-                        levelData: _level,
-                        memberItem: data.Message.Item,//vip编号
-                        memberLevelData: data.Message.Levels,//普通，金卡会员
-                        memberSexData: data.Message.SexTypes,//男，女
-                        memberStatusData: data.Message.GestStatus,//正常，停用
-                        memberType: data.Message.GestTypes,//会员，散客
-                        levelLoaded: true,
-                        loaded: true,
-                    })
-                } else {
-                    alert("获取数据失败：" + data.Message);
-                    _this.setState({
-                        loaded: true,
-                    });
-                }
-            }, function (err) {
-                alert(err);
-            })
-        })
-    }
-
-    _onChooseSex() {
-        this.picker.toggle();
-    }
-
-    _onChooseLevel() {
-        this.pickerLevel.toggle();
-    }
-
-    _onChooseState() {
-        this.pickerState.toggle();
-    }
-
     render() {
-        if (!this.state.levelLoaded) {
+        if (!this.state.loaded) {
             return <View style={AppStyle.container}>
                 <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
                 <Loading type='text'/>

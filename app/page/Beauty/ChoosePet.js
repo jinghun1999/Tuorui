@@ -60,7 +60,6 @@ class ChoosePet extends Component {
 
     _fetchData(value, page, isNext) {
         let _this = this;
-        //http://petservice.tuoruimed.com/service/Api/GestAndPet/GetPageRecord
         NetUtil.getAuth(function (user, hos) {
             let postdata = {
                 "items": [{
@@ -95,16 +94,15 @@ class ChoosePet extends Component {
                     "Sort": {"Name": "Desc", "Title": "降序"},
                     "Conn": 0
                 }, {
-                    "Field": "CreatedOn",
+                    "Field": "PetName",
                     "Title": null,
-                    "Sort": {"Name": "Desc", "Title": "降序"},
+                    "Sort": {"Name": "ASC", "Title": "升序"},
                     "Conn": 0
                 }
                 ],
                 index: page,
                 pageSize: _this.state.pageSize
             };
-            //let hospitalcode = 'aa15-740d-4e6d-a6ca-0ebf-81f1';
             let header = NetUtil.headerClientAuth(user, hos);
             NetUtil.postJson(CONSTAPI.HOST + '/GestAndPet/GetPageRecord', postdata, header, function (data) {
                 if (data.Sign && data.Message != null) {
@@ -122,7 +120,7 @@ class ChoosePet extends Component {
                         pageIndex: page,
                     });
                 } else {
-                    alert("获取数据失败：" + data.Message);
+                    Alert.alert('提示', "获取数据失败：" + data.Message, [{text: '确定'}]);
                     _this.setState({
                         loaded: true,
                     });
@@ -161,12 +159,12 @@ class ChoosePet extends Component {
                             recordCount: data.Message,
                         });
                     } else {
-                        //alert("获取记录数失败：" + data.Message);
+                        Alert.alert('提示', "获取记录数失败：" + data.Message, [{text: '确定'}]);
                     }
                 });
             }
         }, function (err) {
-            //alert(err);
+            Alert.alert('错误', err, [{text: '确定'}]);
         })
     }
 

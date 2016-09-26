@@ -8,7 +8,6 @@ import {
     Text,
     View,
     Dimensions,
-    //ToastAndroid,
     TouchableOpacity,
     ScrollView,
     ListView,
@@ -22,13 +21,10 @@ import Head from '../../commonview/Head';
 import NButton from '../../commonview/NButton';
 import AddGood from './AddGood';
 import ChooseGuest from './ChooseGuest';
-//import ChooseStore from './ChooseStore';
 import FormPicker from '../../commonview/FormPicker';
 import FormInput from '../../commonview/FormInput';
-import DatePicker from  'react-native-datepicker';
-//import Scan from './Scan';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
+
 export default class SaleAdd extends React.Component {
     constructor(props) {
         super(props);
@@ -87,13 +83,7 @@ export default class SaleAdd extends React.Component {
     chooseGood() {
         let _this = this;
         if (_this.state.sellStoreId == null) {
-            Alert.alert('提示', '医院没有设置销售仓库',
-                [
-                    {
-                        text: '确定', onPress: () => {
-                    }
-                    },
-                ]);
+            Alert.alert('提示', '医院没有设置销售仓库', [{text: '确定'}]);
             return false;
         }
         const { navigator } = _this.props;
@@ -131,31 +121,16 @@ export default class SaleAdd extends React.Component {
         }
     }
 
-    SaveInfo() {
+    _onSave() {
         let _this = this;
         if (_this.state.Guest.ID == null) {
-            Alert.alert('提示', "请选择会员", [
-                {
-                    text: '确定', onPress: () => {
-                }
-                },
-            ]);
+            Alert.alert('提示', "请选择会员", [{text: '确定'},]);
             return false;
         } else if (_this.state.SelectedGoods.items.length == 0) {
-            Alert.alert('提示', "请选择商品", [
-                {
-                    text: '确定', onPress: () => {
-                }
-                },
-            ]);
+            Alert.alert('提示', "请选择商品", [{text: '确定'},]);
             return false;
         } else if (!_this.state.SelectedGoods.RealPay || isNaN(_this.state.SelectedGoods.RealPay)) {
-            Alert.alert('提示', "请输入付款金额", [
-                {
-                    text: '确定', onPress: () => {
-                }
-                },
-            ]);
+            Alert.alert('提示', "请输入付款金额", [{text: '确定'}]);
             return false;
         }
         NetUtil.getAuth(function (user, hos) {
@@ -167,16 +142,15 @@ export default class SaleAdd extends React.Component {
                     var item = {
                         BarCode: _goods[i].BarCode,
                         BusiTypeCode: _goods[i].BusiTypeCode,
-                        CreatedBy: user.user.Mobile,
+                        CreatedBy: user.Mobile,
                         CreatedOn: now,
-                        ModifiedBy: user.user.Mobile,
+                        ModifiedBy: user.Mobile,
                         ModifiedOn: now,
                         DirectSellCode: null,
                         DirectSellID: null,
                         EntID: '00000000-0000-0000-0000-000000000000',
                         ID: Util.guid(),
                         IsBulk: '否',
-                        IsDeleted: 0,
                         ItemCode: _goods[i].ItemCode,
                         ItemName: _goods[i].ItemName,
                         ItemNum: _goods[i].GoodCount,
@@ -185,7 +159,7 @@ export default class SaleAdd extends React.Component {
                         ManufacturerCode: null,
                         ManufacturerName: null,
                         PaidStatus: 'SM00040',
-                        PaidTime: now,
+                        PaidTime: null,
                         SellContent: null,
                         SellPrice: _goods[i].SellPrice,
                         SellUnit: _goods[i].PackageUnit,
@@ -210,113 +184,89 @@ export default class SaleAdd extends React.Component {
                             };
                             //获取销售单信息
                             NetUtil.postJson(CONSTAPI.HOST + '/Finance_SettleAccounts/GetFinaceInfo', getfinpost, header, function (findata) {
-                                    if (findata.Sign && findata.Message != null) {
-                                        let finishpost = {
-                                            "newSA": {
-                                                "ID": "00000000-0000-0000-0000-000000000000",
-                                                "SettleCode": null,
-                                                "GestID": findata.Message.CurrentGest.ID,
-                                                "GestCode": findata.Message.CurrentGest.GestCode,
-                                                "GestName": findata.Message.CurrentGest.GestName,
-                                                "PetCode": null,
-                                                "PetName": null,
-                                                "TotalMoney": _this.state.SelectedGoods.MustPay,
-                                                "DisCountMoney": _this.state.goodDiscountInput,
-                                                "ShouldPaidMoney": _this.state.SelectedGoods.MustPay,
-                                                "FactPaidMoney": _this.state.goodAmountInput,
-                                                "BackMoney": null,
-                                                "BackReason": null,
-                                                "PaidStatus": null,
-                                                "PaidTime": null,
-                                                "CreatedBy": null,
-                                                "CreatedOn": null,
-                                                "ModifiedBy": null,
-                                                "ModifiedOn": null,
-                                                "IsDeleted": 0,
-                                                "ChangeMoney": 0.00,
-                                                "EntID": findata.Message.CurrentGest.EntID,
-                                                "HandDiscountMoney": 0.00,
-                                                "InputDiscountMoney": _this.state.goodDiscountInput,
-                                                "OriginalDiscountMoney": 0.0,
-                                                "FactTotalMoney": _this.state.goodAmountInput
-                                            },
-                                            "fSADetalList": findata.Message.FSADetalList,
-                                            "gprList": [{
-                                                "ID": "00000000-0000-0000-0000-000000000000",
-                                                "GestID": null,
-                                                "GestName": null,
-                                                "OperateAction": "现金",
-                                                "OperateContent": _this.state.goodAmountInput,
-                                                "SettleAccountsID": null,
-                                                "CreatedBy": null,
-                                                "CreatedOn": null,
-                                                "ModifiedBy": null,
-                                                "ModifiedOn": null,
-                                                "IsDeleted": 0,
-                                                "EntID": "00000000-0000-0000-0000-000000000000"
-                                            }, {
-                                                "ID": "00000000-0000-0000-0000-000000000000",
-                                                "GestID": null,
-                                                "GestName": null,
-                                                "OperateAction": "折扣",
-                                                "OperateContent": _this.state.goodDiscountInput,
-                                                "SettleAccountsID": null,
-                                                "CreatedBy": null,
-                                                "CreatedOn": null,
-                                                "ModifiedBy": null,
-                                                "ModifiedOn": null,
-                                                "IsDeleted": 0,
-                                                "EntID": "00000000-0000-0000-0000-000000000000"
-                                            }]
-                                        };
-                                        //结算
+                                if (findata.Sign && findata.Message != null) {
+                                    let finishpost = {
+                                        "newSA": {
+                                            "ID": "00000000-0000-0000-0000-000000000000",
+                                            "SettleCode": null,
+                                            "GestID": findata.Message.CurrentGest.ID,
+                                            "GestCode": findata.Message.CurrentGest.GestCode,
+                                            "GestName": findata.Message.CurrentGest.GestName,
+                                            "PetCode": null,
+                                            "PetName": null,
+                                            "TotalMoney": _this.state.SelectedGoods.MustPay,
+                                            "DisCountMoney": _this.state.goodDiscountInput,
+                                            "ShouldPaidMoney": _this.state.SelectedGoods.MustPay,
+                                            "FactPaidMoney": _this.state.goodAmountInput,
+                                            "BackMoney": null,
+                                            "BackReason": null,
+                                            "PaidStatus": null,
+                                            "PaidTime": null,
+                                            "CreatedBy": null,
+                                            "CreatedOn": null,
+                                            "ModifiedBy": null,
+                                            "ModifiedOn": null,
+                                            "ChangeMoney": 0.00,
+                                            "EntID": findata.Message.CurrentGest.EntID,
+                                            "HandDiscountMoney": 0.00,
+                                            "InputDiscountMoney": _this.state.goodDiscountInput,
+                                            "OriginalDiscountMoney": 0.0,
+                                            "FactTotalMoney": _this.state.goodAmountInput
+                                        },
+                                        "fSADetalList": findata.Message.FSADetalList,
+                                        "gprList": [{
+                                            "ID": "00000000-0000-0000-0000-000000000000",
+                                            "GestID": null,
+                                            "GestName": null,
+                                            "OperateAction": "现金",
+                                            "OperateContent": _this.state.goodAmountInput,
+                                            "SettleAccountsID": null,
+                                            "CreatedBy": null,
+                                            "CreatedOn": null,
+                                            "ModifiedBy": null,
+                                            "ModifiedOn": null,
+                                            "EntID": "00000000-0000-0000-0000-000000000000"
+                                        }, {
+                                            "ID": "00000000-0000-0000-0000-000000000000",
+                                            "GestID": null,
+                                            "GestName": null,
+                                            "OperateAction": "折扣",
+                                            "OperateContent": _this.state.goodDiscountInput,
+                                            "SettleAccountsID": null,
+                                            "CreatedBy": null,
+                                            "CreatedOn": null,
+                                            "ModifiedBy": null,
+                                            "ModifiedOn": null,
+                                            "EntID": "00000000-0000-0000-0000-000000000000"
+                                        }]
+                                    };
+                                    //结算
 
-                                        NetUtil.postJson(CONSTAPI.HOST + '/Finance_SettleAccounts/Finish', finishpost, header, function (okdata) {
-                                            if (okdata.Sign && okdata.Message != null) {
-                                                Alert.alert('提示', '销售成功', [
-                                                    {
-                                                        text: '确定', onPress: ()=> {
-                                                    }
-                                                    },
-                                                ]);
-                                                if (_this.props.getResult) {
-                                                    _this.props.getResult();
-                                                }
-                                                _this._onBack();
-                                            } else {
-                                                Alert.alert('提示', '结算失败', [
-                                                    {
-                                                        text: '确定', onPress: ()=> {
-                                                    }
-                                                    },
-                                                ]);
+                                    NetUtil.postJson(CONSTAPI.HOST + '/Finance_SettleAccounts/Finish', finishpost, header, function (okdata) {
+                                        if (okdata.Sign && okdata.Message != null) {
+                                            Alert.alert('提示', '销售成功', [{text: '确定'},]);
+                                            if (_this.props.getResult) {
+                                                _this.props.getResult();
                                             }
-                                        });
-                                    }
-                                    else {
-                                        Alert.alert('提示', '获取销售单失败', [
-                                            {
-                                                text: '确定', onPress: ()=> {
-                                            }
-                                            },
-                                        ]);
-                                    }
+                                            _this._onBack();
+                                        } else {
+                                            Alert.alert('提示', '结算失败', [{text: '确定'}]);
+                                        }
+                                    });
                                 }
-                            )
-                            ;
+                                else {
+                                    Alert.alert('提示', '获取销售单失败', [{text: '确定'}]);
+                                }
+                            });
                         }
                         else {
-                            Alert.alert('提示', '获取数据错误' + data.Exception, [
-                                {
-                                    text: '确定', onPress: ()=> {
-                                }
-                                },
-                            ]);
+                            Alert.alert('提示', '获取数据错误' + data.Exception, [{text: '确定'}]);
                         }
                     }
                 )
                 ;
             }, function (err) {
+                Alert.alert('提示', err, [{text: '确定'}]);
             }
         );
     }
@@ -328,7 +278,7 @@ export default class SaleAdd extends React.Component {
         }
     }
 
-    pressRow(good) {
+    _onRemove(good) {
         let _this = this;
         Alert.alert(
             '删除提醒',
@@ -350,22 +300,18 @@ export default class SaleAdd extends React.Component {
                     selectedgoods.RealPay = 0;
                     _this.setState({
                         SelectedGoods: selectedgoods,
-                        goodAmountInput:0,
+                        goodAmountInput: '0',
                     });
                 }
                 },
             ]
         );
-        //alert(good.ItemName);
     }
 
     renderGood(good, sectionID, rowID) {
         return (
-            <TouchableOpacity
-                style={styles.row}
-                onPress={()=>this.pressRow(good)}>
-                <Image style={styles.goodHead}
-                       source={require('../../img/shopping_81px.png')}/>
+            <TouchableOpacity style={styles.row} onPress={()=>this._onRemove(good)}>
+                <Image style={styles.goodHead} source={require('../../img/shopping_81px.png')}/>
                 <View style={{flex:1}}>
                     <Text style={{fontSize:14, fontWeight:'bold'}}>{good.ItemName}</Text>
                     <View style={{flexDirection:'row'}}>
@@ -384,8 +330,12 @@ export default class SaleAdd extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}
-                      canAdd={true} edit={'保存'} editInfo={this.SaveInfo.bind(this)}
+                <Head title={this.props.headTitle}
+                      canBack={true}
+                      onPress={this._onBack.bind(this)}
+                      canAdd={true}
+                      edit={'保存'}
+                      editInfo={this._onSave.bind(this)}
                     />
                 <ScrollView key={'scrollView'}
                             horizontal={false}
@@ -420,7 +370,7 @@ export default class SaleAdd extends React.Component {
                                     var value= 0;
                                     this.setState({
                                         goodAmountInput: value.toString(),
-                                    })
+                                    });
                                     return false;
                                 }else{
                                     var good = this.state.SelectedGoods;
@@ -429,7 +379,7 @@ export default class SaleAdd extends React.Component {
                                     this.setState({
                                         SelectedGoods: good,
                                         goodAmountInput: good.RealPay,
-                                    })
+                                    });
                                 }
                             }}/>
                         </View>
@@ -442,8 +392,7 @@ export default class SaleAdd extends React.Component {
                                         var val = parseFloat(text).toFixed(1);
                                         if(isNaN(val) || !val){
                                             return false;
-                                        }
-                                        else{
+                                        }else{
                                             var t =this.state.SelectedGoods;
                                             t.RealPay= val;
                                             this.setState({
@@ -489,6 +438,4 @@ const styles = StyleSheet.create({
         },
     }
 );
-module
-    .
-    exports = SaleAdd;
+module.exports = SaleAdd;

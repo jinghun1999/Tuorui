@@ -4,33 +4,25 @@
 'use strict';
 import React, {Component} from 'react';
 import {
-    AppRegistry,
     StyleSheet,
     Text,
-    TextInput,
     View,
-    Image,
-    Dimensions,
-    ToastAndroid,
     Alert,
     TouchableOpacity,
-    BackAndroid,
     ScrollView
     } from 'react-native';
-
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
 import NButton from '../../commonview/NButton';
 import FormPicker from '../../commonview/FormPicker';
 import FormInput from '../../commonview/FormInput';
-//import ScanQr from '../../commonview/ScanQr';
 import ChooseGoods from './ChooseGood';
 import ScanBarcode from './ScanBarcode';
-
 import Icon from 'react-native-vector-icons/Ionicons';
 const scanIcon = (<Icon name={'md-barcode'} size={40} color={'#63B8FF'}/>);
 const addIcon = (<Icon name={'md-add'} size={40} color={'#63B8FF'}/>);
+
 class GoodsAdd extends Component {
     constructor(props) {
         super(props);
@@ -52,7 +44,6 @@ class GoodsAdd extends Component {
                 title: 'ScanBarcode',
                 params: {
                     onSucess: function (v) {
-                        //_this.setState({kw: v});
                         _this._getGood(v);
                     },
                 },
@@ -62,15 +53,21 @@ class GoodsAdd extends Component {
 
     _getGood(v) {
         let _this = this;
-        if ((v == null || v.length == 0) && _this.state.kw == '') {
-            Alert.alert('提示', '未获得商品条码/编号');
+        let kw = '';
+        if (v != null && v.length > 0) {
+            kw = v;
+        } else {
+            kw = _this.state.kw;
+        }
+        if (kw === null || kw === '') {
+            Alert.alert('提示', '未获得商品条码/编号', [{text: '确定'}]);
             return false;
         }
         NetUtil.getAuth(function (user, hos) {
             let postjson = {
                 WarehouseID: _this.props.storeId,
                 CateNo: null,
-                InputTxt: _this.state.kw,
+                InputTxt: kw,
                 BusiTypeCodes: [1, 2, 3, 7, 8, 9, 12],
                 pageSize: 1,
                 pageIndex: 1
@@ -85,22 +82,22 @@ class GoodsAdd extends Component {
                         GoodInfo: good,
                     });
                 } else {
-                    Alert.alert('提示', "未找到此商品");
+                    Alert.alert('提示', "未找到此商品", [{text: '确定'}]);
                 }
             });
-        }, function(msg){
-            Alert.alert('错误', msg)
+        }, function (msg) {
+            Alert.alert('错误', msg, [{text: '确定'}]);
         });
     }
 
     _SaveAndContinue(go) {
         var _this = this;
         if (_this.state.GoodInfo.ID == null) {
-            Alert.alert('提示', '请先选择商品');
+            Alert.alert('提示', '请先选择商品', [{text: '确定'}]);
             return;
         }
         else if (_this.state.GoodCount < 1) {
-            Alert.alert('提示', '商品数量不能少于1');
+            Alert.alert('提示', '商品数量不能少于1', [{text: '确定'}]);
             return;
         }
         if (_this.props.getResult) {
@@ -119,7 +116,7 @@ class GoodsAdd extends Component {
         if (go) {
             _this._onBack();
         } else {
-            Alert.alert('提示', '添加成功');
+            Alert.alert('提示', '添加成功', [{text: '确定'}]);
         }
     }
 

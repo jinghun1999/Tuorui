@@ -8,6 +8,7 @@ import {
     Text,
     TextInput,
     View,
+    Alert,
     TouchableOpacity,
     ListView,
     InteractionManager,
@@ -48,20 +49,12 @@ class SaleDetail extends Component {
         NetUtil.getAuth(function (user, hos) {
             let postdata = [{
                 "Childrens": null,
-                "Field": "IsDeleted",
-                "Title": null,
-                "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                "DataType": 0,
-                "Value": "0",
-                "Conn": 0
-            }, {
-                "Childrens": null,
                 "Field": "DirectSellCode",
                 "Title": null,
                 "Operator": {"Name": "=", "Title": "等于", "Expression": null},
                 "DataType": 0,
                 "Value": _this.state.sale.DirectSellCode,
-                "Conn": 1
+                "Conn": 0
             }];
             let header = NetUtil.headerClientAuth(user, hos);
             NetUtil.postJson(CONSTAPI.HOST + '/Store_DirectSellDetail/GetModelListByQitems', postdata, header, function (data) {
@@ -71,35 +64,12 @@ class SaleDetail extends Component {
                         loaded: true,
                     });
                 } else {
-                    alert("获取数据失败：" + data.Message);
+                    Alert.alert('提示', "获取数据失败：" + data.Message, [{text: '确定'}]);
                     _this.setState({
                         loaded: true,
                     });
                 }
             });
-            /*postdata = [{
-             "Childrens": null,
-             "Field": "SettleAccountsID",
-             "Title": null,
-             "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-             "DataType": 0,
-             "Value": _this.state.sale.ID,
-             "Conn": 0
-             }, {
-             "Childrens": null,
-             "Field": "IsDeleted",
-             "Title": null,
-             "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-             "DataType": 0,
-             "Value": "0",
-             "Conn": 1
-             }];
-             NetUtil.postJson(CONSTAPI.HOST + '/GestPaidRecord/GetModelList', postdata, header, function (data) {
-             if (data.Sign && data.Message != null) {
-             alert(JSON.stringify(data.Message));
-             } else {
-             }
-             });*/
         }, function (err) {
 
         });

@@ -25,7 +25,7 @@ import Loading from '../../commonview/Loading';
 
 import DatePicker from  'react-native-datepicker';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import Immutable from 'immutable';
+
 class SaleList extends Component {
     constructor(props) {
         super(props);
@@ -81,20 +81,12 @@ class SaleList extends Component {
             let postdata = {
                 "items": [{
                     "Childrens": null,
-                    "Field": "IsDeleted",
-                    "Title": null,
-                    "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                    "DataType": 0,
-                    "Value": "0",
-                    "Conn": 0
-                }, {
-                    "Childrens": null,
                     "Field": "CreatedOn",
                     "Title": null,
                     "Operator": {"Name": ">=", "Title": "大于等于", "Expression": null},
                     "DataType": 0,
                     "Value": _this.state.dateFrom,
-                    "Conn": 1
+                    "Conn": 0
                 }, {
                     "Childrens": null,
                     "Field": "CreatedOn",
@@ -128,25 +120,17 @@ class SaleList extends Component {
                         pageIndex: page,
                     });
                 } else {
-                    //Alert.alert('错误',"获取数据失败：" + data.Message, [{text:'确定'}]);
+                    Alert.alert('错误',"获取数据失败：" + data.Exception, [{text:'确定'}]);
                 }
             });
             postdata = [{
-                "Childrens": null,
-                "Field": "IsDeleted",
-                "Title": null,
-                "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                "DataType": 0,
-                "Value": "0",
-                "Conn": 0
-            }, {
                 "Childrens": null,
                 "Field": "CreatedOn",
                 "Title": null,
                 "Operator": {"Name": ">=", "Title": "大于等于", "Expression": null},
                 "DataType": 0,
                 "Value": _this.state.dateFrom,
-                "Conn": 1
+                "Conn": 0
             }, {
                 "Childrens": null,
                 "Field": "CreatedOn",
@@ -164,12 +148,12 @@ class SaleList extends Component {
                             loaded: true,
                         });
                     } else {
-                        //Alert.alert('错误',"获取记录数失败：" + data.Message, [{text:'确定'}]);
+                        Alert.alert('错误', "获取记录数失败：" + data.Exception, [{text: '确定'}]);
                     }
                 });
             }
-        }, function (e) {
-            Alert.alert('提示', e,[{text:'确定'}])
+        }, function (err) {
+            Alert.alert('提示', err, [{text: '确定'}])
         });
     }
 

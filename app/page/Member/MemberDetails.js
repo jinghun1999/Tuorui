@@ -40,10 +40,8 @@ class MemberDetails extends Component {
     }
 
     componentDidMount() {
-        var _this = this;
-        let id = _this.props.memberInfo.ID;
         InteractionManager.runAfterInteractions(() => {
-            _this._fetchData(id, 1, false);
+            this._fetchData(this.props.memberInfo.ID, 1, false);
         });
     }
 
@@ -52,7 +50,6 @@ class MemberDetails extends Component {
     }
 
     _fetchData(memberId, page, isnext) {
-        //http://petservice.tuoruimed.com/service/Api/GestAndPet/GetModelList
         let _this = this;
         NetUtil.getAuth(function (user, hos) {
             let postdata = [
@@ -70,7 +67,6 @@ class MemberDetails extends Component {
                     "Conn": 0
                 }
             ];
-            //let hospitalcode = 'aa15-740d-4e6d-a6ca-0ebf-81f1';
             let header = NetUtil.headerClientAuth(user, hos);
             NetUtil.postJson(CONSTAPI.HOST + '/GestAndPet/GetModelList', postdata, header, function (data) {
                 if (data.Sign && data.Message != null) {
@@ -94,14 +90,14 @@ class MemberDetails extends Component {
                         memberRemark: _this.props.memberInfo.Remark,
                     });
                 } else {
-                    alert("获取数据失败：" + data.Message);
+                    Alert.alert('提示', "获取数据错误，" + data.Exception, [{text: '确定'}]);
                     _this.setState({
                         memberLoaded: true,
                     });
                 }
             });
         }, function (err) {
-            alert(err)
+            Alert.alert('提示', err, [{text: '确定'}]);
         })
     }
 
@@ -148,21 +144,13 @@ class MemberDetails extends Component {
                 edit: '保存',
             })
         } else if (edit == '保存') {
-            if (_this.state.memberName == null) {
-                alert("请输入姓名");
-                return false;
-            } else if (_this.state.memberPhone == null) {
-                alert("请输入手机号码");
+            if (_this.state.memberName == null || _this.state.memberPhone == null) {
+                Alert.alert('提示', "会员不存在", [{text: '确定'}]);
                 return false;
             }
             NetUtil.getAuth(function (user, hos) {
                 let header = NetUtil.headerClientAuth(user, hos);
-                var _sex;
-                if (_this.state.memberSex == '男') {
-                    _sex = 'DM00001'
-                } else if (_this.state.memberSex == '女') {
-                    _sex = 'DM00002'
-                }
+                var _sex = _this.state.memberSex === '男' ? 'DM00001' : 'DM00002';
                 let item = {
                     "ID": _this.props.memberInfo.ID,
                     "GestCode": _this.props.memberInfo.GestCode,
@@ -186,7 +174,6 @@ class MemberDetails extends Component {
                     "CreatedOn": _this.props.memberInfo.CreatedOn,
                     "ModifiedBy": user.FullName,
                     "ModifiedOn": Util.getTime(),
-                    "IsDeleted": _this.props.memberInfo.IsDeleted,
                     "RewardPoint": _this.props.memberInfo.RewardPoint,
                     "PrepayMoney": _this.props.memberInfo.PrepayMoney,
                     "EntID": _this.props.memberInfo.EntID,
@@ -196,29 +183,25 @@ class MemberDetails extends Component {
                     "gest": item,
                     "oldRewardPoint": 0,
                 };
-                //http://test.tuoruimed.com/service/Api/Gest/UpdateGest
                 NetUtil.postJson(CONSTAPI.HOST + '/Gest/UpdateGest', postJson, header, function (data) {
                     if (data.Sign) {
-                        alert('修改成功');
                         if (_this.props.getResult) {
                             let id = _this.props.memberInfo.ID;
                             _this.props.getResult(id);
                         }
                         _this._onBack()
                     } else {
-                        alert("获取数据错误" + data.Exception);
+                        Alert.alert('提示', "保存失败，" + data.Exception, [{text: '确定'}]);
                     }
                 });
             }, function (err) {
-                alert(err)
+                Alert.alert('提示', err, [{text: '确定'}]);
             })
             _this.setState({
                 enable: false,
                 edit: '编辑',
-            })
+            });
         }
-
-
     }
 
     _onPetDetails(pet) {

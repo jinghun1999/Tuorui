@@ -25,16 +25,23 @@ class NetUtil extends React.Component {
             headers: header,
             body: JSON.stringify(data)
         };
-        try {
-            fetch(url, fetchOptions)
-                .then((response) => response.text())
-                .then((responseText) => {
-                    let result = JSON.parse(responseText);
-                    callback(result);
-                }).done();
-        } catch (e) {
-            result = {Sign: false, Message: '【解析远程数据失败】'};
-        }
+
+        fetch(url, fetchOptions)
+            .then((response) => response.text())
+            .then((responseText) => {
+                let result = {};
+                try {
+                    result = JSON.parse(responseText);
+                } catch (e) {
+                    result = {Sign: false, Message: '【解析远程数据失败】'};
+                }
+                callback(result);
+            }).catch(error => {
+                React.AlertIOS.alert(
+                    'Error',
+                    error
+                );
+            }).done();
     }
 
     //get请求
@@ -56,21 +63,22 @@ class NetUtil extends React.Component {
             method: 'GET',
             headers: header
         };
-        try {
-            fetch(url, fetchOptions)
-                .then((response) => response.text())
-                .then((responseText) => {
-                    let result = {};
-                    try {
-                        result = JSON.parse(responseText);
-                    } catch (e) {
-                        result = {Sign: false, Message: '【解析JSON失败】' + responseText};
-                    }
-                    callback(result);
-                }).done();
-        } catch (e) {
-            return e;
-        }
+        fetch(url, fetchOptions)
+            .then((response) => response.text())
+            .then((responseText) => {
+                let result = {};
+                try {
+                    result = JSON.parse(responseText);
+                } catch (e) {
+                    result = {Sign: false, Message: '【解析JSON失败】' + responseText};
+                }
+                callback(result);
+            }).catch(error => {
+                React.AlertIOS.alert(
+                    'Error',
+                    error
+                );
+            }).done();
     }
 
     static getAuth(success, error) {

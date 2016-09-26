@@ -50,17 +50,16 @@ class ChooseBeautyServices extends React.Component {
     }
 
     _onFetchData(page, isNext) {
-        //获取数据http://petservice.tuoruimed.com/service/Api/ItemTypeWithBranchDefine/GetPageRecord
         let _this = this;
         NetUtil.getAuth(function (user, hos) {
             let postdata = {
                 items: [{
                     "Childrens": null,
-                    "Field": "IsDeleted",
+                    "Field": "1",
                     "Title": null,
                     "Operator": {"Name": "=", "Title": "等于", "Expression": null},
                     "DataType": 0,
-                    "Value": "0",
+                    "Value": "1",
                     "Conn": 0
                 }, {
                     "Childrens": [{
@@ -101,9 +100,7 @@ class ChooseBeautyServices extends React.Component {
                 index: page,
                 pageSize: _this.state.pageSize
             };
-            //let hospitalcode = 'aa15-740d-4e6d-a6ca-0ebf-81f1';
             let header = NetUtil.headerClientAuth(user, hos);
-            //http://petservice.tuoruimed.com/service/Api/ItemTypeWithBranchDefine/GetPageRecord
             NetUtil.postJson(CONSTAPI.HOST + '/ItemTypeWithBranchDefine/GetPageRecord', postdata, header, function (data) {
                 if (data.Sign && data.Message != null) {
                     let dataSource = _this.state.dataSource;
@@ -125,14 +122,13 @@ class ChooseBeautyServices extends React.Component {
                     });
                 }
             });
-            /*get recordCount from the api http://petservice.tuoruimed.com/service/Api/ItemTypeWithBranchDefine/GetRecordCount*/
             postdata = [{
                 "Childrens": null,
-                "Field": "IsDeleted",
+                "Field": "1",
                 "Title": null,
                 "Operator": {"Name": "=", "Title": "等于", "Expression": null},
                 "DataType": 0,
-                "Value": "0",
+                "Value": "1",
                 "Conn": 0
             }, {
                 "Childrens": [{

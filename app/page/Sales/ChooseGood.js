@@ -12,6 +12,7 @@ import {
     TouchableOpacity,
     Image,
     ListView,
+    Alert,
     ActivityIndicator,
     InteractionManager,
     } from 'react-native';
@@ -19,11 +20,9 @@ import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
 import Loading from '../../commonview/Loading';
-
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
-var base64 = require('base-64');
-class Goods extends Component {
+
+class ChooseGood extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -95,7 +94,7 @@ class Goods extends Component {
                         nomore: true,
                     })
                 } else {
-                    alert("获取数据失败：" + data.Message);
+                    Alert.alert('提示', "获取数据失败：" + data.Message, [{text: '确定'}]);
                     _this.setState({
                         dataSource: [],
                         loaded: true,
@@ -103,7 +102,7 @@ class Goods extends Component {
                 }
             });
         }, function (err) {
-
+            Alert.alert('提示', err, [{text: '确定'}]);
         });
     }
 
@@ -258,4 +257,4 @@ const styles = StyleSheet.create({
     },
 });
 
-module.exports = Goods;
+module.exports = ChooseGood;

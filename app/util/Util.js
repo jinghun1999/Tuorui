@@ -59,7 +59,7 @@ class Util extends React.Component {
         var dd = new Date();
         dd.setDate(dd.getDate() + adddays);//adddays
         var y = dd.getFullYear();
-        var m = dd.getMonth() + 1;//��ȡ��ǰ�·ݵ�����
+        var m = dd.getMonth() + 1;
         var d = dd.getDate();
         return y + "-" + m + "-" + d;
     }

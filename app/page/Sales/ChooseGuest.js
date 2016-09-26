@@ -9,6 +9,7 @@ import {
     Text,
     TextInput,
     View,
+    Alert,
     Dimensions,
     ToastAndroid,
     TouchableOpacity,
@@ -22,9 +23,7 @@ import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
 import Loading from '../../commonview/Loading';
-
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 
 class ChooseGuest extends Component {
     constructor(props) {
@@ -40,7 +39,6 @@ class ChooseGuest extends Component {
             pageSize: 15,
             recordCount: 0,
         };
-        //this.fetchData = this.fetchData.bind(this);
     }
 
     _pressRow(p) {
@@ -68,15 +66,7 @@ class ChooseGuest extends Component {
                     "DataType": 0,
                     "Value": "SM00054",
                     "Conn": 0
-                }, {
-                    "Childrens": null,
-                    "Field": "IsDeleted",
-                    "Title": null,
-                    "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                    "DataType": 0,
-                    "Value": "0",
-                    "Conn": 1
-                },],
+                }],
                 "sorts": [{"Field": "ModifiedOn", "Title": null, "Sort": {"Name": "Desc", "Title": "降序"}, "Conn": 0}],
                 "index": page,
                 "pageSize": _this.state.pageSize
@@ -134,7 +124,7 @@ class ChooseGuest extends Component {
                         loaded: true,
                     });
                 } else {
-                    alert("获取数据失败：" + data.Message);
+                    Alert.alert('提示', "获取数据失败：" + data.Message, [{text: '确定'}]);
                     _this.setState({
                         dataSource: [],
                         loaded: true,
@@ -149,16 +139,8 @@ class ChooseGuest extends Component {
                 "DataType": 0,
                 "Value": "SM00054",
                 "Conn": 0
-            }, {
-                "Childrens": null,
-                "Field": "IsDeleted",
-                "Title": null,
-                "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                "DataType": 0,
-                "Value": "0",
-                "Conn": 1
-            },];
-            if(_this.state.kw.length>0){
+            }];
+            if (_this.state.kw.length > 0) {
                 let query = {
                     "Childrens": [{
                         "Childrens": null,
@@ -196,11 +178,13 @@ class ChooseGuest extends Component {
                             loaded: true,
                         });
                     } else {
-                        alert("获取记录数失败：" + data.Message);
+                        Alert.alert('提示', "获取记录数失败：" + data.Message, [{text: '确定'}]);
                     }
                 });
             }
-        }, function(err){});
+        }, function (err) {
+            Alert.alert('提示', err, [{text: '确定'}]);
+        });
     }
 
     search() {
@@ -296,7 +280,7 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         paddingRight: 15,
         paddingBottom: 5,
-        backgroundColor:'#fff',
+        backgroundColor: '#fff',
         borderBottomWidth: StyleSheet.hairlineWidth,
         borderBottomColor: '#ccc'
     },

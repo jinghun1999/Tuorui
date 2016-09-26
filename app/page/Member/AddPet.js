@@ -4,15 +4,14 @@
 'use strict';
 import React, {Component} from 'react';
 import {
-    AppRegistry,
     StyleSheet,
     Text,
     TextInput,
     View,
+    Alert,
     TouchableOpacity,
     ListView,
     ScrollView,
-    DatePickerAndroid,
     InteractionManager,
     } from 'react-native';
 import Util from '../../util/Util';
@@ -32,8 +31,8 @@ class AddPet extends Component {
             loaded: false,
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
             enabled: true,
-            petState: '',
-            petSex: '',
+            petState: '未绝育',
+            petSex: '其他',
             petID: null,
             edit: '',
             petRace: '',
@@ -72,12 +71,10 @@ class AddPet extends Component {
                 enabled: true,
                 disabled: false,
                 isUpdate: false,
-
             })
         }
         NetUtil.getAuth(function (user, hos) {
             let header = NetUtil.headerClientAuth(user, hos);
-            //宠物ID http://test.tuoruimed.com/service/Api/BusinessInvoices/PetCode? 宠物编号自增加
             NetUtil.get(CONSTAPI.HOST + '/BusinessInvoices/PetCode?', header, function (data) {
                 if (_this.state.petID == null) {
                     _this.setState({
@@ -93,37 +90,29 @@ class AddPet extends Component {
                     })
                 }
             })
-            let postdata = [{
-                "Childrens": null,
-                "Field": "IsDeleted",
-                "Title": null,
-                "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                "DataType": 0,
-                "Value": "0",
-                "Conn": 0
-            }];
-            //宠物种类 http://test.tuoruimed.com/service/Api/PetRace/GetModelList
+            let postdata = [];
             NetUtil.postJson(CONSTAPI.HOST + '/PetRace/GetModelList', postdata, header, function (data) {
                 if (data.Sign && data.Message != null) {
                     var typeSource = data.Message, _type = [];
                     typeSource.forEach((item, index, array)=> {
                         _type.push(item.BigTypeName);
-                    })
+                    });
                     _this.setState({
                         typeSource: typeSource,
                         typeSelectData: _type,
+                        petRace: _this.state.petRace === '' ? _type[0] : _this.state.petRace,
                         loaded: true,
-                    })
+                    });
                 }
                 else {
-                    alert("获取数据失败：" + data.Message);
+                    Alert.alert('提示', "初始化宠物种类错误：" + data.Exception, [{text: '确定'}]);
                     _this.setState({
                         loaded: true,
                     });
                 }
             })
         }, function (err) {
-            alert(err)
+            Alert.alert('提示', err, [{text: '确定'}]);
         })
     }
 
@@ -132,24 +121,19 @@ class AddPet extends Component {
         let _this = this;
         if (_this.state.edit == '保存' && _this.state.isUpdate == false) {
             if (_this.state.petName == null) {
-                alert("请输入宠物昵称");
+                Alert.alert('提示', "请输入宠物昵称", [{text: '确定'}]);
                 return false;
             } else if (_this.state.petBirthday == null) {
-                alert("请选择出生日期");
+                Alert.alert('提示', "请选择出生日期", [{text: '确定'}]);
                 return false;
             }
             //保存宠物信息
             NetUtil.getAuth(function (user, hos) {
                 let header = NetUtil.headerClientAuth(user, hos);
-                if (_this.props.member.gestCode == null) {
-                    alert('gestCode null');
+                if (_this.props.member.gestCode == null || _this.props.member.memberID == null) {
+                    Alert.alert('提示', "会员信息不正确", [{text: '确定'}]);
                     return false
                 }
-                if (_this.props.member.memberID == null) {
-                    alert('ID null');
-                    return false
-                }
-
                 let item = {
                     "ID": "00000000-0000-0000-0000-000000000000",
                     "PetCode": _this.state.petID,
@@ -179,27 +163,23 @@ class AddPet extends Component {
                     "CreatedOn": "0001-01-01T00:00:00",
                     "ModifiedBy": null,
                     "ModifiedOn": "0001-01-01T00:00:00",
-                    "IsDeleted": 0,
                     "EntID": "00000000-0000-0000-0000-000000000000"
                 };
-                //http://test.tuoruimed.com/service/Api/Pet/AddAndReturn
                 NetUtil.postJson(CONSTAPI.HOST + '/Pet/AddAndReturn', item, header, function (data) {
                     if (data.Sign) {
-                        alert('保存成功');
                         if (_this.props.getResult) {
                             let id = _this.props.member.memberID;
                             _this.props.getResult(id);
                         }
                         _this._onBack()
                     } else {
-                        alert("获取数据错误" + data.Exception);
+                        Alert.alert('提示', "获取数据错误，" + data.Exception, [{text: '确定'}]);
                     }
                 });
             }, function (err) {
-                alert(err)
+                Alert.alert('提示', err, [{text: '确定'}]);
             })
         } else if (_this.state.edit == '保存' && _this.state.isUpdate == true) {
-            //修改http://test.tuoruimed.com/service/Api/Pet/UpdateAndReturn
             NetUtil.getAuth(function (user, hos) {
                 let header = NetUtil.headerClientAuth(user, hos);
                 if (_this.props.member.gestCode == null) {
@@ -237,23 +217,21 @@ class AddPet extends Component {
                     "CreatedOn": _this.props.member.createdOn,
                     "ModifiedBy": user.FullName,
                     "ModifiedOn": Util.getTime(),
-                    "IsDeleted": _this.state.petDataSource.IsDeleted ? _this.state.petDataSource.IsDeleted : 0,
                     "EntID": hos.hospital.ID
                 };
                 NetUtil.postJson(CONSTAPI.HOST + '/Pet/UpdateAndReturn', item, header, function (data) {
                     if (data.Sign) {
-                        alert('修改成功');
                         if (_this.props.getResult) {
                             let id = _this.props.member.memberID;
                             _this.props.getResult(id);
                         }
                         _this._onBack()
                     } else {
-                        alert("获取数据错误" + data.Exception);
+                        Alert.alert('提示', "获取数据错误，" + data.Exception, [{text: '确定'}]);
                     }
                 });
             }, function (err) {
-                alert(err)
+                Alert.alert('提示', err, [{text: '确定'}]);
             })
         } else if (_this.state.edit == '编辑') {
             _this.setState({
@@ -355,7 +333,7 @@ class AddPet extends Component {
                                 placeholder="选择日期"
                                 format="YYYY-MM-DD"
                                 minDate="1980-01-01"
-                                maxDate="2020-01-01"
+                                maxDate={Util.GetDateStr(0)}
                                 confirmBtnText="Confirm"
                                 cancelBtnText="Cancel"
                                 disabled={this.state.disabled}

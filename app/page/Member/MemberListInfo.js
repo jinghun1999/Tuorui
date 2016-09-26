@@ -67,14 +67,6 @@ class MemberListInfo extends Component {
                     DataType: 0,
                     Value: "SM00054",
                     Conn: 0
-                }, {
-                    Childrens: null,
-                    Field: "IsDeleted",
-                    Title: null,
-                    Operator: {"Name": "=", "Title": "等于", "Expression": null},
-                    DataType: 0,
-                    Value: "0",
-                    Conn: 1
                 }],
                 sorts: [{
                     Field: "ModifiedOn",
@@ -103,7 +95,7 @@ class MemberListInfo extends Component {
                         pageIndex: page,
                     });
                 } else {
-                    alert("获取数据失败：" + data.Message);
+                    Alert.alert('提示', "获取数据失败：" + data.Message, [{text: '确定'}]);
                     _this.setState({
                         memberLoaded: true,
                     });
@@ -118,14 +110,6 @@ class MemberListInfo extends Component {
                 "DataType": 0,
                 "Value": "SM00054",
                 "Conn": 0
-            }, {
-                "Childrens": null,
-                "Field": "IsDeleted",
-                "Title": null,
-                "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                "DataType": 0,
-                "Value": "0",
-                "Conn": 1
             }];
             if (!isnext) {
                 NetUtil.postJson(CONSTAPI.HOST + '/Gest/GetRecordCount', postdata, header, function (data) {
@@ -134,12 +118,12 @@ class MemberListInfo extends Component {
                             recordCount: data.Message,
                         });
                     } else {
-                        alert("获取记录数失败：" + data.Message);
+                        Alert.alert('提示', "获取记录数失败：" + data.Message, [{text: '确定'}]);
                     }
                 });
             }
         }, function (err) {
-            Alert.alert('错误', err)
+            Alert.alert('错误', err, [{text: '确定'}]);
         })
     }
 

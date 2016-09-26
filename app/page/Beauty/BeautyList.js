@@ -9,6 +9,7 @@ import {
     ScrollView,
     TextInput,
     View,
+    Alert,
     ListView,
     TouchableOpacity,
     ToastAndroid,
@@ -47,11 +48,11 @@ class BeautyList extends React.Component {
             let postdata = {
                 "items": [{
                     "Childrens": null,
-                    "Field": "IsDeleted",
+                    "Field": "1",
                     "Title": null,
                     "Operator": {"Name": "=", "Title": "等于", "Expression": null},
                     "DataType": 0,
-                    "Value": "0",
+                    "Value": "1",
                     "Conn": 0
                 }],
                 "sorts": [{
@@ -81,7 +82,7 @@ class BeautyList extends React.Component {
                         pageIndex: page,
                     });
                 } else {
-                    //alert("获取数据失败：" + data.Message);
+                    Alert.alert('提示', "获取数据失败：" + data.Message, [{text: '确定'}]);
                     _this.setState({
                         loaded: true,
                     });
@@ -90,13 +91,13 @@ class BeautyList extends React.Component {
 
             postdata = [{
                 "Childrens": null,
-                "Field": "IsDeleted",
+                "Field": "1",
                 "Title": null,
                 "Operator": {"Name": "=", "Title": "等于", "Expression": null},
                 "DataType": 0,
-                "Value": "0",
+                "Value": "1",
                 "Conn": 0
-            }]
+            }];
             if (!isNext) {
                 NetUtil.postJson(CONSTAPI.HOST + '/Service/GetRecordCount', postdata, header, function (data) {
                     if (data.Sign && data.Message != null) {
@@ -104,7 +105,7 @@ class BeautyList extends React.Component {
                             recordCount: data.Message,
                         });
                     } else {
-                        //alert("获取记录数失败：" + data.Message);
+                        Alert.alert('提示', "获取记录数失败：" + data.Message, [{text: '确定'}]);
                     }
                 });
             }
@@ -173,9 +174,7 @@ class BeautyList extends React.Component {
             )
         }
         return (
-            <View style={{height: 120}}>
-                <ActivityIndicator />
-            </View>
+            <ActivityIndicator />
         );
     }
 

@@ -8,6 +8,7 @@ import {
     Text,
     TextInput,
     View,
+    Alert,
     ToastAndroid,
     TouchableOpacity,
     InteractionManager,
@@ -19,7 +20,6 @@ import Head from '../../commonview/Head';
 import Loading from '../../commonview/Loading';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 class ChooseStore extends Component {
     constructor(props) {
         super(props);
@@ -54,21 +54,23 @@ class ChooseStore extends Component {
                 sorts: []
             };
             let header = NetUtil.headerClientAuth(user, hos);
-            NetUtil.postJson(CONSTAPI.HOST+'/Warehouse/GetModelList', postjson, header, function (data) {
+            NetUtil.postJson(CONSTAPI.HOST + '/Warehouse/GetModelList', postjson, header, function (data) {
                 if (data.Sign && data.Message) {
                     _this.setState({
                         storeDataSource: ds.cloneWithRows(data.Message),
                         loaded: true,
                     });
                 } else {
-                    alert("获取数据错误：" + data.Message);
+                    Alert.alert('提示', "获取数据错误：" + data.Message, [{text: '确定'}]);
                     _this.setState({
                         storeDataSource: ds.cloneWithRows([]),
                         loaded: true,
                     });
                 }
             });
-        },function(err){});
+        }, function (err) {
+            Alert.alert('提示', err, [{text: '确定'}]);
+        });
     }
 
     search(val) {
@@ -126,7 +128,7 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         paddingRight: 15,
         paddingBottom: 5,
-        backgroundColor:'#fff',
+        backgroundColor: '#fff',
         borderBottomWidth: StyleSheet.hairlineWidth,
         borderBottomColor: '#ccc'
     },
