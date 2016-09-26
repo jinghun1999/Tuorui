@@ -20,15 +20,15 @@ let AppStyle = StyleSheet.create({
         color: '#CC0033'
     },
     /*inputViewStyle: {
-        flex: 1,
-        flexDirection: 'row',
-        padding: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#fff',
-        borderBottomColor: '#ccc',
-        borderBottomWidth: StyleSheet.hairlineWidth,
-    },*/
+     flex: 1,
+     flexDirection: 'row',
+     padding: 10,
+     justifyContent: 'center',
+     alignItems: 'center',
+     backgroundColor: '#fff',
+     borderBottomColor: '#ccc',
+     borderBottomWidth: StyleSheet.hairlineWidth,
+     },*/
     row: {
         backgroundColor: '#fff',
         flexDirection: 'row',
@@ -53,12 +53,27 @@ let AppStyle = StyleSheet.create({
         padding: 0,
         borderWidth: 0,
     },
-
-
     mpName: {
         flex: 1,
         color: '#27408B',
         fontWeight: 'bold',
+    },
+    mpTitle: {
+        fontSize: 14,
+        color: '#8B0000',
+        marginLeft: 10,
+    },
+    mpBorder: {
+        width:50,
+        margin:5,
+        alignItems:'center',
+        borderWidth: StyleSheet.hairlineWidth,
+        borderColor: '#ccc',
+    },
+    mpBtn:{
+        width:30,
+        backgroundColor:'red',
+        borderRadius:5,
     },
     smallBtn: {
         alignItems: 'center',
@@ -89,13 +104,13 @@ let AppStyle = StyleSheet.create({
         marginRight: 10,
     },
     noMore: {
-        padding:10,
-        marginTop:10,
+        padding: 10,
+        marginTop: 10,
         justifyContent: 'center',
         alignItems: 'center',
-        borderTopWidth:StyleSheet.hairlineWidth,
-        borderTopColor:'#ccc',
-        backgroundColor:'#EDEDED'
+        borderTopWidth: StyleSheet.hairlineWidth,
+        borderTopColor: '#ccc',
+        backgroundColor: '#EDEDED'
     },
     searchBox: {
         flexDirection: 'row',
