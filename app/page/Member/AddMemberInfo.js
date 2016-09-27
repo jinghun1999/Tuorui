@@ -22,7 +22,7 @@ import FormPicker from '../../commonview/FormPicker';
 import Loading from '../../commonview/Loading';
 import NButton from '../../commonview/NButton';
 import AddPet from './AddPet';
-
+import { toastShort } from '../../util/ToastUtil';
 import Picker from 'react-native-picker';
 import DatePicker from 'react-native-datepicker';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -86,13 +86,13 @@ class AddMemberInfo extends Component {
                         loaded: true,
                     });
                 } else {
-                    Alert.alert('提示', "获取数据失败：" + data.Message, [{text: '确定'}]);
+                    toastShort("获取数据失败：" + data.Message, [{text: '确定'}]);
                     _this.setState({
                         loaded: true,
                     });
                 }
             }, function (err) {
-                Alert.alert('提示', err, [{text: '确定'}]);
+                toastShort(err, [{text: '确定'}]);
             })
         })
     }
@@ -112,16 +112,16 @@ class AddMemberInfo extends Component {
     _save(needback) {
         let _this = this;
         if (_this.state.memberName == null) {
-            Alert.alert('提示', "请输入姓名", [{text: '确定'}]);
+            toastShort("请输入姓名");
             return false;
         } else if (_this.state.memberPhone == null) {
-            Alert.alert('提示', "请输入手机号码", [{text: '确定'}]);
+            toastShort("请输入手机号码");
             return false;
         }
         NetUtil.getAuth(function (user, hos) {
             //DM00001 男 DM00002 女
             if (_this.state.memberItem.GestCode == null || _this.state.memberID == null) {
-                Alert.alert('提示', '初始化会员信息错误，请稍后重试', [{text: '确定'}]);
+                toastShort('初始化会员信息错误，请稍后重试');
                 return false;
             }
             var item = {
@@ -162,11 +162,11 @@ class AddMemberInfo extends Component {
                         _this._onBack();
                     }
                 } else {
-                    Alert.alert('提示', "获取数据错误" + data.Exception, [{text: '确定'}]);
+                    toastShort("获取数据错误" + data.Exception);
                 }
             });
         }, function (err) {
-            Alert.alert('提示', err, [{text: '确定'}]);
+            toastShort(err);
         });
     }
 

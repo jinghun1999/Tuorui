@@ -15,7 +15,7 @@ import {
     } from 'react-native';
 import SearchBar from './../../commonview/SearchBar';
 import ScrollableTabView, {DefaultTabBar, } from 'react-native-scrollable-tab-view';
-class SearchAnyInfo extends React.Component {
+class InfoSearch extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -69,4 +69,4 @@ const styles = StyleSheet.create({
         padding: 20,
     },
 })
-module.exports = SearchAnyInfo;
+module.exports = InfoSearch;

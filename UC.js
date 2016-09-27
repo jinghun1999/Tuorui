@@ -13,7 +13,7 @@ import{
 import Head from './app/commonview/Head';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ComIconView from './app/commonview/ComIconView';
-import MyInfo from './app/page/uc/MyAccount';
+import MyAccount from './app/page/uc/MyAccount';
 import Setting from './app/page/uc/Setting';
 import IndexPage from './Index';
 import NButton from './app/commonview/NButton';
@@ -29,12 +29,13 @@ class UC extends React.Component {
         const { navigator } = this.props;
         if (navigator) {
             navigator.push({
-                name: 'MyInfo',
-                component: MyInfo,
+                name: 'MyAccount',
+                component: MyAccount,
                 params: {}
             })
         }
     }
+
     _setting() {
         const { navigator } = this.props;
         if (navigator) {
@@ -57,7 +58,7 @@ class UC extends React.Component {
                 user: ret.user,
             });
         }).catch(err => {
-            alert('error:' + err.message);
+            //alert('error:' + err.message);
         });
     }
 
@@ -104,14 +105,14 @@ class UC extends React.Component {
                         </View>
                     </View>
                     {/*<View style={styles.fanBox}>
-                        <View style={styles.fontViewStyle}>
-                            <Text style={styles.fontStyle}>粉丝：{this.state.user.Sex}</Text>
-                        </View>
-                        <View
-                            style={[styles.fontViewStyle,{borderLeftWidth:StyleSheet.hairlineWidth, borderLeftColor:'#ccc'}]}>
-                            <Text style={styles.fontStyle}>关注：{this.state.user.Sex}</Text>
-                        </View>
-                    </View>*/}
+                     <View style={styles.fontViewStyle}>
+                     <Text style={styles.fontStyle}>粉丝：{this.state.user.Sex}</Text>
+                     </View>
+                     <View
+                     style={[styles.fontViewStyle,{borderLeftWidth:StyleSheet.hairlineWidth, borderLeftColor:'#ccc'}]}>
+                     <Text style={styles.fontStyle}>关注：{this.state.user.Sex}</Text>
+                     </View>
+                     </View>*/}
                     <View style={{backgroundColor:'#fff', marginTop:15, marginBottom:30}}>
                         <ComIconView text="我的信息" icon={'ios-contact'} color={'#00BBFF'}
                                      onPress={this._myInfo.bind(this)}/>

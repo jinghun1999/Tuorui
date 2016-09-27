@@ -31,6 +31,7 @@ import {
 import Global from './app/util/Global';
 import Storage from './app/util/Storage';
 import Index from './Index';
+import { toastShort } from './app/util/ToastUtil';
 import _updateConfig from './update.json';
 const {appKey} = _updateConfig[Platform.OS];
 class Tuorui extends Component {
@@ -57,17 +58,14 @@ class Tuorui extends Component {
              ]);*/
             markSuccess();
         } else if (isRolledBack) {
-            Alert.alert('提示', '刚刚更新失败了,版本被回滚.');
-        }
-        else {
-            //Alert.alert('提示', 'other');
+            toastShort('刚刚更新失败了，版本被回滚。');
         }
     }
 
     doUpdate = info => {
         downloadUpdate(info).then(hash => {
             Alert.alert('提示', '下载完毕,是否重启应用?', [
-                {text: '否',},
+                {text: '取消',},
                 {
                     text: '现在重启', onPress: ()=> {
                     switchVersion(hash);
@@ -80,7 +78,7 @@ class Tuorui extends Component {
                 },
             ]);
         }).catch(err => {
-            Alert.alert('提示', '更新失败.', [{text: '知道了'}]);
+            toastShort('更新失败了。详情：' + err);
         });
     };
     checkUpdate = () => {
@@ -106,7 +104,7 @@ class Tuorui extends Component {
                 ]);
             }
         }).catch(err => {
-            Alert.alert('提示', '更新失败.' + err, [{text: '知道了'}]);
+            toastShort('更新失败了。详情：' + err);
         });
     };
 

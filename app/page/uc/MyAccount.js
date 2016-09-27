@@ -19,7 +19,7 @@ import Head from '../../commonview/Head';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Loading from '../../commonview/Loading';
 import FormPicker from '../../commonview/FormPicker';
-import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
+import { toastShort } from '../../util/ToastUtil';
 import ModalPicker from 'react-native-modal-picker'
 import DatePicker from 'react-native-datepicker';
 class MyAccount extends React.Component {
@@ -75,7 +75,7 @@ class MyAccount extends React.Component {
                 memberSchool: user.School,
             });
         }, function (msg) {
-            Alert.alert('提示', msg, [{text: '确定'}]);
+            toastShort(msg);
             _this.setState({
                 loaded: true,
             });
@@ -96,9 +96,9 @@ class MyAccount extends React.Component {
                     hospital: hos
                 }
             });
-            Alert.alert('提示', '设置默认医院成功', [{text: '确定'}]);
+            toastShort('设置默认医院成功');
         } catch (e) {
-            Alert.alert('提示', '设置失败', [{text: '确定'}]);
+            toastShort('设置失败');
         }
     }
 
@@ -118,9 +118,9 @@ class MyAccount extends React.Component {
         let header = NetUtil.headerClientAuth(_this.state.user, null)
         NetUtil.postJson(CONSTAPI.Auth + '/ad', postjson, header, function (data) {
             if (data.Sign) {
-                Alert.alert('提示', '修改成功', [{text: '确定'}]);
+                toastShort('修改成功');
             } else {
-                Alert.alert('提示', data.Exception, [{text: '确定'}]);
+                toastShort(data.Exception);
             }
         });
 

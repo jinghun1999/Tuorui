@@ -22,7 +22,7 @@ import Head from '../../commonview/Head';
 import SaleAdd from './SaleAdd';
 import SaleDetail from './SaleDetail';
 import Loading from '../../commonview/Loading';
-
+import { toastShort } from '../../util/ToastUtil';
 import DatePicker from  'react-native-datepicker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -120,7 +120,7 @@ class SaleList extends Component {
                         pageIndex: page,
                     });
                 } else {
-                    Alert.alert('错误',"获取数据失败：" + data.Exception, [{text:'确定'}]);
+                    toastShort("获取数据失败：" + data.Exception);
                 }
             });
             postdata = [{
@@ -148,12 +148,12 @@ class SaleList extends Component {
                             loaded: true,
                         });
                     } else {
-                        Alert.alert('错误', "获取记录数失败：" + data.Exception, [{text: '确定'}]);
+                        toastShort("获取记录数失败：" + data.Exception);
                     }
                 });
             }
         }, function (err) {
-            Alert.alert('提示', err, [{text: '确定'}])
+            toastShort(err);
         });
     }
 

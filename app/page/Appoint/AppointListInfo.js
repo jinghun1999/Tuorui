@@ -19,6 +19,7 @@ import Head from '../../commonview/Head';
 import AppointDetails from './AppointDetails';
 import Loading from '../../commonview/Loading';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { toastShort } from '../../util/ToastUtil';
 import DatePicker from 'react-native-datepicker';
 import AppStyle from '../../theme/appstyle';
 
@@ -73,14 +74,14 @@ class AppointListInfo extends React.Component {
                     })
                 }
                 else {
-                    Alert.alert('提示', "获取数据失败：" + data.Exception, [{text: '确定'}]);
+                    toastShort("获取数据失败：" + data.Exception);
                     _this.setState({
                         loaded: true,
                     });
                 }
             })
         }, function (err) {
-            Alert.alert('提示', err, [{text: '确定'}]);
+            toastShort(err);
         })
     }
 

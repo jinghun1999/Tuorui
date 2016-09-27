@@ -16,7 +16,7 @@ import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
 import Loading from '../../commonview/Loading';
-
+import { toastShort } from '../../util/ToastUtil';
 import Icon from 'react-native-vector-icons/Ionicons';
 import DatePicker from 'react-native-datepicker';
 class StockCapital extends React.Component {
@@ -73,23 +73,18 @@ class StockCapital extends React.Component {
                             totalLR: _lr.toFixed(2),
                         });
                     } else {
-                        Alert.alert('提示', "获取数据失败：" + dt, [{text: '确定'}]);
+                        toastShort("获取数据失败：" + dt);
                         _this.setState({
                             loaded: true,
                         });
                     }
                 });
             }, function (err) {
-                Alert.alert('提示', err, [{text: '确定'}]);
+                toastShort(err);
             }
         );
     }
 
-    /*
-     _search() {
-     this.fetchData();
-     }
-     */
     _renderHeader() {
         return (
             <View style={{backgroundColor:'#e7e7e7'}}>

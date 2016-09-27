@@ -23,6 +23,7 @@ import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
 import Loading from '../../commonview/Loading';
+import { toastShort } from '../../util/ToastUtil';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 class ChooseGuest extends Component {
@@ -124,7 +125,7 @@ class ChooseGuest extends Component {
                         loaded: true,
                     });
                 } else {
-                    Alert.alert('提示', "获取数据失败：" + data.Message, [{text: '确定'}]);
+                    toastShort("获取数据失败：" + data.Message);
                     _this.setState({
                         dataSource: [],
                         loaded: true,
@@ -178,12 +179,12 @@ class ChooseGuest extends Component {
                             loaded: true,
                         });
                     } else {
-                        Alert.alert('提示', "获取记录数失败：" + data.Message, [{text: '确定'}]);
+                        toastShort("获取记录数失败：" + data.Message);
                     }
                 });
             }
         }, function (err) {
-            Alert.alert('提示', err, [{text: '确定'}]);
+            toastShort(err);
         });
     }
 

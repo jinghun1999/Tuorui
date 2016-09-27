@@ -20,6 +20,7 @@ import AddMemberInfo from './AddMemberInfo';
 import MyHomeIcon from '../../commonview/ComIconView';
 import Loading from '../../commonview/Loading';
 import MemberDetails from './MemberDetails';
+import { toastShort } from '../../util/ToastUtil';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AppStyle from '../../theme/appstyle';
 
@@ -95,7 +96,7 @@ class MemberListInfo extends Component {
                         pageIndex: page,
                     });
                 } else {
-                    Alert.alert('提示', "获取数据失败：" + data.Message, [{text: '确定'}]);
+                    toastShort("获取数据失败：" + data.Message);
                     _this.setState({
                         memberLoaded: true,
                     });
@@ -118,12 +119,12 @@ class MemberListInfo extends Component {
                             recordCount: data.Message,
                         });
                     } else {
-                        Alert.alert('提示', "获取记录数失败：" + data.Message, [{text: '确定'}]);
+                        toastShort("获取记录数失败：" + data.Message);
                     }
                 });
             }
         }, function (err) {
-            Alert.alert('错误', err, [{text: '确定'}]);
+            toastShort(err);
         })
     }
 

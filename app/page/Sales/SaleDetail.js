@@ -17,7 +17,8 @@ import {
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
-import Icon from '../../../node_modules/react-native-vector-icons/FontAwesome';
+import { toastShort } from '../../util/ToastUtil';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import Loading from '../../commonview/Loading';
 class SaleDetail extends Component {
     constructor(props) {
@@ -64,7 +65,7 @@ class SaleDetail extends Component {
                         loaded: true,
                     });
                 } else {
-                    Alert.alert('提示', "获取数据失败：" + data.Message, [{text: '确定'}]);
+                    toastShort("获取数据失败：" + data.Message);
                     _this.setState({
                         loaded: true,
                     });

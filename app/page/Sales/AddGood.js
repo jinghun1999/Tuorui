@@ -19,11 +19,12 @@ import FormPicker from '../../commonview/FormPicker';
 import FormInput from '../../commonview/FormInput';
 import ChooseGoods from './ChooseGood';
 import ScanBarcode from './ScanBarcode';
+import { toastShort } from '../../util/ToastUtil';
 import Icon from 'react-native-vector-icons/Ionicons';
 const scanIcon = (<Icon name={'md-barcode'} size={40} color={'#63B8FF'}/>);
 const addIcon = (<Icon name={'md-add'} size={40} color={'#63B8FF'}/>);
 
-class GoodsAdd extends Component {
+class AddGood extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -60,7 +61,7 @@ class GoodsAdd extends Component {
             kw = _this.state.kw;
         }
         if (kw === null || kw === '') {
-            Alert.alert('提示', '未获得商品条码/编号', [{text: '确定'}]);
+            toastShort('未获得商品条码/编号');
             return false;
         }
         NetUtil.getAuth(function (user, hos) {
@@ -82,22 +83,22 @@ class GoodsAdd extends Component {
                         GoodInfo: good,
                     });
                 } else {
-                    Alert.alert('提示', "未找到此商品", [{text: '确定'}]);
+                    toastShort("未找到此商品");
                 }
             });
         }, function (msg) {
-            Alert.alert('错误', msg, [{text: '确定'}]);
+            toastShort(msg);
         });
     }
 
     _SaveAndContinue(go) {
         var _this = this;
         if (_this.state.GoodInfo.ID == null) {
-            Alert.alert('提示', '请先选择商品', [{text: '确定'}]);
+            toastShort('请先选择商品');
             return;
         }
         else if (_this.state.GoodCount < 1) {
-            Alert.alert('提示', '商品数量不能少于1', [{text: '确定'}]);
+            toastShort('商品数量不能少于1');
             return;
         }
         if (_this.props.getResult) {
@@ -116,7 +117,7 @@ class GoodsAdd extends Component {
         if (go) {
             _this._onBack();
         } else {
-            Alert.alert('提示', '添加成功', [{text: '确定'}]);
+            toastShort('添加成功');
         }
     }
 
@@ -246,4 +247,4 @@ const styles = StyleSheet.create({
     }
 });
 
-module.exports = GoodsAdd;
+module.exports = AddGood;

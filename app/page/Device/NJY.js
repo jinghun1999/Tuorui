@@ -15,7 +15,7 @@ import Head from '../../commonview/Head';
 import Loading from '../../commonview/Loading';
 import NetUtil from '../../util/NetUtil';
 import Util from '../../util/Util';
-
+import { toastShort } from '../../util/ToastUtil';
 import DatePicker from 'react-native-datepicker';
 class NJY extends Component {
     constructor(props) {
@@ -49,7 +49,7 @@ class NJY extends Component {
                         loaded: true,
                     });
                 } else {
-                    Alert.alert('提示', "获取数据失败：" + data.message, [{text: '确定'}]);
+                    toastShort("获取数据失败：" + data.message);
                     _this.setState({
                         loaded: true,
                     });
@@ -80,7 +80,7 @@ class NJY extends Component {
                 });
             }
         ).catch(err => {
-                alert('error:' + err.message);
+                toastShort('error:' + err.message);
             }
         );
 

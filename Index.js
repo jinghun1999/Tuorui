@@ -68,7 +68,7 @@ class Index extends React.Component {
                 loaded: true,
             });
         }).catch(err => {
-            Alert.alert('提示', '登陆过期，请重新登陆', [{text: '确定'}]);
+            //Alert.alert('提示', '登陆过期，请重新登陆', [{text: '确定'}]);
             _this.setState({
                 loaded: true,
             });

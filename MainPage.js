@@ -28,7 +28,7 @@ import TabNavigator from 'react-native-tab-navigator';
 import Icon from 'react-native-vector-icons/Ionicons';
 const TAB_HOMEPAGE = '首页';
 const TAB_KNOWLEDGE = '知识库';
-const TAB_BBS = '健康社区';
+const TAB_BBS = '医师社区';
 const TAB_APP = '应用服务';
 const TAB_UC = '我的';
 var _navigator;

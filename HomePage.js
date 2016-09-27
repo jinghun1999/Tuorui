@@ -246,9 +246,7 @@ class HomePage extends Component {
 
     renderLoadingView() {
         return (
-            <View style={styles.container}>
-                <Loading />
-            </View>
+            <Loading type='text'/>
         );
     }
 

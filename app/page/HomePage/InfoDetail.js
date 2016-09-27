@@ -7,21 +7,22 @@ import {
     StyleSheet,
     View,
     Text,
+    Alert,
     WebView,
     Dimensions,
     TouchableOpacity,
     InteractionManager,
-    ToastAndroid,
     } from 'react-native';
 import Head from './../../commonview/Head';
 import Global from './../../util/Global';
 import Util from './../../util/Util';
-import Icon from 'react-native-vector-icons/Ionicons';
 import NetUtil from './../../util/NetUtil';
 import Loading from './../../commonview/Loading';
-var Width = Dimensions.get('window').width;
-var Height = Dimensions.get('window').height;
-import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
+import { toastShort } from '../../util/ToastUtil';
+
+import Icon from 'react-native-vector-icons/Ionicons';
+//var Width = Dimensions.get('window').width;
+//var Height = Dimensions.get('window').height;
 class InfoDetail extends React.Component {
     constructor(props) {
         super(props);
@@ -61,7 +62,7 @@ class InfoDetail extends React.Component {
                             phone: ret.Mobile
                         });
                     } else {
-                        alert(data.ErrorMessage);
+                        toastShort(data.ErrorMessage);
                         _this.setState({
                             isCollect: false
                         });
@@ -69,7 +70,7 @@ class InfoDetail extends React.Component {
                 });
             }
         ).catch(err => {
-                alert('error:' + err.message);
+                toastShort('error:' + err.message);
             }
         );
     }
@@ -83,20 +84,18 @@ class InfoDetail extends React.Component {
     }
 
     _onCollect() {
-        //alert('收藏' + this.props.requestId);
         let _this = this;
         let querystr = 'id=' + this.props.requestId + '&operateby=' + _this.state.phone;
         NetUtil.get(CONSTAPI.APIAPP + "/AppInfo/AddOrCountermandOperate?operatetype=1&" + querystr, null, function (data) {
             if (data.Status) {
                 let result = data.Data;
-                ToastAndroid.show(result.Message, ToastAndroid.SHORT);
+                toastShort(result.Message);
                 _this.setState({
                     isCollect: result.IsCollect,
                     collectNum: result.IsCollect ? _this.state.collectNum + 1 : _this.state.collectNum - 1
                 });
             }
         });
-
     }
 
     renderLoad() {
@@ -104,13 +103,15 @@ class InfoDetail extends React.Component {
             <Loading type={'text'}/>
         )
     }
-    onError(){
+
+    onError() {
         return (
             <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
-                <Text>加载失败</Text>
+                <Text>加载内容失败</Text>
             </View>
         )
     }
+
     render() {
         return (
             <View style={{flex: 1}}>
@@ -128,9 +129,9 @@ class InfoDetail extends React.Component {
                     <View style={styles.bottomContainer}>
                         <View style={{flex: 1, flexDirection: 'row'}}>
                             {/*<View style={styles.readInfo}>
-                                <Icon name={'ios-eye'} size={20} color={'#999'} style={{marginRight: 5}}/>
-                                <Text>{this.state.readNum}</Text>
-                            </View>*/}
+                             <Icon name={'ios-eye'} size={20} color={'#999'} style={{marginRight: 5}}/>
+                             <Text>{this.state.readNum}</Text>
+                             </View>*/}
                             <View style={styles.readInfo}>
                                 <Icon name={'ios-star'} size={20} color={'#ffad00'} style={{marginRight: 5}}/>
                                 <Text>{this.state.collectNum}</Text>
@@ -150,7 +151,7 @@ const styles = StyleSheet.create({
     webView: {
         backgroundColor: '#fff',
         flex: 1,
-        width: Width,
+        //width: Width,
     },
     bottomContainer: {
         flexDirection: 'row',

@@ -4,6 +4,7 @@ import React, {
     } from 'react';
 import Util from './Util';
 import Global from './Global';
+import { toastShort } from './ToastUtil';
 class NetUtil extends React.Component {
 
     static postJson(url, data, header, callback) {
@@ -33,14 +34,11 @@ class NetUtil extends React.Component {
                 try {
                     result = JSON.parse(responseText);
                 } catch (e) {
-                    result = {Sign: false, Message: '【解析远程数据失败】'};
+                    result = {Sign: false, Message: '【解析远程数据失败】' + responseText};
                 }
                 callback(result);
             }).catch(error => {
-                React.Alert.alert(
-                    'Error',
-                    error
-                );
+                toastUtil(error);
             }).done();
     }
 
@@ -70,14 +68,11 @@ class NetUtil extends React.Component {
                 try {
                     result = JSON.parse(responseText);
                 } catch (e) {
-                    result = {Sign: false, Message: '【解析JSON失败】' + responseText};
+                    result = {Sign: false, Message: '【解析远程数据失败】' + responseText};
                 }
                 callback(result);
             }).catch(error => {
-                React.Alert.alert(
-                    'Error',
-                    error
-                );
+                toastUtil(error);
             }).done();
     }
 

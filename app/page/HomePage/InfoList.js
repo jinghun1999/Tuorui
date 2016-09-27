@@ -17,13 +17,12 @@ import {
     } from 'react-native';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
-import InfoSearch from './InfoSearch';
+//import InfoSearch from './InfoSearch';
 import InfoDetail from './InfoDetail';
 import SearchBar from './../../commonview/SearchBar';
 import Loading from '../../commonview/Loading';
-
+import { toastShort } from '../../util/ToastUtil';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 class Information extends React.Component {
     constructor(props) {
         super(props);
@@ -77,12 +76,16 @@ class Information extends React.Component {
         });
     }
 
+    _onSearchPress() {
+        this._fetchData(1, false);
+    }
+
     _fetchData(pageIndex, isNext) {
         let _this = this;
         let fetchUri = CONSTAPI.APIAPP + '/AppInfo/GetInformationByName?infoName=' + _this.state.kw + '&pageIndex=' + pageIndex + '&pageSize=' + _this.state.pageSize;
         NetUtil.get(fetchUri, false, function (result) {
             if (result == null) {
-                alert("null result...");
+                toastShort("获取数据失败");
                 return false;
             }
             let _dataCache = _this.state.infoCache;
@@ -110,7 +113,7 @@ class Information extends React.Component {
                     });
                 }
             } else {
-                Alert.alert('提示', '数据获取失败' + result.Data)
+                toastShort('数据获取失败' + result.Data)
             }
             _this.setState({isRefreshing: false,});
         });
@@ -137,18 +140,19 @@ class Information extends React.Component {
         }
     }
 
-    _onPressSearch() {
-        let _this = this;
-        const {navigator} = _this.props;
-        if (navigator) {
-            navigator.push({
-                name: 'InfoSearch',
-                component: InfoSearch,
-                param: {}
-            })
-        }
-    }
-
+    /*
+     _onPressSearch() {
+     let _this = this;
+     const {navigator} = _this.props;
+     if (navigator) {
+     navigator.push({
+     name: 'InfoSearch',
+     component: InfoSearch,
+     param: {}
+     })
+     }
+     }
+     */
     _onRefresh() {
         let _this = this;
         _this.setState({isRefreshing: true});
@@ -158,7 +162,6 @@ class Information extends React.Component {
     _renderInfo(info) {
         return (
             <TouchableOpacity style={styles.rows} onPress={()=>this._rowPress(info)}>
-                {/*<Icon name={'local-post-office'} size={20} color={'#ADD8E6'} style={styles.icon}/>*/}
                 <Text style={styles.rowTitle}>{info.InfoTitle}</Text>
                 <Icon name={'ios-arrow-forward'} size={20} color={'#888'} style={styles.arrow}/>
             </TouchableOpacity>
@@ -177,10 +180,6 @@ class Information extends React.Component {
                 <ActivityIndicator />
             )
         }
-    }
-
-    _onSearchPress() {
-        this._fetchData(1, false);
     }
 
     render() {

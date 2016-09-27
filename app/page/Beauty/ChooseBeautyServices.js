@@ -20,6 +20,7 @@ import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
 import Loading from '../../commonview/Loading';
+import { toastShort } from '../../util/ToastUtil';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AppStyle from '../../theme/appstyle';
 
@@ -117,6 +118,7 @@ class ChooseBeautyServices extends React.Component {
                         pageIndex: page,
                     });
                 } else {
+                    toastShort('获取数据失败，' + data.Exception);
                     _this.setState({
                         loaded: true,
                     });
@@ -170,11 +172,13 @@ class ChooseBeautyServices extends React.Component {
                         _this.setState({
                             recordCount: data.Message,
                         });
+                    }else{
+                        toastShort('获取数据条目失败，' + data.Exception);
                     }
                 });
             }
         }, function (err) {
-            Alert.alert('提示', err, [{text: '确定'}]);
+            toastShort(err);
         })
     }
 

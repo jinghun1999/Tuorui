@@ -19,6 +19,7 @@ import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Loading from '../../commonview/Loading';
+import { toastShort } from '../../util/ToastUtil';
 import DatePicker from 'react-native-datepicker';
 import Picker from 'react-native-picker';
 import NButton from '../../commonview/NButton';
@@ -105,14 +106,14 @@ class AddPet extends Component {
                     });
                 }
                 else {
-                    Alert.alert('提示', "初始化宠物种类错误：" + data.Exception, [{text: '确定'}]);
+                    toastShort("初始化宠物种类错误：" + data.Exception);
                     _this.setState({
                         loaded: true,
                     });
                 }
             })
         }, function (err) {
-            Alert.alert('提示', err, [{text: '确定'}]);
+            toastShort(err);
         })
     }
 
@@ -121,17 +122,17 @@ class AddPet extends Component {
         let _this = this;
         if (_this.state.edit == '保存' && _this.state.isUpdate == false) {
             if (_this.state.petName == null) {
-                Alert.alert('提示', "请输入宠物昵称", [{text: '确定'}]);
+                toastShort("请输入宠物昵称");
                 return false;
             } else if (_this.state.petBirthday == null) {
-                Alert.alert('提示', "请选择出生日期", [{text: '确定'}]);
+                toastShort("请选择出生日期");
                 return false;
             }
             //保存宠物信息
             NetUtil.getAuth(function (user, hos) {
                 let header = NetUtil.headerClientAuth(user, hos);
                 if (_this.props.member.gestCode == null || _this.props.member.memberID == null) {
-                    Alert.alert('提示', "会员信息不正确", [{text: '确定'}]);
+                    toastShort("会员信息不正确");
                     return false
                 }
                 let item = {
@@ -173,11 +174,11 @@ class AddPet extends Component {
                         }
                         _this._onBack()
                     } else {
-                        Alert.alert('提示', "获取数据错误，" + data.Exception, [{text: '确定'}]);
+                        toastShort("获取数据错误，" + data.Exception);
                     }
                 });
             }, function (err) {
-                Alert.alert('提示', err, [{text: '确定'}]);
+                toastShort(err);
             })
         } else if (_this.state.edit == '保存' && _this.state.isUpdate == true) {
             NetUtil.getAuth(function (user, hos) {
@@ -227,11 +228,11 @@ class AddPet extends Component {
                         }
                         _this._onBack()
                     } else {
-                        Alert.alert('提示', "获取数据错误，" + data.Exception, [{text: '确定'}]);
+                        toastShort("获取数据错误，" + data.Exception);
                     }
                 });
             }, function (err) {
-                Alert.alert('提示', err, [{text: '确定'}]);
+                toastShort(err);
             })
         } else if (_this.state.edit == '编辑') {
             _this.setState({

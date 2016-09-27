@@ -146,8 +146,11 @@ class MemberDetails extends Component {
                 edit: '保存',
             })
         } else if (edit == '保存') {
-            if (_this.state.memberName == null || _this.state.memberPhone == null) {
-                toastShort("会员不存在");
+            if (_this.state.memberName === null
+                || _this.state.memberPhone === null
+                || _this.state.memberName === ''
+                || _this.state.memberPhone === '') {
+                toastShort("会员姓名和手机不能为空");
                 return false;
             }
             NetUtil.getAuth(function (user, hos) {

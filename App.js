@@ -22,13 +22,13 @@ import SaleList from './app/page/Sales/SaleList';
 import MemberListInfo from './app/page/Member/MemberListInfo';
 import MyInspect from './app/page/Inspect/MyInspect';
 import PetListInfo from './app/page/Vaccine/VaccineListInfo';
-import Loading from './app/commonview/Loading';
 import AppointListInfo from './app/page/Appoint/AppointListInfo';
 import BeautyList from './app/page/Beauty/BeautyList';
 import ReportIndex from './app/page/Report/ReportIndex';
 import NJY from './app/page/Device/NJY';
-
-import Immutable from 'immutable';
+import Loading from './app/commonview/Loading';
+import { toastShort } from './app/util/ToastUtil';
+//import Immutable from 'immutable';
 import Icon from 'react-native-vector-icons/Ionicons';
 var {List, Map}= Immutable;
 class App extends Component {
@@ -66,7 +66,7 @@ class App extends Component {
             });
         }).catch(err => {
             _this.setState({userloaded: true,});
-            alert('请登录' + err.message);
+            toastShort('请登录' + err.message);
         });
         storage.load({key: 'HOSPITAL', autoSync: false, syncInBackground: false}).then(ret => {
             _this.setState({
@@ -75,7 +75,7 @@ class App extends Component {
             });
         }).catch(err => {
             _this.setState({hosloaded: true,});
-            //alert('您还没有选择默认医院' + err.message);
+            toastShort('您还没有选择默认医院' + err.message);
         });
     }
 
@@ -205,12 +205,12 @@ class App extends Component {
                             </View>
                         </TouchableOpacity>
                         {/*<TouchableOpacity style={styles.grid_view}
-                                          onPress={this._onPress.bind(this, MyInspect, 'MyInspect', '拓瑞检测')}>
-                            <View style={styles.iconOuter}>
-                                <Icon name={'ios-paper'} size={40} color={'#FF6666'}/>
-                                <Text style={{fontSize:15}}>拓瑞检测</Text>
-                            </View>
-                        </TouchableOpacity>*/}
+                         onPress={this._onPress.bind(this, MyInspect, 'MyInspect', '拓瑞检测')}>
+                         <View style={styles.iconOuter}>
+                         <Icon name={'ios-paper'} size={40} color={'#FF6666'}/>
+                         <Text style={{fontSize:15}}>拓瑞检测</Text>
+                         </View>
+                         </TouchableOpacity>*/}
                         <View style={{flex:2}}></View>
                     </View>
 
@@ -261,9 +261,9 @@ const styles = StyleSheet.create({
         //borderRightWidth: StyleSheet.hairlineWidth,
         //borderRightColor: '#ccc',
     },
-    borderRight:{
-        borderRightWidth:StyleSheet.hairlineWidth,
-        borderRightColor:'#ccc'
+    borderRight: {
+        borderRightWidth: StyleSheet.hairlineWidth,
+        borderRightColor: '#ccc'
     },
     iconOuter: {
         flex: 1,

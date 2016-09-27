@@ -17,6 +17,7 @@ import {
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
+import { toastShort } from '../../util/ToastUtil';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Loading from '../../commonview/Loading';
 import AppStyle from '../../theme/appstyle';
@@ -120,7 +121,7 @@ class ChoosePet extends Component {
                         pageIndex: page,
                     });
                 } else {
-                    Alert.alert('提示', "获取数据失败：" + data.Exception, [{text: '确定'}]);
+                    toastShort("获取数据失败：" + data.Exception);
                     _this.setState({
                         loaded: true,
                     });
@@ -159,12 +160,12 @@ class ChoosePet extends Component {
                             recordCount: data.Message,
                         });
                     } else {
-                        Alert.alert('提示', "获取记录数失败：" + data.Exception, [{text: '确定'}]);
+                        toastShort("获取记录数失败：" + data.Exception);
                     }
                 });
             }
         }, function (err) {
-            Alert.alert('错误', err, [{text: '确定'}]);
+            toastShort(err);
         })
     }
 

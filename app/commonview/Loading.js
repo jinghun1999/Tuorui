@@ -18,17 +18,38 @@ class Loading extends React.Component {
         super(props);
         this.state = {}
     }
-
+    /*ヽ(≧Д≦)ノ*/
     render() {
         let body = <Bars size={10} color="#1CAFF6"/>
         if (this.props.type == 'text') {
-            body = <Text>ヽ(≧Д≦)ノ 努力加载中...</Text>
+            body = <Text style={styles.txt}>数据加载中...</Text>
         }
         return (
-            <View style={{flexDirection:'column', flex:1, marginTop:5, justifyContent: 'center', alignItems: 'center',}}>
-                {body}
+            <View style={styles.container}>
+                <View style={styles.inner}>{body}</View>
             </View>
         );
     }
 }
+const styles = StyleSheet.create({
+    container: {
+        flexDirection: 'column',
+        flex: 1,
+        marginTop: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    inner:{
+        marginBottom:50,
+        padding:15,
+        borderWidth:1,
+        borderColor:'#ccc',
+        borderRadius:5,
+        backgroundColor:'#404040',
+        opacity:8,
+    },
+    txt:{
+        color:'#fff',
+    }
+});
 module.exports = Loading;

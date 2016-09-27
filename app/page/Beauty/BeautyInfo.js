@@ -22,6 +22,7 @@ import Loading from '../../commonview/Loading';
 import ChooseBeautyServices from './ChooseBeautyServices';
 import ChoosePet from './ChoosePet';
 import BeautyListInfo from './BeautyList';
+import { toastShort } from '../../util/ToastUtil';
 import Picker from 'react-native-picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AppStyle from '../../theme/appstyle';
@@ -125,12 +126,12 @@ class BeautyServices extends React.Component {
                         _this.setState({
                             loaded: true,
                         });
-                        Alert.alert('提示', "获取数据失败：" + data.Exception, [{text: '确定'}]);
+                        toastShort("获取数据失败：" + data.Exception);
                     }
                 })
             }
         }, function (err) {
-            Alert.alert('提示', err, [{text: '确定'}]);
+            toastShort(err);
         });
     }
 
@@ -179,7 +180,7 @@ class BeautyServices extends React.Component {
                 {
                     text: '确定', onPress: () => {
                     if (beauty.PaidStatus === 'SM00051') {
-                        Alert.alert('提示', '此项目已缴费,不可删除!', [{text: '确定'}]);
+                        toastShort('此项目已缴费,不可删除!');
                         return false;
                     }
                     let newSource = [];
@@ -231,13 +232,13 @@ class BeautyServices extends React.Component {
             })
         } else if (_this.state.edit == '保存') {
             if (_this.state.petSource.PetID == null) {
-                Alert.alert('提示', '请选择宠物', [{text: '确定'}]);
+                toastShort('请选择宠物');
                 return false;
             } else if (_this.state.serviceName == null) {
-                Alert.alert('提示', '请选择服务师', [{text: '确定'}]);
+                toastShort('请选择服务师');
                 return false;
             } else if (_this.state.beautySource.length == 0) {
-                Alert.alert('提示', '请选择美容项目', [{text: '确定'}]);
+                toastShort('请选择美容项目');
                 return false;
             }
             if (_this.props.beautyID == 1) {
@@ -310,17 +311,17 @@ class BeautyServices extends React.Component {
                     ////save http://petservice.tuoruimed.com/service/Api/Service/AddList
                     NetUtil.postJson(CONSTAPI.HOST + '/Service/AddList', postjson, header, function (data) {
                         if (data.Sign && data.Message) {
-                            Alert.alert('提示', "保存成功", [{text: '确定'}]);
+                            toastShort("保存成功");
                             if (_this.props.getResult) {
                                 _this.props.getResult();
                             }
                             _this._onBack();
                         } else {
-                            Alert.alert('提示', "保存失败，" + data.Exception, [{text: '确定'}]);
+                            toastShort("保存失败，" + data.Exception);
                         }
                     });
                 }, function (err) {
-                    Alert.alert('提示', err, [{text: '确定'}]);
+                    toastShort(err);
                 })
             }
             else if (_this.props.beautyID == 2) {
@@ -393,17 +394,17 @@ class BeautyServices extends React.Component {
                     ////update //http://test.tuoruimed.com/service/Api/Service/UpdateList
                     NetUtil.postJson(CONSTAPI.HOST + '/Service/UpdateList', postjson, header, function (data) {
                         if (data.Sign) {
-                            Alert.alert('提示', '保存成功', [{text: '确定'}]);
+                            toastShort('保存成功');
                             if (_this.props.getResult) {
                                 _this.props.getResult();
                             }
                             _this._onBack();
                         } else {
-                            Alert.alert('提示', '保存失败，' + data.Exception, [{text: '确定'}]);
+                            toastShort('保存失败，' + data.Exception);
                         }
                     });
                 }, function (err) {
-                    Alert.alert('提示', err, [{text: '确定'}]);
+                    toastShort(err);
                 })
             }
             _this.setState({

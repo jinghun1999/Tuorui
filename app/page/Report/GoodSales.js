@@ -17,7 +17,7 @@ import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
 import Loading from '../../commonview/Loading';
-
+import { toastShort } from '../../util/ToastUtil';
 import Icon from 'react-native-vector-icons/Ionicons';
 import DatePicker from 'react-native-datepicker';
 class GoodSales extends React.Component {
@@ -72,13 +72,14 @@ class GoodSales extends React.Component {
                         totalAmount: a2,
                     });
                 } else {
-                    alert("获取数据失败：" + data.Message);
+                    toastShort("获取数据失败：" + data.Message);
                     _this.setState({
                         loaded: true,
                     });
                 }
             });
         }, function (err) {
+            toastShort(err);
         });
     }
 

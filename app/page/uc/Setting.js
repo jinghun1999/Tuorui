@@ -16,7 +16,7 @@ import{
 import Head from '../../commonview/Head';
 import Style from '../../theme/styles';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import ModalPicker from 'react-native-modal-picker';
+import { toastShort } from '../../util/ToastUtil';
 import SettingContent from './SettingContent';
 
 import {
@@ -63,31 +63,6 @@ class MyAccount extends React.Component {
         }
     }
 
-    componentWillMount() {
-        //this.checkUpdate();
-        if (isFirstTime) {
-            /*
-             Alert.alert('提示', '这是当前版本第一次启动,是否要模拟启动失败?失败将回滚到上一版本', [
-             {
-             text: '是', onPress: ()=> {
-             throw new Error('模拟启动失败,请重启应用')
-             }
-             },
-             {
-             text: '否', onPress: ()=> {
-             markSuccess()
-             }
-             },
-             ]);*/
-            markSuccess();
-        } else if (isRolledBack) {
-            Alert.alert('提示', '刚刚更新失败了,版本被回滚.', [{text: '知道了'}]);
-        }
-        else {
-            //Alert.alert('提示', 'other');
-        }
-    }
-
     doUpdate = info => {
         downloadUpdate(info).then(hash => {
             Alert.alert('提示', '下载完毕,是否重启应用?', [
@@ -104,7 +79,7 @@ class MyAccount extends React.Component {
                 },
             ]);
         }).catch(err => {
-            Alert.alert('提示', '更新失败.', [{text: '知道了'}]);
+            toastShort('更新失败啦，详情：' + err);
         });
     };
     checkUpdate = () => {
@@ -118,7 +93,7 @@ class MyAccount extends React.Component {
                     },
                 ]);
             } else if (info.upToDate) {
-                Alert.alert('提示', '您的应用版本已是最新.', [{text: '知道了'}]);
+                toastShort('您的应用版本已是最新');
             } else {
                 Alert.alert('提示', '检查到新的版本' + info.name + ',是否下载?\n' + info.description, [
                     {text: '取消',},
@@ -130,7 +105,7 @@ class MyAccount extends React.Component {
                 ]);
             }
         }).catch(err => {
-            Alert.alert('提示', '更新失败.' + err, [{text: '知道了'}]);
+            toastShort('更新失败啦，详情：' + err);
         });
     };
 
@@ -139,7 +114,7 @@ class MyAccount extends React.Component {
     }
 
     clearCache() {
-        Alert.alert('提示', '清理完成', [{text: '确定'}]);
+        toastShort('缓存清理完成');
     }
 
     render() {
