@@ -180,7 +180,7 @@ class BeautyServices extends React.Component {
                 {text: '取消'},
                 {
                     text: '确定', onPress: () => {
-                    if(this.props.beautyID==2){
+                    if (this.props.beautyID == 2) {
                         if (beauty.PaidStatus === 'SM00051') {
                             toastShort('此项目已缴费,不可删除!');
                             return false;
@@ -513,8 +513,9 @@ class BeautyServices extends React.Component {
                 <Text style={AppStyle.mpName}>{beauty.ItemName}</Text>
                 <Text style={AppStyle.mpTitle}>单价: ¥{beauty.SellPrice}</Text>
                 <Text style={AppStyle.mpTitle}>数量:</Text>
-                <View style={AppStyle.mpBorder}>
-                    {this.state.edit === '保存' ?
+                {this.state.edit === '保存' ?
+                    <View style={AppStyle.mpBorder}>
+
                         <TextInput value={beauty.InputCount.toString()}
                                    defaultValue={this.state.num.toString()}
                                    editable={true}
@@ -540,14 +541,15 @@ class BeautyServices extends React.Component {
                                         }
 
                                        }}/>
-                        : <Text style={[AppStyle.mpTitle,{textAlign:'center'}]}>{beauty.InputCount ? beauty.InputCount : 1}</Text>
-                    }
-                </View>
-                {this.state.edit==='保存'?
+                    </View>
+                    : <Text style={AppStyle.mpTitle}>{beauty.InputCount ? beauty.InputCount : 1}</Text>
+                }
+
+                {this.state.edit === '保存' ?
                     <TouchableOpacity style={AppStyle.mpBtn} onPress={()=>this._onBeautyDetails(beauty)}>
                         <Text style={{color:'white',textAlign:'center'}}>删除</Text>
                     </TouchableOpacity>
-                :null
+                    : null
                 }
 
             </View>

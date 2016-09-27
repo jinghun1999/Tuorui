@@ -19,6 +19,7 @@ import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
 import AppStyle from '../../theme/appstyle';
 import Loading from '../../commonview/Loading';
+import { toastShort } from '../../util/ToastUtil';
 class VaccineSettlement extends React.Component {
     constructor(props) {
         super(props);
@@ -34,11 +35,11 @@ class VaccineSettlement extends React.Component {
 
     _onSaveInfo() {
         let _this =this;
-        if (_this.state.vaccineDiscount == null) {
-            toastShort("输入折扣");
+        if (_this.state.vaccineDiscount == null || _this.state.vaccineAmount==null) {
+            toastShort("请输入金额");
             return false;
-        }else if(_this.state.vaccineDiscount==0){
-            toastShort("输入折扣");
+        }else if(_this.state.vaccineDiscount==0 || _this.state.vaccineAmount==0 ){
+            toastShort("请输入金额");
             return false;
         }
 
@@ -52,9 +53,10 @@ class VaccineSettlement extends React.Component {
             })
             let getfinpost = {
                 gestID: _this.props.member.ID,
-                isCurrentOnly: null,
+                isCurrentOnly: true,
                 dicEndItems: {"驱虫疫苗": vaccItem},
             };
+            alert(_this.props.member.ID+' yimiao:'+vaccItem)
             //获取疫苗销售信息http://test.tuoruimed.com/service/Api/Finance_SettleAccounts/GetFinaceInfo
             NetUtil.postJson(CONSTAPI.HOST + '/Finance_SettleAccounts/GetFinaceInfo', getfinpost, header, function (findata) {
                 if (findata.Sign && findata.Message != null) {
@@ -125,18 +127,18 @@ class VaccineSettlement extends React.Component {
                     //结算
                     NetUtil.postJson(CONSTAPI.HOST + '/Finance_SettleAccounts/Finish', finishpost, header, function (okdata) {
                         if (okdata.Sign && okdata.Message != null) {
-                            Alert.alert('提示', '结算成功', [{text: '确定'},]);
+                            toastShort('结算成功');
                             if (_this.props.getResult) {
                                 _this.props.getResult();
                             }
                             _this._onBack();
                         } else {
-                            Alert.alert('提示', '结算失败', [{text: '确定'}]);
+                            toastShort('结算失败');
                         }
                     });
                 }
                 else {
-                    Alert.alert('提示', '获取疫苗销售信息失败', [{text: '确定'}]);
+                    toastShort('获取疫苗销售信息失败');
                 }
             });
         })
@@ -226,7 +228,7 @@ class VaccineSettlement extends React.Component {
                     />
                 </View>
                 <View style={AppStyle.row}>
-                    <Text style={AppStyle.rowTitle}>折扣</Text>
+                    <Text style={AppStyle.rowTitle}>折扣额</Text>
                     <TextInput value={this.state.vaccineDiscount.toString()}
                                editable={this.state.enable}
                                underlineColorAndroid={'transparent'}

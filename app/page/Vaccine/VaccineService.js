@@ -548,8 +548,8 @@ class VaccineService extends Component {
                         <Text
                             style={AppStyle.mpTitle}>单价:¥ {vaccine.SellPrice ? vaccine.SellPrice : vaccine.ItemCost}</Text>
                         <Text style={AppStyle.mpTitle}>数量</Text>
-                        <View style={AppStyle.mpBorder}>
-                            {this.state.canEdit ?
+                        {this.state.canEdit ?
+                            <View style={AppStyle.mpBorder}>
                                 <TextInput value={vaccine.ItemNum}
                                            defaultValue={this.state.num.toString()}
                                            editable={true}
@@ -564,17 +564,18 @@ class VaccineService extends Component {
                                        if(this.state.vaccine.length>1){
                                        this.state.vaccine.forEach((item,index,array)=>{
                                             if(item.ItemCode===vaccine.ItemCode){return false;}
-                                            _countAmount+=item.TotalCost;
+                                            _countAmount+=item.SellPrice*item.ItemNum;
                                         })
                                        }
                                         this.setState({totalAmount:_countAmount+(_price*text)})
                                        }}/>
-                                : <Text style={AppStyle.mpTitle}>{vaccine.ItemNum ? vaccine.ItemNum : 1}</Text>
-                            }
-                        </View>
+                            </View>
+                            : <Text style={AppStyle.mpTitle}>{vaccine.ItemNum ? vaccine.ItemNum : 1}</Text>
+                        }
+
                     </View>
-                    <View style={{flexDirection:'row',alignItems:'center'}}>
-                        <Text style={{fontSize: 14,color: '#8B0000',}}>执行日期</Text>
+                    <View style={{flexDirection:'row',alignItems:'center',}}>
+                        <Text style={{fontSize: 14,color: '#8B0000',}}>日期</Text>
                         {this.state.canEdit ?
                             <DatePicker
                                 date={vaccine.FactShootTime?vaccine.FactShootTime:Util.getTime()}
@@ -598,9 +599,9 @@ class VaccineService extends Component {
                                   }}
                                 onDateChange={(date) => {vaccine.FactShootTime=date;this.setState({loaded:true,})  }}/>
                             : <Text
-                            style={AppStyle.mpTitle}>{vaccine.FactShootTime ? vaccine.FactShootTime.replace('T', ' ') : Util.getTime('YYYY-MM-dd')}</Text>
+                            style={AppStyle.mpTitle}>{vaccine.FactShootTime ? vaccine.FactShootTime.substr(0,10) : Util.getTime('YYYY-MM-dd')}</Text>
                         }
-                        <Text style={AppStyle.mpTitle}>下次执行日期</Text>
+                        <Text style={AppStyle.mpTitle}>下次执行</Text>
                         {this.state.canEdit ?
                             <DatePicker
                                 date={vaccine.EstimateTime}
@@ -628,7 +629,7 @@ class VaccineService extends Component {
                                   }}
                                 onDateChange={(date) => {vaccine.EstimateTime=date;this.setState({loaded:false})}}/>
                             : <Text
-                            style={AppStyle.mpTitle}>{vaccine.EstimateTime ? vaccine.EstimateTime.replace('T', ' ') : null}</Text>
+                            style={AppStyle.mpTitle}>{vaccine.EstimateTime ? vaccine.EstimateTime.substr(0,10) : null}</Text>
                         }
                     </View>
                 </View>

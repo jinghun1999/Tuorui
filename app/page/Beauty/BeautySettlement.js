@@ -54,7 +54,7 @@ class BeautySettlement extends React.Component {
             })
             let getfinpost = {
                 gestID: _this.props.member.ID,
-                isCurrentOnly: null,
+                isCurrentOnly: true,
                 dicEndItems: {"美容服务": vaccItem},
             };
             //获取疫苗销售信息http://test.tuoruimed.com/service/Api/Finance_SettleAccounts/GetFinaceInfo

@@ -173,7 +173,7 @@ class MemberListInfo extends Component {
                     </View>
                     <View style={{flexDirection:'row'}}>
                         <Text style={{flex:1}}>手机: {g.MobilePhone}</Text>
-                        <Text style={{flex:1}}>登记日期: {g.CreatedOn.replace('T', ' ')}</Text>
+                        <Text style={{flex:1}}>登记日期: {g.CreatedOn.substr(0,10)}</Text>
                     </View>
                 </View>
                 <Icon name={'ios-arrow-forward'} size={15} color={'#333'}/>
