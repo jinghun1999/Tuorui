@@ -30,7 +30,7 @@ import Loading from './app/commonview/Loading';
 import { toastShort } from './app/util/ToastUtil';
 //import Immutable from 'immutable';
 import Icon from 'react-native-vector-icons/Ionicons';
-var {List, Map}= Immutable;
+//var {List, Map}= Immutable;
 class App extends Component {
     constructor(props) {
         super(props);
