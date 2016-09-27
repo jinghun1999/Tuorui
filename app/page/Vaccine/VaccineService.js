@@ -27,6 +27,7 @@ import AppStyle from '../../theme/appstyle';
 import DatePicker from 'react-native-datepicker';
 import VaccineSettlement from './VaccineSettlement';
 import NButton from '../../commonview/NButton';
+import { toastShort } from '../../util/ToastUtil';
 class VaccineService extends Component {
     constructor(props) {
         super(props);
@@ -92,6 +93,7 @@ class VaccineService extends Component {
                     GestName: _this.props.vaccine.GestName,
                     GestCode: _this.props.vaccine.GestCode,
                     PetName: _this.props.vaccine.PetName,
+                    GestID: _this.props.vaccine.GestID,
                 },
                 enable: false,
                 edit: '编辑',
@@ -100,20 +102,20 @@ class VaccineService extends Component {
             });
             //获取疫苗信息列表
             var postdata = {
-                "items":[{
-                    "Childrens":null,
-                    "Field":"VaccineGroupCode",
-                    "Title":null,
-                    "Operator":{"Name":"=","Title":"等于","Expression":null},
-                    "DataType":0,
-                    "Value":_this.state.VaccineGroupCode,
-                    "Conn":0
+                "items": [{
+                    "Childrens": null,
+                    "Field": "VaccineGroupCode",
+                    "Title": null,
+                    "Operator": {"Name": "=", "Title": "等于", "Expression": null},
+                    "DataType": 0,
+                    "Value": _this.state.VaccineGroupCode,
+                    "Conn": 0
                 }],
-                "sorts":[{
-                    "Field":"EstimateTime",
-                    "Title":null,
-                    "Sort":{"Name":"Asc","Title":"升序"},
-                    "Conn":0
+                "sorts": [{
+                    "Field": "EstimateTime",
+                    "Title": null,
+                    "Sort": {"Name": "Asc", "Title": "升序"},
+                    "Conn": 0
                 }]
             };
             NetUtil.getAuth(function (user, hos) {
@@ -163,22 +165,24 @@ class VaccineService extends Component {
 
     }
 
-    _saveAndSet(isResult){
-        let _this=this;
-        if(isResult){_this._onSaveInfo();}
+    _saveAndSet(isResult) {
+        let _this = this;
+        if (isResult) {
+            _this._onSaveInfo();
+        }
         const {navigator}=_this.props;
-        if(navigator){
+        if (navigator) {
             navigator.push({
-                name:'VaccineSettlement',
-                component:VaccineSettlement,
-                params:{
-                    vaccine:_this.state.vaccine,
-                    member:{
-                        ID:_this.state.petSource.GestID,
+                name: 'VaccineSettlement',
+                component: VaccineSettlement,
+                params: {
+                    vaccine: _this.state.vaccine,
+                    member: {
+                        ID: _this.state.petSource.GestID,
                         memberCode: _this.state.petSource.GestCode,
-                        memberName:_this.state.petSource.GestName,
+                        memberName: _this.state.petSource.GestName,
                     },
-                    headTitle:'疫苗结算',
+                    headTitle: '疫苗结算',
                 }
             })
         }
@@ -194,13 +198,13 @@ class VaccineService extends Component {
         }
         else if (_this.state.edit == '保存') {
             if (_this.state.petSource.GestCode == null) {
-                Alert.alert('提示', '请选择宠物信息', [{text: '确定'}]);
+                toastShort('请选择宠物信息');
                 return false;
             } else if (_this.state.executorName == '' || _this.state.executorName == null) {
-                Alert.alert('提示', '请选择执行人', [{text: '确定'}]);
+                toastShort('请选择执行人');
                 return false;
             } else if (_this.state.vaccine.length == 0) {
-                Alert.alert('提示', '请选择疫苗', [{text: '确定'}]);
+                toastShort('请选择疫苗');
                 return false;
             }
             if (_this.props.id == 1) {
@@ -241,11 +245,10 @@ class VaccineService extends Component {
                             "WarnStatus": "SM00027",
                             "ShootStatus": "SM00029",
                             "PaidTime": null,
-                            "CreatedBy": null,
-                            "CreatedOn": "0001-01-01T00:00:00",
-                            "ModifiedBy": null,
-                            "ModifiedOn": "0001-01-01T00:00:00",
-                            "IsDeleted": 0,
+                            "CreatedBy": user.Mobile,
+                            "CreatedOn": Util.getTime(),
+                            "ModifiedBy": user.Mobile,
+                            "ModifiedOn": Util.getTime(),
                             "BatchNumber": "",
                             "OutDateTime": null,
                             "ManufacturerCode": _vaccine[i].ManufacturerCode,
@@ -256,10 +259,12 @@ class VaccineService extends Component {
                             "DoctorName": null,
                             "AssistantDoctorID": null,
                             "AssistantDoctorName": "",
-                            "ItemNum": _vaccine[i].ItemNum,
-                            "TotalCost":_vaccine[i].TotalCost,
+                            "ItemNum": _vaccine[i].ItemNum ? _vaccine[i].ItemNum : 1,
+                            "TotalCost": _vaccine[i].TotalCost,
                             "Sign": null,
-                            "EntID": "00000000-0000-0000-0000-000000000000"
+                            "EntID": "00000000-0000-0000-0000-000000000000",
+                            "CreatedByID": "00000000-0000-0000-0000-000000000000",
+                            "ModifiedByID": "00000000-0000-0000-0000-000000000000"
                         };
                         vaccineItems.push(items);
                     }
@@ -271,18 +276,17 @@ class VaccineService extends Component {
                     ////save http://test.tuoruimed.com/service/Api/Medic_Vaccine/AddOrUpdate
                     NetUtil.postJson(CONSTAPI.HOST + '/Medic_Vaccine/AddOrUpdate', postjson, header, function (data) {
                         if (data.Sign && data.Message) {
-                            Alert.alert('提示', '保存成功', [{text: '确定'}]);
+                            toastShort('保存成功');
                             if (_this.props.getResult) {
                                 _this.props.getResult();
                             }
                             _this._onBack();
                         } else {
-                            Alert.alert('错误信息', '获取数据错误' + data.Message, [{text: '确定'}]);
+                            toastShort('获取数据错误' + data.Message);
                         }
                     });
                 }, function (err) {
-                    Alert.alert('错误信息', err, [{text: '确定'}]);
-                    alert(err);
+                    toastShort(err);
                 })
             }
             else if (_this.props.id == 2) {
@@ -353,17 +357,17 @@ class VaccineService extends Component {
                     ////save http://test.tuoruimed.com/service/Api/Medic_Vaccine/AddOrUpdate
                     NetUtil.postJson(CONSTAPI.HOST + '/Medic_Vaccine/AddOrUpdate', postjson, header, function (data) {
                         if (data.Sign && data.Message) {
-                            Alert.alert('信息', '修改成功', [{text: '确定'}]);
+                            toastShort('修改成功');
                             if (_this.props.getResult) {
                                 _this.props.getResult();
                             }
                             _this._onBack();
                         } else {
-                            Alert.alert('错误信息', '获取数据错误' + data.Message, [{text: '确定'}]);
+                            toastShort('获取数据错误' + data.Message);
                         }
                     });
                 }, function (err) {
-                    Alert.alert('错误信息', err, [{text: '确定'}]);
+                    toastShort(err);
                 })
             }
             _this.setState({
@@ -542,7 +546,7 @@ class VaccineService extends Component {
                     <View style={{flexDirection:'row',alignItems:'center'}}>
                         <Text style={AppStyle.mpName}>{vaccine.ItemName}</Text>
                         <Text
-                            style={AppStyle.mpTitle}>单价:¥ {vaccine.ItemCost ? vaccine.ItemCost : vaccine.TotalCost}</Text>
+                            style={AppStyle.mpTitle}>单价:¥ {vaccine.SellPrice ? vaccine.SellPrice : vaccine.ItemCost}</Text>
                         <Text style={AppStyle.mpTitle}>数量</Text>
                         <View style={AppStyle.mpBorder}>
                             {this.state.canEdit ?
@@ -554,7 +558,7 @@ class VaccineService extends Component {
                                            style={AppStyle.input}
                                            onChangeText={(text)=>{
                                        vaccine.ItemNum=text;
-                                       let _price=vaccine.SellPrice ? vaccine.SellPrice : vaccine.TotalCost;
+                                       let _price=vaccine.SellPrice ? vaccine.SellPrice : vaccine.ItemCost;
                                        vaccine.TotalCost=_price*text;
                                        let _countAmount=0;
                                        if(this.state.vaccine.length>1){
@@ -565,27 +569,26 @@ class VaccineService extends Component {
                                        }
                                         this.setState({totalAmount:_countAmount+(_price*text)})
                                        }}/>
-                                : <Text style={AppStyle.mpTitle}>{vaccine.ItemNum?vaccine.ItemNum:1}</Text>
+                                : <Text style={AppStyle.mpTitle}>{vaccine.ItemNum ? vaccine.ItemNum : 1}</Text>
                             }
-
                         </View>
                     </View>
                     <View style={{flexDirection:'row',alignItems:'center'}}>
                         <Text style={{fontSize: 14,color: '#8B0000',}}>执行日期</Text>
                         {this.state.canEdit ?
-                        <DatePicker
-                            date={vaccine.FactShootTime?vaccine.FactShootTime:Util.getTime()}
-                            mode="date"
-                            placeholder="选择日期"
-                            format="YYYY-MM-DD"
-                            minDate="1980-01-01"
-                            maxDate="2020-01-01"
-                            confirmBtnText="Confirm"
-                            cancelBtnText="Cancel"
-                            showIcon={false}
-                            style={{padding:0, margin:0,width:100,marginLeft:10,}}
-                            enabled={true}
-                            customStyles={{dateInput: {
+                            <DatePicker
+                                date={vaccine.FactShootTime?vaccine.FactShootTime:Util.getTime()}
+                                mode="date"
+                                placeholder="选择日期"
+                                format="YYYY-MM-DD"
+                                minDate="1980-01-01"
+                                maxDate="2020-01-01"
+                                confirmBtnText="Confirm"
+                                cancelBtnText="Cancel"
+                                showIcon={false}
+                                style={{padding:0, margin:0,width:100,marginLeft:10,}}
+                                enabled={true}
+                                customStyles={{dateInput: {
                                        alignItems:'flex-start',
                                        height:30,
                                        padding:0,
@@ -593,24 +596,25 @@ class VaccineService extends Component {
                                        borderWidth:0,},
                                        dateTouchBody:{ height:30,}
                                   }}
-                            onDateChange={(date) => {vaccine.FactShootTime=date;this.setState({loaded:true,})  }}/>
-                            :<Text style={AppStyle.mpTitle}>{vaccine.FactShootTime?vaccine.FactShootTime.replace('T', ' '):Util.getTime('YYYY-MM-dd')}</Text>
+                                onDateChange={(date) => {vaccine.FactShootTime=date;this.setState({loaded:true,})  }}/>
+                            : <Text
+                            style={AppStyle.mpTitle}>{vaccine.FactShootTime ? vaccine.FactShootTime.replace('T', ' ') : Util.getTime('YYYY-MM-dd')}</Text>
                         }
                         <Text style={AppStyle.mpTitle}>下次执行日期</Text>
                         {this.state.canEdit ?
-                        <DatePicker
-                            date={vaccine.EstimateTime}
-                            mode="date"
-                            placeholder="选择日期"
-                            format="YYYY-MM-DD"
-                            minDate="1980-01-01"
-                            maxDate="2020-01-01"
-                            confirmBtnText="Confirm"
-                            cancelBtnText="Cancel"
-                            showIcon={false}
-                            style={{padding:0, margin:0,width:100,marginLeft:10,}}
-                            enabled={true}
-                            customStyles={{
+                            <DatePicker
+                                date={vaccine.EstimateTime}
+                                mode="date"
+                                placeholder="选择日期"
+                                format="YYYY-MM-DD"
+                                minDate="1980-01-01"
+                                maxDate="2020-01-01"
+                                confirmBtnText="Confirm"
+                                cancelBtnText="Cancel"
+                                showIcon={false}
+                                style={{padding:0, margin:0,width:100,marginLeft:10,}}
+                                enabled={true}
+                                customStyles={{
                                     dateInput: {
                                         alignItems:'flex-start',
                                         height:30,
@@ -622,8 +626,9 @@ class VaccineService extends Component {
                                         height:30,
                                     }
                                   }}
-                            onDateChange={(date) => {vaccine.EstimateTime=date;this.setState({loaded:false})}}/>
-                            :<Text style={AppStyle.mpTitle}>{vaccine.EstimateTime?vaccine.EstimateTime.replace('T', ' '):null}</Text>
+                                onDateChange={(date) => {vaccine.EstimateTime=date;this.setState({loaded:false})}}/>
+                            : <Text
+                            style={AppStyle.mpTitle}>{vaccine.EstimateTime ? vaccine.EstimateTime.replace('T', ' ') : null}</Text>
                         }
                     </View>
                 </View>

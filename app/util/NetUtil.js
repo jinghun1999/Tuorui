@@ -38,7 +38,7 @@ class NetUtil extends React.Component {
                 }
                 callback(result);
             }).catch(error => {
-                toastUtil(error);
+                toastShort(error);
             }).done();
     }
 
@@ -72,7 +72,7 @@ class NetUtil extends React.Component {
                 }
                 callback(result);
             }).catch(error => {
-                toastUtil(error);
+                toastShort(error);
             }).done();
     }
 

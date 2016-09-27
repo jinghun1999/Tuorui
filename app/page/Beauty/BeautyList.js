@@ -14,6 +14,7 @@ import {
     TouchableOpacity,
     ToastAndroid,
     InteractionManager,
+    ActivityIndicator,
     }from 'react-native';
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
@@ -23,7 +24,6 @@ import Loading from '../../commonview/Loading';
 import { toastShort } from '../../util/ToastUtil';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AppStyle from '../../theme/appstyle';
-
 class BeautyList extends React.Component {
     constructor(props) {
         super(props);

@@ -202,7 +202,7 @@ class ChooseBeautyServices extends React.Component {
         return (
             <TouchableOpacity style={AppStyle.row} onPress={()=>this.pressRow(beauty)}>
                 <Text style={[AppStyle.titleText,{flex:1,}]}>{beauty.ItemName}</Text>
-                <Text style={AppStyle.money}>￥{beauty.RecipePrice}</Text>
+                <Text style={AppStyle.money}>￥{beauty.SellPrice}</Text>
                 <Icon name={'angle-right'} size={20} color={'#ccc'}/>
             </TouchableOpacity>
         )

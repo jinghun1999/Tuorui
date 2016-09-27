@@ -1,5 +1,5 @@
 /**
- * Created by tuorui on 2016/9/26.
+ * Created by tuorui on 2016/9/27.
  */
 'use strict';
 import React, { Component } from 'react';
@@ -13,18 +13,20 @@ import {
     Alert,
     TouchableOpacity,
     ToastAndroid,
+    ActivityIndicator,
 }from 'react-native';
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
 import AppStyle from '../../theme/appstyle';
 import Loading from '../../commonview/Loading';
-class VaccineSettlement extends React.Component {
+import { toastShort } from '../../util/ToastUtil';
+class BeautySettlement extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             edit: '结算',
-            vaccine: [],
+            beauty: [],
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
             totalAmount: 0,
             vaccineAmount: 0,
@@ -47,13 +49,13 @@ class VaccineSettlement extends React.Component {
         NetUtil.getAuth(function (user, hos) {
             let header = NetUtil.headerClientAuth(user, hos);
             var vaccItem=[];
-            _this.props.vaccine.forEach((item,index,array)=>{
+            _this.props.beauty.forEach((item,index,array)=>{
                 vaccItem.push(item.ID)
             })
             let getfinpost = {
                 gestID: _this.props.member.ID,
                 isCurrentOnly: null,
-                dicEndItems: {"驱虫疫苗": vaccItem},
+                dicEndItems: {"美容服务": vaccItem},
             };
             //获取疫苗销售信息http://test.tuoruimed.com/service/Api/Finance_SettleAccounts/GetFinaceInfo
             NetUtil.postJson(CONSTAPI.HOST + '/Finance_SettleAccounts/GetFinaceInfo', getfinpost, header, function (findata) {
@@ -153,32 +155,32 @@ class VaccineSettlement extends React.Component {
     componentDidMount() {
         let _this = this;
         let amount = 0;
-        _this.props.vaccine.forEach((item, index, array)=> {
-            amount += item.ItemCost * item.ItemNum
+        _this.props.beauty.forEach((item, index, array)=> {
+            amount += item.SellPrice * item.InputCount
         })
         _this.setState({
-            vaccine: _this.props.vaccine,
+            beauty: _this.props.beauty,
             totalAmount: amount,
         });
 
     }
 
-    _renderRow(vaccine) {
+    _renderRow(beauty) {
         return (
             <View style={AppStyle.row}>
-                <Text style={AppStyle.mpName}>{vaccine.ItemName}</Text>
-                <Text style={AppStyle.mpTitle}>单价:¥ {vaccine.ItemCost}</Text>
-                <Text style={AppStyle.mpTitle}>数量: {vaccine.ItemNum}</Text>
+                <Text style={AppStyle.mpName}>{beauty.ItemName}</Text>
+                <Text style={AppStyle.mpTitle}>单价:¥ {beauty.SellPrice}</Text>
+                <Text style={AppStyle.mpTitle}>数量: {beauty.InputCount}</Text>
             </View>
         )
     }
 
     render() {
         var listBody = <Loading type="text"/>;
-        if (this.props.vaccine.length > 0) {
+        if (this.props.beauty.length > 0) {
             listBody = (
                 <ListView enableEmptySections={true}
-                          dataSource={this.state.ds.cloneWithRows(this.state.vaccine)}
+                          dataSource={this.state.ds.cloneWithRows(this.state.beauty)}
                           renderRow={this._renderRow.bind(this)}
                 />
             )
@@ -199,7 +201,7 @@ class VaccineSettlement extends React.Component {
                     <Text style={AppStyle.rowVal}>{this.props.member.memberName}</Text>
                 </View>
                 <View style={AppStyle.groupTitle}>
-                    <Text style={AppStyle.groupText}>疫苗信息</Text>
+                    <Text style={AppStyle.groupText}>美容信息</Text>
                 </View>
                 <View>
                     {listBody}
@@ -255,4 +257,4 @@ class VaccineSettlement extends React.Component {
         )
     }
 }
-module.exports = VaccineSettlement;
+module.exports = BeautySettlement;

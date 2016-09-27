@@ -2,19 +2,19 @@
  * Created by tuorui on 2016/9/5.
  */
 'use strict';
-import React, { Component } from 'react';
-import {
+import React, {Component} from 'react';
+import{
     StyleSheet,
-    Text,
-    ScrollView,
-    TextInput,
     View,
-    ListView,
-    Alert,
+    Text,
+    TextInput,
     TouchableOpacity,
-    ToastAndroid,
+    Image,
+    Alert,
+    ListView,
+    ScrollView,
     InteractionManager,
-    }from 'react-native';
+} from 'react-native';
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
@@ -26,6 +26,8 @@ import { toastShort } from '../../util/ToastUtil';
 import Picker from 'react-native-picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AppStyle from '../../theme/appstyle';
+import NButton from '../../commonview/NButton';
+import BeautySettlement from './BeautySettlement';
 class BeautyServices extends React.Component {
     constructor(props) {
         super(props);
@@ -49,13 +51,12 @@ class BeautyServices extends React.Component {
             isEdit: true,
             ServicerNameData: [''],
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
+            num: 1,
         }
     }
 
     componentWillMount() {
-        InteractionManager.runAfterInteractions(() => {
-            this._loadData();
-        });
+        this._loadData();
     }
 
     _onBack() {
@@ -154,7 +155,7 @@ class BeautyServices extends React.Component {
                             })
                             if (!_exists) {
                                 _beauty.push(beauty);
-                                _this.state.totalAmount += beauty.RecipePrice;
+                                _this.state.totalAmount += beauty.SellPrice;
                                 _this.state.totalNum += 1;
                             }
                             _this.setState({
@@ -179,9 +180,11 @@ class BeautyServices extends React.Component {
                 {text: '取消'},
                 {
                     text: '确定', onPress: () => {
-                    if (beauty.PaidStatus === 'SM00051') {
-                        toastShort('此项目已缴费,不可删除!');
-                        return false;
+                    if(this.props.beautyID==2){
+                        if (beauty.PaidStatus === 'SM00051') {
+                            toastShort('此项目已缴费,不可删除!');
+                            return false;
+                        }
                     }
                     let newSource = [];
                     _this.state.beautySource.forEach((item, index, array)=> {
@@ -286,19 +289,19 @@ class BeautyServices extends React.Component {
                             "ServiceID": null,
                             "ItemCode": _beauty[i].ItemCode,
                             "ItemName": _beauty[i].ItemName,
-                            "ItemStandard": "",
+                            "ItemStandard": _beauty[i].ItemStandard ? _beauty[i].ItemStandard : '',
                             "BarCode": _beauty[i].BarCode,
                             "SellPrice": _beauty[i].SellPrice,
-                            "InputCount": 1,
+                            "InputCount": _beauty[i].InputCount,
                             "TotalCost": _beauty[i].TotalCost,
                             "PackageUnit": _beauty[i].PackageUnit,
                             "PaidStatus": "SM00040",
                             "PaidTime": null,
                             "Remark": null,
-                            "CreatedBy": null,
-                            "CreatedOn": "0001-01-01T00:00:00",
-                            "ModifiedBy": null,
-                            "ModifiedOn": "0001-01-01T00:00:00",
+                            "CreatedBy": user.FullName,
+                            "CreatedOn": Util.getTime(),
+                            "ModifiedBy": user.FullName,
+                            "ModifiedOn": Util.getTime(),
                             "EntID": "00000000-0000-0000-0000-000000000000"
                         };
                         beautyItems.push(item);
@@ -415,6 +418,27 @@ class BeautyServices extends React.Component {
 
     }
 
+    _saveAndSet() {
+        //保存并结算
+        let _this = this;
+        const {navigator}=_this.props;
+        if (navigator) {
+            navigator.push({
+                name: 'BeautySettlement',
+                component: BeautySettlement,
+                params: {
+                    headTitle: '美容结算',
+                    beauty: _this.state.beautySource,
+                    member: {
+                        ID: _this.state.petSource.GestID,
+                        memberCode: _this.state.petSource.GestCode,
+                        memberName: _this.state.petSource.GestName,
+                    },
+                }
+            })
+        }
+    }
+
     _onChooseService() {
         if (this.state.canChoose) {
             this.picker.toggle();
@@ -485,10 +509,48 @@ class BeautyServices extends React.Component {
 
     _onRenderRow(beauty) {
         return (
-            <TouchableOpacity style={AppStyle.row} onPress={()=>this._onBeautyDetails(beauty)}>
+            <View style={AppStyle.row}>
                 <Text style={AppStyle.mpName}>{beauty.ItemName}</Text>
-                <Text style={{fontSize:14,color:'#8B0000'}}>单价: ¥{beauty.SellPrice}</Text>
-            </TouchableOpacity>
+                <Text style={AppStyle.mpTitle}>单价: ¥{beauty.SellPrice}</Text>
+                <Text style={AppStyle.mpTitle}>数量:</Text>
+                <View style={AppStyle.mpBorder}>
+                    {this.state.edit === '保存' ?
+                        <TextInput value={beauty.InputCount.toString()}
+                                   defaultValue={this.state.num.toString()}
+                                   editable={true}
+                                   underlineColorAndroid={'transparent'}
+                                   keyboardType={'numeric'}
+                                   style={AppStyle.input}
+                                   onChangeText={(text)=>{
+                                       beauty.InputCount=text;
+                                       beauty.TotalCost=beauty.SellPrice*beauty.InputCount;
+                                       let _countAmount=0;
+                                       if(!text || isNaN(text)){
+                                        this.setState({num:1})
+                                        return false;
+                                        }
+                                        if(this.state.beautySource.length===1){
+                                            this.setState({totalAmount:beauty.SellPrice*text})
+                                        }else{
+                                            this.state.beautySource.forEach((item,index,array)=>{
+                                                if(item.ItemCode===beauty.ItemCode){return false;}
+                                                _countAmount+=item.SellPrice*item.InputCount
+                                            })
+                                            this.setState({totalAmount:_countAmount+(beauty.SellPrice*text)})
+                                        }
+
+                                       }}/>
+                        : <Text style={[AppStyle.mpTitle,{textAlign:'center'}]}>{beauty.InputCount ? beauty.InputCount : 1}</Text>
+                    }
+                </View>
+                {this.state.edit==='保存'?
+                    <TouchableOpacity style={AppStyle.mpBtn} onPress={()=>this._onBeautyDetails(beauty)}>
+                        <Text style={{color:'white',textAlign:'center'}}>删除</Text>
+                    </TouchableOpacity>
+                :null
+                }
+
+            </View>
         );
     }
 
@@ -507,7 +569,13 @@ class BeautyServices extends React.Component {
                           dataSource={this.state.ds.cloneWithRows(this.state.beautySource)}
                           renderHeader={this._renderHeader.bind(this)}
                           renderRow={this._onRenderRow.bind(this)}
-                    />
+                />
+                {this.state.edit === '编辑' ?
+                    <View style={{padding:10,}}>
+                        <NButton onPress={this._saveAndSet.bind(this)} backgroundColor={'#1E90FF'} text="结算"/>
+                    </View>
+                    : null
+                }
                 <Picker
                     style={{height: 300}}
                     showDuration={300}
@@ -522,7 +590,7 @@ class BeautyServices extends React.Component {
                      serviceName: text!==null?text[0]:'',
                  })
                  }}
-                    />
+                />
             </View>
         )
     }
