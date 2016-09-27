@@ -86,13 +86,13 @@ class AddMemberInfo extends Component {
                         loaded: true,
                     });
                 } else {
-                    toastShort("获取数据失败：" + data.Message, [{text: '确定'}]);
+                    toastShort("获取数据失败：" + data.Message);
                     _this.setState({
                         loaded: true,
                     });
                 }
             }, function (err) {
-                toastShort(err, [{text: '确定'}]);
+                toastShort(err);
             })
         })
     }

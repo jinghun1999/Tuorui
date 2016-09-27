@@ -183,10 +183,8 @@ class AddPet extends Component {
         } else if (_this.state.edit == '保存' && _this.state.isUpdate == true) {
             NetUtil.getAuth(function (user, hos) {
                 let header = NetUtil.headerClientAuth(user, hos);
-                if (_this.props.member.gestCode == null) {
-                    return false
-                }
-                if (_this.props.member.memberID == null) {
+                if (_this.props.member == null || _this.props.member.gestCode == null || _this.props.member.memberID == null) {
+                    toastShort('未知的会员信息');
                     return false
                 }
                 let item = {
