@@ -99,7 +99,7 @@ class MemberDetails extends Component {
                 }
             });
         }, function (err) {
-            toastShort(er);
+            toastShort(err);
         })
     }
 
