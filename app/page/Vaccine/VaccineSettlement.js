@@ -35,11 +35,9 @@ class VaccineSettlement extends React.Component {
 
     _onSaveInfo() {
         let _this =this;
-        if (_this.state.vaccineDiscount == null || _this.state.vaccineAmount==null) {
-            toastShort("请输入金额");
-            return false;
-        }else if(_this.state.vaccineDiscount==0 || _this.state.vaccineAmount==0 ){
-            toastShort("请输入金额");
+        let _count = parseFloat(_this.state.vaccineDiscount)+parseFloat(_this.state.vaccineAmount);
+        if (_count!== _this.state.totalAmount) {
+            toastShort("金额不正确");
             return false;
         }
 
@@ -53,10 +51,9 @@ class VaccineSettlement extends React.Component {
             })
             let getfinpost = {
                 gestID: _this.props.member.ID,
-                isCurrentOnly: true,
                 dicEndItems: {"驱虫疫苗": vaccItem},
+                isCurrentOnly: false,
             };
-            alert(_this.props.member.ID+' yimiao:'+vaccItem)
             //获取疫苗销售信息http://test.tuoruimed.com/service/Api/Finance_SettleAccounts/GetFinaceInfo
             NetUtil.postJson(CONSTAPI.HOST + '/Finance_SettleAccounts/GetFinaceInfo', getfinpost, header, function (findata) {
                 if (findata.Sign && findata.Message != null) {
@@ -71,7 +68,7 @@ class VaccineSettlement extends React.Component {
                     });
                     let finishpost = {
                         "newSA": {
-                            "ID": null,
+                            "ID": "00000000-0000-0000-0000-000000000000",
                             "SettleCode": null,
                             "GestID": findata.Message.CurrentGest.ID,
                             "GestCode": findata.Message.CurrentGest.GestCode,
@@ -79,9 +76,9 @@ class VaccineSettlement extends React.Component {
                             "PetCode": null,
                             "PetName": null,
                             "TotalMoney": _this.state.totalAmount,
-                            "DisCountMoney": _this.state.vaccineDiscount,
-                            "ShouldPaidMoney": _this.state.totalAmount,
-                            "FactPaidMoney": _this.state.totalAmount,
+                            "DisCountMoney": parseInt(_this.state.vaccineDiscount),
+                            "ShouldPaidMoney": parseFloat(_this.state.vaccineAmount),
+                            "FactPaidMoney": parseFloat(_this.state.vaccineAmount),
                             "BackMoney": null,
                             "BackReason": null,
                             "PaidStatus": null,
@@ -91,13 +88,15 @@ class VaccineSettlement extends React.Component {
                             "ModifiedBy": null,
                             "ModifiedOn": null,
                             "ChangeMoney": 0.00,
-                            "EntID": findata.Message.CurrentGest.EntID,
+                            "EntID": "00000000-0000-0000-0000-000000000000",
                             "HandDiscountMoney": 0.00,
-                            "InputDiscountMoney": _this.state.vaccineDiscount,
+                            "InputDiscountMoney": parseInt(_this.state.vaccineDiscount),
                             "OriginalDiscountMoney": 0.0,
-                            "FactTotalMoney": _this.state.totalAmount
+                            "FactTotalMoney": _this.state.totalAmount,
+                            "CreatedByID":"00000000-0000-0000-0000-000000000000",
+                            "ModifiedByID":"00000000-0000-0000-0000-000000000000"
                         },
-                        "fSADetalList": fsasp,
+                        "fSADetailList": fsasp,
                         "gprList": [{
                             "ID": null,
                             "GestID": null,
@@ -109,7 +108,9 @@ class VaccineSettlement extends React.Component {
                             "CreatedOn": null,
                             "ModifiedBy": null,
                             "ModifiedOn": null,
-                            "EntID": null
+                            "EntID": null,
+                            "CreatedByID":null,
+                            "ModifiedByID":null
                         }, {
                             "ID": null,
                             "GestID": null,
@@ -121,7 +122,9 @@ class VaccineSettlement extends React.Component {
                             "CreatedOn": null,
                             "ModifiedBy": null,
                             "ModifiedOn": null,
-                            "EntID": null
+                            "EntID": null,
+                            "CreatedByID":null,
+                            "ModifiedByID":null
                         }]
                     };
                     //结算
@@ -224,6 +227,13 @@ class VaccineSettlement extends React.Component {
                                         this.setState({
                                             vaccineAmount:parseFloat(text)
                                         })
+                                        var d = parseFloat(text);
+                                if(!d || isNaN(d)){
+                                    this.setState({
+                                        vaccineAmount: 0,
+                                    });
+                                    return false;
+                                }
                                    }}
                     />
                 </View>
@@ -238,7 +248,7 @@ class VaccineSettlement extends React.Component {
                                         this.setState({
                                             vaccineDiscount:text
                                         })
-                                        var d = parseFloat(text);
+                                var d = parseFloat(text);
                                 if(!d || isNaN(d)){
                                     this.setState({
                                         vaccineAmount: 0,

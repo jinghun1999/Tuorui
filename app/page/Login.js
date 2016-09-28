@@ -22,7 +22,7 @@ import Index from '../../Index';
 import NButton from '../commonview/NButton';
 import Register from './Register';
 import FindPwd from './FindPwd';
-
+import { toastShort } from '../util/ToastUtil';
 class Login extends React.Component {
     constructor(props) {
         super(props);
@@ -34,24 +34,13 @@ class Login extends React.Component {
     }
 
     _Login() {
+        this.refs.pwd.blur();
         if (!this.state.user || this.state.user.length == 0) {
-            Alert.alert('错误', "请输入用户名",
-                [
-                    {
-                        text: '确定', onPress: () => {
-                    }
-                    },
-                ]);
+            toastShort('请输入用户名')
             return;
         }
         if (!this.state.pwd || this.state.pwd.length == 0) {
-            Alert.alert('错误', "请输入密码",
-                [
-                    {
-                        text: '确定', onPress: () => {
-                    }
-                    },
-                ]);
+            toastShort('请输入密码')
             return;
         }
 
@@ -69,21 +58,11 @@ class Login extends React.Component {
                         });
                     }
                 } else {
-                    Alert.alert('提示', msg,
-                        [
-                            {
-                                text: '确定'
-                            },
-                        ]);
+                    toastShort(msg)
                 }
             });
         } catch (e) {
-            Alert.alert('错误', "登陆失败.(500)" + e,
-                [
-                    {
-                        text: '确定'
-                    },
-                ]);
+            toastShort("登陆失败.(500)" + e)
         }
     }
 

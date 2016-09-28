@@ -71,7 +71,7 @@ class BeautySettlement extends React.Component {
                     });
                     let finishpost = {
                         "newSA": {
-                            "ID": null,
+                            "ID": "00000000-0000-0000-0000-000000000000",
                             "SettleCode": null,
                             "GestID": findata.Message.CurrentGest.ID,
                             "GestCode": findata.Message.CurrentGest.GestCode,
@@ -79,9 +79,9 @@ class BeautySettlement extends React.Component {
                             "PetCode": null,
                             "PetName": null,
                             "TotalMoney": _this.state.totalAmount,
-                            "DisCountMoney": _this.state.vaccineDiscount,
-                            "ShouldPaidMoney": _this.state.totalAmount,
-                            "FactPaidMoney": _this.state.totalAmount,
+                            "DisCountMoney": parseInt(_this.state.vaccineDiscount),
+                            "ShouldPaidMoney": parseFloat(_this.state.vaccineAmount),
+                            "FactPaidMoney": parseFloat(_this.state.vaccineAmount),
                             "BackMoney": null,
                             "BackReason": null,
                             "PaidStatus": null,
@@ -93,11 +93,13 @@ class BeautySettlement extends React.Component {
                             "ChangeMoney": 0.00,
                             "EntID": findata.Message.CurrentGest.EntID,
                             "HandDiscountMoney": 0.00,
-                            "InputDiscountMoney": _this.state.vaccineDiscount,
+                            "InputDiscountMoney": parseInt(_this.state.vaccineDiscount),
                             "OriginalDiscountMoney": 0.0,
-                            "FactTotalMoney": _this.state.totalAmount
+                            "FactTotalMoney": _this.state.totalAmount,
+                            "CreatedByID":"00000000-0000-0000-0000-000000000000",
+                            "ModifiedByID":"00000000-0000-0000-0000-000000000000"
                         },
-                        "fSADetalList": fsasp,
+                        "fSADetailList": fsasp,
                         "gprList": [{
                             "ID": null,
                             "GestID": null,
@@ -127,18 +129,18 @@ class BeautySettlement extends React.Component {
                     //结算
                     NetUtil.postJson(CONSTAPI.HOST + '/Finance_SettleAccounts/Finish', finishpost, header, function (okdata) {
                         if (okdata.Sign && okdata.Message != null) {
-                            Alert.alert('提示', '结算成功', [{text: '确定'},]);
+                            toastShort("结算成功");
                             if (_this.props.getResult) {
                                 _this.props.getResult();
                             }
                             _this._onBack();
                         } else {
-                            Alert.alert('提示', '结算失败', [{text: '确定'}]);
+                            toastShort("结算失败");
                         }
                     });
                 }
                 else {
-                    Alert.alert('提示', '获取疫苗销售信息失败', [{text: '确定'}]);
+                    toastShort("获取疫苗销售信息失败");
                 }
             });
         })

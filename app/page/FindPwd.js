@@ -18,7 +18,7 @@ import NetUtil from '../util/NetUtil';
 import Index from '../../Index';
 import NButton from '../commonview/NButton';
 import Head from '../commonview/Head';
-
+import { toastShort } from '../util/ToastUtil';
 class FindPwd extends Component {
     constructor(props) {
         super(props);
@@ -43,7 +43,7 @@ class FindPwd extends Component {
         let c = 60;
         let _this = this;
         if (_this.state.phone.length !== 11) {
-            Alert.alert('提示', "请输入正确的手机号", [{text: '确定'}]);
+            toastShort("请输入正确的手机号");
             return;
         }
         let uri = CONSTAPI.Auth + '/verify?clientid=' + this.state.phone + '&mobile=' + this.state.phone
@@ -67,7 +67,7 @@ class FindPwd extends Component {
                     1000
                 );
             } else {
-                Alert.alert('提示', '验证码发送失败，请重试', [{text: '确定'}]);
+                toastShort("验证码发送失败，请重试");
             }
         });
     }
@@ -76,19 +76,19 @@ class FindPwd extends Component {
         let _this = this;
         const {navigator} = _this.props;
         if (_this.state.phone.length !== 11) {
-            Alert.alert('提示', "请输入正确的手机号", [{text: '确定'}]);
+            toastShort("请输入正确的手机号");
             return;
         }
         if (_this.state.code.length !== 6) {
-            Alert.alert('提示', "请输入正确的验证码", [{text: '确定'}]);
+            toastShort("请输入正确的验证码");
             return;
         }
         if (_this.state.pwd.length < 6) {
-            Alert.alert('提示', "密码太短啦", [{text: '确定'}]);
+            toastShort("密码太短啦");
             return;
         }
         if (_this.state.pwd.indexOf('12345') > -1) {
-            Alert.alert('提示', '密码太简单，请重新设置', [{text: '确定'}]);
+            toastShort("密码太简单，请重新设置");
             return false;
         }
         let postjson = {
@@ -113,15 +113,15 @@ class FindPwd extends Component {
                                 });
                             }
                         } else {
-                            Alert.alert('提示', msg, [{text: '确定'}]);
+                            toastShort(msg);
                         }
                     });
                 } else {
-                    Alert.alert('提示', data.Exception, [{text: '确定'}]);
+                    toastShort(data.Exception);
                 }
             });
         } catch (e) {
-            Alert.alert('错误', '找回密码失败(500)' + e, [{text: '确定'}]);
+            toastShort('找回密码失败(500)' + e);
         }
     }
 

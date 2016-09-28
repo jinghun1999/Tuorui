@@ -99,6 +99,7 @@ class VaccineService extends Component {
                 edit: '编辑',
                 VaccineGroupCode: _this.props.vaccine.VaccineGroupCode,
                 executorName: _this.props.vaccine.ExecutorName,
+                shootState:_this.props.vaccine.ShootStatus,
             });
             //获取疫苗信息列表
             var postdata = {
@@ -126,7 +127,7 @@ class VaccineService extends Component {
                         var _totalAmount = 0
                         var _totalNum = 0
                         data.Message.forEach((item, index, array)=> {
-                            _totalAmount += item.ItemCost;
+                            _totalAmount += item.TotalCost;
                             _totalNum += 1;
                         })
                         _this.setState({
@@ -136,7 +137,7 @@ class VaccineService extends Component {
                             loaded: true,
                         });
                     } else {
-                        alert("获取数据失败：" + data.Message);
+                        toastShort("获取数据失败"+ data.Message);
                         _this.setState({
                             loaded: true,
                         });
@@ -159,7 +160,7 @@ class VaccineService extends Component {
                     });
                 })
             }, function (err) {
-                alert(err)
+                toastShort(err);
             })
         }
 
@@ -314,7 +315,7 @@ class VaccineService extends Component {
                             "MobilePhone": _this.state.petSource.MobilePhone,
                             "ItemName": _vaccine[i].ItemName,
                             "ItemCode": _vaccine[i].ItemCode,
-                            "ItemCost": _vaccine[i].SellPrice ? _vaccine[i].SellPrice : _vaccine[i].TotalCost,
+                            "ItemCost": _vaccine[i].SellPrice,
                             "ItemStandard": _vaccine[i].ItemStandard,
                             "EstimateTime": _vaccine[i].EstimateTime,
                             "FactShootTime": _vaccine[i].FactShootTime,
@@ -343,7 +344,7 @@ class VaccineService extends Component {
                             "AssistantDoctorID": _vaccine[i].AssistantDoctorID,
                             "AssistantDoctorName": _vaccine[i].AssistantDoctorName,
                             "ItemNum": _vaccine[i].ItemNum,
-                            "TotalCost": _vaccine[i].SellPrice ? _vaccine[i].SellPrice : _vaccine[i].TotalCost,
+                            "TotalCost": _vaccine[i].TotalCost,
                             "Sign": null,
                             "EntID": "00000000-0000-0000-0000-000000000000"
                         };
@@ -647,6 +648,27 @@ class VaccineService extends Component {
     }
 
     render() {
+        var sett ;
+        if(!this.state.canEdit){
+            //true 新增 false 详情
+            if(this.state.shootState!=='SM00030'){
+                sett=(
+                    <View style={{padding:5,}}>
+                        <NButton onPress={this._saveAndSet.bind(this,false)} backgroundColor={'#1E90FF'} text="结算"/>
+                    </View>
+                )
+            }else{
+                sett=null
+            }
+        }else{
+            sett=(
+
+                <View style={{padding:5,}}>
+        <NButton onPress={this._saveAndSet.bind(this,true)} backgroundColor={'#1E90FF'} text="保存并结算"/>
+                </View>
+            )
+        }
+
         return (
             <View style={AppStyle.container}>
                 <Head title={this.props.headTitle}
@@ -660,14 +682,7 @@ class VaccineService extends Component {
                           renderHeader={this._renderHeader.bind(this)}
                           renderRow={this._renderRow.bind(this)}
                 />
-                {this.state.canEdit ?
-                    <View style={{padding:10,}}>
-                        <NButton onPress={this._saveAndSet.bind(this,true)} backgroundColor={'#1E90FF'} text="保存并结算"/>
-                    </View>
-                    : <View style={{padding:10,}}>
-                    <NButton onPress={this._saveAndSet.bind(this,false)} backgroundColor={'#1E90FF'} text="结算"/>
-                </View>
-                }
+                {sett}
                 <Picker
                     style={{height: 300}}
                     showDuration={300}

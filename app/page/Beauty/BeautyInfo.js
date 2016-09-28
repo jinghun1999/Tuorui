@@ -189,7 +189,7 @@ class BeautyServices extends React.Component {
                     let newSource = [];
                     _this.state.beautySource.forEach((item, index, array)=> {
                         if (beauty.ItemCode === item.ItemCode) {
-                            _this.state.totalAmount -= beauty.SellPrice;
+                            _this.state.totalAmount -= beauty.SellPrice*(beauty.InputCount?beauty.InputCount:this.state.num);
                             _this.state.totalNum -= 1;
                         } else {
                             newSource.push(item);
@@ -515,8 +515,7 @@ class BeautyServices extends React.Component {
                 <Text style={AppStyle.mpTitle}>数量:</Text>
                 {this.state.edit === '保存' ?
                     <View style={AppStyle.mpBorder}>
-
-                        <TextInput value={beauty.InputCount.toString()}
+                        <TextInput value={beauty.InputCount}
                                    defaultValue={this.state.num.toString()}
                                    editable={true}
                                    underlineColorAndroid={'transparent'}
@@ -524,22 +523,19 @@ class BeautyServices extends React.Component {
                                    style={AppStyle.input}
                                    onChangeText={(text)=>{
                                        beauty.InputCount=text;
-                                       beauty.TotalCost=beauty.SellPrice*beauty.InputCount;
+                                       beauty.TotalCost=beauty.SellPrice*beauty.InputCount?beauty.InputCount:this.state.num;
                                        let _countAmount=0;
                                        if(!text || isNaN(text)){
                                         this.setState({num:1})
                                         return false;
                                         }
-                                        if(this.state.beautySource.length===1){
-                                            this.setState({totalAmount:beauty.SellPrice*text})
-                                        }else{
+                                        if(this.state.beautySource.length>1){
                                             this.state.beautySource.forEach((item,index,array)=>{
                                                 if(item.ItemCode===beauty.ItemCode){return false;}
-                                                _countAmount+=item.SellPrice*item.InputCount
+                                                _countAmount+=item.SellPrice*(item.InputCount?item.InputCount:this.state.num)
                                             })
-                                            this.setState({totalAmount:_countAmount+(beauty.SellPrice*text)})
                                         }
-
+                                        this.setState({totalAmount:_countAmount+(beauty.SellPrice*(beauty.InputCount?beauty.InputCount:this.state.num))})
                                        }}/>
                     </View>
                     : <Text style={AppStyle.mpTitle}>{beauty.InputCount ? beauty.InputCount : 1}</Text>

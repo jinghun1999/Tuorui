@@ -180,12 +180,14 @@ class BeautyList extends React.Component {
     }
 
     _onRenderRow(beauty) {
+        //PaidStatus=SM00051
         return (
             <TouchableOpacity style={AppStyle.row} onPress={()=>this._onBeautyDetails(beauty)}>
                 <View style={{flex:1, marginRight:10,}}>
                     <View style={{flex:1, flexDirection:'row'}}>
                         <Text style={AppStyle.titleText}>会员: {beauty.GestName}</Text>
-                        <Text style={{flex:1, textAlign:'right'}}>手机: {beauty.MobilePhone}</Text>
+                        {beauty.PaidStatus === 'SM00051' ? <Text style={{color:'#FF8247'}}>已付款</Text> :
+                            <Text style={{color:'#CDC9A5'}}>未付款</Text>}
                     </View>
                     <View style={{flexDirection:'row',marginTop:3}}>
                         <Text style={{flex:1}}>宠物: {beauty.PetName}</Text>
