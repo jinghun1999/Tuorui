@@ -190,13 +190,13 @@ class SaleList extends Component {
         return (
             <TouchableOpacity style={styles.row} onPress={()=>this._pressRow(obj)}>
                 <View style={{flexDirection:'row',}}>
-                    <Text style={{fontSize:16, flex:1, color:'#CC0033'}}>单号:{obj.DirectSellCode}</Text>
+                    <Text style={{fontSize:16, flex:2, color:'#CC0033'}}>单号:{obj.DirectSellCode}</Text>
                     {status}
                 </View>
                 <View style={{flexDirection:'row'}}>
                     <Text style={{flex: 1,}}>会员:{obj.GestName}</Text>
                     <Text style={{flex: 1,}}>总价:¥{obj.TotalCost}</Text>
-                    <Text style={{flex:1, textAlign:'right'}}>{obj.CreatedOn.replace('T', ' ')}</Text>
+                    <Text style={{flex: 2, textAlign:'right'}}>{Util.getFormateTime(obj.CreatedOn, 'min')}</Text>
                 </View>
 
             </TouchableOpacity>

@@ -324,6 +324,7 @@ class HomePage extends Component {
                                   />
                                 }
                         />
+                    <View style={{marginTop:50,}}></View>
                 </View>
             )
         }

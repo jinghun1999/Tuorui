@@ -129,13 +129,8 @@ class App extends Component {
 
     render() {
         let body;
-        let noTips = (
-            <View style={styles.rows}>
-                <Text style={styles.rowTitle}>您的手机还未绑定任何医院！</Text>
-            </View>
-        );
         if (!this.state.userloaded || !this.state.hosloaded) {
-            body = (<Loading type={'text'}/>);
+            body = <Loading type={'text'}/>;
         }
         else if (this.state.hospital.ID != null && this.state.hospital.ID != '') {
             body = (
@@ -213,15 +208,19 @@ class App extends Component {
                          </TouchableOpacity>*/}
                         <View style={{flex:2}}></View>
                     </View>
-
                 </View>);
         } else {
             body = (
                 <View style={{flexDirection:'column', margin:15,}}>
-                    <View style={{height:30, justifyContent:'center'}}>
-                        <Text>您当前还没有默认医院，请先选择默认医院</Text>
-                    </View>
-                    {this.state.hospitals.length > 0 ? null : noTips}
+                    {this.state.hospitals.length > 0 ?
+                        <View style={{height:30, justifyContent:'center'}}>
+                            <Text>您当前还没有默认医院，请先选择默认医院</Text>
+                        </View>
+                        :
+                        <View style={styles.rows}>
+                            <Text style={styles.rowTitle}>您的手机还未绑定任何医院！</Text>
+                        </View>
+                    }
                     <ListView dataSource={this.state.ds.cloneWithRows(this.state.hospitals)}
                               renderRow={this._renderHos.bind(this)}
                               initialListSize={15}
@@ -246,8 +245,8 @@ class App extends Component {
 }
 
 const styles = StyleSheet.create({
-    container: {},
-    contentContainer: {},
+    container: {flex: 1,},
+    contentContainer: {flex: 1,},
     homeStyle: {
         flexDirection: 'row',
         alignItems: 'center',
