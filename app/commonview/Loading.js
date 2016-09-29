@@ -10,6 +10,7 @@ import {
     Text,
     Image,
     Dimensions,
+    ActivityIndicator,
     Animated
     } from 'react-native';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
@@ -26,7 +27,10 @@ class Loading extends React.Component {
         }
         return (
             <View style={styles.container}>
-                <View style={styles.inner}>{body}</View>
+                <View style={styles.inner}>
+                    <ActivityIndicator size="large" />
+                    {body}
+                </View>
             </View>
         );
     }

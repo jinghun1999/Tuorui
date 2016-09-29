@@ -80,11 +80,12 @@ class VaccineService extends Component {
                 _this.setState({
                     executorSource: serviceData,
                     executorNameData: _data,
+                    executorName:_data[0],
                 });
             })
 
         }, function (err) {
-            alert(err)
+            toastShort(err)
         })
         if (_this.props.id == 2) {
             //疫苗详情
@@ -99,7 +100,7 @@ class VaccineService extends Component {
                 edit: '编辑',
                 VaccineGroupCode: _this.props.vaccine.VaccineGroupCode,
                 executorName: _this.props.vaccine.ExecutorName,
-                shootState:_this.props.vaccine.ShootStatus,
+                shootState: _this.props.vaccine.ShootStatus,
             });
             //获取疫苗信息列表
             var postdata = {
@@ -137,14 +138,14 @@ class VaccineService extends Component {
                             loaded: true,
                         });
                     } else {
-                        toastShort("获取数据失败"+ data.Message);
+                        toastShort("获取数据失败" + data.Message);
                         _this.setState({
                             loaded: true,
                         });
                     }
                 })
             }, function (err) {
-                alert(err)
+                toastShort(err)
             })
 
         } else if (_this.props.id === 1) {
@@ -168,8 +169,18 @@ class VaccineService extends Component {
 
     _saveAndSet(isResult) {
         let _this = this;
+        if (_this.state.petSource.PetName == '' || _this.state.petSource.length==0) {
+            toastShort('请选择宠物信息');
+            return;
+        } else if (_this.state.executorName == '' || _this.state.executorName == null) {
+            toastShort('请选择执行人');
+            return;
+        } else if (_this.state.vaccine.length == 0) {
+            toastShort('请选择疫苗');
+            return;
+        }
         if (isResult) {
-            _this._onSaveInfo();
+            _this._onSaveInfo(false);
         }
         const {navigator}=_this.props;
         if (navigator) {
@@ -189,7 +200,7 @@ class VaccineService extends Component {
         }
     }
 
-    _onSaveInfo() {
+    _onSaveInfo(isCan) {
         //保存疫苗信息
         let _this = this;
         if (_this.state.edit == '编辑') {
@@ -198,15 +209,15 @@ class VaccineService extends Component {
             })
         }
         else if (_this.state.edit == '保存') {
-            if (_this.state.petSource.GestCode == null) {
+            if (_this.state.petSource.PetName == ''|| _this.state.petSource.length==0) {
                 toastShort('请选择宠物信息');
-                return false;
+                return;
             } else if (_this.state.executorName == '' || _this.state.executorName == null) {
                 toastShort('请选择执行人');
-                return false;
+                return;
             } else if (_this.state.vaccine.length == 0) {
                 toastShort('请选择疫苗');
-                return false;
+                return;
             }
             if (_this.props.id == 1) {
                 //1新增
@@ -281,7 +292,10 @@ class VaccineService extends Component {
                             if (_this.props.getResult) {
                                 _this.props.getResult();
                             }
-                            _this._onBack();
+                            if(isCan){
+                                _this._onBack();
+                            }
+
                         } else {
                             toastShort('获取数据错误' + data.Message);
                         }
@@ -292,7 +306,7 @@ class VaccineService extends Component {
             }
             else if (_this.props.id == 2) {
                 //2 详情修改
-                NetUtil.getAuth(function (user, hos) {
+                /*NetUtil.getAuth(function (user, hos) {
                     var vaccineGroupCode = _this.state.VaccineGroupCode;
                     let vaccineItems = [];
                     let _vaccine = _this.state.vaccine;
@@ -369,7 +383,7 @@ class VaccineService extends Component {
                     });
                 }, function (err) {
                     toastShort(err);
-                })
+                })*/
             }
             _this.setState({
                 edit: '编辑',
@@ -518,7 +532,7 @@ class VaccineService extends Component {
                     <Icon name={'angle-right'} size={20} color={'#ccc'}/>
                 </TouchableOpacity>
                 <View style={AppStyle.row}>
-                    <Text style={AppStyle.rowTitle}>数量</Text>
+                    <Text style={AppStyle.rowTitle}>疫苗数</Text>
                     <Text style={AppStyle.rowVal}>{this.state.totalNum.toString()}</Text>
                 </View>
                 <View style={AppStyle.row}>
@@ -600,7 +614,7 @@ class VaccineService extends Component {
                                   }}
                                 onDateChange={(date) => {vaccine.FactShootTime=date;this.setState({loaded:true,})  }}/>
                             : <Text
-                            style={AppStyle.mpTitle}>{vaccine.FactShootTime ? vaccine.FactShootTime.substr(0,10) : Util.getTime('YYYY-MM-dd')}</Text>
+                            style={AppStyle.mpTitle}>{vaccine.FactShootTime ? vaccine.FactShootTime.substr(0, 10) : Util.getTime('YYYY-MM-dd')}</Text>
                         }
                         <Text style={AppStyle.mpTitle}>下次执行</Text>
                         {this.state.canEdit ?
@@ -630,7 +644,7 @@ class VaccineService extends Component {
                                   }}
                                 onDateChange={(date) => {vaccine.EstimateTime=date;this.setState({loaded:false})}}/>
                             : <Text
-                            style={AppStyle.mpTitle}>{vaccine.EstimateTime ? vaccine.EstimateTime.substr(0,10) : null}</Text>
+                            style={AppStyle.mpTitle}>{vaccine.EstimateTime ? vaccine.EstimateTime.substr(0, 10) : null}</Text>
                         }
                     </View>
                 </View>
@@ -647,28 +661,16 @@ class VaccineService extends Component {
 
     }
 
-    render() {
-        var sett ;
-        if(!this.state.canEdit){
-            //true 新增 false 详情
-            if(this.state.shootState!=='SM00030'){
-                sett=(
-                    <View style={{padding:5,}}>
-                        <NButton onPress={this._saveAndSet.bind(this,false)} backgroundColor={'#1E90FF'} text="结算"/>
-                    </View>
-                )
-            }else{
-                sett=null
-            }
-        }else{
-            sett=(
 
-                <View style={{padding:5,}}>
-        <NButton onPress={this._saveAndSet.bind(this,true)} backgroundColor={'#1E90FF'} text="保存并结算"/>
+    render() {
+        if (!this.state.loaded) {
+            return (
+                <View style={AppStyle.container}>
+                    <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
+                    <Loading type="text"/>
                 </View>
             )
         }
-
         return (
             <View style={AppStyle.container}>
                 <Head title={this.props.headTitle}
@@ -682,7 +684,17 @@ class VaccineService extends Component {
                           renderHeader={this._renderHeader.bind(this)}
                           renderRow={this._renderRow.bind(this)}
                 />
-                {sett}
+                {this.state.canEdit ?
+                    <View style={{padding:5,}}>
+                        {
+                            this.state.shootState === 'SM00030'
+                                ?null:
+                                <NButton onPress={this._saveAndSet.bind(this)} backgroundColor={'#1E90FF'} text="结算"/>
+                        }
+
+                    </View>
+                    : null
+                }
                 <Picker
                     style={{height: 300}}
                     showDuration={300}

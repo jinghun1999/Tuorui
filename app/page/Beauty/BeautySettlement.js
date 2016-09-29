@@ -36,14 +36,12 @@ class BeautySettlement extends React.Component {
 
     _onSaveInfo() {
         let _this =this;
-        if (_this.state.vaccineDiscount == null) {
-            toastShort("输入折扣");
-            return false;
-        }else if(_this.state.vaccineDiscount==0){
-            toastShort("输入折扣");
+        let _count = parseFloat(_this.state.vaccineDiscount)+parseFloat(_this.state.vaccineAmount);
+        if (_count!== _this.state.totalAmount) {
+            toastShort("金额不正确");
             return false;
         }
-
+        if(_this.state.beauty.PaidStatus==='SM00051'){return false;}
         //http://test.tuoruimed.com/service/Api/Finance_SettleAccounts/GetFinaceInfo
 
         NetUtil.getAuth(function (user, hos) {

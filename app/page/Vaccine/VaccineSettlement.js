@@ -40,7 +40,10 @@ class VaccineSettlement extends React.Component {
             toastShort("金额不正确");
             return false;
         }
-
+        if(_this.props.vaccine.ShootStatus==='SM00030'){
+            toastShort("已结算");
+            return false;
+        }
         //http://test.tuoruimed.com/service/Api/Finance_SettleAccounts/GetFinaceInfo
 
         NetUtil.getAuth(function (user, hos) {
@@ -159,7 +162,7 @@ class VaccineSettlement extends React.Component {
         let _this = this;
         let amount = 0;
         _this.props.vaccine.forEach((item, index, array)=> {
-            amount += item.ItemCost * item.ItemNum
+            amount += item.ItemCost * (item.ItemNum?item.ItemNum:1)
         })
         _this.setState({
             vaccine: _this.props.vaccine,
@@ -173,7 +176,7 @@ class VaccineSettlement extends React.Component {
             <View style={AppStyle.row}>
                 <Text style={AppStyle.mpName}>{vaccine.ItemName}</Text>
                 <Text style={AppStyle.mpTitle}>单价:¥ {vaccine.ItemCost}</Text>
-                <Text style={AppStyle.mpTitle}>数量: {vaccine.ItemNum}</Text>
+                <Text style={AppStyle.mpTitle}>数量: {vaccine.ItemNum?vaccine.ItemNum:1}</Text>
             </View>
         )
     }
@@ -219,6 +222,7 @@ class VaccineSettlement extends React.Component {
                 <View style={AppStyle.row}>
                     <Text style={AppStyle.rowTitle}>实收金额</Text>
                     <TextInput value={this.state.vaccineAmount.toString()}
+                               defaultValue={this.state.totalAmount.toString()}
                                editable={this.state.enable}
                                underlineColorAndroid={'transparent'}
                                keyboardType={'numeric'}

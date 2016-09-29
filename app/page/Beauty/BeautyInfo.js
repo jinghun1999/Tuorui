@@ -56,9 +56,13 @@ class BeautyServices extends React.Component {
     }
 
     componentWillMount() {
-        this._loadData();
+        InteractionManager.runAfterInteractions(() => {
+            this._loadData();
+        });
     }
+    componentWillUnmount() {
 
+    }
     _onBack() {
         let _this = this;
         const {navigator}= _this.props;
@@ -102,6 +106,7 @@ class BeautyServices extends React.Component {
                     servicesID: _this.props.beautyInfo.HairdresserID,
                     totalNum: _this.props.beautyInfo.TotalNum,
                     totalAmount: _this.props.beautyInfo.TotalCost,
+                    paidStatus:_this.props.beautyInfo.PaidStatus,
                     edit: '编辑',
                 })
                 if (_this.props.beautyInfo.PaidStatus == 'SM00051') {
@@ -569,8 +574,13 @@ class BeautyServices extends React.Component {
                           renderRow={this._onRenderRow.bind(this)}
                 />
                 {this.state.edit === '编辑' ?
-                    <View style={{padding:10,}}>
-                        <NButton onPress={this._saveAndSet.bind(this)} backgroundColor={'#1E90FF'} text="结算"/>
+                    <View style={{padding:5,}}>
+                        {
+                            this.state.paidStatus === 'SM00051'
+                                ?null:
+                                <NButton onPress={this._saveAndSet.bind(this)} backgroundColor={'#1E90FF'} text="结算"/>
+                        }
+
                     </View>
                     : null
                 }

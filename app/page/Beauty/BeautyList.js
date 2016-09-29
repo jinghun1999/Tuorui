@@ -131,7 +131,7 @@ class BeautyList extends React.Component {
                 name: 'BeautyInfo',
                 component: BeautyInfo,
                 params: {
-                    headTitle: '新增美容服务',
+                    headTitle: '新增美容',
                     canEdit: true,
                     beautyID: 1,
                     getResult: function () {
@@ -150,7 +150,7 @@ class BeautyList extends React.Component {
                 name: 'BeautyInfo',
                 component: BeautyInfo,
                 params: {
-                    headTitle: '美容服务详情',
+                    headTitle: '美容详情',
                     canEdit: false,
                     beautyID: 2,
                     beautyInfo: beauty,
@@ -185,7 +185,7 @@ class BeautyList extends React.Component {
             <TouchableOpacity style={AppStyle.row} onPress={()=>this._onBeautyDetails(beauty)}>
                 <View style={{flex:1, marginRight:10,}}>
                     <View style={{flex:1, flexDirection:'row'}}>
-                        <Text style={AppStyle.titleText}>会员: {beauty.GestName}</Text>
+                        <Text style={[AppStyle.titleText,{flex:1,}]}>会员: {beauty.GestName}</Text>
                         {beauty.PaidStatus === 'SM00051' ? <Text style={{color:'#FF8247'}}>已付款</Text> :
                             <Text style={{color:'#CDC9A5'}}>未付款</Text>}
                     </View>

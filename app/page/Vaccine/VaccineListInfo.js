@@ -12,7 +12,7 @@ import{
     TouchableOpacity,
     ActivityIndicator,
     InteractionManager,
-    } from 'react-native';
+} from 'react-native';
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
@@ -21,7 +21,7 @@ import Picker from 'react-native-picker';
 import VaccineService from './VaccineService';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AppStyle from '../../theme/appstyle';
-
+import { toastShort } from '../../util/ToastUtil';
 class VaccineListInfo extends Component {
     constructor(props) {
         super(props);
@@ -57,37 +57,37 @@ class VaccineListInfo extends Component {
             let postdata = {
                 "items": [
                     {
-                        "Childrens":null,
-                        "Field":"1",
-                        "Title":null,
-                        "Operator":{
-                            "Name":"=",
-                            "Title":"等于",
-                            "Expression":null
+                        "Childrens": null,
+                        "Field": "1",
+                        "Title": null,
+                        "Operator": {
+                            "Name": "=",
+                            "Title": "等于",
+                            "Expression": null
                         },
-                        "DataType":0,
-                        "Value":"1",
-                        "Conn":0
+                        "DataType": 0,
+                        "Value": "1",
+                        "Conn": 0
                     }
                 ],
                 "sorts": [
                     {
-                        "Field":"ShootStatus",
-                        "Title":null,
-                        "Sort":{
-                            "Name":"Asc",
-                            "Title":"升序"
+                        "Field": "ShootStatus",
+                        "Title": null,
+                        "Sort": {
+                            "Name": "Asc",
+                            "Title": "升序"
                         },
-                        "Conn":0
+                        "Conn": 0
                     },
                     {
-                        "Field":"CreatedOn",
-                        "Title":null,
-                        "Sort":{
-                            "Name":"Desc",
-                            "Title":"降序"
+                        "Field": "CreatedOn",
+                        "Title": null,
+                        "Sort": {
+                            "Name": "Desc",
+                            "Title": "降序"
                         },
-                        "Conn":0
+                        "Conn": 0
                     }
                 ],
                 "index": page,
@@ -112,7 +112,7 @@ class VaccineListInfo extends Component {
                         pageIndex: page,
                     });
                 } else {
-                    Alert.alert('提示', '获取数据失败：' + data.Message, [{text: '确定'}]);
+                    toastShort('获取数据失败：' + data.Message)
                     _this.setState({
                         loaded: true,
                     });
@@ -122,15 +122,11 @@ class VaccineListInfo extends Component {
             postdata = [
                 {
                     "Childrens": null,
-                    "Field": "IsDeleted",
+                    "Field": "1",
                     "Title": null,
-                    "Operator": {
-                        "Name": "=",
-                        "Title": "等于",
-                        "Expression": null
-                    },
+                    "Operator": {"Name": "=", "Title": "等于", "Expression": null},
                     "DataType": 0,
-                    "Value": "0",
+                    "Value": "1",
                     "Conn": 0
                 }
             ]
@@ -142,12 +138,12 @@ class VaccineListInfo extends Component {
                             recordCount: data.Message,
                         });
                     } else {
-                        //alert("获取记录数失败：" + data.Message);
+                        toastShort("获取记录数失败：" + data.Message)
                     }
                 });
             }
         }, function (err) {
-            Alert.alert('错误', err, [{text: '确定'}]);
+            toastShort(err)
         })
     }
 
@@ -182,7 +178,7 @@ class VaccineListInfo extends Component {
                     headTitle: '疫苗详情',
                     canEdit: false,
                     vaccine: vacc,
-                    id: 2,
+                    id: 2,//2为修改 目前不支持修改
                     getResult: function () {
                         _this.onFetchData(1, false);
                     }
@@ -216,8 +212,7 @@ class VaccineListInfo extends Component {
 
     _renderFooter() {
         //计算总页数，如果最后一页，则返回没有数据啦~
-        let totalPage = this.state.recordCount / this.state.pageSize;
-        if (this.state.pageIndex >= totalPage) {
+        if (this.state.pageIndex >= this.state.recordCount / this.state.pageSize) {
             return (
                 <View style={AppStyle.noMore}>
                     <Text>没有更多数据了~</Text>
@@ -225,9 +220,7 @@ class VaccineListInfo extends Component {
             )
         }
         return (
-            <View style={{height: 120}}>
-                <ActivityIndicator />
-            </View>
+            <ActivityIndicator />
         );
     }
 
@@ -242,7 +235,7 @@ class VaccineListInfo extends Component {
                           onEndReached={this._onEndReached.bind(this)}
                           enableEmptySections={true}
                           renderFooter={this._renderFooter.bind(this)}
-                    />
+                />
             )
         }
         return (

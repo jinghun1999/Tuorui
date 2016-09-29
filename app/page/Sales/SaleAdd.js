@@ -52,7 +52,8 @@ export default class SaleAdd extends React.Component {
         if (_this.state.sellStoreId == null) {
             NetUtil.getAuth(function (user, hos) {
                 let header = NetUtil.headerClientAuth(user, hos);
-                NetUtil.get(CONSTAPI.HOST + '/Store_DirectSell/GetDirectSellPageConfig', header, function (data) {
+                //http://test.tuoruimed.com/service/Api/Store_DirectSell/GetPageConfig?
+                NetUtil.get(CONSTAPI.HOST + '/Store_DirectSell/GetPageConfig?', header, function (data) {
                     if (data.Sign && data.Message) {
                         _this.setState({
                             sellStoreId: data.Message.SellStoreID,
@@ -84,7 +85,7 @@ export default class SaleAdd extends React.Component {
     chooseGood() {
         let _this = this;
         if (_this.state.sellStoreId == null) {
-            Alert.alert('提示', '医院没有设置销售仓库', [{text: '确定'}]);
+            toastShort('医院没有设置销售仓库');
             return false;
         }
         const { navigator } = _this.props;
@@ -223,7 +224,7 @@ export default class SaleAdd extends React.Component {
                                             "OriginalDiscountMoney": 0.0,
                                             "FactTotalMoney": _this.state.goodAmountInput
                                         },
-                                        "fSADetalList": fsasp,
+                                        "fSADetailList": fsasp,
                                         "gprList": [{
                                             "ID": null,
                                             "GestID": null,
