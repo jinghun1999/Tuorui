@@ -135,7 +135,8 @@ class VaccineSettlement extends React.Component {
                         if (okdata.Sign && okdata.Message != null) {
                             toastShort('结算成功');
                             if (_this.props.getResult) {
-                                _this.props.getResult();
+                                var paidStatus=okdata.Message.PaidStatus;
+                                _this.props.getResult(paidStatus);
                             }
                             _this._onBack();
                         } else {
