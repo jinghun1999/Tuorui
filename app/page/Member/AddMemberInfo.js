@@ -170,6 +170,7 @@ class AddMemberInfo extends Component {
             toastShort(err);
         });
     }
+
     _checkPhone(){
         //验证手机号码
         let _this= this;
@@ -185,7 +186,6 @@ class AddMemberInfo extends Component {
             _this.refs.phone.focus();
         }
     }
-
     render() {
         if (!this.state.loaded) {
             return <View style={AppStyle.container}>
@@ -236,7 +236,7 @@ class AddMemberInfo extends Component {
                             mode="date"
                             placeholder="选择日期"
                             format="YYYY-MM-DD"
-                            minDate="1980-01-01"
+                            minDate="1920-01-01"
                             maxDate="2020-01-01"
                             confirmBtnText="Confirm"
                             cancelBtnText="Cancel"
@@ -256,10 +256,9 @@ class AddMemberInfo extends Component {
                                     }
                                   }}
                             onDateChange={(dateBirth) => {this.setState({memberBirthday:dateBirth})}}/>
-
                     </View>
                     <View style={AppStyle.row}>
-                        <Text style={AppStyle.rowTitle}>电话</Text>
+                        <Text style={AppStyle.rowTitle}>手机</Text>
                         <TextInput value={this.state.memberPhone}
                                    editable={this.state.enable}
                                    underlineColorAndroid={'transparent'}

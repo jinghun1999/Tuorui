@@ -33,7 +33,7 @@ class MemberDetails extends Component {
             petSource: [],
             enable: false,
             registrationDate: now,
-            birthDate: now,
+            birthDate: Util.GetDateStr(0),
             edit: '编辑',
             memberLoaded: false,
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
@@ -253,6 +253,21 @@ class MemberDetails extends Component {
         )
     }
 
+    _checkPhone(){
+        //验证手机号码
+        let _this= this;
+        var re =/^1\d{10}$/;
+        var phone = _this.state.memberPhone;
+        if(isNaN(phone)|| phone ==''){
+            toastShort('请输入手机号');
+            return false;
+        }
+        if(!re.test(phone)){
+            toastShort("格式错误");
+            _this.setState({memberPhone:''})
+        }
+    }
+
     render() {
         var listBody = <Loading type="text"/>
         if (this.state.memberLoaded) {
@@ -326,13 +341,14 @@ class MemberDetails extends Component {
                         }
                     </View>
                     <View style={AppStyle.row}>
-                        <Text style={AppStyle.rowTitle}>电话</Text>
+                        <Text style={AppStyle.rowTitle}>手机</Text>
                         <TextInput value={this.state.memberPhone}
                                    editable={this.state.enable}
                                    underlineColorAndroid={'transparent'}
-                                   keyboardType={'default'}
+                                   keyboardType={'numeric'}
                                    style={AppStyle.input}
                                    onChangeText={(text)=>{this.setState({ memberPhone: text })}}
+                                   onBlur={this._checkPhone.bind(this)}
                         />
                     </View>
                     <TouchableOpacity onPress={this._onChooseSex.bind(this)} style={AppStyle.row}>

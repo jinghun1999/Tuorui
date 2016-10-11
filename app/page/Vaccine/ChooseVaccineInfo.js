@@ -23,7 +23,7 @@ import Loading from '../../commonview/Loading';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 import AppStyle from '../../theme/appstyle';
-
+import { toastShort } from '../../util/ToastUtil';
 class ChooseVaccineInfo extends Component {
     constructor(props) {
         super(props);
@@ -48,11 +48,11 @@ class ChooseVaccineInfo extends Component {
     componentWillUnmount() {
     }
 
+
     _fetchData(value) {
         //http://petservice.tuoruimed.com/service/Api/ItemTypeWithBranchDefine/GetPageRecord
         var _this = this;
         NetUtil.getAuth(function (user, hos) {
-            alert(hos.SerialNumber);
             let postdata = [{
                 "Childrens": null,
                 "Field": "BusiTypeCode",
@@ -67,7 +67,7 @@ class ChooseVaccineInfo extends Component {
                 "Title": null,
                 "Operator": {"Name": "=", "Title": "等于", "Expression": null},
                 "DataType": 0,
-                "Value": "a574a9fb-038a-4221-8f33-675d5b305b30",
+                "Value": _this.props.WarehouseID,
                 "Conn": 1
             }, {
                 "Childrens": [{
@@ -112,14 +112,14 @@ class ChooseVaccineInfo extends Component {
                         loaded: true,
                     });
                 } else {
-                    alert("获取数据失败：" + data.Message);
+                    toastShort("获取数据错误，" + data.Exception);
                     _this.setState({
                         loaded: true,
                     });
                 }
             });
         }, function (err) {
-            alert(err)
+            toastShort(err)
         })
     }
 

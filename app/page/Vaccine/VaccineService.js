@@ -82,6 +82,23 @@ class VaccineService extends Component {
                     executorNameData: _data,
                     executorName:_data[0],
                 });
+            });
+            let postData=[{
+                "Childrens":null,
+                "Field":"IsDrugStore",
+                "Title":null,
+                "Operator":{"Name":"=","Title":"等于","Expression":null},
+                "DataType":0,
+                "Value":"是",
+                "Conn":0
+            }];
+            //http://test.tuoruimed.com/service/Api/Warehouse/GetFirstModel
+            NetUtil.postJson(CONSTAPI.HOST+'/Warehouse/GetFirstModel',postData,header,function(data){
+                if(data.Sign&&data.Message != null){
+                    _this.setState({
+                        warehouseID:data.Message.ID,
+                    })
+                }
             })
 
         }, function (err) {
@@ -437,6 +454,7 @@ class VaccineService extends Component {
                 component: ChooseVaccineInfo,
                 params: {
                     headTitle: '选择疫苗',
+                    WarehouseID:_this.state.warehouseID,
                     getResult: function (vaccine) {
                         var _vaccine = _this.state.vaccine, _exists = false;
                         _vaccine && _vaccine.forEach((item, index, array) => {
@@ -646,7 +664,7 @@ class VaccineService extends Component {
                                         height:30,
                                     }
                                   }}
-                                onDateChange={(date) => {vaccine.EstimateTime=date;this.setState({loaded:false})}}/>
+                                onDateChange={(date) => {vaccine.EstimateTime=date;this.setState({loaded:true})}}/>
                             : <Text
                             style={AppStyle.mpTitle}>{vaccine.EstimateTime ? vaccine.EstimateTime.substr(0, 10) : null}</Text>
                         }

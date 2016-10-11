@@ -33,13 +33,14 @@ class ChooseBeautyServices extends React.Component {
             pageIndex: 1,
             recordCount: 0,
             dataSource: [],
+            value:'',
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
         }
     }
 
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
-            this._onFetchData(1, false);
+            this._onFetchData(1,this.state.value,false);
         });
     }
 
@@ -47,56 +48,85 @@ class ChooseBeautyServices extends React.Component {
     }
 
     _onEndReached() {
-        this._onFetchData(this.state.pageIndex + 1, true);
+        this._onFetchData(this.state.pageIndex + 1, this.state.value,true);
     }
-
-    _onFetchData(page, isNext) {
+    _onFetchData(page, value,isNext) {
         let _this = this;
         NetUtil.getAuth(function (user, hos) {
             let postdata = {
-                items: [{
-                    "Childrens": null,
-                    "Field": "1",
-                    "Title": null,
-                    "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                    "DataType": 0,
-                    "Value": "1",
-                    "Conn": 0
-                }, {
-                    "Childrens": [{
-                        "Childrens": null,
-                        "Field": "BusiTypeCode",
-                        "Title": null,
-                        "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                        "DataType": 0,
-                        "Value": "7",
-                        "Conn": 0
-                    }, {
-                        "Childrens": null,
-                        "Field": "BusiTypeCode",
-                        "Title": null,
-                        "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                        "DataType": 0,
-                        "Value": "8",
-                        "Conn": 2
-                    }, {
-                        "Childrens": null,
-                        "Field": "BusiTypeCode",
-                        "Title": null,
-                        "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                        "DataType": 0,
-                        "Value": "12",
-                        "Conn": 2
-                    }
-                    ],
-                    "Field": null,
-                    "Title": null,
-                    "Operator": null,
-                    "DataType": 0,
-                    "Value": null,
-                    "Conn": 1
-                }
-                ],
+                "items":[{
+                    "Childrens":[{
+                        "Childrens":null,
+                        "Field":"BarCode",
+                        "Title":null,
+                        "Operator":{"Name":"like","Title":"相似","Expression":" @File like '%' + @Value + '%' "},
+                        "DataType":0,
+                        "Value":value,
+                        "Conn":0
+                    },{
+                        "Childrens":null,
+                        "Field":"ItemName",
+                        "Title":null,
+                        "Operator":{"Name":"like","Title":"相似","Expression":" @File like '%' + @Value + '%' "},
+                        "DataType":0,
+                        "Value":value,
+                        "Conn":2
+                    },{
+                        "Childrens":null,
+                        "Field":"InputCode",
+                        "Title":null,
+                        "Operator":{"Name":"like","Title":"相似","Expression":" @File like '%' + @Value + '%' "},
+                        "DataType":0,
+                        "Value":value,
+                        "Conn":2
+                    }],
+                    "Field":null,
+                    "Title":null,
+                    "Operator":null,
+                    "DataType":0,
+                    "Value":null,
+                    "Conn":0
+                },{
+                    "Childrens":null,
+                    "Field":"1",
+                    "Title":null,
+                    "Operator":{"Name":"=","Title":"等于","Expression":null},
+                    "DataType":0,
+                    "Value":"1",
+                    "Conn":1
+                },{
+                    "Childrens":[{
+                        "Childrens":null,
+                        "Field":"BusiTypeCode",
+                        "Title":null,
+                        "Operator":{"Name":"=","Title":"等于","Expression":null},
+                        "DataType":0,
+                        "Value":"7",
+                        "Conn":0
+                    },{
+                        "Childrens":null,
+                        "Field":"BusiTypeCode",
+                        "Title":null,
+                        "Operator":{"Name":"=","Title":"等于","Expression":null},
+                        "DataType":0,
+                        "Value":"8",
+                        "Conn":2
+                    },{
+                        "Childrens":null,
+                        "Field":"BusiTypeCode",
+                        "Title":null,
+                        "Operator":{"Name":"=","Title":"等于","Expression":null},
+                        "DataType":0,
+                        "Value":"12",
+                        "Conn":2
+                    }],
+                    "Field":null,
+                    "Title":null,
+                    "Operator":null,
+                    "DataType":0,
+                    "Value":null,
+                    "Conn":1
+                }],
                 sorts: null,
                 index: page,
                 pageSize: _this.state.pageSize
@@ -124,48 +154,75 @@ class ChooseBeautyServices extends React.Component {
                     });
                 }
             });
-            postdata = [{
-                "Childrens": null,
-                "Field": "1",
-                "Title": null,
-                "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                "DataType": 0,
-                "Value": "1",
-                "Conn": 0
-            }, {
-                "Childrens": [{
-                    "Childrens": null,
-                    "Field": "BusiTypeCode",
-                    "Title": null,
-                    "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                    "DataType": 0,
-                    "Value": "7",
-                    "Conn": 0
-                }, {
-                    "Childrens": null,
-                    "Field": "BusiTypeCode",
-                    "Title": null,
-                    "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                    "DataType": 0,
-                    "Value": "8",
-                    "Conn": 2
-                }, {
-                    "Childrens": null,
-                    "Field": "BusiTypeCode",
-                    "Title": null,
-                    "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                    "DataType": 0,
-                    "Value": "12",
-                    "Conn": 2
-                }],
-                "Field": null,
-                "Title": null,
-                "Operator": null,
-                "DataType": 0,
-                "Value": null,
-                "Conn": 1
-            }
-            ];
+            postdata = [{"Childrens":
+                [{"Childrens":null,
+                "Field":"BarCode",
+                "Title":null,
+                "Operator":{"Name":"like","Title":"相似","Expression":" @File like '%' + @Value + '%' "},
+                "DataType":0,
+                "Value":value,
+                "Conn":0},
+                {"Childrens":null,
+                "Field":"ItemName",
+                "Title":null,
+                "Operator":{"Name":"like","Title":"相似","Expression":" @File like '%' + @Value + '%' "},
+                "DataType":0,
+                "Value":value,
+                "Conn":2
+                },
+                {"Childrens":null,
+                "Field":"InputCode",
+                "Title":null,
+                "Operator":{"Name":"like","Title":"相似","Expression":" @File like '%' + @Value + '%' "},
+                "DataType":0,
+                "Value":value,
+                "Conn":2
+            }],
+                "Field":null,
+                "Title":null,
+                "Operator":null,
+                "DataType":0,
+                "Value":null,
+                "Conn":0
+            },
+                {"Childrens":null,
+                "Field":"1",
+                "Title":null,
+                "Operator":{"Name":"=","Title":"等于","Expression":null},
+                "DataType":0,
+                "Value":"1",
+                "Conn":1
+            },
+                {"Childrens":[{
+                    "Childrens":null,
+                    "Field":"BusiTypeCode",
+                    "Title":null,
+                    "Operator":{"Name":"=","Title":"等于","Expression":null},
+                    "DataType":0,
+                    "Value":"7",
+                    "Conn":0},
+                    {"Childrens":null,
+                    "Field":"BusiTypeCode",
+                    "Title":null,
+                    "Operator":{"Name":"=","Title":"等于","Expression":null},
+                    "DataType":0,
+                    "Value":"8",
+                    "Conn":2},
+                    {"Childrens":null,
+                    "Field":"BusiTypeCode",
+                    "Title":null,
+                    "Operator":{"Name":"=","Title":"等于","Expression":null},
+                    "DataType":0,
+                    "Value":"12",
+                    "Conn":2}],
+                "Field":null,
+                "Title":null,
+                "Operator":null,
+                "DataType":0,
+                "Value":null,
+                "Conn":1
+            }]
+
             if (!isNext) {
                 NetUtil.postJson(CONSTAPI.HOST + '/ItemTypeWithBranchDefine/GetRecordCount', postdata, header, function (data) {
                     if (data.Sign && data.Message != null) {
@@ -206,6 +263,13 @@ class ChooseBeautyServices extends React.Component {
             </TouchableOpacity>
         )
     }
+    search(txt) {
+        this._onFetchData(1,txt,false);
+        this.setState({
+            value: txt,
+            loaded: false,
+        });
+    }
 
     render() {
         var body = <Loading type="text"/>
@@ -221,6 +285,17 @@ class ChooseBeautyServices extends React.Component {
         return (
             <View style={AppStyle.container}>
                 <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
+                <View style={AppStyle.searchRow}>
+                    <TextInput
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        clearButtonMode="always"
+                        onChangeText={this.search.bind(this)}
+                        placeholder="输入美容名称..."
+                        value={this.state.value}
+                        style={AppStyle.searchTextInput}
+                    />
+                </View>
                 {body}
             </View>
         )
