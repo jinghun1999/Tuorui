@@ -37,7 +37,7 @@ class AppointListInfo extends React.Component {
 
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
-            this._onFetchData();
+            this._fetchData();
         });
     }
 
@@ -45,7 +45,7 @@ class AppointListInfo extends React.Component {
 
     }
 
-    _onFetchData() {
+    _fetchData() {
         let _this = this;
         NetUtil.getAuth(function (user, hos) {
             let header = NetUtil.headerClientAuth(user, hos);
@@ -109,7 +109,7 @@ class AppointListInfo extends React.Component {
     }
 
     _search() {
-        this._onFetchData();
+        this._fetchData();
     }
 
     _onRenderRow(a) {

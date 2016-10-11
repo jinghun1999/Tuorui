@@ -504,19 +504,23 @@ class VaccineService extends Component {
                 <View style={AppStyle.groupTitle}>
                     <Text style={AppStyle.groupText}>宠物信息</Text>
                 </View>
-                <View style={AppStyle.row}>
-                    <Text style={AppStyle.rowTitle}>会员编号</Text>
-                    <Text style={AppStyle.rowVal}>{this.state.petSource.GestCode}</Text>
-                </View>
-                <View style={AppStyle.row}>
-                    <Text style={AppStyle.rowTitle}>会员名称</Text>
-                    <Text style={AppStyle.rowVal}>{this.state.petSource.GestName}</Text>
-                </View>
+                {this.state.petSource.PetName!=null && this.state.petSource.PetName!=''?
+                <View>
+                    <View style={AppStyle.row}>
+                        <Text style={AppStyle.rowTitle}>会员编号</Text>
+                        <Text style={AppStyle.rowVal}>{this.state.petSource.GestCode}</Text>
+                    </View>
+                    <View style={AppStyle.row}>
+                        <Text style={AppStyle.rowTitle}>会员名称</Text>
+                        <Text style={AppStyle.rowVal}>{this.state.petSource.GestName}</Text>
+                    </View>
+                </View>:null
+                }
                 <TouchableOpacity onPress={this._onChoosePet.bind(this)}
                                   style={AppStyle.row}>
                     <Text style={AppStyle.rowTitle}>宠物名称</Text>
                     <Text style={AppStyle.rowVal}>{this.state.petSource.PetName}</Text>
-                    <Icon name={'angle-right'} size={20} color={'#ccc'}/>
+                    {this.state.canEdit?<Icon name={'angle-right'} size={20} color={'#ccc'}/>:null}
                 </TouchableOpacity>
                 <View style={AppStyle.groupTitle}>
                     <Text style={AppStyle.groupText}>服务信息</Text>

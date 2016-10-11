@@ -478,7 +478,7 @@ class BeautyServices extends React.Component {
                 <TouchableOpacity onPress={this._onChoosePet.bind(this)} style={AppStyle.row}>
                     <Text style={AppStyle.rowTitle}>宠物</Text>
                     <Text style={AppStyle.rowVal}>{this.state.petSource.PetName}</Text>
-                    <Icon name={'angle-right'} size={20} color={'#ccc'}/>
+                    {this.state.edit === '保存'?<Icon name={'angle-right'} size={20} color={'#ccc'}/>:null}
                 </TouchableOpacity>
                 <View style={AppStyle.groupTitle}>
                     <Text style={AppStyle.groupText}>服务信息</Text>
@@ -490,7 +490,7 @@ class BeautyServices extends React.Component {
                 <TouchableOpacity onPress={this._onChooseService.bind(this)} style={AppStyle.row}>
                     <Text style={AppStyle.rowTitle}>服务师</Text>
                     <Text style={AppStyle.rowVal}>{this.state.serviceName}</Text>
-                    <Icon name={'angle-right'} size={20} color={'#ccc'}/>
+                    {this.state.edit === '保存'?<Icon name={'angle-right'} size={20} color={'#ccc'}/>:null}
                 </TouchableOpacity>
                 <View style={AppStyle.row}>
                     <Text style={AppStyle.rowTitle}>项目数</Text>

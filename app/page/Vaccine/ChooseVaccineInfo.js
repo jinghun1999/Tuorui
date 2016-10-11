@@ -156,7 +156,6 @@ class ChooseVaccineInfo extends Component {
                         <Text style={AppStyle.money}>单价: ￥{vaccine.SellPrice}</Text>
                     </View>
                 </View>
-                <Icon name={'angle-right'} size={20} color={'#ccc'}/>
             </TouchableOpacity>
         )
     }

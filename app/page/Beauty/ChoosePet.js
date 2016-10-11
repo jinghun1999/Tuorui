@@ -187,7 +187,6 @@ class ChoosePet extends Component {
                         <Text style={{flex: 2,}}>手机: {pet.MobilePhone}</Text>
                     </View>
                 </View>
-                <Icon name={'angle-right'} size={20} color={'#ccc'}/>
             </TouchableOpacity>
         )
     }
