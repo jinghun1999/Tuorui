@@ -516,7 +516,7 @@ class BeautyServices extends React.Component {
         return (
             <View style={AppStyle.row}>
                 <Text style={AppStyle.mpName}>{beauty.ItemName}</Text>
-                <Text style={AppStyle.mpTitle}>单价: ¥{beauty.SellPrice}</Text>
+                <Text style={AppStyle.mpTitle}>单价: ¥{beauty.SellPrice?beauty.SellPrice:1}</Text>
                 <Text style={AppStyle.mpTitle}>数量:</Text>
                 {this.state.edit === '保存' ?
                     <View style={AppStyle.mpBorder}>

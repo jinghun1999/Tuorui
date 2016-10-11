@@ -37,7 +37,7 @@ class AddMemberInfo extends Component {
             memberName: null,
             memberPhone: null,
             memberSex: '女',
-            memberLevel: '8',
+            memberLevel: '',
             memberState: '正常',
             memberBirthday: Util.GetDateStr(0),
             memberRegistrationTime: Util.GetDateStr(0),
@@ -78,6 +78,7 @@ class AddMemberInfo extends Component {
                     });
                     _this.setState({
                         levelData: _level,
+                        memberLevel:_level[0],
                         memberItem: data.Message.Item,//vip编号
                         memberLevelData: data.Message.Levels,//普通，金卡会员
                         memberSexData: data.Message.SexTypes,//男，女
@@ -134,7 +135,7 @@ class AddMemberInfo extends Component {
                 "MobilePhone": _this.state.memberPhone,
                 "TelPhone": null,
                 "EMail": null,
-                "GestAddress": null,
+                "GestAddress": _this.state.memberAddress,
                 "IsVIP": "SM00054",
                 "VIPNo": null,
                 "VIPAccount": null,
@@ -168,6 +169,21 @@ class AddMemberInfo extends Component {
         }, function (err) {
             toastShort(err);
         });
+    }
+    _checkPhone(){
+        //验证手机号码
+        let _this= this;
+        var re =/^1\d{10}$/;
+        var phone = _this.state.memberPhone;
+        if(isNaN(phone)|| phone ==''){
+            toastShort('请输入手机号');
+            return false;
+        }
+        if(!re.test(phone)){
+            toastShort("格式错误");
+            _this.setState({memberPhone:''})
+            _this.refs.phone.focus();
+        }
     }
 
     render() {
@@ -247,15 +263,28 @@ class AddMemberInfo extends Component {
                         <TextInput value={this.state.memberPhone}
                                    editable={this.state.enable}
                                    underlineColorAndroid={'transparent'}
-                                   keyboardType={'default'}
+                                   keyboardType={'numeric'}
                                    style={AppStyle.input}
-                                   onChangeText={(text)=>{this.setState({ memberPhone:text })}}
-                            />
+                                   ref='phone'
+                                   onChangeText={(text)=>{
+                                   this.setState({ memberPhone:text })}}
+                                   onBlur={this._checkPhone.bind(this)}
+                        />
                     </View>
                     <TouchableOpacity onPress={this._onChooseSex.bind(this)} style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>性别</Text>
                         <Text style={AppStyle.rowVal}>{this.state.memberSex}</Text>
                     </TouchableOpacity>
+                    <View style={AppStyle.row}>
+                        <Text style={AppStyle.rowTitle}>地址</Text>
+                        <TextInput value={this.state.memberAddress}
+                                   editable={this.state.enable}
+                                   underlineColorAndroid={'transparent'}
+                                   keyboardType={'default'}
+                                   style={AppStyle.input}
+                                   onChangeText={(text)=>{this.setState({ memberAddress:text })}}
+                        />
+                    </View>
                     <View style={AppStyle.groupTitle}>
                         <Text style={AppStyle.groupText}>会员信息</Text>
                     </View>

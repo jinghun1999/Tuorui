@@ -52,6 +52,7 @@ class ChooseVaccineInfo extends Component {
         //http://petservice.tuoruimed.com/service/Api/ItemTypeWithBranchDefine/GetPageRecord
         var _this = this;
         NetUtil.getAuth(function (user, hos) {
+            alert(hos.SerialNumber);
             let postdata = [{
                 "Childrens": null,
                 "Field": "BusiTypeCode",

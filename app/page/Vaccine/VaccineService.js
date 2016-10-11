@@ -529,7 +529,7 @@ class VaccineService extends Component {
                                   style={AppStyle.row}>
                     <Text style={AppStyle.rowTitle}>执行人</Text>
                     <Text style={AppStyle.rowVal}>{this.state.executorName}</Text>
-                    <Icon name={'angle-right'} size={20} color={'#ccc'}/>
+                    {this.state.canEdit?<Icon name={'angle-right'} size={20} color={'#ccc'}/>:null}
                 </TouchableOpacity>
                 <View style={AppStyle.row}>
                     <Text style={AppStyle.rowTitle}>疫苗数</Text>

@@ -13,7 +13,7 @@ import{
     TextInput,
     TouchableOpacity,
     InteractionManager,
-    } from 'react-native';
+} from 'react-native';
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
@@ -277,7 +277,7 @@ class MemberDetails extends Component {
                     </View>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>登记日期</Text>
-                        <Text style={AppStyle.rowVal}>{this.props.memberInfo.CreatedOn.replace('T', ' ')}</Text>
+                        <Text style={AppStyle.rowVal}>{Util.getFormateTime(this.props.memberInfo.CreatedOn, 'day')}</Text>
                     </View>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>姓名</Text>
@@ -287,7 +287,7 @@ class MemberDetails extends Component {
                                    keyboardType={'default'}
                                    style={AppStyle.input}
                                    onChangeText={(text)=>{this.setState({ memberName: text })}}
-                            />
+                        />
 
                     </View>
                     <View style={AppStyle.row}>
@@ -320,7 +320,7 @@ class MemberDetails extends Component {
                                         this.setState({birthDate: date})
                                     }
                                 }
-                                />
+                            />
                             :
                             <Text style={AppStyle.rowVal}>{Util.getFormateTime(this.state.birthDate, 'day')}</Text>
                         }
@@ -333,7 +333,7 @@ class MemberDetails extends Component {
                                    keyboardType={'default'}
                                    style={AppStyle.input}
                                    onChangeText={(text)=>{this.setState({ memberPhone: text })}}
-                            />
+                        />
                     </View>
                     <TouchableOpacity onPress={this._onChooseSex.bind(this)} style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>性别</Text>
@@ -348,7 +348,7 @@ class MemberDetails extends Component {
                                    keyboardType={'default'}
                                    style={AppStyle.input}
                                    onChangeText={(text)=>{this.setState({ memberAddress: text })}}
-                            />
+                        />
                     </View>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>备注</Text>
@@ -358,7 +358,7 @@ class MemberDetails extends Component {
                                    keyboardType={'default'}
                                    style={AppStyle.input}
                                    onChangeText={(text)=>{this.setState({ memberRemark: text })}}
-                            />
+                        />
                     </View>
                     <View style={AppStyle.groupTitle}>
                         <Text style={AppStyle.groupText}>宠物信息</Text>
@@ -385,7 +385,7 @@ class MemberDetails extends Component {
                             memberSex: sex,
                         })
                     }}
-                    />
+                />
             </View>
         )
     }
