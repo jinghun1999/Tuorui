@@ -20,6 +20,7 @@ import Head from '../../commonview/Head';
 import AppStyle from '../../theme/appstyle';
 import Loading from '../../commonview/Loading';
 import { toastShort } from '../../util/ToastUtil';
+import VaccineListInfo from './VaccineListInfo';
 class VaccineSettlement extends React.Component {
     constructor(props) {
         super(props);
@@ -37,7 +38,7 @@ class VaccineSettlement extends React.Component {
         let _this =this;
         let _count = parseFloat(_this.state.vaccineDiscount)+parseFloat(_this.state.vaccineAmount);
         if (_count!== _this.state.totalAmount) {
-            toastShort("金额不正确");
+            toastShort("请结算正确的金额");
             return false;
         }
         if(_this.props.vaccine.ShootStatus==='SM00030'){
@@ -150,6 +151,17 @@ class VaccineSettlement extends React.Component {
             });
         })
     }
+    _onReturn(){
+        let _this =this;
+        const {navigator}=_this.props;
+        if(navigator){
+            navigator.push({
+                name: 'VaccineListInfo',
+                component: VaccineListInfo,
+                params:{headTitle:'疫苗接种'}
+            })
+        }
+    }
 
     _onBack() {
         let _this = this;
@@ -161,10 +173,11 @@ class VaccineSettlement extends React.Component {
 
     componentDidMount() {
         let _this = this;
-        let amount = 0;
+        let amount = 0.00;
         _this.props.vaccine.forEach((item, index, array)=> {
-            amount += item.ItemCost * (item.ItemNum?item.ItemNum:1)
+            amount += item.ItemCost*(item.ItemNum?item.ItemNum:1)
         })
+
         _this.setState({
             vaccine: _this.props.vaccine,
             totalAmount: amount,

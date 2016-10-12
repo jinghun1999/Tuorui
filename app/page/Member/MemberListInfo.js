@@ -68,6 +68,14 @@ class MemberListInfo extends Component {
                     DataType: 0,
                     Value: "SM00054",
                     Conn: 0
+                },{
+                    "Childrens":null,
+                    "Field":"Status",
+                    "Title":null,
+                    "Operator":{"Name":"=","Title":"等于","Expression":null},
+                    "DataType":0,
+                    "Value":"SM00001",
+                    "Conn":1
                 }],
                 sorts: [{
                     Field: "ModifiedOn",
@@ -111,6 +119,14 @@ class MemberListInfo extends Component {
                 "DataType": 0,
                 "Value": "SM00054",
                 "Conn": 0
+            },{
+                "Childrens":null,
+                "Field":"Status",
+                "Title":null,
+                "Operator":{"Name":"=","Title":"等于","Expression":null},
+                "DataType":0,
+                "Value":"SM00001",
+                "Conn":1
             }];
             if (!isnext) {
                 NetUtil.postJson(CONSTAPI.HOST + '/Gest/GetRecordCount', postdata, header, function (data) {

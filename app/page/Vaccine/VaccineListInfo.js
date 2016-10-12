@@ -201,9 +201,9 @@ class VaccineListInfo extends Component {
                             <Text style={{color:'#CDC9A5'}}>未执行</Text>}
                     </View>
                     <View style={{flexDirection:'row',marginTop:3}}>
-                        <Text style={{flex:1,}}>宠物: {vacc.PetName}</Text>
-                        <Text style={{flex:1,}}>疫苗名称: {vacc.ItemName}</Text>
-                        <Text style={{}}>时间: {vacc.CreatedOn.substr(0,10)}</Text>
+                        <Text style={{flex:2,}}>疫苗: {vacc.ItemName}</Text>
+                        <Text  style={{flex:1,}}>宠物: {vacc.PetName}</Text>
+                        <Text style={{flex:1,}}>{vacc.CreatedOn.substr(0,10)}</Text>
                     </View>
                 </View>
                 <Icon name={'angle-right'} size={20} color={'#ccc'}/>

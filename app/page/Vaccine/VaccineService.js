@@ -47,6 +47,7 @@ class VaccineService extends Component {
             edit: this.props.canEdit ? '保存' : '',
             num: 1,
             carryDate: new Date(),
+            shootStatus: '',
             loaded: false,
         }
     }
@@ -80,23 +81,23 @@ class VaccineService extends Component {
                 _this.setState({
                     executorSource: serviceData,
                     executorNameData: _data,
-                    executorName:_data[0],
+                    executorName: _data[0],
                 });
             });
-            let postData=[{
-                "Childrens":null,
-                "Field":"IsDrugStore",
-                "Title":null,
-                "Operator":{"Name":"=","Title":"等于","Expression":null},
-                "DataType":0,
-                "Value":"是",
-                "Conn":0
+            let postData = [{
+                "Childrens": null,
+                "Field": "IsDrugStore",
+                "Title": null,
+                "Operator": {"Name": "=", "Title": "等于", "Expression": null},
+                "DataType": 0,
+                "Value": "是",
+                "Conn": 0
             }];
             //http://test.tuoruimed.com/service/Api/Warehouse/GetFirstModel
-            NetUtil.postJson(CONSTAPI.HOST+'/Warehouse/GetFirstModel',postData,header,function(data){
-                if(data.Sign&&data.Message != null){
+            NetUtil.postJson(CONSTAPI.HOST + '/Warehouse/GetFirstModel', postData, header, function (data) {
+                if (data.Sign && data.Message != null) {
                     _this.setState({
-                        warehouseID:data.Message.ID,
+                        warehouseID: data.Message.ID,
                     })
                 }
             })
@@ -117,7 +118,7 @@ class VaccineService extends Component {
                 edit: '编辑',
                 VaccineGroupCode: _this.props.vaccine.VaccineGroupCode,
                 executorName: _this.props.vaccine.ExecutorName,
-                shootState: _this.props.vaccine.ShootStatus,
+                shootStatus: _this.props.vaccine.ShootStatus,
             });
             //获取疫苗信息列表
             var postdata = {
@@ -145,7 +146,7 @@ class VaccineService extends Component {
                         var _totalAmount = 0
                         var _totalNum = 0
                         data.Message.forEach((item, index, array)=> {
-                            _totalAmount += item.TotalCost;
+                            _totalAmount += (item.ItemCost * item.ItemNum);
                             _totalNum += 1;
                         })
                         _this.setState({
@@ -186,7 +187,7 @@ class VaccineService extends Component {
 
     _saveAndSet(isResult) {
         let _this = this;
-        if (_this.state.petSource.PetName == '' || _this.state.petSource.length==0) {
+        if (_this.state.petSource.PetName == '' || _this.state.petSource.length == 0) {
             toastShort('请选择宠物信息');
             return;
         } else if (_this.state.executorName == '' || _this.state.executorName == null) {
@@ -212,6 +213,11 @@ class VaccineService extends Component {
                         memberName: _this.state.petSource.GestName,
                     },
                     headTitle: '疫苗结算',
+                    getResult:function(paidStatus){
+                        _this.setState({
+                            shootStatus:'SM00030'
+                        })
+                    }
                 }
             })
         }
@@ -226,7 +232,7 @@ class VaccineService extends Component {
             })
         }
         else if (_this.state.edit == '保存') {
-            if (_this.state.petSource.PetName == ''|| _this.state.petSource.length==0) {
+            if (_this.state.petSource.PetName == '' || _this.state.petSource.length == 0) {
                 toastShort('请选择宠物信息');
                 return;
             } else if (_this.state.executorName == '' || _this.state.executorName == null) {
@@ -309,7 +315,7 @@ class VaccineService extends Component {
                             if (_this.props.getResult) {
                                 _this.props.getResult();
                             }
-                            if(isCan){
+                            if (isCan) {
                                 _this._onBack();
                             }
 
@@ -324,83 +330,83 @@ class VaccineService extends Component {
             else if (_this.props.id == 2) {
                 //2 详情修改
                 /*NetUtil.getAuth(function (user, hos) {
-                    var vaccineGroupCode = _this.state.VaccineGroupCode;
-                    let vaccineItems = [];
-                    let _vaccine = _this.state.vaccine;
-                    var executorID = 0;
-                    _this.state.executorSource.forEach((item, index, array)=> {
-                        if (item.PersonName == _this.state.executorName) {
-                            executorID = item.ID;
-                        }
-                    });
-                    let name = _this.state.executorName;
-                    for (let i = 0; i < _vaccine.length; i++) {
-                        var items = {
-                            "ID": _vaccine[i].ID,
-                            "VaccineGroupCode": vaccineGroupCode,
-                            "PetName": _this.state.petSource.PetName,
-                            "GestID": _this.state.petSource.GestID,
-                            "GestName": _this.state.petSource.GestName,
-                            "GestCode": _this.state.petSource.GestCode,
-                            "PetID": _this.state.petSource.PetID,
-                            "MobilePhone": _this.state.petSource.MobilePhone,
-                            "ItemName": _vaccine[i].ItemName,
-                            "ItemCode": _vaccine[i].ItemCode,
-                            "ItemCost": _vaccine[i].SellPrice,
-                            "ItemStandard": _vaccine[i].ItemStandard,
-                            "EstimateTime": _vaccine[i].EstimateTime,
-                            "FactShootTime": _vaccine[i].FactShootTime,
-                            "ShootLevelNum": _vaccine[i].ShootLevelNum,
-                            "ShootProcess": _vaccine[i].ShootProcess,
-                            "IntervalDay": _vaccine[i].IntervalDay,
-                            "AddType": _vaccine[i].AddType,
-                            "Remark": _vaccine[i].Remark,
-                            "PaidStatus": _vaccine[i].PaidStatus,
-                            "WarnStatus": _vaccine[i].WarnStatus,
-                            "ShootStatus": _vaccine[i].ShootStatus,
-                            "PaidTime": _vaccine[i].PaidTime,
-                            "CreatedBy": _vaccine[i].CreatedBy,
-                            "CreatedOn": _vaccine[i].CreatedOn,
-                            "ModifiedBy": user.FullName,
-                            "ModifiedOn": Util.getTime(),
-                            "IsDeleted": _vaccine[i].IsDeleted,
-                            "BatchNumber": _vaccine[i].BatchNumber,
-                            "OutDateTime": _vaccine[i].OutDateTime,
-                            "ManufacturerCode": _vaccine[i].ManufacturerCode,
-                            "ManufacturerName": _vaccine[i].ManufacturerName,
-                            "ExecutorID": executorID,
-                            "ExecutorName": name,
-                            "DoctorID": _vaccine[i].DoctorID,
-                            "DoctorName": _vaccine[i].DoctorName,
-                            "AssistantDoctorID": _vaccine[i].AssistantDoctorID,
-                            "AssistantDoctorName": _vaccine[i].AssistantDoctorName,
-                            "ItemNum": _vaccine[i].ItemNum,
-                            "TotalCost": _vaccine[i].TotalCost,
-                            "Sign": null,
-                            "EntID": "00000000-0000-0000-0000-000000000000"
-                        };
-                        vaccineItems.push(items);
-                    }
-                    let postjson = {
-                        vaccineGroupCode: vaccineGroupCode,
-                        list: vaccineItems,
-                    };
-                    let header = NetUtil.headerClientAuth(user, hos);
-                    ////save http://test.tuoruimed.com/service/Api/Medic_Vaccine/AddOrUpdate
-                    NetUtil.postJson(CONSTAPI.HOST + '/Medic_Vaccine/AddOrUpdate', postjson, header, function (data) {
-                        if (data.Sign && data.Message) {
-                            toastShort('修改成功');
-                            if (_this.props.getResult) {
-                                _this.props.getResult();
-                            }
-                            _this._onBack();
-                        } else {
-                            toastShort('获取数据错误' + data.Message);
-                        }
-                    });
-                }, function (err) {
-                    toastShort(err);
-                })*/
+                 var vaccineGroupCode = _this.state.VaccineGroupCode;
+                 let vaccineItems = [];
+                 let _vaccine = _this.state.vaccine;
+                 var executorID = 0;
+                 _this.state.executorSource.forEach((item, index, array)=> {
+                 if (item.PersonName == _this.state.executorName) {
+                 executorID = item.ID;
+                 }
+                 });
+                 let name = _this.state.executorName;
+                 for (let i = 0; i < _vaccine.length; i++) {
+                 var items = {
+                 "ID": _vaccine[i].ID,
+                 "VaccineGroupCode": vaccineGroupCode,
+                 "PetName": _this.state.petSource.PetName,
+                 "GestID": _this.state.petSource.GestID,
+                 "GestName": _this.state.petSource.GestName,
+                 "GestCode": _this.state.petSource.GestCode,
+                 "PetID": _this.state.petSource.PetID,
+                 "MobilePhone": _this.state.petSource.MobilePhone,
+                 "ItemName": _vaccine[i].ItemName,
+                 "ItemCode": _vaccine[i].ItemCode,
+                 "ItemCost": _vaccine[i].SellPrice,
+                 "ItemStandard": _vaccine[i].ItemStandard,
+                 "EstimateTime": _vaccine[i].EstimateTime,
+                 "FactShootTime": _vaccine[i].FactShootTime,
+                 "ShootLevelNum": _vaccine[i].ShootLevelNum,
+                 "ShootProcess": _vaccine[i].ShootProcess,
+                 "IntervalDay": _vaccine[i].IntervalDay,
+                 "AddType": _vaccine[i].AddType,
+                 "Remark": _vaccine[i].Remark,
+                 "PaidStatus": _vaccine[i].PaidStatus,
+                 "WarnStatus": _vaccine[i].WarnStatus,
+                 "ShootStatus": _vaccine[i].ShootStatus,
+                 "PaidTime": _vaccine[i].PaidTime,
+                 "CreatedBy": _vaccine[i].CreatedBy,
+                 "CreatedOn": _vaccine[i].CreatedOn,
+                 "ModifiedBy": user.FullName,
+                 "ModifiedOn": Util.getTime(),
+                 "IsDeleted": _vaccine[i].IsDeleted,
+                 "BatchNumber": _vaccine[i].BatchNumber,
+                 "OutDateTime": _vaccine[i].OutDateTime,
+                 "ManufacturerCode": _vaccine[i].ManufacturerCode,
+                 "ManufacturerName": _vaccine[i].ManufacturerName,
+                 "ExecutorID": executorID,
+                 "ExecutorName": name,
+                 "DoctorID": _vaccine[i].DoctorID,
+                 "DoctorName": _vaccine[i].DoctorName,
+                 "AssistantDoctorID": _vaccine[i].AssistantDoctorID,
+                 "AssistantDoctorName": _vaccine[i].AssistantDoctorName,
+                 "ItemNum": _vaccine[i].ItemNum,
+                 "TotalCost": _vaccine[i].TotalCost,
+                 "Sign": null,
+                 "EntID": "00000000-0000-0000-0000-000000000000"
+                 };
+                 vaccineItems.push(items);
+                 }
+                 let postjson = {
+                 vaccineGroupCode: vaccineGroupCode,
+                 list: vaccineItems,
+                 };
+                 let header = NetUtil.headerClientAuth(user, hos);
+                 ////save http://test.tuoruimed.com/service/Api/Medic_Vaccine/AddOrUpdate
+                 NetUtil.postJson(CONSTAPI.HOST + '/Medic_Vaccine/AddOrUpdate', postjson, header, function (data) {
+                 if (data.Sign && data.Message) {
+                 toastShort('修改成功');
+                 if (_this.props.getResult) {
+                 _this.props.getResult();
+                 }
+                 _this._onBack();
+                 } else {
+                 toastShort('获取数据错误' + data.Message);
+                 }
+                 });
+                 }, function (err) {
+                 toastShort(err);
+                 })*/
             }
             _this.setState({
                 edit: '编辑',
@@ -454,7 +460,7 @@ class VaccineService extends Component {
                 component: ChooseVaccineInfo,
                 params: {
                     headTitle: '选择疫苗',
-                    WarehouseID:_this.state.warehouseID,
+                    WarehouseID: _this.state.warehouseID,
                     getResult: function (vaccine) {
                         var _vaccine = _this.state.vaccine, _exists = false;
                         _vaccine && _vaccine.forEach((item, index, array) => {
@@ -522,23 +528,23 @@ class VaccineService extends Component {
                 <View style={AppStyle.groupTitle}>
                     <Text style={AppStyle.groupText}>宠物信息</Text>
                 </View>
-                {this.state.petSource.PetName!=null && this.state.petSource.PetName!=''?
-                <View>
-                    <View style={AppStyle.row}>
-                        <Text style={AppStyle.rowTitle}>会员编号</Text>
-                        <Text style={AppStyle.rowVal}>{this.state.petSource.GestCode}</Text>
-                    </View>
-                    <View style={AppStyle.row}>
-                        <Text style={AppStyle.rowTitle}>会员名称</Text>
-                        <Text style={AppStyle.rowVal}>{this.state.petSource.GestName}</Text>
-                    </View>
-                </View>:null
+                {this.state.petSource.PetName != null && this.state.petSource.PetName != '' ?
+                    <View>
+                        <View style={AppStyle.row}>
+                            <Text style={AppStyle.rowTitle}>会员编号</Text>
+                            <Text style={AppStyle.rowVal}>{this.state.petSource.GestCode}</Text>
+                        </View>
+                        <View style={AppStyle.row}>
+                            <Text style={AppStyle.rowTitle}>会员名称</Text>
+                            <Text style={AppStyle.rowVal}>{this.state.petSource.GestName}</Text>
+                        </View>
+                    </View> : null
                 }
                 <TouchableOpacity onPress={this._onChoosePet.bind(this)}
                                   style={AppStyle.row}>
                     <Text style={AppStyle.rowTitle}>宠物名称</Text>
                     <Text style={AppStyle.rowVal}>{this.state.petSource.PetName}</Text>
-                    {this.state.canEdit?<Icon name={'angle-right'} size={20} color={'#ccc'}/>:null}
+                    {this.state.canEdit ? <Icon name={'angle-right'} size={20} color={'#ccc'}/> : null}
                 </TouchableOpacity>
                 <View style={AppStyle.groupTitle}>
                     <Text style={AppStyle.groupText}>服务信息</Text>
@@ -551,7 +557,7 @@ class VaccineService extends Component {
                                   style={AppStyle.row}>
                     <Text style={AppStyle.rowTitle}>执行人</Text>
                     <Text style={AppStyle.rowVal}>{this.state.executorName}</Text>
-                    {this.state.canEdit?<Icon name={'angle-right'} size={20} color={'#ccc'}/>:null}
+                    {this.state.canEdit ? <Icon name={'angle-right'} size={20} color={'#ccc'}/> : null}
                 </TouchableOpacity>
                 <View style={AppStyle.row}>
                     <Text style={AppStyle.rowTitle}>疫苗数</Text>
@@ -581,10 +587,10 @@ class VaccineService extends Component {
             <View style={AppStyle.row}>
                 <View style={{flex:1,flexDirection:'column'}}>
                     <View style={{flexDirection:'row',alignItems:'center'}}>
-                        <Text style={AppStyle.mpName}>{vaccine.ItemName}</Text>
+                        <Text style={[AppStyle.mpName,{flex:2}]}>{vaccine.ItemName}</Text>
                         <Text
                             style={AppStyle.mpTitle}>单价:¥ {vaccine.SellPrice ? vaccine.SellPrice : vaccine.ItemCost}</Text>
-                        <Text style={AppStyle.mpTitle}>数量</Text>
+                        <Text style={AppStyle.mpTitle}>数量:</Text>
                         {this.state.canEdit ?
                             <View style={AppStyle.mpBorder}>
                                 <TextInput value={vaccine.ItemNum}
@@ -612,7 +618,7 @@ class VaccineService extends Component {
 
                     </View>
                     <View style={{flexDirection:'row',alignItems:'center',}}>
-                        <Text style={{fontSize: 14,color: '#8B0000',}}>日期</Text>
+                        <Text style={{}}>日期:</Text>
                         {this.state.canEdit ?
                             <DatePicker
                                 date={vaccine.FactShootTime?vaccine.FactShootTime:Util.getTime()}
@@ -624,7 +630,7 @@ class VaccineService extends Component {
                                 confirmBtnText="Confirm"
                                 cancelBtnText="Cancel"
                                 showIcon={false}
-                                style={{padding:0, margin:0,width:100,marginLeft:10,}}
+                                style={{padding:0, margin:0,width:100,marginLeft:10,flex:2}}
                                 enabled={true}
                                 customStyles={{dateInput: {
                                        alignItems:'flex-start',
@@ -636,9 +642,9 @@ class VaccineService extends Component {
                                   }}
                                 onDateChange={(date) => {vaccine.FactShootTime=date;this.setState({loaded:true,})  }}/>
                             : <Text
-                            style={AppStyle.mpTitle}>{vaccine.FactShootTime ? vaccine.FactShootTime.substr(0, 10) : Util.getTime('YYYY-MM-dd')}</Text>
+                            style={{flex:2}}>{vaccine.FactShootTime ? vaccine.FactShootTime.substr(0, 10) : Util.getTime("YYYY-MM-dd")}</Text>
                         }
-                        <Text style={AppStyle.mpTitle}>下次执行</Text>
+                        <Text style={{}}>下次执行:</Text>
                         {this.state.canEdit ?
                             <DatePicker
                                 date={vaccine.EstimateTime}
@@ -666,7 +672,7 @@ class VaccineService extends Component {
                                   }}
                                 onDateChange={(date) => {vaccine.EstimateTime=date;this.setState({loaded:true})}}/>
                             : <Text
-                            style={AppStyle.mpTitle}>{vaccine.EstimateTime ? vaccine.EstimateTime.substr(0, 10) : null}</Text>
+                            style={{flex:1}}>{vaccine.EstimateTime ? vaccine.EstimateTime.substr(0, 10) : null}</Text>
                         }
                     </View>
                 </View>
@@ -677,7 +683,6 @@ class VaccineService extends Component {
                     </TouchableOpacity>
                     : null
                 }
-
             </View>
         )
 
@@ -706,16 +711,12 @@ class VaccineService extends Component {
                           renderHeader={this._renderHeader.bind(this)}
                           renderRow={this._renderRow.bind(this)}
                 />
-                {this.state.canEdit ?
-                    <View style={{padding:5,}}>
-                        {
-                            this.state.shootState === 'SM00030'
-                                ?null:
-                                <NButton onPress={this._saveAndSet.bind(this)} backgroundColor={'#1E90FF'} text="结算"/>
-                        }
-
-                    </View>
-                    : null
+                {
+                    this.state.shootStatus === 'SM00030'
+                        ? null :
+                        <View style={{padding:5,}}>
+                            <NButton onPress={this._saveAndSet.bind(this)} backgroundColor={'#1E90FF'} text="结算"/>
+                        </View>
                 }
                 <Picker
                     style={{height: 300}}

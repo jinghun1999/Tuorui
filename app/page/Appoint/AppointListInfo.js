@@ -12,7 +12,7 @@ import {
     ListView,
     TouchableOpacity,
     InteractionManager
-    }from 'react-native';
+}from 'react-native';
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
@@ -113,11 +113,36 @@ class AppointListInfo extends React.Component {
     }
 
     _onRenderRow(a) {
+        let typeCode = a.Type, type;
+        switch (typeCode) {
+            case 'Foster':
+                type = '寄养';
+                break;
+            case 'Hospital':
+                type = '住院';
+                break;
+            case 'Service':
+                type = '服务';
+                break;
+            case 'Treatment':
+                type = '诊疗';
+                break;
+            case 'Vaccine':
+                type = '驱虫疫苗';
+                break;
+            case 'Other':
+                type = '其他';
+                break;
+        }
         return (
             <TouchableOpacity style={AppStyle.row} onPress={()=>this._onDetails(a)}>
                 <View style={{flex:1, marginRight:10,}}>
-                    <Text style={[AppStyle.titleText, {width:300,}]}>{a.GestName}</Text>
-                    <View style={{flexDirection:'row',marginTop:3}}>
+                    <View style={{flex:1, flexDirection:'row'}}>
+                        <Text style={[AppStyle.titleText, {flex:1,color:'#CD5C5C'}]}>{a.GestName}</Text>
+                        <Text style={{flex:1}}>类型:{type}</Text>
+                        <Text style={{flex:1}}>宠物:{a.PetName}</Text>
+                    </View>
+                    <View style={{flexDirection:'row',marginTop:1}}>
                         <Text style={{flex:1,}}>预约医生：{a.DoctorName}</Text>
                         <Text>预约时间：{Util.getFormateTime(a.StartTime, 'min')}</Text>
                     </View>
@@ -137,7 +162,7 @@ class AppointListInfo extends React.Component {
                               initialListSize={5}
                               pageSize={5}
                               renderRow={this._onRenderRow.bind(this)}
-                        />
+                    />
                 )
             } else {
                 body = (
