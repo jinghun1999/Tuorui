@@ -222,7 +222,6 @@ class ChooseBeautyServices extends React.Component {
                 "Value":null,
                 "Conn":1
             }]
-
             if (!isNext) {
                 NetUtil.postJson(CONSTAPI.HOST + '/ItemTypeWithBranchDefine/GetRecordCount', postdata, header, function (data) {
                     if (data.Sign && data.Message != null) {

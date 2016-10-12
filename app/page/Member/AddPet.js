@@ -206,7 +206,7 @@ class AddPet extends Component {
                     "PetBodyLong": _this.state.petDataSource.PetBodyLong ? _this.state.petDataSource.PetBodyLong : '',
                     "SickFileCode": _this.state.petSickID,
                     "BirthStatus": _this.state.petState,
-                    "Status": _this.state.petDataSource.Status ? _this.state.petDataSource.Status : '',
+                    "Status": _this.state.petDataSource.Status ? _this.state.petDataSource.Status : 'SM00052',
                     "PetHead": _this.state.petDataSource.PetHead ? _this.state.petDataSource.PetHead : '',
                     "PetHeadID": _this.state.petDataSource.PetHeadID ? _this.state.petDataSource.PetHeadID : '',
                     "DogBandID": _this.state.petDataSource.DogBandID ? _this.state.petDataSource.DogBandID : '',
