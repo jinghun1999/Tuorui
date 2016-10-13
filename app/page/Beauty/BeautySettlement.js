@@ -30,24 +30,26 @@ class BeautySettlement extends React.Component {
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
             totalAmount: 0,
             vaccineAmount: 0,
-            vaccineDiscount:0,
+            vaccineDiscount: 0,
         }
     }
 
     _onSaveInfo() {
-        let _this =this;
-        let _count = parseFloat(_this.state.vaccineDiscount)+parseFloat(_this.state.vaccineAmount);
-        if (_count!== _this.state.totalAmount) {
+        let _this = this;
+        let _count = parseFloat(_this.state.vaccineDiscount) + parseFloat(_this.state.vaccineAmount);
+        if (_count !== _this.state.totalAmount) {
             toastShort("金额不正确");
             return false;
         }
-        if(_this.state.beauty.PaidStatus==='SM00051'){return false;}
+        if (_this.state.beauty.PaidStatus === 'SM00051') {
+            return false;
+        }
         //http://test.tuoruimed.com/service/Api/Finance_SettleAccounts/GetFinaceInfo
 
         NetUtil.getAuth(function (user, hos) {
             let header = NetUtil.headerClientAuth(user, hos);
-            var vaccItem=[];
-            _this.props.beauty.forEach((item,index,array)=>{
+            var vaccItem = [];
+            _this.props.beauty.forEach((item, index, array)=> {
                 vaccItem.push(item.ID)
             })
             let getfinpost = {
@@ -94,8 +96,8 @@ class BeautySettlement extends React.Component {
                             "InputDiscountMoney": parseInt(_this.state.vaccineDiscount),
                             "OriginalDiscountMoney": 0.0,
                             "FactTotalMoney": _this.state.totalAmount,
-                            "CreatedByID":"00000000-0000-0000-0000-000000000000",
-                            "ModifiedByID":"00000000-0000-0000-0000-000000000000"
+                            "CreatedByID": "00000000-0000-0000-0000-000000000000",
+                            "ModifiedByID": "00000000-0000-0000-0000-000000000000"
                         },
                         "fSADetailList": fsasp,
                         "gprList": [{
@@ -189,52 +191,57 @@ class BeautySettlement extends React.Component {
             <View style={AppStyle.container}>
                 <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}
                       canAdd={true} edit={this.state.edit} editInfo={this._onSaveInfo.bind(this)}/>
-                <View style={AppStyle.groupTitle}>
-                    <Text style={AppStyle.groupText}>会员信息</Text>
-                </View>
-                <View style={AppStyle.row}>
-                    <Text style={AppStyle.rowTitle}>会员编号</Text>
-                    <Text style={AppStyle.rowVal}>{this.props.member.memberCode}</Text>
-                </View>
-                <View style={AppStyle.row}>
-                    <Text style={AppStyle.rowTitle}>会员姓名</Text>
-                    <Text style={AppStyle.rowVal}>{this.props.member.memberName}</Text>
-                </View>
-                <View style={AppStyle.groupTitle}>
-                    <Text style={AppStyle.groupText}>美容信息</Text>
-                </View>
-                <View>
-                    {listBody}
-                </View>
-                <View style={AppStyle.groupTitle}>
-                    <Text style={AppStyle.groupText}>结算信息</Text>
-                </View>
-                <View style={AppStyle.row}>
-                    <Text style={AppStyle.rowTitle}>应收金额</Text>
-                    <Text style={AppStyle.rowVal}>{this.state.totalAmount.toString()}</Text>
-                </View>
-                <View style={AppStyle.row}>
-                    <Text style={AppStyle.rowTitle}>实收金额</Text>
-                    <TextInput value={this.state.vaccineAmount.toString()}
-                               editable={this.state.enable}
-                               underlineColorAndroid={'transparent'}
-                               keyboardType={'numeric'}
-                               style={AppStyle.input}
-                               onChangeText={(text)=>{
+                <ScrollView key={'scrollView'}
+                            horizontal={false}
+                            keyboardDismissMode={'none'}
+                            showsVerticalScrollIndicator={true}
+                            scrollEnabled={true}>
+                    <View style={AppStyle.groupTitle}>
+                        <Text style={AppStyle.groupText}>会员信息</Text>
+                    </View>
+                    <View style={AppStyle.row}>
+                        <Text style={AppStyle.rowTitle}>会员编号</Text>
+                        <Text style={AppStyle.rowVal}>{this.props.member.memberCode}</Text>
+                    </View>
+                    <View style={AppStyle.row}>
+                        <Text style={AppStyle.rowTitle}>会员姓名</Text>
+                        <Text style={AppStyle.rowVal}>{this.props.member.memberName}</Text>
+                    </View>
+                    <View style={AppStyle.groupTitle}>
+                        <Text style={AppStyle.groupText}>美容信息</Text>
+                    </View>
+                    <View>
+                        {listBody}
+                    </View>
+                    <View style={AppStyle.groupTitle}>
+                        <Text style={AppStyle.groupText}>结算信息</Text>
+                    </View>
+                    <View style={AppStyle.row}>
+                        <Text style={AppStyle.rowTitle}>应收金额</Text>
+                        <Text style={AppStyle.rowVal}>{this.state.totalAmount.toString()}</Text>
+                    </View>
+                    <View style={AppStyle.row}>
+                        <Text style={AppStyle.rowTitle}>实收金额</Text>
+                        <TextInput value={this.state.vaccineAmount.toString()}
+                                   editable={this.state.enable}
+                                   underlineColorAndroid={'transparent'}
+                                   keyboardType={'numeric'}
+                                   style={AppStyle.input}
+                                   onChangeText={(text)=>{
                                         this.setState({
                                             vaccineAmount:parseFloat(text)
                                         })
                                    }}
-                    />
-                </View>
-                <View style={AppStyle.row}>
-                    <Text style={AppStyle.rowTitle}>折扣</Text>
-                    <TextInput value={this.state.vaccineDiscount.toString()}
-                               editable={this.state.enable}
-                               underlineColorAndroid={'transparent'}
-                               keyboardType={'numeric'}
-                               style={AppStyle.input}
-                               onChangeText={(text)=>{
+                        />
+                    </View>
+                    <View style={AppStyle.row}>
+                        <Text style={AppStyle.rowTitle}>折扣额</Text>
+                        <TextInput value={this.state.vaccineDiscount.toString()}
+                                   editable={this.state.enable}
+                                   underlineColorAndroid={'transparent'}
+                                   keyboardType={'numeric'}
+                                   style={AppStyle.input}
+                                   onChangeText={(text)=>{
                                         this.setState({
                                             vaccineDiscount:text
                                         })
@@ -250,9 +257,9 @@ class BeautySettlement extends React.Component {
                                     });
                                 }
                                    }}
-                    />
-                </View>
-
+                        />
+                    </View>
+                </ScrollView>
             </View>
         )
     }
