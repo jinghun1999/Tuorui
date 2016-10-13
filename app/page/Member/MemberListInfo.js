@@ -203,7 +203,6 @@ class MemberListInfo extends Component {
         if (this.state.pageIndex >= totalPage) {
             return (
                 <View style={AppStyle.noMore}>
-                    <Text>没有更多数据了~</Text>
                 </View>
             )
         }
@@ -236,6 +235,7 @@ class MemberListInfo extends Component {
                       edit="新增"
                       onPress={this._onBack.bind(this)}
                       editInfo={this._addInfo.bind(this)}/>
+
                 {body}
             </View>
         )

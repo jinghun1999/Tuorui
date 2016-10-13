@@ -125,6 +125,19 @@ class AddMemberInfo extends Component {
                 toastShort('初始化会员信息错误，请稍后重试');
                 return false;
             }
+            var levelName=_this.state.memberLevel;
+            var levelCode='';
+            _this.state.memberLevelData.forEach((item,index,array)=>{
+                if(item.LevelName == levelName){
+                    levelCode =item.LevelCode;
+                }
+            })
+            var gestStatus = _this.state.memberState,gestStatusCode;
+            if(gestStatus =='正常'){
+                gestStatusCode ='SM00001'
+            } else{
+                gestStatusCode='SM00002'
+            }
             var item = {
                 "ID": _this.state.memberID,
                 "GestCode": _this.state.memberItem.GestCode,
@@ -140,8 +153,8 @@ class AddMemberInfo extends Component {
                 "VIPNo": null,
                 "VIPAccount": null,
                 "LastPaidTime": null,
-                "GestStyle": "HYDJ000000003",
-                "Status": "SM00001",
+                "GestStyle": levelCode,
+                "Status": gestStatusCode,
                 "PaidStatus": null,
                 "Remark": _this.state.memberRemarks,
                 "CreatedBy": null,
@@ -151,7 +164,7 @@ class AddMemberInfo extends Component {
                 "RewardPoint": null,
                 "PrepayMoney": null,
                 "EntID": "00000000-0000-0000-0000-000000000000",
-                "LevelName": null
+                "LevelName": null,
             };
             let header = NetUtil.headerClientAuth(user, hos);
             NetUtil.postJson(CONSTAPI.HOST + '/Gest/AddGest', item, header, function (data) {

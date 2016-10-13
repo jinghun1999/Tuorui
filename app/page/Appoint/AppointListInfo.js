@@ -138,13 +138,13 @@ class AppointListInfo extends React.Component {
             <TouchableOpacity style={AppStyle.row} onPress={()=>this._onDetails(a)}>
                 <View style={{flex:1, marginRight:10,}}>
                     <View style={{flex:1, flexDirection:'row'}}>
-                        <Text style={[AppStyle.titleText, {flex:1,color:'#CD5C5C'}]}>{a.GestName}</Text>
-                        <Text style={{flex:1}}>类型:{type}</Text>
-                        <Text style={{flex:1}}>宠物:{a.PetName}</Text>
+                        <Text style={{flex:1,color: '#292929',}}>{a.GestName}</Text>
+                        <Text style={{color:'#EE7621'}}>类型:{type}</Text>
                     </View>
                     <View style={{flexDirection:'row',marginTop:1}}>
-                        <Text style={{flex:1,}}>预约医生：{a.DoctorName}</Text>
-                        <Text>预约时间：{Util.getFormateTime(a.StartTime, 'min')}</Text>
+                        <Text style={{flex:1,}}>医生：{a.DoctorName}</Text>
+                        <Text style={{flex:1}}>宠物:{a.PetName}</Text>
+                        <Text>时间：{Util.getFormateTime(a.StartTime, 'min')}</Text>
                     </View>
                 </View>
                 <Icon name={'angle-right'} size={20} color={'#ccc'}/>
@@ -194,7 +194,7 @@ class AppointListInfo extends React.Component {
                           borderWidth:StyleSheet.hairlineWidth,
                         },
                       }} onDateChange={(date) => {this.setState({dateFrom: date})}}/>
-                    <Text> 到 </Text>
+                    <Text>到</Text>
                     <DatePicker
                         date={this.state.dateTo}
                         mode="date"

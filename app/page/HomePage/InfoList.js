@@ -172,7 +172,6 @@ class Information extends React.Component {
         if (this.state.pageIndex >= this.state.totalPage) {
             return (
                 <View style={{height: 40, justifyContent:'center', alignItems:'center'}}>
-                    <Text>没有更多数据了~</Text>
                 </View>
             )
         } else {

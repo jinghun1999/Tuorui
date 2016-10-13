@@ -38,6 +38,9 @@ class MemberDetails extends Component {
             memberLoaded: false,
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
             memberSex: '男',
+            memberLevel: '',
+            levelData: [''],
+            memberState: '',
         }
     }
 
@@ -80,6 +83,9 @@ class MemberDetails extends Component {
                     } else {
                         dataSource = data.Message;
                     }
+                    var gestStatus = _this.props.memberInfo.Status;
+                    var gestStatusName='';
+                    if(gestStatus=='SM00001'){gestStatusName='正常'}else{gestStatusName='停用'}
                     _this.setState({
                         petSource: dataSource,
                         memberLoaded: true,
@@ -90,6 +96,7 @@ class MemberDetails extends Component {
                         memberSex: _this.props.memberInfo.GestSex,
                         memberAddress: _this.props.memberInfo.GestAddress,
                         memberRemark: _this.props.memberInfo.Remark,
+                        memberState:gestStatusName,
                     });
                 } else {
                     toastShort("获取数据错误，" + data.Exception);
@@ -97,12 +104,41 @@ class MemberDetails extends Component {
                         memberLoaded: true,
                     });
                 }
-            });
+            })
+            ///service/Api/Gest/GetVipUpdatePageConfig?id=875f40b2-c40f-4ef5-935e-ceba855fa491
+            NetUtil.get(CONSTAPI.HOST + '/Gest/GetVipAddPageConfig?', header, function (data) {
+                if (data.Sign && data.Message != null) {
+                    var levelData = data.Message.Levels, _level = [];
+                    var levelCode = _this.props.memberInfo.GestStyle;
+                    var levelName='';
+                    levelData.forEach((item, index, array)=> {
+                        if(item.LevelCode ==levelCode){
+                            levelName=item.LevelName;
+                        }
+                        _level.push(item.LevelName);
+                    });
+
+                    _this.setState({
+                        levelData: _level,
+                        memberLevel:levelName,
+                        memberItem: data.Message.Item,//vip编号
+                        memberLevelData: data.Message.Levels,//普通，金卡会员
+                        memberSexData: data.Message.SexTypes,//男，女
+                        memberStatusData: data.Message.GestStatus,//正常，停用
+                        memberType: data.Message.GestTypes,//会员，散客
+                        loaded: true,
+                    });
+                } else {
+                    toastShort("获取数据失败：" + data.Message);
+                    _this.setState({
+                        loaded: true,
+                    });
+                }
+            })
         }, function (err) {
             toastShort(err);
         })
     }
-
 
     _onBack() {
         let _this = this;
@@ -156,6 +192,14 @@ class MemberDetails extends Component {
             NetUtil.getAuth(function (user, hos) {
                 let header = NetUtil.headerClientAuth(user, hos);
                 var _sex = _this.state.memberSex === '男' ? 'DM00001' : 'DM00002';
+                var _status =_this.state.memberState ==='正常'?'SM00001':'SM00002';
+                var _memberLevel =_this.state.memberLevel;
+                var _memberLevelCode = '';
+                _this.state.memberLevelData.forEach((item,index,array)=>{
+                    if(item.LevelName=_memberLevel){
+                        _memberLevelCode=item.LevelCode;
+                    }
+                })
                 let item = {
                     "ID": _this.props.memberInfo.ID,
                     "GestCode": _this.props.memberInfo.GestCode,
@@ -171,8 +215,8 @@ class MemberDetails extends Component {
                     "VIPNo": _this.props.memberInfo.VIPNo,
                     "VIPAccount": _this.props.memberInfo.VIPAccount,
                     "LastPaidTime": _this.props.memberInfo.LastPaidTime,
-                    "GestStyle": _this.props.memberInfo.GestStyle,
-                    "Status": _this.props.memberInfo.Status,
+                    "GestStyle": _memberLevelCode,
+                    "Status": _status,
                     "PaidStatus": _this.props.memberInfo.PaidStatus,
                     "Remark": _this.state.memberRemark,
                     "CreatedBy": _this.props.memberInfo.CreatedBy,
@@ -241,7 +285,23 @@ class MemberDetails extends Component {
         if (_this.state.edit == '编辑') {
             return false;
         }
-        this.pickerSex.toggle();
+        _this.pickerSex.toggle();
+    }
+
+    _onChooseLevel() {
+        let _this = this;
+        if (_this.state.edit == '编辑') {
+            return false;
+        }
+        _this.pickerLevel.toggle();
+    }
+
+    _onChooseState() {
+        let _this = this;
+        if (_this.state.edit == '编辑') {
+            return false;
+        }
+        _this.pickerState.toggle();
     }
 
     _onRenderRow(pet) {
@@ -288,7 +348,11 @@ class MemberDetails extends Component {
                             showsVerticalScrollIndicator={true}
                             scrollEnabled={true}>
                     <View style={AppStyle.groupTitle}>
-                        <Text style={AppStyle.groupText}>会员信息</Text>
+                        <Text style={AppStyle.groupText}>基本信息</Text>
+                    </View>
+                    <View style={AppStyle.row}>
+                        <Text style={AppStyle.rowTitle}>编号</Text>
+                        <Text style={AppStyle.rowVal}>{this.props.memberInfo.GestCode}</Text>
                     </View>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>登记日期</Text>
@@ -357,7 +421,6 @@ class MemberDetails extends Component {
                     </TouchableOpacity>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>地址</Text>
-
                         <TextInput value={this.state.memberAddress}
                                    editable={this.state.enable}
                                    underlineColorAndroid={'transparent'}
@@ -366,6 +429,17 @@ class MemberDetails extends Component {
                                    onChangeText={(text)=>{this.setState({ memberAddress: text })}}
                         />
                     </View>
+                    <View style={AppStyle.groupTitle}>
+                        <Text style={AppStyle.groupText}>会员信息</Text>
+                    </View>
+                    <TouchableOpacity onPress={this._onChooseLevel.bind(this)} style={AppStyle.row}>
+                        <Text style={AppStyle.rowTitle}>会员等级</Text>
+                        <Text style={AppStyle.rowVal}>{this.state.memberLevel}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={this._onChooseState.bind(this)} style={AppStyle.row}>
+                        <Text style={AppStyle.rowTitle}>会员状态</Text>
+                        <Text style={AppStyle.rowVal}>{this.state.memberState}</Text>
+                    </TouchableOpacity>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>备注</Text>
                         <TextInput value={this.state.memberRemark}
@@ -399,6 +473,36 @@ class MemberDetails extends Component {
                     onPickerDone={(sex)=>{
                         this.setState({
                             memberSex: sex,
+                        })
+                    }}
+                />
+                <Picker
+                    style={{height: 300}}
+                    showDuration={300}
+                    showMask={true}
+                    pickerBtnText={'确认'}
+                    pickerCancelBtnText={'取消'}
+                    ref={picker => this.pickerLevel = picker}
+                    pickerData={this.state.levelData}
+                    selectedValue={this.state.memberLevel}
+                    onPickerDone={(level)=>{
+                        this.setState({
+                            memberLevel: level,
+                        })
+                    }}
+                />
+                <Picker
+                    style={{height: 300}}
+                    showDuration={300}
+                    showMask={true}
+                    pickerBtnText={'确认'}
+                    pickerCancelBtnText={'取消'}
+                    ref={picker => this.pickerState = picker}
+                    pickerData={['正常','停用']}
+                    selectedValue={this.state.memberState}
+                    onPickerDone={(cardState)=>{
+                        this.setState({
+                            memberState:cardState,
                         })
                     }}
                 />

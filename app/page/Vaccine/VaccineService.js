@@ -312,6 +312,9 @@ class VaccineService extends Component {
                     NetUtil.postJson(CONSTAPI.HOST + '/Medic_Vaccine/AddOrUpdate', postjson, header, function (data) {
                         if (data.Sign && data.Message) {
                             toastShort('保存成功');
+                            _this.setState({
+                                vaccine:vaccineItems,
+                            })
                             if (_this.props.getResult) {
                                 _this.props.getResult();
                             }

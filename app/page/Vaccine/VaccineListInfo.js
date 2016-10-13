@@ -216,7 +216,6 @@ class VaccineListInfo extends Component {
         if (this.state.pageIndex >= this.state.recordCount / this.state.pageSize) {
             return (
                 <View style={AppStyle.noMore}>
-                    <Text>没有更多数据了~</Text>
                 </View>
             )
         }

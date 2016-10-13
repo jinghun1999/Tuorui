@@ -175,7 +175,7 @@ class VaccineSettlement extends React.Component {
         let _this = this;
         let amount = 0.00;
         _this.props.vaccine.forEach((item, index, array)=> {
-            amount += item.ItemCost*(item.ItemNum?item.ItemNum:1)
+            amount += (item.ItemCost?item.ItemCost:item.SellPrice)*(item.ItemNum?item.ItemNum:1)
         })
 
         _this.setState({
@@ -189,7 +189,7 @@ class VaccineSettlement extends React.Component {
         return (
             <View style={AppStyle.row}>
                 <Text style={AppStyle.mpName}>{vaccine.ItemName}</Text>
-                <Text style={AppStyle.mpTitle}>单价:¥ {vaccine.ItemCost}</Text>
+                <Text style={AppStyle.mpTitle}>单价:¥ {vaccine.ItemCost?vaccine.ItemCost:vaccine.SellPrice}</Text>
                 <Text style={AppStyle.mpTitle}>数量: {vaccine.ItemNum?vaccine.ItemNum:1}</Text>
             </View>
         )

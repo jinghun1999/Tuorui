@@ -209,7 +209,6 @@ class SaleList extends Component {
         if (this.state.pageIndex >= totalPage) {
             return (
                 <View style={{height: 40, justifyContent:'center', alignItems:'center'}}>
-                    <Text>没有更多数据了~</Text>
                 </View>
             )
         }
