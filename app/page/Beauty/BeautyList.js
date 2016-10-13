@@ -13,9 +13,10 @@ import {
     ListView,
     TouchableOpacity,
     ToastAndroid,
+    Picker,
     InteractionManager,
     ActivityIndicator,
-    }from 'react-native';
+}from 'react-native';
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
@@ -33,6 +34,7 @@ class BeautyList extends React.Component {
             pageIndex: 1,
             dataSource: [],
             recordCount: 0,
+            payState: '全部',
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
         }
     }
@@ -198,6 +200,10 @@ class BeautyList extends React.Component {
         )
     }
 
+    onSearch() {
+        alert('筛选条件')
+    }
+
     render() {
         var body = <Loading type="text"/>;
         if (this.state.loaded) {
@@ -215,6 +221,25 @@ class BeautyList extends React.Component {
                       canAdd={true}
                       edit="新增"
                       editInfo={this._onAdd.bind(this)}/>
+                <View style={{flexDirection:'row',margin:5,padding:1,}}>
+                    <TouchableOpacity style={{flex:1,flexDirection:'row',justifyContent:'center',}}
+                                      onPress={this.onSearch.bind(this)}>
+                        <Text style={{textAlign:'center',}}>付款状态</Text>
+                        <Icon name={'caret-down'} size={20} color={'#ccc'}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{flex:1,flexDirection:'row',justifyContent:'center',}}
+                                      onPress={this.onSearch.bind(this)}>
+                        <Text style={{textAlign:'center',}}>时间选择</Text>
+                        <Icon name={'caret-down'} size={20} color={'#ccc'}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{flex:1,flexDirection:'row',justifyContent:'center',}}
+                                      onPress={this.onSearch.bind(this)}>
+                        <Text style={{textAlign:'center',}}>筛选条件</Text>
+                        <Icon name={'filter'} size={20} color={'#ccc'}/>
+                    </TouchableOpacity>
+                </View>
+                <View style={{flexDirection:'row'}}>
+                </View>
                 {body}
             </View>
         )
