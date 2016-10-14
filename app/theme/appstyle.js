@@ -19,16 +19,16 @@ let AppStyle = StyleSheet.create({
         flex: 1,
         color: '#CC0033'
     },
-    /*inputViewStyle: {
-     flex: 1,
-     flexDirection: 'row',
-     padding: 10,
-     justifyContent: 'center',
-     alignItems: 'center',
-     backgroundColor: '#fff',
-     borderBottomColor: '#ccc',
-     borderBottomWidth: StyleSheet.hairlineWidth,
-     },*/
+    listRow: {
+        flex: 1,
+        flexDirection: 'column',
+        padding: 10,
+        justifyContent: 'center',
+        //alignItems: 'center',
+        backgroundColor: '#fff',
+        borderBottomColor: '#ccc',
+        borderBottomWidth: StyleSheet.hairlineWidth,
+    },
     row: {
         backgroundColor: '#fff',
         flexDirection: 'row',
@@ -64,16 +64,16 @@ let AppStyle = StyleSheet.create({
         marginLeft: 10,
     },
     mpBorder: {
-        width:50,
-        margin:5,
-        alignItems:'center',
+        width: 50,
+        margin: 5,
+        alignItems: 'center',
         borderWidth: StyleSheet.hairlineWidth,
         borderColor: '#ccc',
     },
-    mpBtn:{
-        width:30,
-        backgroundColor:'red',
-        borderRadius:5,
+    mpBtn: {
+        width: 30,
+        backgroundColor: 'red',
+        borderRadius: 5,
     },
     smallBtn: {
         alignItems: 'center',
@@ -86,7 +86,23 @@ let AppStyle = StyleSheet.create({
         paddingRight: 10,
         paddingBottom: 10,
     },
+    searchBox: {
+        flexDirection: 'row',
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        padding: 10,
+    },
+    searchBtn: {
+        height: 30,
+        width: 50,
+        marginLeft: 10,
+        backgroundColor: '#0099CC',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5,
+    },
     searchTextInput: {
+        flex: 1,
         backgroundColor: '#fff',
         borderColor: '#cccccc',
         borderRadius: 3,
@@ -112,20 +128,47 @@ let AppStyle = StyleSheet.create({
         borderTopColor: '#ccc',
         backgroundColor: '#EDEDED'
     },
-    searchBox: {
+    /**
+     *Report Used.
+     **/
+    outerRow: {
         flexDirection: 'row',
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        padding: 10,
     },
-    searchBtn: {
-        height: 30,
-        width: 50,
-        marginLeft: 10,
-        backgroundColor: '#0099CC',
+    sumRow: {
+        flex: 1,
+        flexDirection: 'column',
+        height: 80,
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 5,
+        padding: 10,
+        backgroundColor: '#fff',
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderBottomColor: '#ccc',
+        borderRightWidth: StyleSheet.hairlineWidth,
+        borderRightColor: '#ccc',
+    },
+    sumTitle: {
+        color: '#CCCC99',
+        fontSize: 14,
+    },
+    sumValue: {
+        fontSize: 32,
+        color: '#0099CC',
+        fontWeight: 'bold',
+    },
+    moneyText: {
+        fontSize: 16,
+        paddingRight: 5,
+        color: '#FF7F24'
+    },
+    itemName: {
+        flex:1,
+        fontSize: 18,
+        color: '#000'
+    },
+    subName:{
+        fontSize:16,
+        color:'#EE6A50'
     },
 });
 export default AppStyle;

@@ -19,6 +19,7 @@ import Loading from '../../commonview/Loading';
 import { toastShort } from '../../util/ToastUtil';
 import Icon from 'react-native-vector-icons/Ionicons';
 import DatePicker from 'react-native-datepicker';
+import AppStyle from '../../theme/appstyle';
 class StockCapital extends React.Component {
     constructor(props) {
         var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -88,30 +89,33 @@ class StockCapital extends React.Component {
     _renderHeader() {
         return (
             <View style={{backgroundColor:'#e7e7e7'}}>
-                <View style={styles.hd}>
+                <View style={AppStyle.groupTitle}>
                     <Text style={{color:'#CC0033'}}>资产汇总</Text>
                 </View>
-                <View style={styles.outerRow}>
-                    <View style={styles.sumRow}>
-                        <Text style={styles.sumValue}>{this.state.totalCount}</Text>
-                        <Text style={styles.sumTitle}>资产数量</Text>
+                <View style={AppStyle.outerRow}>
+                    <View style={AppStyle.sumRow}>
+                        <Text style={AppStyle.sumValue}>{this.state.totalCount}</Text>
+                        <Text style={AppStyle.sumTitle}>资产数量</Text>
                     </View>
-                    <View style={[styles.sumRow,{borderRightWidth:0,}]}>
-                        <Text style={styles.sumValue}>¥{this.state.totalVal}</Text>
-                        <Text style={styles.sumTitle}>资产价值</Text>
-                    </View>
-                </View>
-                <View style={[styles.outerRow,{borderBottomWidth:0}]}>
-                    <View style={styles.sumRow}>
-                        <Text style={styles.sumValue}>¥{this.state.totalCB}</Text>
-                        <Text style={styles.sumTitle}>资产成本</Text>
-                    </View>
-                    <View style={[styles.sumRow,{borderRightWidth:0}]}>
-                        <Text style={styles.sumValue}>¥{this.state.totalLR}</Text>
-                        <Text style={styles.sumTitle}>资产利润</Text>
+                    <View style={[AppStyle.sumRow,{borderRightWidth:0,}]}>
+                        <Text style={AppStyle.sumValue}><Text style={AppStyle.moneyText}>¥</Text>{this.state.totalVal}
+                        </Text>
+                        <Text style={AppStyle.sumTitle}>资产价值</Text>
                     </View>
                 </View>
-                <View style={styles.hd}>
+                <View style={[AppStyle.outerRow,{borderBottomWidth:0}]}>
+                    <View style={AppStyle.sumRow}>
+                        <Text style={AppStyle.sumValue}><Text style={AppStyle.moneyText}>¥</Text>{this.state.totalCB}
+                        </Text>
+                        <Text style={AppStyle.sumTitle}>资产成本</Text>
+                    </View>
+                    <View style={[AppStyle.sumRow,{borderRightWidth:0}]}>
+                        <Text style={AppStyle.sumValue}><Text style={AppStyle.moneyText}>¥</Text>{this.state.totalLR}
+                        </Text>
+                        <Text style={AppStyle.sumTitle}>资产利润</Text>
+                    </View>
+                </View>
+                <View style={AppStyle.groupTitle}>
                     <Text style={{color:'#CC0033'}}>营收明细</Text>
                 </View>
             </View>
@@ -120,19 +124,15 @@ class StockCapital extends React.Component {
 
     _onRenderRow(obj) {
         return (
-            <View style={styles.row}>
-                <Text style={styles.itemName}>{obj.ItemName}</Text>
-                <View style={{flexDirection:'column', flex:1, marginLeft:15,}}>
-                    <Text style={styles.barcode}>
-                        <Text
-                            style={{marginRight:5,paddingLeft:5, fontSize:12, color:'#fff', backgroundColor:'#ccc'}}>{obj.ItemStyle}</Text>
-                        <Text>{obj.BarCode}</Text>
-                    </Text>
-                    <View style={{flexDirection:'row'}}>
-                        <Text>售价:¥{obj.SellPrice}</Text>
-                        <Text style={{marginLeft:8,}}>进价:¥{obj.InputPrice}</Text>
-                        <Text style={{marginLeft:8,}}>库存:{obj.ItemCountNum}</Text>
-                    </View>
+            <View style={AppStyle.listRow}>
+                <View style={{flexDirection:'row'}}>
+                    <Text style={AppStyle.itemName}>{obj.ItemName}</Text>
+                    <Text style={AppStyle.subName}>{obj.BarCode}</Text>
+                </View>
+                <View style={{flexDirection:'row'}}>
+                    <Text>售价:¥{obj.SellPrice}</Text>
+                    <Text style={{marginLeft:8,}}>进价:¥{obj.InputPrice}</Text>
+                    <Text style={{marginLeft:8,}}>库存:{obj.ItemCountNum}</Text>
                 </View>
             </View>
         );
@@ -141,7 +141,7 @@ class StockCapital extends React.Component {
     render() {
         if (this.state.loaded) {
             return (
-                <View style={styles.container}>
+                <View style={AppStyle.container}>
                     <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
                     <View style={{ backgroundColor:'#fff', flex:1}}>
                         <ListView dataSource={this.state.ds.cloneWithRows(this.state.dataSource)}
@@ -156,7 +156,7 @@ class StockCapital extends React.Component {
             )
         } else {
             return (
-                <View style={styles.container}>
+                <View style={AppStyle.container}>
                     <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
                     <Loading type={'text'}/>
                 </View>
@@ -165,64 +165,6 @@ class StockCapital extends React.Component {
     }
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#e7e7e7',
-    },
-    hd: {
-        margin: 5,
-        borderLeftWidth: 3,
-        borderLeftColor: '#CC0033',
-        paddingLeft: 5,
-    },
-    outerRow: {
-        flexDirection: 'row',
-        borderBottomColor: '#ccc',
-        borderBottomWidth: StyleSheet.hairlineWidth,
-    },
-    sumRow: {
-        flex: 1,
-        flexDirection: 'column',
-        height: 80,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 10,
-        backgroundColor: '#fff',
-
-        borderRightWidth: StyleSheet.hairlineWidth,
-        borderRightColor: '#ccc',
-    },
-    sumTitle: {
-        color: '#CCCC99',
-        fontSize: 14,
-    },
-    sumValue: {
-        fontSize: 24,
-        color: '#0099CC',
-        fontWeight: 'bold',
-    },
-    row: {
-        flexDirection: 'row',
-        padding: 10,
-        alignItems: 'center',
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: '#ccc'
-    },
-    itemName: {
-        fontSize: 16,
-        textAlign: 'center',
-        color: '#fff',
-        width: 120,
-        backgroundColor: '#0099CC',
-        padding: 2
-    },
-    barcode: {
-        flex: 1,
-        fontSize: 16,
-        color: '#0099CC',
-        fontWeight: 'bold',
-    },
-});
+const styles = StyleSheet.create({});
 
 module.exports = StockCapital;
