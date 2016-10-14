@@ -465,6 +465,10 @@ class BeautyServices extends React.Component {
                 {this.state.petSource.PetName != null && this.state.petSource.PetName != '' ?
                     <View>
                         <View style={AppStyle.row}>
+                            <Text style={AppStyle.rowTitle}>编号</Text>
+                            <Text style={AppStyle.rowVal}>{this.state.petSource.GestCode}</Text>
+                        </View>
+                        <View style={AppStyle.row}>
                             <Text style={AppStyle.rowTitle}>会员</Text>
                             <Text style={AppStyle.rowVal}>{this.state.petSource.GestName}</Text>
                         </View>
@@ -520,7 +524,7 @@ class BeautyServices extends React.Component {
                 <Text style={AppStyle.mpTitle}>数量:</Text>
                 {this.state.edit === '保存' ?
                     <View style={AppStyle.mpBorder}>
-                        <TextInput value={beauty.InputCount}
+                        <TextInput value={beauty.InputCount.toString()}
                                    defaultValue={this.state.num.toString()}
                                    editable={true}
                                    underlineColorAndroid={'transparent'}
@@ -543,7 +547,7 @@ class BeautyServices extends React.Component {
                                         this.setState({totalAmount:_countAmount+(beauty.SellPrice*(beauty.InputCount?beauty.InputCount:this.state.num))})
                                        }}/>
                     </View>
-                    : <Text style={AppStyle.mpTitle}>{beauty.InputCount ? beauty.InputCount : 1}</Text>
+                    : <Text style={AppStyle.mpTitle}>{beauty.InputCount.toString() ? beauty.InputCount.toString() : 1}</Text>
                 }
 
                 {this.state.edit === '保存' ?

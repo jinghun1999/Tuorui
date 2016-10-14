@@ -157,10 +157,10 @@ class AddMemberInfo extends Component {
                 "Status": gestStatusCode,
                 "PaidStatus": null,
                 "Remark": _this.state.memberRemarks,
-                "CreatedBy": null,
-                "CreatedOn": _this.state.memberRegistrationTime,
-                "ModifiedBy": null,
-                "ModifiedOn": "0001-01-01T00:00:00",
+                "CreatedBy": user.FullName,
+                "CreatedOn": Util.getTime(),
+                "ModifiedBy": user.FullName,
+                "ModifiedOn": Util.getTime(),
                 "RewardPoint": null,
                 "PrepayMoney": null,
                 "EntID": "00000000-0000-0000-0000-000000000000",
@@ -221,12 +221,11 @@ class AddMemberInfo extends Component {
                     </View>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>编号</Text>
-                        <Text style={AppStyle.rowVal}>{this.state.memberItem.GestCode}</Text>
+                        <Text style={[AppStyle.rowVal,{color:'#ccc'}]}>{this.state.memberItem.GestCode}</Text>
                     </View>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>登记日期</Text>
-                        <Text
-                            style={AppStyle.rowVal}>{this.state.memberRegistrationTime}</Text>
+                        <Text style={[AppStyle.rowVal,{color:'#ccc'}]}>{this.state.memberRegistrationTime}</Text>
                     </View>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>姓名</Text>

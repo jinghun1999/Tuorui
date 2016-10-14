@@ -534,12 +534,16 @@ class VaccineService extends Component {
                 {this.state.petSource.PetName != null && this.state.petSource.PetName != '' ?
                     <View>
                         <View style={AppStyle.row}>
-                            <Text style={AppStyle.rowTitle}>会员编号</Text>
+                            <Text style={AppStyle.rowTitle}>编号</Text>
                             <Text style={AppStyle.rowVal}>{this.state.petSource.GestCode}</Text>
                         </View>
                         <View style={AppStyle.row}>
-                            <Text style={AppStyle.rowTitle}>会员名称</Text>
+                            <Text style={AppStyle.rowTitle}>名称</Text>
                             <Text style={AppStyle.rowVal}>{this.state.petSource.GestName}</Text>
+                        </View>
+                        <View style={AppStyle.row}>
+                            <Text style={AppStyle.rowTitle}>手机</Text>
+                            <Text style={AppStyle.rowVal}>{this.state.petSource.MobilePhone}</Text>
                         </View>
                     </View> : null
                 }
@@ -596,7 +600,7 @@ class VaccineService extends Component {
                         <Text style={AppStyle.mpTitle}>数量:</Text>
                         {this.state.canEdit ?
                             <View style={AppStyle.mpBorder}>
-                                <TextInput value={vaccine.ItemNum}
+                                <TextInput value={vaccine.ItemNum.toString()}
                                            defaultValue={this.state.num.toString()}
                                            editable={true}
                                            underlineColorAndroid={'transparent'}
@@ -616,7 +620,7 @@ class VaccineService extends Component {
                                         this.setState({totalAmount:_countAmount+(_price*text)})
                                        }}/>
                             </View>
-                            : <Text style={AppStyle.mpTitle}>{vaccine.ItemNum ? vaccine.ItemNum : 1}</Text>
+                            : <Text style={AppStyle.mpTitle}>{vaccine.ItemNum.toString() ? vaccine.ItemNum.toString() : 1}</Text>
                         }
 
                     </View>

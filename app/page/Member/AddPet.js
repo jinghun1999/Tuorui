@@ -40,6 +40,11 @@ class AddPet extends Component {
             isUpdate: false,
             petSickID: null,
             disabled: false,
+            colorNameData:[''],
+            colorName:'',
+            colorData:[],
+            petWeight:'',
+            dogBandID:'',
         };
     }
 
@@ -51,6 +56,44 @@ class AddPet extends Component {
 
     _onFetchBasicData() {
         let _this = this;
+        NetUtil.getAuth(function (user, hos) {
+            let header = NetUtil.headerClientAuth(user, hos);
+            //宠物颜色http://test.tuoruimed.com/service/Api/UserDictDetail/GetModelListWithSort
+            let postData ={
+                "items": [{
+                    "Childrens":null,
+                    "Field":"UserDictCode",
+                    "Title":null,
+                    "Operator":{"Name":"=","Title":"等于","Expression":null},
+                    "DataType":0,
+                    "Value":"3",
+                    "Conn":0
+                }],
+                "sorts":[{
+                    "Field":"Sort",
+                    "Title":null,
+                    "Sort":{"Name":"Asc","Title":"升序"},
+                    "Conn":0
+                }]
+            };
+            NetUtil.postJson(CONSTAPI.HOST+'/UserDictDetail/GetModelListWithSort',postData,header,function(data){
+                if(data.Sign && data.Message!=null){
+                    var colorData=data.Message,colorNameData=[],colorCode=_this.props.petSource.PetSkinColor,_color='';
+                    data.Message.forEach((item,index,array)=>{
+                        if(item.Code==colorCode){_color=item.value_nameCN}
+                        colorNameData.push(item.value_nameCN)
+                    })
+
+                    _this.setState({
+                        colorNameData:colorNameData,
+                        colorData:colorData,
+                        colorName:_color==''?colorNameData[0]:_color
+                    })
+                }
+            })
+        },function(err){
+            toastShort(err)
+        })
         if (!this.props.isAdd) {
             _this.setState({
                 edit: '编辑',
@@ -63,6 +106,8 @@ class AddPet extends Component {
                 petRace: _this.props.petSource.PetRace,
                 petState: _this.props.petSource.BirthStatus,
                 petBirthday: _this.props.petSource.PetBirthday,
+                petWeight:_this.props.petSource.PetWeight,
+                dogBandID:_this.props.petSource.DogBandID,
                 isUpdate: true,
                 petDataSource: _this.props.petSource,
             })
@@ -91,6 +136,7 @@ class AddPet extends Component {
                     })
                 }
             })
+
             let postdata = [];
             NetUtil.postJson(CONSTAPI.HOST + '/PetRace/GetModelList', postdata, header, function (data) {
                 if (data.Sign && data.Message != null) {
@@ -135,6 +181,12 @@ class AddPet extends Component {
                     toastShort("会员信息不正确");
                     return false
                 }
+                let _color=_this.state.colorName,_colorCode='';
+                _this.state.colorData.forEach((item,index,array)=>{
+                    if(item.value_nameCN==_color){
+                        item.Code=_colorCode;
+                    }
+                })
                 let item = {
                     "ID": "00000000-0000-0000-0000-000000000000",
                     "PetCode": _this.state.petID,
@@ -145,10 +197,10 @@ class AddPet extends Component {
                     "PetSex": _this.state.petSex,
                     "PetBirthday": _this.state.petBirthday,
                     "Age": null,
-                    "PetSkinColor": null,
+                    "PetSkinColor": _colorCode,
                     "PetRace": _this.state.petRace,
                     "PetBreed": "",
-                    "PetWeight": null,
+                    "PetWeight": _this.state.petWeight,
                     "PetHeight": null,
                     "PetSWidth": null,
                     "PetBodyLong": null,
@@ -157,13 +209,13 @@ class AddPet extends Component {
                     "Status": "SM00052",
                     "PetHead": null,
                     "PetHeadID": null,
-                    "DogBandID": null,
+                    "DogBandID": _this.state.dogBandID,
                     "MdicTypeName": 'DM0000000060',
                     "Remark": null,
-                    "CreatedBy": null,
-                    "CreatedOn": "0001-01-01T00:00:00",
-                    "ModifiedBy": null,
-                    "ModifiedOn": "0001-01-01T00:00:00",
+                    "CreatedBy": user.FullName,
+                    "CreatedOn": Util.getTime(),
+                    "ModifiedBy": user.FullName,
+                    "ModifiedOn": Util.getTime(),
                     "EntID": "00000000-0000-0000-0000-000000000000"
                 };
                 NetUtil.postJson(CONSTAPI.HOST + '/Pet/AddAndReturn', item, header, function (data) {
@@ -270,6 +322,13 @@ class AddPet extends Component {
         }
     }
 
+    _onChooseColor(){
+        let _this = this;
+        if (_this.state.edit == '保存') {
+            this.pickerColor.toggle();
+        }
+    }
+
     render() {
         var load = (<View>
             <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
@@ -295,71 +354,122 @@ class AddPet extends Component {
                     </View>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>会员</Text>
-                        <Text style={AppStyle.rowVal}>{this.props.member.name}</Text>
+                        <Text style={[AppStyle.rowVal,{color:'#ccc'}]}>{this.props.member.name}</Text>
                     </View>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>手机</Text>
-                        <Text style={AppStyle.rowVal}>{this.props.member.phone}</Text>
+                        <Text style={[AppStyle.rowVal,{color:'#ccc'}]}>{this.props.member.phone}</Text>
                     </View>
                     <View style={AppStyle.groupTitle}>
                         <Text style={AppStyle.groupText}>宠物信息</Text>
                     </View>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>宠物编号</Text>
-                        <Text style={AppStyle.rowVal}>{this.state.petID}</Text>
+                        <Text style={[AppStyle.rowVal,{color:'#ccc'}]}>{this.state.petID}</Text>
                     </View>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>病历号</Text>
-                        <Text style={{flex:1,color:'black'}}>{this.state.petSickID}</Text>
+                        <Text style={[AppStyle.rowVal,{color:'#ccc'}]}>{this.state.petSickID}</Text>
                     </View>
                     <View style={AppStyle.row}>
-                        <Text style={AppStyle.rowTitle}>宠物昵称</Text>
-                        <TextInput
-                            value={this.state.petName}
-                            editable={this.state.enabled}
-                            underlineColorAndroid={'transparent'}
-                            keyboardType={'default'}
-                            style={AppStyle.input}
-                            onChangeText={(text)=>{this.setState({ petName:text })}}
+                        <Text style={AppStyle.rowTitle}>昵称</Text>
+                        {this.state.edit==='保存'?
+                            <TextInput
+                                value={this.state.petName}
+                                editable={true}
+                                underlineColorAndroid={'transparent'}
+                                keyboardType={'default'}
+                                style={AppStyle.input}
+                                onChangeText={(text)=>{this.setState({ petName:text })}}
                             />
+                            :
+                            <Text style={AppStyle.rowVal}>{this.state.petName}</Text>
+                        }
+
                     </View>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>出生日期</Text>
-                        <View style={{flex:1,height:39}}>
-                            <DatePicker
-                                date={this.state.petBirthday}
-                                mode="date"
-                                placeholder="选择日期"
-                                format="YYYY-MM-DD"
-                                minDate="1980-01-01"
-                                maxDate={Util.GetDateStr(0)}
-                                confirmBtnText="Confirm"
-                                cancelBtnText="Cancel"
-                                disabled={this.state.disabled}
-                                showIcon={false}
-                                customStyles={{
+                        {this.state.edit ==='保存'?
+                                <DatePicker
+                                    date={this.state.petBirthday}
+                                    mode="date"
+                                    placeholder="选择日期"
+                                    format="YYYY-MM-DD"
+                                    minDate="1980-01-01"
+                                    maxDate={Util.GetDateStr(0)}
+                                    confirmBtnText="Confirm"
+                                    cancelBtnText="Cancel"
+                                    showIcon={false}
+                                    enabled={this.state.enable}
+                                    style={{padding:0, margin:0,}}
+                                    customStyles={{
                                     dateInput: {
-                                      alignItems:'flex-start',
+                                        alignItems:'flex-start',
+                                        height:30,
+                                        padding:0,
+                                        margin:0,
                                       borderWidth:0,
                                     },
-                                    disabled:{
-                                        backgroundColor:'transparent'
+                                    dateTouchBody:{
+                                        height:30,
                                     }
                                   }}
-                                onDateChange={(dateBirth) => {this.setState({petBirthday:dateBirth})}}/>
-                        </View>
+                                    onDateChange={(dateBirth) => {this.setState({petBirthday:dateBirth})}}/>
+                            : <Text style={AppStyle.rowVal}>{Util.getFormateTime(this.state.petBirthday, 'day')}</Text>
+
+                        }
+                    </View>
+                    <View style={AppStyle.row}>
+                        <Text style={AppStyle.rowTitle}>体重</Text>
+                        {this.state.edit==='保存'?
+                            <TextInput
+                                value={this.state.petWeight.toString()}
+                                editable={true}
+                                underlineColorAndroid={'transparent'}
+                                keyboardType={'default'}
+                                style={AppStyle.input}
+                                onChangeText={(text)=>{this.setState({ petWeight:text })}}
+                            />
+                            :
+                            <Text style={AppStyle.rowVal}>{this.state.petWeight.toString()}</Text>
+                        }
+
+                    </View>
+                    <View style={AppStyle.row}>
+                        <Text style={AppStyle.rowTitle}>牌号</Text>
+                        {this.state.edit==='保存'?
+                            <TextInput
+                                value={this.state.dogBandID}
+                                editable={true}
+                                underlineColorAndroid={'transparent'}
+                                keyboardType={'default'}
+                                style={AppStyle.input}
+                                onChangeText={(text)=>{this.setState({ dogBandID:text })}}
+                            />
+                            :
+                            <Text style={AppStyle.rowVal}>{this.state.dogBandID}</Text>
+                        }
+
                     </View>
                     <TouchableOpacity onPress={this._onChooseRace.bind(this)} style={AppStyle.row}>
-                        <Text style={AppStyle.rowTitle}>宠物种类</Text>
+                        <Text style={AppStyle.rowTitle}>种类</Text>
                         <Text style={{flex:1,color:'black'}}>{this.state.petRace}</Text>
+                        {this.state.edit === '保存'?<Icon name={'angle-right'} size={20} color={'#ccc'}/>:null}
                     </TouchableOpacity>
                     <TouchableOpacity onPress={this._onChooseSex.bind(this)} style={AppStyle.row}>
-                        <Text style={AppStyle.rowTitle}>宠物性别</Text>
+                        <Text style={AppStyle.rowTitle}>性别</Text>
                         <Text style={{flex:1,color:'black'}}>{this.state.petSex}</Text>
+                        {this.state.edit === '保存'?<Icon name={'angle-right'} size={20} color={'#ccc'}/>:null}
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={this._onChooseColor.bind(this)} style={AppStyle.row}>
+                        <Text style={AppStyle.rowTitle}>颜色</Text>
+                        <Text style={{flex:1,color:'black'}}>{this.state.colorName}</Text>
+                        {this.state.edit === '保存'?<Icon name={'angle-right'} size={20} color={'#ccc'}/>:null}
                     </TouchableOpacity>
                     <TouchableOpacity onPress={this._onChooseState.bind(this)} style={AppStyle.row}>
-                        <Text style={AppStyle.rowTitle}>宠物状态</Text>
+                        <Text style={AppStyle.rowTitle}>状态</Text>
                         <Text style={{flex:1,color:'black'}}>{this.state.petState}</Text>
+                        {this.state.edit === '保存'?<Icon name={'angle-right'} size={20} color={'#ccc'}/>:null}
                     </TouchableOpacity>
                 </ScrollView>
                 <Picker
@@ -407,6 +517,21 @@ class AddPet extends Component {
                         })
                     }}
                     />
+                <Picker
+                    style={{height: 300}}
+                    showDuration={300}
+                    showMask={true}
+                    pickerBtnText={'确认'}
+                    pickerCancelBtnText={'取消'}
+                    ref={picker => this.pickerColor = picker}
+                    pickerData={this.state.colorNameData}
+                    selectedValue={this.state.colorName}
+                    onPickerDone={(color)=>{
+                        this.setState({
+                            colorName: color[0]?color[0]:'',
+                        })
+                    }}
+                />
             </View>
         )
     }

@@ -17,11 +17,10 @@ import{
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
-import Icon from 'react-native-vector-icons/Ionicons';
 import AddPet from './AddPet';
 import Loading from '../../commonview/Loading';
 import { toastShort } from '../../util/ToastUtil';
-
+import Icon from 'react-native-vector-icons/FontAwesome';
 import DatePicker from 'react-native-datepicker';
 import Picker from 'react-native-picker';
 import AppStyle from '../../theme/appstyle';
@@ -308,7 +307,7 @@ class MemberDetails extends Component {
         return (
             <TouchableOpacity style={AppStyle.row} onPress={()=>this._onPetDetails(pet)}>
                 <Text style={AppStyle.mpName}>{pet.PetName}</Text>
-                <Icon name={'ios-arrow-forward'} size={15} color={'#666'}/>
+                <Icon name={'angle-right'} size={20} color={'#ccc'}/>
             </TouchableOpacity>
         )
     }
@@ -352,21 +351,26 @@ class MemberDetails extends Component {
                     </View>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>编号</Text>
-                        <Text style={AppStyle.rowVal}>{this.props.memberInfo.GestCode}</Text>
+                        <Text style={[AppStyle.rowVal,{color:'#ccc'}]}>{this.props.memberInfo.GestCode}</Text>
                     </View>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>登记日期</Text>
-                        <Text style={AppStyle.rowVal}>{Util.getFormateTime(this.props.memberInfo.CreatedOn, 'day')}</Text>
+                        <Text style={[AppStyle.rowVal,{color:'#ccc'}]}>{Util.getFormateTime(this.props.memberInfo.CreatedOn, 'day')}</Text>
                     </View>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>姓名</Text>
-                        <TextInput value={this.state.memberName}
-                                   editable={this.state.enable}
-                                   underlineColorAndroid={'transparent'}
-                                   keyboardType={'default'}
-                                   style={AppStyle.input}
-                                   onChangeText={(text)=>{this.setState({ memberName: text })}}
-                        />
+                        {this.state.edit==='保存'?
+                            <TextInput value={this.state.memberName}
+                                       editable={true}
+                                       underlineColorAndroid={'transparent'}
+                                       keyboardType={'default'}
+                                       style={AppStyle.input}
+                                       onChangeText={(text)=>{this.setState({ memberName: text })}}
+                            />
+                        :
+                            <Text style={AppStyle.rowVal}>{this.state.memberName}</Text>
+                        }
+
 
                     </View>
                     <View style={AppStyle.row}>
@@ -406,18 +410,24 @@ class MemberDetails extends Component {
                     </View>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>手机</Text>
-                        <TextInput value={this.state.memberPhone}
-                                   editable={this.state.enable}
-                                   underlineColorAndroid={'transparent'}
-                                   keyboardType={'numeric'}
-                                   style={AppStyle.input}
-                                   onChangeText={(text)=>{this.setState({ memberPhone: text })}}
-                                   onBlur={this._checkPhone.bind(this)}
-                        />
+                        {this.state.edit==='保存'?
+                            <TextInput value={this.state.memberPhone}
+                                       editable={true}
+                                       underlineColorAndroid={'transparent'}
+                                       keyboardType={'numeric'}
+                                       style={AppStyle.input}
+                                       onChangeText={(text)=>{this.setState({ memberPhone: text })}}
+                                       onBlur={this._checkPhone.bind(this)}
+                            />
+                            :
+                            <Text style={AppStyle.rowVal}>{this.state.memberPhone}</Text>
+                        }
+
                     </View>
                     <TouchableOpacity onPress={this._onChooseSex.bind(this)} style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>性别</Text>
                         <Text style={AppStyle.rowVal}>{this.state.memberSex == 'DM00001' ? '男' : '女'}</Text>
+                        {this.state.edit === '保存'?<Icon name={'angle-right'} size={20} color={'#ccc'}/>:null}
                     </TouchableOpacity>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>地址</Text>
@@ -435,10 +445,12 @@ class MemberDetails extends Component {
                     <TouchableOpacity onPress={this._onChooseLevel.bind(this)} style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>会员等级</Text>
                         <Text style={AppStyle.rowVal}>{this.state.memberLevel}</Text>
+                        {this.state.edit === '保存'?<Icon name={'angle-right'} size={20} color={'#ccc'}/>:null}
                     </TouchableOpacity>
                     <TouchableOpacity onPress={this._onChooseState.bind(this)} style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>会员状态</Text>
                         <Text style={AppStyle.rowVal}>{this.state.memberState}</Text>
+                        {this.state.edit === '保存'?<Icon name={'angle-right'} size={20} color={'#ccc'}/>:null}
                     </TouchableOpacity>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>备注</Text>
