@@ -20,6 +20,7 @@ import Loading from '../../commonview/Loading';
 import { toastShort } from '../../util/ToastUtil';
 import Icon from 'react-native-vector-icons/Ionicons';
 import DatePicker from 'react-native-datepicker';
+import ReportStyles from '../../theme/ReportStyles';
 class GoodSales extends React.Component {
     constructor(props) {
         let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -107,7 +108,7 @@ class GoodSales extends React.Component {
 
     render() {
         let searchBox = (<View style={styles.searchBox}>
-            <View style={{flexDirection:'column', flex:1,}}>
+            <View style={ReportStyles.container}>
                 <View style={{flexDirection:'row', flex:1, alignItems:'center'}}>
                     <Text style={{marginLeft:10}}>查询日期从</Text>
                     <DatePicker
