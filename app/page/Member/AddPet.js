@@ -13,7 +13,7 @@ import {
     ListView,
     ScrollView,
     InteractionManager,
-    } from 'react-native';
+} from 'react-native';
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
@@ -40,11 +40,11 @@ class AddPet extends Component {
             isUpdate: false,
             petSickID: null,
             disabled: false,
-            colorNameData:[''],
-            colorName:'',
-            colorData:[],
-            petWeight:'',
-            dogBandID:'',
+            colorNameData: [''],
+            colorName: '',
+            colorData: [],
+            petWeight: '',
+            dogBandID: '',
         };
     }
 
@@ -59,39 +59,41 @@ class AddPet extends Component {
         NetUtil.getAuth(function (user, hos) {
             let header = NetUtil.headerClientAuth(user, hos);
             //宠物颜色http://test.tuoruimed.com/service/Api/UserDictDetail/GetModelListWithSort
-            let postData ={
+            let postData = {
                 "items": [{
-                    "Childrens":null,
-                    "Field":"UserDictCode",
-                    "Title":null,
-                    "Operator":{"Name":"=","Title":"等于","Expression":null},
-                    "DataType":0,
-                    "Value":"3",
-                    "Conn":0
+                    "Childrens": null,
+                    "Field": "UserDictCode",
+                    "Title": null,
+                    "Operator": {"Name": "=", "Title": "等于", "Expression": null},
+                    "DataType": 0,
+                    "Value": "3",
+                    "Conn": 0
                 }],
-                "sorts":[{
-                    "Field":"Sort",
-                    "Title":null,
-                    "Sort":{"Name":"Asc","Title":"升序"},
-                    "Conn":0
+                "sorts": [{
+                    "Field": "Sort",
+                    "Title": null,
+                    "Sort": {"Name": "Asc", "Title": "升序"},
+                    "Conn": 0
                 }]
             };
-            NetUtil.postJson(CONSTAPI.HOST+'/UserDictDetail/GetModelListWithSort',postData,header,function(data){
-                if(data.Sign && data.Message!=null){
-                    var colorData=data.Message,colorNameData=[],colorCode=_this.props.petSource.PetSkinColor,_color='';
-                    data.Message.forEach((item,index,array)=>{
-                        if(item.Code==colorCode){_color=item.value_nameCN}
+            NetUtil.postJson(CONSTAPI.HOST + '/UserDictDetail/GetModelListWithSort', postData, header, function (data) {
+                if (data.Sign && data.Message != null) {
+                    var colorData = data.Message, colorNameData = [], colorCode = _this.props.petSource.PetSkinColor, _color = '';
+                    data.Message.forEach((item, index, array)=> {
+                        if (item.Code == colorCode) {
+                            _color = item.value_nameCN
+                        }
                         colorNameData.push(item.value_nameCN)
                     })
 
                     _this.setState({
-                        colorNameData:colorNameData,
-                        colorData:colorData,
-                        colorName:_color==''?colorNameData[0]:_color
+                        colorNameData: colorNameData,
+                        colorData: colorData,
+                        colorName: _color == '' ? colorNameData[0] : _color
                     })
                 }
             })
-        },function(err){
+        }, function (err) {
             toastShort(err)
         })
         if (!this.props.isAdd) {
@@ -106,8 +108,8 @@ class AddPet extends Component {
                 petRace: _this.props.petSource.PetRace,
                 petState: _this.props.petSource.BirthStatus,
                 petBirthday: _this.props.petSource.PetBirthday,
-                petWeight:_this.props.petSource.PetWeight,
-                dogBandID:_this.props.petSource.DogBandID,
+                petWeight: _this.props.petSource.PetWeight,
+                dogBandID: _this.props.petSource.DogBandID,
                 isUpdate: true,
                 petDataSource: _this.props.petSource,
             })
@@ -181,10 +183,10 @@ class AddPet extends Component {
                     toastShort("会员信息不正确");
                     return false
                 }
-                let _color=_this.state.colorName,_colorCode='';
-                _this.state.colorData.forEach((item,index,array)=>{
-                    if(item.value_nameCN==_color){
-                        item.Code=_colorCode;
+                let _color = _this.state.colorName, _colorCode = '';
+                _this.state.colorData.forEach((item, index, array)=> {
+                    if (item.value_nameCN == _color) {
+                        item.Code = _colorCode;
                     }
                 })
                 let item = {
@@ -239,6 +241,12 @@ class AddPet extends Component {
                     toastShort('未知的会员信息');
                     return false
                 }
+                let _color = _this.state.colorName, _colorCode = '';
+                _this.state.colorData.forEach((item, index, array)=> {
+                    if (item.value_nameCN == _color) {
+                        item.Code = _colorCode;
+                    }
+                })
                 let item = {
                     "ID": _this.props.petSource.PetID,
                     "PetCode": _this.state.petID,
@@ -249,10 +257,10 @@ class AddPet extends Component {
                     "PetSex": _this.state.petSex,
                     "PetBirthday": _this.state.petBirthday,
                     "Age": _this.state.petDataSource.Age,
-                    "PetSkinColor": _this.state.petDataSource.PetSkinColor ? _this.state.petDataSource.PetSkinColor : '',
+                    "PetSkinColor": _colorCode ? _colorCode : _this.state.petDataSource.PetSkinColor,
                     "PetRace": _this.state.petRace,
                     "PetBreed": _this.state.petDataSource.PetBreed ? _this.state.petDataSource.PetBreed : '',
-                    "PetWeight": _this.state.petDataSource.PetWeight ? _this.state.petDataSource.PetWeight : '',
+                    "PetWeight": _this.state.petWeight ?_this.state.petWeight: _this.state.petDataSource.PetWeight,
                     "PetHeight": _this.state.petDataSource.PetHeight ? _this.state.petDataSource.PetHeight : '',
                     "PetSWidth": _this.state.petDataSource.PetSWidth ? _this.state.petDataSource.PetSWidth : '',
                     "PetBodyLong": _this.state.petDataSource.PetBodyLong ? _this.state.petDataSource.PetBodyLong : '',
@@ -261,7 +269,7 @@ class AddPet extends Component {
                     "Status": _this.state.petDataSource.Status ? _this.state.petDataSource.Status : 'SM00052',
                     "PetHead": _this.state.petDataSource.PetHead ? _this.state.petDataSource.PetHead : '',
                     "PetHeadID": _this.state.petDataSource.PetHeadID ? _this.state.petDataSource.PetHeadID : '',
-                    "DogBandID": _this.state.petDataSource.DogBandID ? _this.state.petDataSource.DogBandID : '',
+                    "DogBandID": _this.state.dogBandID ? _this.state.dogBandID: _this.state.petDataSource.DogBandID,
                     "MdicTypeName": _this.state.petDataSource.MdicTypeName ? _this.state.petDataSource.MdicTypeName : '',
                     "Remark": _this.state.petDataSource.Remark ? _this.state.petDataSource.Remark : '',
                     "CreatedBy": _this.props.member.createdBy,
@@ -322,10 +330,24 @@ class AddPet extends Component {
         }
     }
 
-    _onChooseColor(){
+    _onChooseColor() {
         let _this = this;
         if (_this.state.edit == '保存') {
             this.pickerColor.toggle();
+        }
+    }
+
+    _check(){
+        //验证是否输入的为数字
+        let _this= this;
+        var re =/^[1-9]\d*$|^0$/;
+        var petWeight = _this.state.petWeight;
+        if(isNaN(petWeight)|| petWeight ===''){
+            toastShort('请输入数字');
+        }
+        if(!re.test(petWeight)){
+            toastShort("请输入正确的数字");
+            _this.setState({petWeight:''})
         }
     }
 
@@ -347,6 +369,7 @@ class AddPet extends Component {
                       editInfo={this._save.bind(this)}/>
                 <ScrollView key={'scrollView'}
                             horizontal={false}
+                            keyboardDismissMode={'none'}
                             showsVerticalScrollIndicator={true}
                             scrollEnabled={true}>
                     <View style={AppStyle.groupTitle}>
@@ -373,7 +396,7 @@ class AddPet extends Component {
                     </View>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>昵称</Text>
-                        {this.state.edit==='保存'?
+                        {this.state.edit === '保存' ?
                             <TextInput
                                 value={this.state.petName}
                                 editable={true}
@@ -389,20 +412,20 @@ class AddPet extends Component {
                     </View>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>出生日期</Text>
-                        {this.state.edit ==='保存'?
-                                <DatePicker
-                                    date={this.state.petBirthday}
-                                    mode="date"
-                                    placeholder="选择日期"
-                                    format="YYYY-MM-DD"
-                                    minDate="1980-01-01"
-                                    maxDate={Util.GetDateStr(0)}
-                                    confirmBtnText="Confirm"
-                                    cancelBtnText="Cancel"
-                                    showIcon={false}
-                                    enabled={this.state.enable}
-                                    style={{padding:0, margin:0,}}
-                                    customStyles={{
+                        {this.state.edit === '保存' ?
+                            <DatePicker
+                                date={this.state.petBirthday}
+                                mode="date"
+                                placeholder="选择日期"
+                                format="YYYY-MM-DD"
+                                minDate="1980-01-01"
+                                maxDate={Util.GetDateStr(0)}
+                                confirmBtnText="Confirm"
+                                cancelBtnText="Cancel"
+                                showIcon={false}
+                                enabled={this.state.enable}
+                                style={{padding:0, margin:0,}}
+                                customStyles={{
                                     dateInput: {
                                         alignItems:'flex-start',
                                         height:30,
@@ -414,30 +437,31 @@ class AddPet extends Component {
                                         height:30,
                                     }
                                   }}
-                                    onDateChange={(dateBirth) => {this.setState({petBirthday:dateBirth})}}/>
+                                onDateChange={(dateBirth) => {this.setState({petBirthday:dateBirth})}}/>
                             : <Text style={AppStyle.rowVal}>{Util.getFormateTime(this.state.petBirthday, 'day')}</Text>
 
                         }
                     </View>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>体重</Text>
-                        {this.state.edit==='保存'?
-                            <TextInput
-                                value={this.state.petWeight.toString()}
-                                editable={true}
-                                underlineColorAndroid={'transparent'}
-                                keyboardType={'default'}
-                                style={AppStyle.input}
-                                onChangeText={(text)=>{this.setState({ petWeight:text })}}
-                            />
+                        {this.state.edit === '保存' ?
+                                <TextInput
+                                    value={this.state.petWeight.toString()}
+                                    editable={true}
+                                    underlineColorAndroid={'transparent'}
+                                    keyboardType={'numeric'}
+                                    style={AppStyle.input}
+                                    onBlur={this._check.bind(this)}
+                                    onChangeText={(text)=>{this.setState({ petWeight:text })}}
+                                />
                             :
-                            <Text style={AppStyle.rowVal}>{this.state.petWeight.toString()}</Text>
+                            <Text style={AppStyle.rowVal}>{this.state.petWeight}</Text>
                         }
-
+                        <Text>kg</Text>
                     </View>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>牌号</Text>
-                        {this.state.edit==='保存'?
+                        {this.state.edit === '保存' ?
                             <TextInput
                                 value={this.state.dogBandID}
                                 editable={true}
@@ -454,22 +478,22 @@ class AddPet extends Component {
                     <TouchableOpacity onPress={this._onChooseRace.bind(this)} style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>种类</Text>
                         <Text style={{flex:1,color:'black'}}>{this.state.petRace}</Text>
-                        {this.state.edit === '保存'?<Icon name={'angle-right'} size={20} color={'#ccc'}/>:null}
+                        {this.state.edit === '保存' ? <Icon name={'angle-right'} size={20} color={'#ccc'}/> : null}
                     </TouchableOpacity>
                     <TouchableOpacity onPress={this._onChooseSex.bind(this)} style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>性别</Text>
                         <Text style={{flex:1,color:'black'}}>{this.state.petSex}</Text>
-                        {this.state.edit === '保存'?<Icon name={'angle-right'} size={20} color={'#ccc'}/>:null}
+                        {this.state.edit === '保存' ? <Icon name={'angle-right'} size={20} color={'#ccc'}/> : null}
                     </TouchableOpacity>
                     <TouchableOpacity onPress={this._onChooseColor.bind(this)} style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>颜色</Text>
                         <Text style={{flex:1,color:'black'}}>{this.state.colorName}</Text>
-                        {this.state.edit === '保存'?<Icon name={'angle-right'} size={20} color={'#ccc'}/>:null}
+                        {this.state.edit === '保存' ? <Icon name={'angle-right'} size={20} color={'#ccc'}/> : null}
                     </TouchableOpacity>
                     <TouchableOpacity onPress={this._onChooseState.bind(this)} style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>状态</Text>
                         <Text style={{flex:1,color:'black'}}>{this.state.petState}</Text>
-                        {this.state.edit === '保存'?<Icon name={'angle-right'} size={20} color={'#ccc'}/>:null}
+                        {this.state.edit === '保存' ? <Icon name={'angle-right'} size={20} color={'#ccc'}/> : null}
                     </TouchableOpacity>
                 </ScrollView>
                 <Picker
@@ -486,7 +510,7 @@ class AddPet extends Component {
                             petSex: sex[0]?sex[0]:'',
                         })
                     }}
-                    />
+                />
                 <Picker
                     style={{height: 300}}
                     showDuration={300}
@@ -501,7 +525,7 @@ class AddPet extends Component {
                             petState: state[0]?state[0]:'',
                         })
                     }}
-                    />
+                />
                 <Picker
                     style={{height: 300}}
                     showDuration={300}
@@ -516,7 +540,7 @@ class AddPet extends Component {
                             petRace: type[0]?type[0]:'',
                         })
                     }}
-                    />
+                />
                 <Picker
                     style={{height: 300}}
                     showDuration={300}

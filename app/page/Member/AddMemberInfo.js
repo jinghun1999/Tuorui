@@ -187,16 +187,14 @@ class AddMemberInfo extends Component {
     _checkPhone(){
         //验证手机号码
         let _this= this;
-        var re =/^1\d{10}$/;
+        var re =/^1[34578]\d{9}$/;
         var phone = _this.state.memberPhone;
-        if(isNaN(phone)|| phone ==''){
+        if(isNaN(phone)|| phone ===''){
             toastShort('请输入手机号');
-            return false;
         }
         if(!re.test(phone)){
-            toastShort("格式错误");
+            toastShort("输入手机号码有误");
             _this.setState({memberPhone:''})
-            _this.refs.phone.focus();
         }
     }
     render() {
@@ -214,6 +212,7 @@ class AddMemberInfo extends Component {
                     />
                 <ScrollView key={'scrollView'}
                             horizontal={false}
+                            keyboardDismissMode={'none'}
                             showsVerticalScrollIndicator={true}
                             scrollEnabled={true}>
                     <View style={AppStyle.groupTitle}>
@@ -276,7 +275,6 @@ class AddMemberInfo extends Component {
                                    underlineColorAndroid={'transparent'}
                                    keyboardType={'numeric'}
                                    style={AppStyle.input}
-                                   ref='phone'
                                    onChangeText={(text)=>{
                                    this.setState({ memberPhone:text })}}
                                    onBlur={this._checkPhone.bind(this)}
@@ -285,6 +283,7 @@ class AddMemberInfo extends Component {
                     <TouchableOpacity onPress={this._onChooseSex.bind(this)} style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>性别</Text>
                         <Text style={AppStyle.rowVal}>{this.state.memberSex}</Text>
+                        <Icon name={'angle-right'} size={20} color={'#ccc'}/>
                     </TouchableOpacity>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>地址</Text>
@@ -302,10 +301,12 @@ class AddMemberInfo extends Component {
                     <TouchableOpacity onPress={this._onChooseLevel.bind(this)} style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>会员等级</Text>
                         <Text style={AppStyle.rowVal}>{this.state.memberLevel}</Text>
+                        <Icon name={'angle-right'} size={20} color={'#ccc'}/>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={this._onChooseState.bind(this)} style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>会员状态</Text>
                         <Text style={AppStyle.rowVal}>{this.state.memberState}</Text>
+                        <Icon name={'angle-right'} size={20} color={'#ccc'}/>
                     </TouchableOpacity>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>备注</Text>
