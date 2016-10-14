@@ -69,7 +69,7 @@ class GoodSales extends React.Component {
                         dataSource: json,
                         loaded: true,
                         totalCount: a1,
-                        totalAmount: a2,
+                        totalAmount: a2.toFixed(2),
                     });
                 } else {
                     toastShort("获取数据失败：" + data.Message);
@@ -94,7 +94,6 @@ class GoodSales extends React.Component {
                 <View style={{flexDirection:'column', flex:1, marginLeft:15,}}>
                     <View style={{flexDirection:'row'}}>
                         <Text style={styles.barcode}>条码: {obj.条码}</Text>
-                        <Text style={{marginLeft:10, color:'#CCCC99'}}>生产商: {obj.生产商}</Text>
                     </View>
                     <View style={{flexDirection:'row'}}>
                         <Text>总数:{obj.总数量} {obj.单位}</Text>

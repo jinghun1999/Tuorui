@@ -134,27 +134,27 @@ class Income extends React.Component {
                         <Text style={styles.sumTitle}>销售数量</Text>
                     </View>
                     <View style={[styles.sumRow,{borderRightWidth:0}]}>
-                        <Text style={styles.sumValue}>¥{this.state.sumInfo.SellTotal}</Text>
+                        <Text style={styles.sumValue}>¥{this.state.sumInfo.SellTotal.toFixed(2)}</Text>
                         <Text style={styles.sumTitle}>销售额</Text>
                     </View>
                 </View>
                 <View style={styles.outerRow}>
                     <View style={styles.sumRow}>
-                        <Text style={styles.sumValue}>¥{this.state.sumInfo.InPrice}</Text>
+                        <Text style={styles.sumValue}>¥{this.state.sumInfo.InPrice.toFixed(2)}</Text>
                         <Text style={styles.sumTitle}>销售成本</Text>
                     </View>
                     <View style={[styles.sumRow,{borderRightWidth:0}]}>
-                        <Text style={styles.sumValue}>¥{this.state.sumInfo.Discount}</Text>
+                        <Text style={styles.sumValue}>¥{this.state.sumInfo.Discount.toFixed(2)}</Text>
                         <Text style={styles.sumTitle}>优惠成本</Text>
                     </View>
                 </View>
                 <View style={[styles.outerRow,{borderBottomWidth:0,}]}>
                     <View style={styles.sumRow}>
-                        <Text style={styles.sumValue}>¥{this.state.sumInfo.BackMoney}</Text>
+                        <Text style={styles.sumValue}>¥{this.state.sumInfo.BackMoney.toFixed(2)}</Text>
                         <Text style={styles.sumTitle}>其他成本</Text>
                     </View>
                     <View style={[styles.sumRow,{borderRightWidth:0}]}>
-                        <Text style={styles.sumValue}>¥{this.state.sumInfo.Profit}</Text>
+                        <Text style={styles.sumValue}>¥{this.state.sumInfo.Profit.toFixed(2)}</Text>
                         <Text style={styles.sumTitle}>利润</Text>
                     </View>
                 </View>
