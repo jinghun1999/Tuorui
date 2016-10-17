@@ -119,64 +119,95 @@ class AddMemberInfo extends Component {
             toastShort("请输入手机号码");
             return false;
         }
+
         NetUtil.getAuth(function (user, hos) {
-            //DM00001 男 DM00002 女
-            if (_this.state.memberItem.GestCode == null || _this.state.memberID == null) {
-                toastShort('初始化会员信息错误，请稍后重试');
-                return false;
-            }
-            var levelName=_this.state.memberLevel;
-            var levelCode='';
-            _this.state.memberLevelData.forEach((item,index,array)=>{
-                if(item.LevelName == levelName){
-                    levelCode =item.LevelCode;
-                }
-            })
-            var gestStatus = _this.state.memberState,gestStatusCode;
-            if(gestStatus =='正常'){
-                gestStatusCode ='SM00001'
-            } else{
-                gestStatusCode='SM00002'
-            }
-            var item = {
-                "ID": _this.state.memberID,
-                "GestCode": _this.state.memberItem.GestCode,
-                "LoseRightDate": null,
-                "GestName": _this.state.memberName,
-                "GestSex": _this.state.memberSex == '男' ? 'DM00001' : 'DM00002',
-                "GestBirthday": _this.state.memberBirthday,
-                "MobilePhone": _this.state.memberPhone,
-                "TelPhone": null,
-                "EMail": null,
-                "GestAddress": _this.state.memberAddress,
-                "IsVIP": "SM00054",
-                "VIPNo": null,
-                "VIPAccount": null,
-                "LastPaidTime": null,
-                "GestStyle": levelCode,
-                "Status": gestStatusCode,
-                "PaidStatus": null,
-                "Remark": _this.state.memberRemarks,
-                "CreatedBy": user.FullName,
-                "CreatedOn": Util.getTime(),
-                "ModifiedBy": user.FullName,
-                "ModifiedOn": Util.getTime(),
-                "RewardPoint": null,
-                "PrepayMoney": null,
-                "EntID": "00000000-0000-0000-0000-000000000000",
-                "LevelName": null,
-            };
+            //验证手机是否存在
+            let postdata =[{
+                    Childrens: null,
+                    Field: "MobilePhone",
+                    Title: null,
+                    Operator: {"Name": "=", "Title": "等于", "Expression": null},
+                    DataType: 0,
+                    Value: _this.state.memberPhone,
+                    Conn: 0
+                },{
+                    "Childrens": null,
+                    "Field": "ID",
+                    "Title": null,
+                    "Operator": {"Name": "<>", "Title": "不等于", "Expression": null},
+                    "DataType": 0,
+                    "Value": _this.state.memberID,
+                    "Conn": 1
+                }];
             let header = NetUtil.headerClientAuth(user, hos);
-            NetUtil.postJson(CONSTAPI.HOST + '/Gest/AddGest', item, header, function (data) {
+            NetUtil.postJson(CONSTAPI.HOST + '/Gest/GetModelList', postdata, header, function (data) {
                 if (data.Sign) {
-                    if (_this.props.getResult) {
-                        _this.props.getResult();
+                    alert(JSON.stringify(data.Message));
+                    if (data.Message != null && data.Message.length > 0) {
+                        toastShort("该手机已存在，请更换其他手机！");
+                        return false;
                     }
-                    if (needback) {
-                        _this._onBack();
+                    else {
+                        //DM00001 男 DM00002 女
+                        if (_this.state.memberItem.GestCode == null || _this.state.memberID == null) {
+                            toastShort('初始化会员信息错误，请稍后重试');
+                            return false;
+                        }
+                        var levelName = _this.state.memberLevel;
+                        var levelCode = '';
+                        _this.state.memberLevelData.forEach((item, index, array)=> {
+                            if (item.LevelName == levelName) {
+                                levelCode = item.LevelCode;
+                            }
+                        })
+                        var gestStatus = _this.state.memberState, gestStatusCode;
+                        if (gestStatus == '正常') {
+                            gestStatusCode = 'SM00001'
+                        } else {
+                            gestStatusCode = 'SM00002'
+                        }
+                        var item = {
+                            "ID": _this.state.memberID,
+                            "GestCode": _this.state.memberItem.GestCode,
+                            "LoseRightDate": null,
+                            "GestName": _this.state.memberName,
+                            "GestSex": _this.state.memberSex == '男' ? 'DM00001' : 'DM00002',
+                            "GestBirthday": _this.state.memberBirthday,
+                            "MobilePhone": _this.state.memberPhone,
+                            "TelPhone": null,
+                            "EMail": null,
+                            "GestAddress": _this.state.memberAddress,
+                            "IsVIP": "SM00054",
+                            "VIPNo": null,
+                            "VIPAccount": null,
+                            "LastPaidTime": null,
+                            "GestStyle": levelCode,
+                            "Status": gestStatusCode,
+                            "PaidStatus": null,
+                            "Remark": _this.state.memberRemarks,
+                            "CreatedBy": user.FullName,
+                            "CreatedOn": Util.getTime(),
+                            "ModifiedBy": user.FullName,
+                            "ModifiedOn": Util.getTime(),
+                            "RewardPoint": null,
+                            "PrepayMoney": null,
+                            "EntID": "00000000-0000-0000-0000-000000000000",
+                            "LevelName": null,
+                        };
+                        //let header = NetUtil.headerClientAuth(user, hos);
+                        NetUtil.postJson(CONSTAPI.HOST + '/Gest/AddGest', item, header, function (data) {
+                            if (data.Sign) {
+                                if (_this.props.getResult) {
+                                    _this.props.getResult();
+                                }
+                                if (needback) {
+                                    _this._onBack();
+                                }
+                            } else {
+                                toastShort("获取数据错误" + data.Exception);
+                            }
+                        });
                     }
-                } else {
-                    toastShort("获取数据错误" + data.Exception);
                 }
             });
         }, function (err) {
@@ -190,10 +221,10 @@ class AddMemberInfo extends Component {
         var re =/^1[34578]\d{9}$/;
         var phone = _this.state.memberPhone;
         if(isNaN(phone)|| phone ===''){
-            toastShort('请输入手机号');
+            toastShort('请输入手机');
         }
         if(!re.test(phone)){
-            toastShort("输入手机号码有误");
+            toastShort("输入的手机有误，请重新输入");
             _this.setState({memberPhone:''})
         }
     }
