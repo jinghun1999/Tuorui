@@ -171,8 +171,7 @@ class Information extends React.Component {
     renderFooter() {
         if (this.state.pageIndex >= this.state.totalPage) {
             return (
-                <View style={{height: 40, justifyContent:'center', alignItems:'center'}}>
-                </View>
+                <View/>
             )
         } else {
             return (

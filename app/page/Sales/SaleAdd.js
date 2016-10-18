@@ -25,7 +25,7 @@ import FormPicker from '../../commonview/FormPicker';
 import FormInput from '../../commonview/FormInput';
 import { toastShort } from '../../util/ToastUtil';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import AppStyle from '../../theme/appstyle';
 export default class SaleAdd extends React.Component {
     constructor(props) {
         super(props);
@@ -321,8 +321,7 @@ export default class SaleAdd extends React.Component {
 
     renderGood(good, sectionID, rowID) {
         return (
-            <TouchableOpacity style={styles.row} onPress={()=>this._onRemove(good)}>
-                <Image style={styles.goodHead} source={require('../../img/shopping_81px.png')}/>
+            <TouchableOpacity style={AppStyle.row} onPress={()=>this._onRemove(good)}>
                 <View style={{flex:1}}>
                     <Text style={{fontSize:14, fontWeight:'bold'}}>{good.ItemName}</Text>
                     <View style={{flexDirection:'row'}}>
@@ -340,14 +339,13 @@ export default class SaleAdd extends React.Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <View style={AppStyle.container}>
                 <Head title={this.props.headTitle}
                       canBack={true}
                       onPress={this._onBack.bind(this)}
                       canAdd={true}
                       edit={'保存'}
-                      editInfo={this._onSave.bind(this)}
-                    />
+                      editInfo={this._onSave.bind(this)}/>
                 <ScrollView key={'scrollView'}
                             horizontal={false}
                             showsVerticalScrollIndicator={true}
@@ -419,16 +417,6 @@ export default class SaleAdd extends React.Component {
 }
 
 const styles = StyleSheet.create({
-        container: {
-            flex: 1,
-            flexDirection: 'column',
-            backgroundColor: '#ececec',
-        },
-        goodHead: {
-            width: 34,
-            height: 34,
-            marginRight: 10,
-        },
         pickerBox: {
             backgroundColor: '#fff',
             borderBottomColor: '#ddd',
@@ -437,15 +425,6 @@ const styles = StyleSheet.create({
             borderTopWidth: 1,
             paddingLeft: 5,
             paddingRight: 5,
-        },
-        row: {
-            flexDirection: 'row',
-            marginLeft: 15,
-            marginRight: 15,
-            paddingTop: 10,
-            paddingBottom: 10,
-            borderBottomWidth: StyleSheet.hairlineWidth,
-            borderBottomColor: '#ccc'
         },
     }
 );

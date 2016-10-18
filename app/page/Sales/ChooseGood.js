@@ -19,23 +19,23 @@ import {
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
+import SearchBar from './../../commonview/SearchBar';
 import Loading from '../../commonview/Loading';
 import { toastShort } from '../../util/ToastUtil';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import AppStyle from '../../theme/appstyle';
 class ChooseGood extends Component {
     constructor(props) {
         super(props);
         this.state = {
             dataSource: null,
             loaded: false,
+            dataloaded: false,
             //storeId: this.props.storeId,
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
             kw: null,
-            pageSize: 15,
+            pageSize: 20,
             pageIndex: 0,
-            recordCount: 0,
-            nomore: false,
             sellStoreId: this.props.storeId,
         };
     }
@@ -60,11 +60,10 @@ class ChooseGood extends Component {
         });
     }
 
-    fetchData(page, isnext) {
+    fetchData(page) {
+        toastShort('pageindex'+page)
         let _this = this;
-        if (page == 1) {
-            _this.setState({nomore: false});
-        }
+        _this.setState({dataloaded: false});
         NetUtil.getAuth(function (user, hos) {
             let header = NetUtil.headerClientAuth(user, hos);
             let postjson = {
@@ -78,7 +77,7 @@ class ChooseGood extends Component {
             NetUtil.postJson(CONSTAPI.HOST + '/ItemTypeLeftJoinItemCount/SearchSellListByPage', postjson, header, function (data) {
                 if (data.Sign && data.Message != null) {
                     let dataSource = _this.state.dataSource;
-                    if (isnext) {
+                    if (page > 1) {
                         data.Message.forEach((d)=> {
                             dataSource.push(d);
                         });
@@ -89,16 +88,20 @@ class ChooseGood extends Component {
                         dataSource: dataSource,
                         pageIndex: page,
                         loaded: true,
+                        dataloaded: true,
                     });
                 } else if (data.Message == null || data.Message.length === 0) {
+                    toastShort('no data')
                     _this.setState({
-                        nomore: true,
-                    })
+                        loaded: true,
+                        dataloaded: true,
+                    });
                 } else {
                     toastShort("获取数据失败：" + data.Message);
                     _this.setState({
                         dataSource: [],
                         loaded: true,
+                        dataloaded: true,
                     });
                 }
             });
@@ -112,40 +115,31 @@ class ChooseGood extends Component {
     }
 
     _onEndReached() {
-        this.fetchData(this.state.pageIndex + 1, true);
+        this.fetchData(this.state.pageIndex + 1);
     }
 
     renderRow(good, sectionID, rowID) {
         return (
-            <TouchableOpacity style={styles.row} onPress={()=>this.pressRow(good)}>
-                <View style={{flex:1}}>
-                    <Text style={{fontSize:14, fontWeight:'bold'}}>{good.ItemName} ({good.ItemStyle})</Text>
-                    <View style={{flexDirection:'row'}}>
-                        <Text style={{flex: 1,}}>库存: {good.ItemCountNum}</Text>
-                        <Text style={{flex: 1,}}>售价: {good.SellPrice}</Text>
-                        <Text style={{flex: 1,}}>单位: {good.ItemStandard}</Text>
-                    </View>
+            <TouchableOpacity style={AppStyle.row} onPress={()=>this.pressRow(good)}>
+                <View style={{flex:1, flexDirection:'row'}}>
+                    <Text style={{flex: 1,fontSize:14, fontWeight:'bold'}}>{good.ItemName} ({good.ItemStyle})</Text>
+                    <Text style={{fontSize:14, color:'#FF7F24', marginRight:10, }}>¥{good.SellPrice.toFixed(2)}</Text>
                 </View>
-                <View style={{width:20,alignItems:'center', justifyContent:'center'}}>
-                    <Text><Icon name={'angle-right'} size={20} color={'#ccc'}/></Text>
-                </View>
+                <Icon name={'angle-right'} size={20} color={'#ccc'}/>
             </TouchableOpacity>
         )
     }
 
     _renderFooter() {
-        if (this.state.nomore) {
+        if (!this.state.dataloaded) {
             return (
-                <View style={{height: 40, justifyContent:'center', alignItems:'center'}}>
-                    <Text>没有更多数据了~</Text>
+                <View style={{height:100,}}>
+                    <ActivityIndicator />
                 </View>
-            )
+            );
+        } else {
+            return <View/>
         }
-        return (
-            <View style={{height: 120}}>
-                <ActivityIndicator />
-            </View>
-        );
     }
 
     render() {
@@ -159,103 +153,26 @@ class ChooseGood extends Component {
                 <ListView dataSource={this.state.ds.cloneWithRows(this.state.dataSource)}
                           enableEmptySections={true}
                           renderRow={this.renderRow.bind(this)}
-                          initialListSize={15}
-                          pageSize={15}
+                          initialListSize={20}
+                          pageSize={20}
+                          onEndReachedThreshold={400}
                           onEndReached={this._onEndReached.bind(this)}
                           renderFooter={this._renderFooter.bind(this)}/>
             )
         }
         return (
-            <View style={{flex:1}}>
-                <Head title='选择商品' canBack={true} onPress={this._onBack.bind(this)}/>
-                <View style={styles.searchRow}>
-                    <TextInput
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        clearButtonMode="always"
-                        onChangeText={(txt)=>{this.setState({kw:txt})}}
-                        placeholder="输入商品名称..."
-                        value={this.state.kw}
-                        style={styles.searchTextInput}/>
-                    <TouchableOpacity
-                        underlayColor='#4169e1'
-                        style={styles.searchBtn}
-                        onPress={this.search.bind(this)}>
-                        <Text style={{color:'#fff'}}>查询</Text>
-                    </TouchableOpacity>
-                </View>
+            <View style={AppStyle.container}>
+                <SearchBar placeholder="输入商品名称"
+                           onChangeText={(text)=>{this.setState({kw: text})}}
+                           keyboardType={'default'}
+                           onBack={this._onBack.bind(this)}
+                           onPress={this.search.bind(this)}
+                    />
                 {body}
             </View>
         )
     }
 }
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        flexDirection: 'row',
-        backgroundColor: '#fff',
-    },
-    loadingBox: {
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    row: {
-        padding: 10,
-        flexDirection: 'row',
-        backgroundColor: '#fff',
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: '#ccc'
-    },
-    good_view: {
-        flex: 1,
-        justifyContent: 'center',
-        paddingTop: 5,
-        paddingLeft: 15,
-        paddingRight: 15,
-        paddingBottom: 5,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc'
-    },
-    goodname: {
-        fontWeight: 'bold',
-        fontSize: 22,
-        backgroundColor: '#fff',
-    },
-    goodno: {
-        fontSize: 12,
-        textAlign: 'left',
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingLeft: 5,
-        backgroundColor: "#ccc"
-    },
-    searchBtn: {
-        height: 30,
-        width: 50,
-        marginLeft: 10,
-        backgroundColor: '#0099CC',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 5,
-    },
-    searchRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#eeeeee',
-        paddingTop: 15,
-        paddingLeft: 10,
-        paddingRight: 10,
-        paddingBottom: 10,
-    },
-    searchTextInput: {
-        flex: 1,
-        backgroundColor: '#fff',
-        borderColor: '#cccccc',
-        borderRadius: 3,
-        borderWidth: 1,
-        height: 40,
-        paddingLeft: 8,
-    },
-});
+const styles = StyleSheet.create({});
 
 module.exports = ChooseGood;

@@ -134,7 +134,10 @@ class App extends Component {
         }
         else if (this.state.hospital.ID != null && this.state.hospital.ID != '') {
             body = (
-                <View>
+                <ScrollView key={'scrollView'} horizontal={false}
+                            showsVerticalScrollIndicator={true}
+                            scrollEnabled={true}
+                            style={styles.contentContainer}>
                     <View style={{flex:1, borderBottomWidth:StyleSheet.hairlineWidth, borderBottomColor:'#ccc'}}>
                         <View style={[styles.homeStyle,{height:80, }]}>
                             <Image style={styles.IconStyle}
@@ -208,7 +211,7 @@ class App extends Component {
                          </TouchableOpacity>*/}
                         <View style={{flex:2}}></View>
                     </View>
-                </View>);
+                </ScrollView>);
         } else {
             body = (
                 <View style={{flexDirection:'column', margin:15,}}>
@@ -233,12 +236,7 @@ class App extends Component {
         return (
             <View style={styles.container}>
                 <Head title="应用服务"/>
-                <ScrollView key={'scrollView'} horizontal={false}
-                            showsVerticalScrollIndicator={true}
-                            scrollEnabled={true}
-                            style={styles.contentContainer}>
-                    {body}
-                </ScrollView>
+                {body}
             </View>
         )
     }
