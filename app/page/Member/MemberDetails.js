@@ -188,67 +188,100 @@ class MemberDetails extends Component {
                 toastShort("会员姓名和手机不能为空");
                 return false;
             }
+
+
             NetUtil.getAuth(function (user, hos) {
                 let header = NetUtil.headerClientAuth(user, hos);
-                var _sex = _this.state.memberSex === '男' ? 'DM00001' : 'DM00002';
-                var _status =_this.state.memberState ==='正常'?'SM00001':'SM00002';
-                var _memberLevel =_this.state.memberLevel;
-                var _memberLevelCode = '';
-                _this.state.memberLevelData.forEach((item,index,array)=>{
-                    if(item.LevelName=_memberLevel){
-                        _memberLevelCode=item.LevelCode;
-                    }
-                })
-                let item = {
-                    "ID": _this.props.memberInfo.ID,
-                    "GestCode": _this.props.memberInfo.GestCode,
-                    "LoseRightDate": _this.props.memberInfo.LoseRightDate,
-                    "GestName": _this.state.memberName,
-                    "GestSex": _sex,
-                    "GestBirthday": _this.state.birthDate,
-                    "MobilePhone": _this.state.memberPhone,
-                    "TelPhone": _this.props.memberInfo.TelPhone,
-                    "EMail": _this.props.memberInfo.EMail,
-                    "GestAddress": _this.state.memberAddress,
-                    "IsVIP": _this.props.memberInfo.IsVIP,
-                    "VIPNo": _this.props.memberInfo.VIPNo,
-                    "VIPAccount": _this.props.memberInfo.VIPAccount,
-                    "LastPaidTime": _this.props.memberInfo.LastPaidTime,
-                    "GestStyle": _memberLevelCode,
-                    "Status": _status,
-                    "PaidStatus": _this.props.memberInfo.PaidStatus,
-                    "Remark": _this.state.memberRemark,
-                    "CreatedBy": _this.props.memberInfo.CreatedBy,
-                    "CreatedOn": _this.props.memberInfo.CreatedOn,
-                    "ModifiedBy": user.FullName,
-                    "ModifiedOn": Util.getTime(),
-                    "RewardPoint": _this.props.memberInfo.RewardPoint,
-                    "PrepayMoney": _this.props.memberInfo.PrepayMoney,
-                    "EntID": _this.props.memberInfo.EntID,
-                    "LevelName": _this.props.memberInfo.LevelName
-                };
-                let postJson = {
-                    "gest": item,
-                    "oldRewardPoint": 0,
-                };
-                NetUtil.postJson(CONSTAPI.HOST + '/Gest/UpdateGest', postJson, header, function (data) {
+                //验证手机是否存在
+                let postdata = [{
+                        Childrens: null,
+                        Field: "MobilePhone",
+                        Title: null,
+                        Operator: {"Name": "=", "Title": "等于", "Expression": null},
+                        DataType: 0,
+                        Value: _this.state.memberPhone,
+                        Conn: 0
+                    },{
+                        "Childrens":null,
+                        "Field":"ID",
+                        "Title":null,
+                        "Operator":{"Name":"<>","Title":"不等于","Expression":null},
+                        "DataType":0,
+                        "Value":_this.props.memberInfo.ID,
+                        "Conn":1
+                    }];
+                NetUtil.postJson(CONSTAPI.HOST + '/Gest/GetModelList', postdata, header, function (data) {
                     if (data.Sign) {
-                        if (_this.props.getResult) {
-                            let id = _this.props.memberInfo.ID;
-                            _this.props.getResult(id);
+                        if (data.Message != null && data.Message.length > 0) {
+                            toastShort("该手机已存在，请更换其他手机！");
+                            return false;
                         }
-                        _this._onBack()
-                    } else {
-                        toastShort("保存失败，" + data.Exception);
+                        else
+                        {
+                            //保存会员信息
+                            var _sex = _this.state.memberSex === '男' ? 'DM00001' : 'DM00002';
+                            var _status =_this.state.memberState ==='正常'?'SM00001':'SM00002';
+                            var _memberLevel =_this.state.memberLevel;
+                            var _memberLevelCode = '';
+                            _this.state.memberLevelData.forEach((item,index,array)=>{
+                                if(item.LevelName=_memberLevel){
+                                    _memberLevelCode=item.LevelCode;
+                                }
+                            })
+                            let item = {
+                                "ID": _this.props.memberInfo.ID,
+                                "GestCode": _this.props.memberInfo.GestCode,
+                                "LoseRightDate": _this.props.memberInfo.LoseRightDate,
+                                "GestName": _this.state.memberName,
+                                "GestSex": _sex,
+                                "GestBirthday": _this.state.birthDate,
+                                "MobilePhone": _this.state.memberPhone,
+                                "TelPhone": _this.props.memberInfo.TelPhone,
+                                "EMail": _this.props.memberInfo.EMail,
+                                "GestAddress": _this.state.memberAddress,
+                                "IsVIP": _this.props.memberInfo.IsVIP,
+                                "VIPNo": _this.props.memberInfo.VIPNo,
+                                "VIPAccount": _this.props.memberInfo.VIPAccount,
+                                "LastPaidTime": _this.props.memberInfo.LastPaidTime,
+                                "GestStyle": _memberLevelCode,
+                                "Status": _status,
+                                "PaidStatus": _this.props.memberInfo.PaidStatus,
+                                "Remark": _this.state.memberRemark,
+                                "CreatedBy": _this.props.memberInfo.CreatedBy,
+                                "CreatedOn": _this.props.memberInfo.CreatedOn,
+                                "ModifiedBy": user.FullName,
+                                "ModifiedOn": Util.getTime(),
+                                "RewardPoint": _this.props.memberInfo.RewardPoint,
+                                "PrepayMoney": _this.props.memberInfo.PrepayMoney,
+                                "EntID": _this.props.memberInfo.EntID,
+                                "LevelName": _this.props.memberInfo.LevelName
+                            };
+                            let postJson = {
+                                "gest": item,
+                                "oldRewardPoint": 0,
+                            };
+                            NetUtil.postJson(CONSTAPI.HOST + '/Gest/UpdateGest', postJson, header, function (data) {
+                                if (data.Sign) {
+                                    if (_this.props.getResult) {
+                                        let id = _this.props.memberInfo.ID;
+                                        _this.props.getResult(id);
+
+                                        _this.setState({
+                                            enable: false,
+                                            edit: '编辑',
+                                        });
+                                    }
+                                    _this._onBack()
+                                } else {
+                                    toastShort("保存失败，" + data.Exception);
+                                }
+                            });
+                        }
                     }
                 });
             }, function (err) {
                 toastShort(err);
             })
-            _this.setState({
-                enable: false,
-                edit: '编辑',
-            });
         }
     }
 
@@ -322,7 +355,7 @@ class MemberDetails extends Component {
             return false;
         }
         if(!re.test(phone)){
-            toastShort("格式错误");
+            toastShort("输入的手机有误，请重新输入");
             _this.setState({memberPhone:''})
         }
     }
