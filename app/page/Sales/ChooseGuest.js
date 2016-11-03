@@ -22,10 +22,11 @@ import {
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
+import SearchBar from './../../commonview/SearchBar';
 import Loading from '../../commonview/Loading';
 import { toastShort } from '../../util/ToastUtil';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import AppStyle from '../../theme/appstyle';
 class ChooseGuest extends Component {
     constructor(props) {
         super(props);
@@ -201,14 +202,12 @@ class ChooseGuest extends Component {
 
     renderRow(p, sectionID, rowID) {
         return (
-            <TouchableOpacity style={styles.rowBox} onPress={()=>this._pressRow(p)}>
-                <View style={styles.gestWrap}>
-                    <Text style={styles.guestName}>{p.GestName}</Text>
-                    <Text style={styles.guestDetail}>手机：{p.MobilePhone}</Text>
+            <TouchableOpacity style={AppStyle.row} onPress={()=>this._pressRow(p)}>
+                <View style={{flex:1, flexDirection:'row'}}>
+                    <Text style={{flex: 1,fontSize:16, fontWeight:'bold'}}>{p.GestName}</Text>
+                    <Text style={{fontSize:14, color:'#FF7F24', marginRight:10, }}>手机：{p.MobilePhone}</Text>
                 </View>
-                <View style={{width:20,alignItems:'center', justifyContent:'center'}}>
-                    <Text><Icon name={'angle-right'} size={20} color={'#ccc'}/></Text>
-                </View>
+                <Icon name={'angle-right'} size={20} color={'#ccc'}/>
             </TouchableOpacity>
         );
     }
@@ -219,14 +218,10 @@ class ChooseGuest extends Component {
 
     _renderFooter() {
         if (this.state.pageIndex >= this.state.recordCount / this.state.pageSize) {
-            return (
-                <View style={{height: 40, justifyContent:'center', alignItems:'center'}}>
-                    <Text>没有更多数据了~</Text>
-                </View>
-            )
+            return <View/>
         }
         return (
-            <View style={{height: 120}}>
+            <View>
                 <ActivityIndicator />
             </View>
         );
@@ -250,24 +245,14 @@ class ChooseGuest extends Component {
             )
         }
         return (
-            <View style={{flex:1}}>
+            <View style={AppStyle.container}>
                 <Head title='选择会员' canBack={true} onPress={this._onBack.bind(this)}/>
-                <View style={styles.searchRow}>
-                    <TextInput
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        clearButtonMode="always"
-                        onChangeText={(txt) => this.setState({kw: txt})}
-                        placeholder="输入会员名称..."
-                        style={styles.searchTextInput}
-                        />
-                    <TouchableOpacity
-                        underlayColor='#4169e1'
-                        style={styles.searchBtn}
-                        onPress={this.search.bind(this)}>
-                        <Text style={{color:'#fff'}}>查询</Text>
-                    </TouchableOpacity>
-                </View>
+                <SearchBar placeholder="输入会员名称"
+                           onChangeText={(text)=>{this.setState({kw: text})}}
+                           keyboardType={'default'}
+                           onBack={this._onBack.bind(this)}
+                           onPress={this.search.bind(this)}
+                    />
                 {body}
             </View>
         )

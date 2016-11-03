@@ -24,16 +24,19 @@ import Loading from '../../commonview/Loading';
 import { toastShort } from '../../util/ToastUtil';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AppStyle from '../../theme/appstyle';
+//import CountiesByPopulation from '../Demo/CountiesByPopulation';
+import Immutable from 'immutable';
+//import ImmutableDataSource from 'react-native-immutable-listview-datasource'
+//import counterApp from '../app/containers/counterApp';
 class ChooseGood extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dataSource: null,
+            dataSource: Immutable.fromJS([]),
             loaded: false,
             dataloaded: false,
-            //storeId: this.props.storeId,
-            ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
-            kw: null,
+            ds: new ListView.DataSource({rowHasChanged: (r1, r2) => !immutable.is(r1, r2)}),
+            kw: '',
             pageSize: 20,
             pageIndex: 0,
             sellStoreId: this.props.storeId,
@@ -54,10 +57,14 @@ class ChooseGood extends Component {
         this._onBack();
     }
 
-    componentDidMount() {
+    componentWillMount() {
         InteractionManager.runAfterInteractions(() => {
             this.fetchData(1);
         });
+    }
+    shouldComponentUpdate(nextProps, nextState){
+        return nextState.dataSource !== this.state.dataSource;
+        //return true;
     }
 
     fetchData(page) {
@@ -75,7 +82,8 @@ class ChooseGood extends Component {
                 pageIndex: page
             };
             NetUtil.postJson(CONSTAPI.HOST + '/ItemTypeLeftJoinItemCount/SearchSellListByPage', postjson, header, function (data) {
-                if (data.Sign && data.Message != null) {
+                if (data.Sign && data.Message != null && data.Message.length>0) {
+                    toastShort(data.Message.length)
                     let dataSource = _this.state.dataSource;
                     if (page > 1) {
                         data.Message.forEach((d)=> {
@@ -85,21 +93,21 @@ class ChooseGood extends Component {
                         dataSource = data.Message;
                     }
                     _this.setState({
-                        dataSource: dataSource,
+                        dataSource: Immutable.List(dataSource),
                         pageIndex: page,
                         loaded: true,
                         dataloaded: true,
                     });
                 } else if (data.Message == null || data.Message.length === 0) {
-                    toastShort('no data')
                     _this.setState({
+                        dataSource: Immutable.fromJS([]),
                         loaded: true,
                         dataloaded: true,
                     });
                 } else {
                     toastShort("获取数据失败：" + data.Message);
                     _this.setState({
-                        dataSource: [],
+                        dataSource: Immutable.List([]),
                         loaded: true,
                         dataloaded: true,
                     });
@@ -118,12 +126,12 @@ class ChooseGood extends Component {
         this.fetchData(this.state.pageIndex + 1);
     }
 
-    renderRow(good, sectionID, rowID) {
+    renderRow(rowData, sectionID, rowID) {
         return (
-            <TouchableOpacity style={AppStyle.row} onPress={()=>this.pressRow(good)}>
+            <TouchableOpacity style={AppStyle.row} onPress={()=>this.pressRow(rowData)}>
                 <View style={{flex:1, flexDirection:'row'}}>
-                    <Text style={{flex: 1,fontSize:14, fontWeight:'bold'}}>{good.ItemName} ({good.ItemStyle})</Text>
-                    <Text style={{fontSize:14, color:'#FF7F24', marginRight:10, }}>¥{good.SellPrice.toFixed(2)}</Text>
+                    <Text style={{flex: 1,fontSize:16, fontWeight:'bold'}}>{rowData.get('ItemName')} ({rowData.get('ItemStyle')})</Text>
+                    <Text style={{fontSize:14, color:'#FF7F24', marginRight:10, }}>¥{rowData.get('SellPrice').toFixed(2)}</Text>
                 </View>
                 <Icon name={'angle-right'} size={20} color={'#ccc'}/>
             </TouchableOpacity>
@@ -133,7 +141,7 @@ class ChooseGood extends Component {
     _renderFooter() {
         if (!this.state.dataloaded) {
             return (
-                <View style={{height:100,}}>
+                <View>
                     <ActivityIndicator />
                 </View>
             );
@@ -168,7 +176,7 @@ class ChooseGood extends Component {
                            onBack={this._onBack.bind(this)}
                            onPress={this.search.bind(this)}
                     />
-                {body}
+
             </View>
         )
     }
