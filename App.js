@@ -195,6 +195,13 @@ class App extends Component {
                         </TouchableOpacity>
                     </View>
                     <View style={[styles.iconViewStyle, ]}>
+                        <TouchableOpacity style={styles.grid_view}
+                                          onPress={this._onPress.bind(this, ReportIndex, 'ReportIndex', '数据报表')}>
+                            <View style={styles.iconOuter}>
+                                <Icon name={'logo-yen'} size={40} color={'#FF8040'}/>
+                                <Text style={{fontSize:15}}>收费</Text>
+                            </View>
+                        </TouchableOpacity>
                         <TouchableOpacity style={[styles.grid_view, styles.borderRight]}
                                           onPress={this._onPress.bind(this, ReportIndex, 'ReportIndex', '数据报表')}>
                             <View style={styles.iconOuter}>
@@ -209,7 +216,7 @@ class App extends Component {
                          <Text style={{fontSize:15}}>拓瑞检测</Text>
                          </View>
                          </TouchableOpacity>*/}
-                        <View style={{flex:2}}></View>
+                        <View style={{flex:1}}></View>
                     </View>
                 </ScrollView>);
         } else {

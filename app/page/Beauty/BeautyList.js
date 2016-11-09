@@ -26,20 +26,45 @@ import { toastShort } from '../../util/ToastUtil';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AppStyle from '../../theme/appstyle';
 import DatePicker from 'react-native-datepicker';
+import SideMenu from 'react-native-side-menu';
+import BeautyMenu from './BeautyMenu';
+class Button extends Component {
+    handlePress(e) {
+        if (this.props.onPress) {
+            this.props.onPress(e);
+        }
+    }
+
+    render() {
+        return (
+            <TouchableOpacity
+                onPress={this.handlePress.bind(this)}
+                style={{flex:1,flexDirection:'row',justifyContent:'flex-end',}}>
+                <Text style={{textAlign:'center',}}>筛选条件</Text>
+                <Icon name={'filter'} size={20} color={'#ccc'}/>
+            </TouchableOpacity>
+        );
+    }
+}
 class BeautyList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             loaded: false,
+            isOpen: false,
+            selectedItem: '全部',
             pageSize: 15,
             pageIndex: 1,
             dataSource: [],
             recordCount: 0,
             searchID: 0,
-            value: '',
-            dateFrom: Util.GetDateStr(0),
+            value: null,
+            dateFrom: Util.GetDateStr(-7),
             dateTo: Util.GetDateStr(0),
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
+            noPayBackgroundColor: '#F0F0F0',
+            payBackgroundColor: '#F0F0F0',
+            allBackgroundColor: '#FF5809',
         }
     }
 
@@ -109,7 +134,7 @@ class BeautyList extends React.Component {
                 pageSize: _this.state.pageSize
             };
 
-            let gestData={
+            let gestData = {
                 "Childrens": [
                     {
                         "Childrens": null,
@@ -158,7 +183,7 @@ class BeautyList extends React.Component {
                 "Value": null,
                 "Conn": 1
             };
-            let paidData={
+            let paidData = {
                 "Childrens": null,
                 "Field": "PaidStatus",
                 "Title": null,
@@ -171,10 +196,10 @@ class BeautyList extends React.Component {
                 "Value": _this.state.paidStatus,
                 "Conn": 1
             };
-            if(_this.state.value!=null&& _this.state.value!=''){
+            if (_this.state.value != null && _this.state.value != '') {
                 postdata.items.push(gestData);
             }
-            if(_this.state.paidStatus!=null&& _this.state.paidStatus!=''){
+            if (_this.state.paidStatus != null && _this.state.paidStatus != '') {
                 postdata.items.push(paidData);
             }
             //let hospitalcode = 'aa15-740d-4e6d-a6ca-0ebf-81f1';
@@ -250,7 +275,7 @@ class BeautyList extends React.Component {
                 "Value": null,
                 "Conn": 1
             };
-            let paidFilter ={
+            let paidFilter = {
                 "Childrens": null,
                 "Field": "PaidStatus",
                 "Title": null,
@@ -304,10 +329,10 @@ class BeautyList extends React.Component {
                     "Conn": 1
                 }
             ];
-            if(_this.state.value!=null&& _this.state.value!=''){
+            if (_this.state.value != null && _this.state.value != '') {
                 postdata.push(guestFilter);
             }
-            if(_this.state.paidStatus!=null&& _this.state.paidStatus!=''){
+            if (_this.state.paidStatus != null && _this.state.paidStatus != '') {
                 postdata.push(paidFilter);
             }
             if (!isNext) {
@@ -412,19 +437,34 @@ class BeautyList extends React.Component {
     onSearch(value) {
         let _this = this;
         if (value == 1) {
-            _this.setState({searchID:1});
+            _this.setState({searchID: 1});
         } else if (value == 2) {
-            _this.setState({searchID:2});
+            _this.setState({searchID: 2});
         }
     }
+
     _search() {
         this.fetchData(1, false);
     }
-    _searchName(txt){
-        let _this =this;
-        _this.state.value=txt;
+
+    _searchName(txt) {
+        let _this = this;
+        _this.state.value = txt;
         _this.fetchData(1, false);
     }
+
+    toggle() {
+        this.setState({
+            isOpen: !this.state.isOpen,
+        });
+    }
+
+    updateMenuState(isOpen) {
+        //修改值
+        let _this = this;
+        _this.setState({isOpen,});
+    }
+
     render() {
         var body = <Loading type="text"/>;
         if (this.state.loaded) {
@@ -434,94 +474,74 @@ class BeautyList extends React.Component {
                              onEndReached={this._onEndReached.bind(this)}
                              renderFooter={this._renderFooter.bind(this)}/>
         }
-        return (
-            <View style={AppStyle.container}>
-                <Head title={this.props.headTitle}
-                      canBack={true}
-                      onPress={this._onBack.bind(this)}
-                      canAdd={true}
-                      edit="新增"
-                      editInfo={this._onAdd.bind(this)}/>
-                <View style={{flexDirection:'row',margin:5,padding:1,}}>
-                    <TouchableOpacity style={{flex:1,flexDirection:'row',justifyContent:'center',}}
-                                      onPress={this.onSearch.bind(this)}>
-                        <Text style={{textAlign:'center',}}>付款状态</Text>
-                        <Icon name={'caret-down'} size={20} color={'#ccc'}/>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={{flex:1,flexDirection:'row',justifyContent:'center',}}
-                                      onPress={this.onSearch.bind(this,1)}>
-                        <Text style={{textAlign:'center',}}>时间选择</Text>
-                        <Icon name={'caret-down'} size={20} color={'#ccc'}/>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={{flex:1,flexDirection:'row',justifyContent:'center',}}
-                                      onPress={this.onSearch.bind(this,2)}>
-                        <Text style={{textAlign:'center',}}>筛选条件</Text>
-                        <Icon name={'filter'} size={20} color={'#ccc'}/>
-                    </TouchableOpacity>
-                </View>
-                {this.state.searchID === 0 ? null : <View>
-                    {
-                        this.state.searchID === 1 ? <View style={AppStyle.searchBox}>
-                            <Text>时间</Text>
-                            <DatePicker
-                                date={this.state.dateFrom}
-                                mode="date"
-                                placeholder="选择日期"
-                                format="YYYY-MM-DD"
-                                minDate="2015-01-01"
-                                maxDate="2020-01-01"
-                                confirmBtnText="Confirm"
-                                cancelBtnText="Cancel"
-                                showIcon={false}
-                                style={{width:80}}
-                                customStyles={{
-                        dateInput: {
-                          height:30,
-                          borderWidth:StyleSheet.hairlineWidth,
-                        },
-                      }} onDateChange={(date) => {this.setState({dateFrom: date})}}/>
-                            <Text>到</Text>
-                            <DatePicker
-                                date={this.state.dateTo}
-                                mode="date"
-                                placeholder="选择日期"
-                                format="YYYY-MM-DD"
-                                minDate="2010-01-01"
-                                maxDate="2020-01-01"
-                                confirmBtnText="Confirm"
-                                cancelBtnText="Cancel"
-                                showIcon={false}
-                                style={{width:80}}
-                                customStyles={{
-                    dateInput: {
-                      height:30,
-                      borderWidth:StyleSheet.hairlineWidth,
-                    },
-                  }} onDateChange={(date) => {this.setState({dateTo: date})}}/>
-                            <TouchableOpacity
-                                underlayColor='#4169e1'
-                                style={AppStyle.searchBtn}
-                                onPress={this._search.bind(this)}>
-                                <Text style={{color:'#fff'}}>查询</Text>
-                            </TouchableOpacity>
-                        </View>
-                            :
-                            <View style={AppStyle.searchRow}>
-                                <TextInput
-                                    autoCapitalize="none"
-                                    autoCorrect={false}
-                                    clearButtonMode="always"
-                                    onChangeText={this._searchName.bind(this)}
-                                    placeholder="输入会员名称..."
-                                    value={this.state.value}
-                                    style={AppStyle.searchTextInput}
-                                />
-                            </View>
+        const menu = <BeautyMenu onItemSelected={(item)=>{
+            if(item=='submit'){
+                this.setState({isOpen:false,selectedItem:'时间:'+this.state.dateFrom+'至'+this.state.dateTo})
+                if(this.state.paidStatus!=null && this.state.paidStatus!=''){
+                    var status='';
+                    if(this.state.paidStatus=='SM00051'){
+                        status='已支付'
+                    }else if(this.state.paidStatus=='SM00040'){
+                        status='未支付'
                     }
-                </View>
+                    this.setState({selectedItem:this.state.selectedItem+' 支付状态:'+status})
                 }
-                {body}
-            </View>
+                if(this.state.value != null && this.state.value != ''){
+                    this.setState({selectedItem:this.state.selectedItem+' 关键字:'+this.state.value})
+                }
+               this.fetchData(1, false);
+               return false;
+            }else if(item =='cancel'){
+                this.setState({isOpen:false})
+                 return false;
+            }else if(item.indexOf('Form')>0){
+                var dateFrom = item.split(':')[1];
+                 this.setState({dateFrom:dateFrom,})
+                  return false;
+            }else if(item.indexOf('To')>0){
+                var dateTo = item.split(':')[1];
+                this.setState({dateTo:dateTo})
+                 return false;
+            }else if(item=='no'){
+                this.setState({noPayBackgroundColor:'#FF5809',payBackgroundColor:'#F0F0F0',allBackgroundColor:'#F0F0F0',paidStatus:'SM00040',})
+                 return false;
+            }else if(item=='pay'){
+                this.setState({payBackgroundColor:'#FF5809',noPayBackgroundColor:'#F0F0F0',allBackgroundColor:'#F0F0F0',paidStatus:'SM00051',})
+                 return false;
+            }else if(item =='all'){''
+                this.setState({allBackgroundColor:'#FF5809',noPayBackgroundColor:'#F0F0F0',payBackgroundColor:'#F0F0F0',paidStatus:''})
+                 return false;
+            }else if(item.indexOf('ey')>0){
+                var key = item.split(':')[1];
+                this.setState({value:key,})
+                 return false;
+            }
+        }}
+        dateFrom={this.state.dateFrom} dateTo={this.state.dateTo}
+        noColor={this.state.noPayBackgroundColor} payColor={this.state.payBackgroundColor}
+        allColor={this.state.allBackgroundColor} value = {this.state.value}/>;
+        return (
+            <SideMenu menu={menu}
+                      menuPosition={'right'}
+                      disableGestures={true}
+                      isOpen={this.state.isOpen}
+                      onChange={(isOpen)=>this.updateMenuState(isOpen)}
+            >
+                <View style={AppStyle.container}>
+                    <Head title={this.props.headTitle}
+                          canBack={true}
+                          onPress={this._onBack.bind(this)}
+                          canAdd={true}
+                          edit="新增"
+                          editInfo={this._onAdd.bind(this)}/>
+
+                    <View style={{flexDirection:'row',margin:5}}>
+                        <Text style={{flex:4,}}>当前筛选：{this.state.selectedItem}</Text>
+                        <Button style={{flex:1,}} onPress={() => this.toggle()}/>
+                    </View>
+                    {body}
+                </View>
+            </SideMenu >
         )
     }
 }
