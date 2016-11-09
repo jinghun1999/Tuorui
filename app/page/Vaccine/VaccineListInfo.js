@@ -22,6 +22,9 @@ import VaccineService from './VaccineService';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AppStyle from '../../theme/appstyle';
 import { toastShort } from '../../util/ToastUtil';
+import SideMenu from 'react-native-side-menu';
+import VaccineMenu from './VaccineMenu';
+import SearchTitle from '../../commonview/SearchTitle';
 class VaccineListInfo extends Component {
     constructor(props) {
         super(props);
@@ -34,12 +37,17 @@ class VaccineListInfo extends Component {
             pageSize: 15,
             pageIndex: 1,
             recordCount: 0,
+            value: null,
+            isOpen: false,
+            dateFrom: Util.GetDateStr(-7),
+            dateTo: Util.GetDateStr(0),
+            selectedItem: '全部',
         }
     }
 
     componentWillMount() {
         InteractionManager.runAfterInteractions(() => {
-            this.onFetchData(1, false);
+            this.fetchData(1, false);
         });
     }
 
@@ -51,7 +59,7 @@ class VaccineListInfo extends Component {
         }
     }
 
-    onFetchData(page, isNext) {
+    fetchData(page, isNext) {
         let _this = this;
         NetUtil.getAuth(function (user, hos) {
             let postdata = {
@@ -68,6 +76,32 @@ class VaccineListInfo extends Component {
                         "DataType": 0,
                         "Value": "1",
                         "Conn": 0
+                    },
+                    {
+                        "Childrens": null,
+                        "Field": "FactShootTime",
+                        "Title": null,
+                        "Operator": {
+                            "Name": ">=",
+                            "Title": "大于等于",
+                            "Expression": null
+                        },
+                        "DataType": 0,
+                        "Value": _this.state.dateFrom + " 00:00:00",
+                        "Conn": 1
+                    },
+                    {
+                        "Childrens": null,
+                        "Field": "FactShootTime",
+                        "Title": null,
+                        "Operator": {
+                            "Name": "<=",
+                            "Title": "小于等于",
+                            "Expression": null
+                        },
+                        "DataType": 0,
+                        "Value": _this.state.dateTo + " 23:59:59",
+                        "Conn": 1
                     }
                 ],
                 "sorts": [
@@ -92,6 +126,58 @@ class VaccineListInfo extends Component {
                 ],
                 "index": page,
                 "pageSize": _this.state.pageSize
+            };
+            let gestData = {
+                "Childrens": [
+                    {
+                        "Childrens": null,
+                        "Field": "GestCode",
+                        "Title": null,
+                        "Operator": {
+                            "Name": "like",
+                            "Title": "相似",
+                            "Expression": " @File like '%' + @Value + '%' "
+                        },
+                        "DataType": 0,
+                        "Value": _this.state.value,
+                        "Conn": 0
+                    },
+                    {
+                        "Childrens": null,
+                        "Field": "GestName",
+                        "Title": null,
+                        "Operator": {
+                            "Name": "like",
+                            "Title": "相似",
+                            "Expression": " @File like '%' + @Value + '%' "
+                        },
+                        "DataType": 0,
+                        "Value": _this.state.value,
+                        "Conn": 2
+                    },
+                    {
+                        "Childrens": null,
+                        "Field": "MobilePhone",
+                        "Title": null,
+                        "Operator": {
+                            "Name": "like",
+                            "Title": "相似",
+                            "Expression": " @File like '%' + @Value + '%' "
+                        },
+                        "DataType": 0,
+                        "Value": _this.state.value,
+                        "Conn": 2
+                    }
+                ],
+                "Field": null,
+                "Title": null,
+                "Operator": null,
+                "DataType": 0,
+                "Value": null,
+                "Conn": 1
+            };
+            if (_this.state.value != null && _this.state.value != '') {
+                postdata.items.push(gestData);
             }
             //let hospitalcode = 'aa15-740d-4e6d-a6ca-0ebf-81f1';
             let header = NetUtil.headerClientAuth(user, hos);
@@ -124,12 +210,94 @@ class VaccineListInfo extends Component {
                     "Childrens": null,
                     "Field": "1",
                     "Title": null,
-                    "Operator": {"Name": "=", "Title": "等于", "Expression": null},
+                    "Operator": {
+                        "Name": "=",
+                        "Title": "等于",
+                        "Expression": null
+                    },
                     "DataType": 0,
                     "Value": "1",
                     "Conn": 0
+                },
+                {
+                    "Childrens": null,
+                    "Field": "FactShootTime",
+                    "Title": null,
+                    "Operator": {
+                        "Name": ">=",
+                        "Title": "大于等于",
+                        "Expression": null
+                    },
+                    "DataType": 0,
+                    "Value": _this.state.dateFrom + " 00:00:00",
+                    "Conn": 1
+                },
+                {
+                    "Childrens": null,
+                    "Field": "FactShootTime",
+                    "Title": null,
+                    "Operator": {
+                        "Name": "<=",
+                        "Title": "小于等于",
+                        "Expression": null
+                    },
+                    "DataType": 0,
+                    "Value": _this.state.dateTo + " 23:59:59",
+                    "Conn": 1
                 }
             ]
+            let gestFilter = {
+                "Childrens": [
+                    {
+                        "Childrens": null,
+                        "Field": "GestCode",
+                        "Title": null,
+                        "Operator": {
+                            "Name": "like",
+                            "Title": "相似",
+                            "Expression": " @File like '%' + @Value + '%' "
+                        },
+                        "DataType": 0,
+                        "Value": _this.state.value,
+                        "Conn": 0
+                    },
+                    {
+                        "Childrens": null,
+                        "Field": "GestName",
+                        "Title": null,
+                        "Operator": {
+                            "Name": "like",
+                            "Title": "相似",
+                            "Expression": " @File like '%' + @Value + '%' "
+                        },
+                        "DataType": 0,
+                        "Value": _this.state.value,
+                        "Conn": 2
+                    },
+                    {
+                        "Childrens": null,
+                        "Field": "MobilePhone",
+                        "Title": null,
+                        "Operator": {
+                            "Name": "like",
+                            "Title": "相似",
+                            "Expression": " @File like '%' + @Value + '%' "
+                        },
+                        "DataType": 0,
+                        "Value": _this.state.value,
+                        "Conn": 2
+                    }
+                ],
+                "Field": null,
+                "Title": null,
+                "Operator": null,
+                "DataType": 0,
+                "Value": null,
+                "Conn": 1
+            };
+            if (_this.state.value != null && _this.state.value != '') {
+                postdata.push(gestFilter);
+            }
             //http://test.tuoruimed.com/service/Api/Medic_Vaccine/GetRecordCount
             if (!isNext) {
                 NetUtil.postJson(CONSTAPI.HOST + '/Medic_Vaccine/GetRecordCount', postdata, header, function (data) {
@@ -159,7 +327,7 @@ class VaccineListInfo extends Component {
                     canEdit: true,
                     id: 1,
                     getResult: function () {
-                        _this.onFetchData(1, false);
+                        _this.fetchData(1, false);
                     }
                 }
             })
@@ -180,7 +348,7 @@ class VaccineListInfo extends Component {
                     vaccine: vacc,
                     id: 2,//2为修改 目前不支持修改
                     getResult: function () {
-                        _this.onFetchData(1, false);
+                        _this.fetchData(1, false);
                     }
                 }
             })
@@ -188,7 +356,7 @@ class VaccineListInfo extends Component {
     }
 
     _onEndReached() {
-        this.onFetchData(this.state.pageIndex + 1, true);
+        this.fetchData(this.state.pageIndex + 1, true);
     }
 
     _onRenderRow(vacc) {
@@ -202,8 +370,8 @@ class VaccineListInfo extends Component {
                     </View>
                     <View style={{flexDirection:'row',marginTop:3}}>
                         <Text style={{flex:2,}}>疫苗: {vacc.ItemName}</Text>
-                        <Text  style={{flex:1,}}>宠物: {vacc.PetName}</Text>
-                        <Text style={{flex:1,}}>{vacc.CreatedOn.substr(0,10)}</Text>
+                        <Text style={{flex:1,}}>宠物: {vacc.PetName}</Text>
+                        <Text style={{flex:1,}}>{vacc.CreatedOn.substr(0, 10)}</Text>
                     </View>
                 </View>
                 <Icon name={'angle-right'} size={20} color={'#ccc'}/>
@@ -224,6 +392,18 @@ class VaccineListInfo extends Component {
         );
     }
 
+    toggle() {
+        this.setState({
+            isOpen: !this.state.isOpen,
+        });
+    }
+
+    updateMenuState(isOpen) {
+        //修改值
+        let _this = this;
+        _this.setState({isOpen,});
+    }
+
     render() {
         let body = (<Loading type={'text'}/>);
         if (this.state.loaded) {
@@ -238,13 +418,46 @@ class VaccineListInfo extends Component {
                 />
             )
         }
+        const menu = <VaccineMenu dateFrom={this.state.dateFrom} dateTo={this.state.dateTo} value={this.state.value}
+                                  onItemSelected={(item)=>{
+                                  if(item=='submit'){
+                                    //完成
+                                    this.setState({isOpen:false,selectedItem:'时间:'+this.state.dateFrom+'至'+this.state.dateTo})
+                                    if(this.state.value != null && this.state.value != ''){
+                                        this.setState({selectedItem:this.state.selectedItem+' 关键字:'+this.state.value})
+                                    }
+                                    this.fetchData(1, false);
+                                } if(item =='cancel'){
+                                    //取消
+                                    this.setState({isOpen:false})
+                                } if(item.indexOf('Form')>0){
+                                    //日期
+                                     var dateFrom = item.split(':')[1];
+                                     this.setState({dateFrom:dateFrom,})
+                                } if(item.indexOf('To')>0){
+                                    var dateTo = item.split(':')[1];
+                                    this.setState({dateTo:dateTo})
+                                } if(item.indexOf('ey')>0){
+                                    var key = item.split(':')[1];
+                                    this.setState({value:key,})
+                                }
+                                  }}
+        />
         return (
-            <View style={AppStyle.container}>
-                <Head title={this.props.headTitle} canAdd={true} canBack={true} edit="新增"
-                      onPress={this._onBack.bind(this)}
-                      editInfo={this._addInfo.bind(this)}/>
-                {body}
-            </View>
+            <SideMenu menu={menu}
+                      menuPosition={'right'}
+                      disableGestures={true}
+                      isOpen={this.state.isOpen}
+                      onChange={(isOpen)=>this.updateMenuState(isOpen)}
+            >
+                <View style={AppStyle.container}>
+                    <Head title={this.props.headTitle} canAdd={true} canBack={true} edit="新增"
+                          onPress={this._onBack.bind(this)}
+                          editInfo={this._addInfo.bind(this)}/>
+                    <SearchTitle onPress={()=>this.toggle()} selectedItem={this.state.selectedItem}/>
+                    {body}
+                </View>
+            </SideMenu>
         )
     }
 }

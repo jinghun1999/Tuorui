@@ -28,24 +28,7 @@ import AppStyle from '../../theme/appstyle';
 import DatePicker from 'react-native-datepicker';
 import SideMenu from 'react-native-side-menu';
 import BeautyMenu from './BeautyMenu';
-class Button extends Component {
-    handlePress(e) {
-        if (this.props.onPress) {
-            this.props.onPress(e);
-        }
-    }
-
-    render() {
-        return (
-            <TouchableOpacity
-                onPress={this.handlePress.bind(this)}
-                style={{flex:1,flexDirection:'row',justifyContent:'flex-end',}}>
-                <Text style={{textAlign:'center',}}>筛选条件</Text>
-                <Icon name={'filter'} size={20} color={'#ccc'}/>
-            </TouchableOpacity>
-        );
-    }
-}
+import SearchTitle from '../../commonview/SearchTitle';
 class BeautyList extends React.Component {
     constructor(props) {
         super(props);
@@ -476,6 +459,7 @@ class BeautyList extends React.Component {
         }
         const menu = <BeautyMenu onItemSelected={(item)=>{
             if(item=='submit'){
+                this.state.selectedItem = '';
                 this.setState({isOpen:false,selectedItem:'时间:'+this.state.dateFrom+'至'+this.state.dateTo})
                 if(this.state.paidStatus!=null && this.state.paidStatus!=''){
                     var status='';
@@ -508,7 +492,7 @@ class BeautyList extends React.Component {
             }else if(item=='pay'){
                 this.setState({payBackgroundColor:'#FF5809',noPayBackgroundColor:'#F0F0F0',allBackgroundColor:'#F0F0F0',paidStatus:'SM00051',})
                  return false;
-            }else if(item =='all'){''
+            }else if(item =='all'){
                 this.setState({allBackgroundColor:'#FF5809',noPayBackgroundColor:'#F0F0F0',payBackgroundColor:'#F0F0F0',paidStatus:''})
                  return false;
             }else if(item.indexOf('ey')>0){
@@ -517,9 +501,9 @@ class BeautyList extends React.Component {
                  return false;
             }
         }}
-        dateFrom={this.state.dateFrom} dateTo={this.state.dateTo}
-        noColor={this.state.noPayBackgroundColor} payColor={this.state.payBackgroundColor}
-        allColor={this.state.allBackgroundColor} value = {this.state.value}/>;
+                                 dateFrom={this.state.dateFrom} dateTo={this.state.dateTo}
+                                 noColor={this.state.noPayBackgroundColor} payColor={this.state.payBackgroundColor}
+                                 allColor={this.state.allBackgroundColor} value={this.state.value}/>;
         return (
             <SideMenu menu={menu}
                       menuPosition={'right'}
@@ -534,11 +518,7 @@ class BeautyList extends React.Component {
                           canAdd={true}
                           edit="新增"
                           editInfo={this._onAdd.bind(this)}/>
-
-                    <View style={{flexDirection:'row',margin:5}}>
-                        <Text style={{flex:4,}}>当前筛选：{this.state.selectedItem}</Text>
-                        <Button style={{flex:1,}} onPress={() => this.toggle()}/>
-                    </View>
+                    <SearchTitle onPress={()=>this.toggle()} selectedItem={this.state.selectedItem}/>
                     {body}
                 </View>
             </SideMenu >

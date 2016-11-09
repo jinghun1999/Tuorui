@@ -22,22 +22,26 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { toastShort } from '../../util/ToastUtil';
 import DatePicker from 'react-native-datepicker';
 import AppStyle from '../../theme/appstyle';
-
+import SideMenu from 'react-native-side-menu';
+import AppointMenu from './AppointMenu';
+import SearchTitle from '../../commonview/SearchTitle';
 class AppointListInfo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             appointSource: [],
             loaded: false,
-            dateFrom: Util.GetDateStr(0),
+            dateFrom: Util.GetDateStr(-7),
             dateTo: Util.GetDateStr(0),
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
+            selectedItem: '全部',
+            isOpen: false,
         }
     }
 
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
-            this._fetchData();
+            this.fetchData();
         });
     }
 
@@ -45,7 +49,7 @@ class AppointListInfo extends React.Component {
 
     }
 
-    _fetchData() {
+    fetchData() {
         let _this = this;
         NetUtil.getAuth(function (user, hos) {
             let header = NetUtil.headerClientAuth(user, hos);
@@ -108,10 +112,6 @@ class AppointListInfo extends React.Component {
         }
     }
 
-    _search() {
-        this._fetchData();
-    }
-
     _onRenderRow(a) {
         let typeCode = a.Type, type;
         switch (typeCode) {
@@ -152,6 +152,18 @@ class AppointListInfo extends React.Component {
         )
     }
 
+    toggle() {
+        this.setState({
+            isOpen: !this.state.isOpen,
+        });
+    }
+
+    updateMenuState(isOpen) {
+        //修改值
+        let _this = this;
+        _this.setState({isOpen,});
+    }
+
     render() {
         let body = <Loading type={'text'}/>
         if (this.state.loaded) {
@@ -172,55 +184,38 @@ class AppointListInfo extends React.Component {
                 )
             }
         }
+        const menu=<AppointMenu dateFrom={this.state.dateFrom} dateTo={this.state.dateTo}
+                                onItemSelected={(item)=>{
+                                if(item=='submit'){
+                                    //完成
+                                    this.setState({isOpen:false,selectedItem:'时间:'+this.state.dateFrom+'至'+this.state.dateTo})
+                                    this.fetchData();
+                                } if(item =='cancel'){
+                                    //取消
+                                    this.setState({isOpen:false})
+                                } if(item.indexOf('Form')>0){
+                                    //日期
+                                     var dateFrom = item.split(':')[1];
+                                     this.setState({dateFrom:dateFrom,})
+                                } if(item.indexOf('To')>0){
+                                    var dateTo = item.split(':')[1];
+                                    this.setState({dateTo:dateTo})
+                                }
+                                }}
+        />
         return (
-            <View style={AppStyle.container}>
-                <Head title={'预约列表'} canBack={true} onPress={this._onBack.bind(this)}/>
-                <View style={AppStyle.searchBox}>
-                    <Text>预约时间</Text>
-                    <DatePicker
-                        date={this.state.dateFrom}
-                        mode="date"
-                        placeholder="选择日期"
-                        format="YYYY-MM-DD"
-                        minDate="2015-01-01"
-                        maxDate="2020-01-01"
-                        confirmBtnText="Confirm"
-                        cancelBtnText="Cancel"
-                        showIcon={false}
-                        style={{width:80}}
-                        customStyles={{
-                        dateInput: {
-                          height:30,
-                          borderWidth:StyleSheet.hairlineWidth,
-                        },
-                      }} onDateChange={(date) => {this.setState({dateFrom: date})}}/>
-                    <Text>到</Text>
-                    <DatePicker
-                        date={this.state.dateTo}
-                        mode="date"
-                        placeholder="选择日期"
-                        format="YYYY-MM-DD"
-                        minDate="2010-01-01"
-                        maxDate="2020-01-01"
-                        confirmBtnText="Confirm"
-                        cancelBtnText="Cancel"
-                        showIcon={false}
-                        style={{width:80}}
-                        customStyles={{
-                    dateInput: {
-                      height:30,
-                      borderWidth:StyleSheet.hairlineWidth,
-                    },
-                  }} onDateChange={(date) => {this.setState({dateTo: date})}}/>
-                    <TouchableOpacity
-                        underlayColor='#4169e1'
-                        style={AppStyle.searchBtn}
-                        onPress={this._search.bind(this)}>
-                        <Text style={{color:'#fff'}}>查询</Text>
-                    </TouchableOpacity>
+            <SideMenu menu={menu}
+                      menuPosition={'right'}
+                      disableGestures={true}
+                      isOpen={this.state.isOpen}
+                      onChange={(isOpen)=>this.updateMenuState(isOpen)}
+            >
+                <View style={AppStyle.container}>
+                    <Head title={'预约列表'} canBack={true} onPress={this._onBack.bind(this)}/>
+                    <SearchTitle onPress={()=>this.toggle()} selectedItem={this.state.selectedItem}/>
+                    {body}
                 </View>
-                {body}
-            </View>
+            </SideMenu>
         )
     }
 }
