@@ -26,6 +26,7 @@ import AppointListInfo from './app/page/Appoint/AppointListInfo';
 import BeautyList from './app/page/Beauty/BeautyList';
 import ReportIndex from './app/page/Report/ReportIndex';
 import NJY from './app/page/Device/NJY';
+import Fees from './app/page/Fees/FeesInfo' ;
 import Loading from './app/commonview/Loading';
 import { toastShort } from './app/util/ToastUtil';
 //import Immutable from 'immutable';
@@ -196,7 +197,7 @@ class App extends Component {
                     </View>
                     <View style={[styles.iconViewStyle, ]}>
                         <TouchableOpacity style={styles.grid_view}
-                                          onPress={this._onPress.bind(this, ReportIndex, 'ReportIndex', '数据报表')}>
+                                          onPress={this._onPress.bind(this, Fees, 'Fees', '收费信息')}>
                             <View style={styles.iconOuter}>
                                 <Icon name={'logo-yen'} size={40} color={'#FF8040'}/>
                                 <Text style={{fontSize:15}}>收费</Text>

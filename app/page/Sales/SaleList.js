@@ -375,16 +375,19 @@ class SaleList extends Component {
             status = (<Text style={{color:'#99CC66',flex:1, textAlign:'right'}}>已付款</Text>)
         }
         return (
-            <TouchableOpacity style={styles.row} onPress={()=>this._pressRow(obj)}>
-                <View style={{flexDirection:'row',}}>
-                    <Text style={{fontSize:16, flex:2, color:'#CC0033'}}>单号:{obj.DirectSellCode}</Text>
-                    {status}
+            <TouchableOpacity style={AppStyle.row} onPress={()=>this._pressRow(obj)}>
+                <View style={{flex:1, marginRight:10,}}>
+                    <View style={{flexDirection:'row',}}>
+                        <Text style={{fontSize:16, flex:2, color:'#CC0033'}}>单号:{obj.DirectSellCode}</Text>
+                        {status}
+                    </View>
+                    <View style={{flexDirection:'row'}}>
+                        <Text style={{flex: 1,}}>会员:{obj.GestName}</Text>
+                        <Text style={{flex: 1,}}>总价:¥{obj.TotalCost}</Text>
+                        <Text style={{flex: 2, textAlign:'right'}}>{Util.getFormateTime(obj.CreatedOn, 'min')}</Text>
+                    </View>
                 </View>
-                <View style={{flexDirection:'row'}}>
-                    <Text style={{flex: 1,}}>会员:{obj.GestName}</Text>
-                    <Text style={{flex: 1,}}>总价:¥{obj.TotalCost}</Text>
-                    <Text style={{flex: 2, textAlign:'right'}}>{Util.getFormateTime(obj.CreatedOn, 'min')}</Text>
-                </View>
+                <Icon name={'angle-right'} size={20} color={'#ccc'}/>
 
             </TouchableOpacity>
         )
