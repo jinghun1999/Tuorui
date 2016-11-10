@@ -11,7 +11,7 @@ import{
     View,
     ListView,
     InteractionManager,
-    } from 'react-native';
+} from 'react-native';
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
@@ -20,13 +20,15 @@ import { toastShort } from '../../util/ToastUtil';
 import Icon from 'react-native-vector-icons/Ionicons';
 import DatePicker from 'react-native-datepicker';
 import AppStyle from '../../theme/appstyle';
+import SideMenu from 'react-native-side-menu';
+import IncomeMenu from './IncomeMenu';
+import SearchTitle from '../../commonview/SearchTitle';
 class Income extends React.Component {
     constructor(props) {
-        let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         super(props);
         this.state = {
             user: {},
-            ds: ds,
+            ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
             sumInfo: {
                 TotalNum: 0,
                 SellTotal: 0,
@@ -62,31 +64,33 @@ class Income extends React.Component {
         })
         NetUtil.getAuth(function (user, hos) {
             let header = NetUtil.headerClientAuth(user, hos);
-            let postdata = [{
-                "Childrens": null,
-                "Field": "1",
-                "Title": null,
-                "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                "DataType": 0,
-                "Value": "1",
-                "Conn": 0
-            }, {
-                "Childrens": null,
-                "Field": "PaidTime",
-                "Title": null,
-                "Operator": {"Name": ">=", "Title": "大于等于", "Expression": null},
-                "DataType": 0,
-                "Value": _this.state.dateFrom,
-                "Conn": 1
-            }, {
-                "Childrens": null,
-                "Field": "PaidTime",
-                "Title": null,
-                "Operator": {"Name": "<=", "Title": "小于等于", "Expression": null},
-                "DataType": 0,
-                "Value": _this.state.dateTo + ' 23:59:59',
-                "Conn": 1
-            }];
+            let postdata = [
+                {
+                    "Childrens": null,
+                    "Field": "1",
+                    "Title": null,
+                    "Operator": {"Name": "=", "Title": "等于", "Expression": null},
+                    "DataType": 0,
+                    "Value": "1",
+                    "Conn": 0
+                }, {
+                    "Childrens": null,
+                    "Field": "PaidTime",
+                    "Title": null,
+                    "Operator": {"Name": ">=", "Title": "大于等于", "Expression": null},
+                    "DataType": 0,
+                    "Value": _this.state.dateFrom,
+                    "Conn": 1
+                }, {
+                    "Childrens": null,
+                    "Field": "PaidTime",
+                    "Title": null,
+                    "Operator": {"Name": "<=", "Title": "小于等于", "Expression": null},
+                    "DataType": 0,
+                    "Value": _this.state.dateTo + ' 23:59:59',
+                    "Conn": 1
+                }
+            ];
             NetUtil.postJson(CONSTAPI.HOST + '/HasPaidTotal/GetModelList', postdata, header, function (data) {
                 let ds = data.Message;
                 if (data.Sign && ds != null) {
@@ -119,8 +123,16 @@ class Income extends React.Component {
         });
     }
 
-    _search() {
-        this.fetchData();
+    toggle() {
+        this.setState({
+            isOpen: !this.state.isOpen,
+        });
+    }
+
+    updateMenuState(isOpen) {
+        //修改值
+        let _this = this;
+        _this.setState({isOpen,});
     }
 
     _renderHeader() {
@@ -188,78 +200,50 @@ class Income extends React.Component {
     }
 
     render() {
-        let searchBox = (
-            <View style={AppStyle.searchBox}>
-                <Text style={{marginLeft:10}}>查询日期从</Text>
-                <DatePicker
-                    date={this.state.dateFrom}
-                    mode="date"
-                    placeholder="选择日期"
-                    format="YYYY-MM-DD"
-                    minDate="2010-01-01"
-                    maxDate="2020-01-01"
-                    confirmBtnText="Confirm"
-                    cancelBtnText="Cancel"
-                    showIcon={false}
-                    style={{width:100}}
-                    customStyles={{
-                    dateInput: {
-                      height:30,
-                      borderWidth:StyleSheet.hairlineWidth,
-                    },
-                  }}
-                    onDateChange={(date) => {this.setState({dateFrom: date})}}/>
-                <Text>到</Text>
-                <DatePicker
-                    date={this.state.dateTo}
-                    mode="date"
-                    placeholder="选择日期"
-                    format="YYYY-MM-DD"
-                    minDate="2010-01-01"
-                    maxDate="2020-01-01"
-                    confirmBtnText="Confirm"
-                    cancelBtnText="Cancel"
-                    showIcon={false}
-                    style={{width:100}}
-                    customStyles={{
-                    dateInput: {
-                      height:30,
-                      borderWidth:StyleSheet.hairlineWidth,
-                    },
-                  }}
-                    onDateChange={(date) => {this.setState({dateTo: date})}}/>
-                <TouchableHighlight
-                    underlayColor='#4169e1'
-                    style={AppStyle.searchBtn}
-                    onPress={this._search.bind(this)}>
-                    <Text style={{color:'#fff'}}>查询</Text>
-                </TouchableHighlight>
-            </View>)
+        let searchBox = <SearchTitle onPress={()=>this.toggle()} selectedItem={this.state.selectedItem}/>
+        let body = <Loading type={'text'}/>;
         if (this.state.loaded) {
-            return (
-                <View style={AppStyle.container}>
-                    <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
-                    {searchBox}
-                    <View style={{ backgroundColor:'#fff', flex:1}}>
-                        <ListView dataSource={this.state.ds.cloneWithRows(this.state.dataSource)}
-                                  renderRow={this._onRenderRow.bind(this)}
-                                  renderHeader={this._renderHeader.bind(this)}
-                                  initialListSize={15}
-                                  pageSize={15}
-                                  enableEmptySections={true}
-                            />
-                    </View>
-                </View>
-            )
-        } else {
-            return (
-                <View style={AppStyle.container}>
-                    <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
-                    {searchBox}
-                    <Loading type={'text'}/>
-                </View>
-            )
+            body = <ListView dataSource={this.state.ds.cloneWithRows(this.state.dataSource)}
+                             renderRow={this._onRenderRow.bind(this)}
+                             renderHeader={this._renderHeader.bind(this)}
+                             initialListSize={15}
+                             pageSize={15}
+                             enableEmptySections={true}
+            />
         }
+        const menu=<IncomeMenu dateFrom={this.state.dateFrom} dateTo={this.state.dateTo}
+                               onItemSelected={(item)=>{
+                                if(item=='submit'){
+                                    //完成
+                                    this.setState({isOpen:false,selectedItem:'时间:'+this.state.dateFrom+'至'+this.state.dateTo})
+                                    this.fetchData();
+                                } if(item =='cancel'){
+                                    //取消
+                                    this.setState({isOpen:false})
+                                } if(item.indexOf('Form')>0){
+                                    //日期
+                                     var dateFrom = item.split(':')[1];
+                                     this.setState({dateFrom:dateFrom,})
+                                } if(item.indexOf('To')>0){
+                                    var dateTo = item.split(':')[1];
+                                    this.setState({dateTo:dateTo})
+                                }
+                                }}
+            />
+        return (
+            <SideMenu menu={menu}
+                      menuPosition={'right'}
+                      disableGestures={true}
+                      isOpen={this.state.isOpen}
+                      onChange={(isOpen)=>this.updateMenuState(isOpen)}
+            >
+                <View style={AppStyle.container}>
+                    <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
+                    <SearchTitle onPress={()=>this.toggle()} selectedItem={this.state.selectedItem}/>
+                    {body}
+                </View>
+            </SideMenu>
+        )
     }
 }
 

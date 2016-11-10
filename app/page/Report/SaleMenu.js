@@ -1,5 +1,5 @@
 /**
- * Created by tuorui on 2016/11/9.
+ * Created by tuorui on 2016/11/10.
  */
 import React, { Component } from 'react';
 import {
@@ -16,7 +16,7 @@ const window = Dimensions.get('window');
 import DatePicker from 'react-native-datepicker';
 import Util from '../../util/Util';
 import SideMenuStyle from '../../theme/sidemenustyle';
-class AppointMenu extends React.Component {
+class SaleMenu extends React.Component {
     static propTypes = {
         onItemSelected: React.PropTypes.func.isRequired,
     };
@@ -57,6 +57,17 @@ class AppointMenu extends React.Component {
                         />
                     </View>
                 </View>
+                <View style={SideMenuStyle.searchView}>
+                    <Text style={SideMenuStyle.item}>关键字搜索</Text>
+                    <TextInput value={this.props.value}
+                               placeholder={'关键字'}
+                               editable={true}
+                               underlineColorAndroid={'transparent'}
+                               keyboardType={'default'}
+                               style={SideMenuStyle.searchKey}
+                               onChangeText={(text)=>{this.props.value = text; this.props.onItemSelected('key:'+text)}}
+                    />
+                </View>
                 <View style={SideMenuStyle.bottomContainer}>
                     <View style={[SideMenuStyle.buttonView,{backgroundColor:'#F75000'}]}>
                         <Text onPress={() => {this.props.onItemSelected('submit')}}
@@ -75,4 +86,4 @@ class AppointMenu extends React.Component {
 }
 ;
 const styles = StyleSheet.create({})
-module.exports = AppointMenu;
+module.exports = SaleMenu;

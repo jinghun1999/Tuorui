@@ -459,7 +459,6 @@ class BeautyList extends React.Component {
         }
         const menu = <BeautyMenu onItemSelected={(item)=>{
             if(item=='submit'){
-                this.state.selectedItem = '';
                 this.setState({isOpen:false,selectedItem:'时间:'+this.state.dateFrom+'至'+this.state.dateTo})
                 if(this.state.paidStatus!=null && this.state.paidStatus!=''){
                     var status='';

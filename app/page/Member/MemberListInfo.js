@@ -390,7 +390,7 @@ class MemberListInfo extends Component {
     }
 
     render() {
-        let body = (<Loading type={'text'}/>);
+        let body = <Loading type={'text'}/>;
         if (this.state.memberLoaded) {
             body = (
                 <ListView dataSource={this.state.ds.cloneWithRows(this.state.dataSource)}

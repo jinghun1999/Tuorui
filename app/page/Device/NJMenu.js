@@ -1,5 +1,5 @@
 /**
- * Created by tuorui on 2016/11/9.
+ * Created by tuorui on 2016/11/10.
  */
 import React, { Component } from 'react';
 import {
@@ -16,7 +16,7 @@ const window = Dimensions.get('window');
 import DatePicker from 'react-native-datepicker';
 import Util from '../../util/Util';
 import SideMenuStyle from '../../theme/sidemenustyle';
-class AppointMenu extends React.Component {
+class NJMenu extends React.Component {
     static propTypes = {
         onItemSelected: React.PropTypes.func.isRequired,
     };
@@ -75,4 +75,4 @@ class AppointMenu extends React.Component {
 }
 ;
 const styles = StyleSheet.create({})
-module.exports = AppointMenu;
+module.exports = NJMenu;

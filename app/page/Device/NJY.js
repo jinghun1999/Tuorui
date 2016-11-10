@@ -10,16 +10,19 @@ import{
     ListView,
     InteractionManager,
     TouchableHighlight
-    } from 'react-native';
+} from 'react-native';
 import Head from '../../commonview/Head';
 import Loading from '../../commonview/Loading';
 import NetUtil from '../../util/NetUtil';
 import Util from '../../util/Util';
 import { toastShort } from '../../util/ToastUtil';
 import DatePicker from 'react-native-datepicker';
+import SideMenu from 'react-native-side-menu';
+import NJMenu from './NJMenu';
+import SearchTitle from '../../commonview/SearchTitle';
+import AppStyle from '../../theme/appstyle';
 class NJY extends Component {
     constructor(props) {
-        let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         super(props);
         this.state = {
             loaded: false,
@@ -27,8 +30,9 @@ class NJY extends Component {
             deviceId: null,
             startDate: Util.GetDateStr(-1),
             endDate: Util.GetDateStr(0),
-            ds: ds,
-            dataSource: null
+            ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
+            dataSource: null,
+            isOpen:false,
         }
     }
 
@@ -127,6 +131,18 @@ class NJY extends Component {
         );
     }
 
+    toggle() {
+        this.setState({
+            isOpen: !this.state.isOpen,
+        });
+    }
+
+    updateMenuState(isOpen) {
+        //修改值
+        let _this = this;
+        _this.setState({isOpen,});
+    }
+
     render() {
         let body = (<Loading type={'text'}/>);
         if (this.state.loaded) {
@@ -137,7 +153,7 @@ class NJY extends Component {
                                   initialListSize={5}
                                   pageSize={5}
                                   enableEmptySections={true}
-                            />
+                        />
                     </View>
                 )
             }
@@ -149,63 +165,41 @@ class NJY extends Component {
                 )
             }
         }
+        const menu=<NJMenu dateFrom={this.state.startDate} dateTo={this.state.endDate}
+                           onItemSelected={(item)=>{
+                                if(item=='submit'){
+                                    //完成
+                                    this.setState({isOpen:false,selectedItem:'时间:'+this.state.startDate+'至'+this.state.endDate})
+                                    this.fetchData();
+                                } if(item =='cancel'){
+                                    //取消
+                                    this.setState({isOpen:false})
+                                } if(item.indexOf('Form')>0){
+                                    //日期
+                                     var dateFrom = item.split(':')[1];
+                                     this.setState({startDate:dateFrom,})
+                                } if(item.indexOf('To')>0){
+                                    var dateTo = item.split(':')[1];
+                                    this.setState({endDate:dateTo})
+                                }
+                                }}/>
         return (
-            <View style={{flex:1, flexDirection:'column'}}>
-                <Head title={this.props.headTitle} canAdd={false} canBack={true}
-                      onPress={this._onBack.bind(this)}/>
-                <View style={{backgroundColor:'#e7e7e7', padding:10, height:30, justifyContent:'center'}}>
-                    <Text>{this.state.clues}<Text style={{fontWeight:'bold'}}>{this.state.deviceId}</Text></Text>
+            <SideMenu menu={menu}
+                      menuPosition={'right'}
+                      disableGestures={true}
+                      isOpen={this.state.isOpen}
+                      onChange={(isOpen)=>this.updateMenuState(isOpen)}
+            >
+                <View style={AppStyle.container}>
+                    <Head title={this.props.headTitle} canAdd={false} canBack={true}
+                          onPress={this._onBack.bind(this)}/>
+                    <SearchTitle onPress={()=>this.toggle()} selectedItem={this.state.selectedItem}/>
+                    <View style={{backgroundColor:'#e7e7e7', padding:10, height:30, justifyContent:'center'}}>
+                        <Text>{this.state.clues}<Text style={{fontWeight:'bold'}}>{this.state.deviceId}</Text></Text>
+                    </View>
+                    {body}
                 </View>
-                <View style={{flexDirection:'row',alignItems:'center', padding:10,}}>
-                    <Text>检测时间从</Text>
-                    <DatePicker
-                        date={this.state.startDate}
-                        mode="date"
-                        placeholder="开始日期"
-                        format="YYYY-MM-DD"
-                        minDate="2015-01-01"
-                        maxDate="2020-01-01"
-                        confirmBtnText="Confirm"
-                        cancelBtnText="Cancel"
-                        showIcon={false}
-                        enabled={this.state.enable}
-                        style={{width:100}}
-                        customStyles={{
-                            dateInput: {
-                              height:30,
-                              borderWidth:StyleSheet.hairlineWidth,
-                            },
-                          }}
-                        onDateChange={(date) => {this.setState({startDate: date})}}/>
-                    <Text>到</Text>
-                    <DatePicker
-                        date={this.state.endDate}
-                        mode="date"
-                        placeholder="结束日期"
-                        format="YYYY-MM-DD"
-                        minDate="2015-01-01"
-                        maxDate="2020-01-01"
-                        confirmBtnText="Confirm"
-                        cancelBtnText="Cancel"
-                        showIcon={false}
-                        enabled={this.state.enable}
-                        style={{width:100}}
-                        customStyles={{
-                            dateInput: {
-                              height:30,
-                              borderWidth:StyleSheet.hairlineWidth,
-                            },
-                          }}
-                        onDateChange={(date) => {this.setState({endDate: date})}}/>
-                    <TouchableHighlight
-                        underlayColor='#FF0033'
-                        style={styles.searchBtn}
-                        onPress={this._search.bind(this)}>
-                        <Text style={{color:'#fff'}}>查询</Text>
-                    </TouchableHighlight>
-                </View>
-                {body}
-            </View>
+            </SideMenu>
         )
     }
 }
@@ -231,6 +225,4 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     }
 });
-module
-    .
-    exports = NJY;
+module.exports = NJY;

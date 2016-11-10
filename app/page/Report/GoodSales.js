@@ -12,7 +12,7 @@ import{
     ListView,
     TextInput,
     InteractionManager,
-    } from 'react-native';
+} from 'react-native';
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
 import Head from '../../commonview/Head';
@@ -21,6 +21,9 @@ import { toastShort } from '../../util/ToastUtil';
 import Icon from 'react-native-vector-icons/Ionicons';
 import DatePicker from 'react-native-datepicker';
 import AppStyle from '../../theme/appstyle';
+import SideMenu from 'react-native-side-menu';
+import SaleMenu from './SaleMenu';
+import SearchTitle from '../../commonview/SearchTitle';
 class GoodSales extends React.Component {
     constructor(props) {
         let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -35,6 +38,8 @@ class GoodSales extends React.Component {
             kw: '',
             totalCount: 0,
             totalAmount: 0,
+            selectedItem:'全部',
+            isOpen:false,
         };
     }
 
@@ -128,89 +133,69 @@ class GoodSales extends React.Component {
         );
     }
 
+    toggle() {
+        this.setState({
+            isOpen: !this.state.isOpen,
+        });
+    }
+
+    updateMenuState(isOpen) {
+        //修改值
+        let _this = this;
+        _this.setState({isOpen,});
+    }
+
+
     render() {
-        let searchBox = (
-            <View>
-                <View style={[AppStyle.searchBox, {paddingBottom:0}]}>
-                    <Text>查询日期从</Text>
-                    <DatePicker
-                        date={this.state.dateFrom}
-                        mode="date"
-                        placeholder="选择日期"
-                        format="YYYY-MM-DD"
-                        minDate="2010-01-01"
-                        maxDate="2020-01-01"
-                        confirmBtnText="Confirm"
-                        cancelBtnText="Cancel"
-                        showIcon={false}
-                        style={{width:100}}
-                        customStyles={{
-                            dateInput: {
-                              height:30,
-                              borderWidth:StyleSheet.hairlineWidth,
-                            },
-                          }} onDateChange={(date) => {this.setState({dateFrom: date})}}/>
-                    <Text>到</Text>
-                    <DatePicker
-                        date={this.state.dateTo}
-                        mode="date"
-                        placeholder="选择日期"
-                        format="YYYY-MM-DD"
-                        minDate="2010-01-01"
-                        maxDate="2020-01-01"
-                        confirmBtnText="Confirm"
-                        cancelBtnText="Cancel"
-                        showIcon={false}
-                        style={{width:100}}
-                        customStyles={{
-                            dateInput: {
-                              height:30,
-                              borderWidth:StyleSheet.hairlineWidth,
-                            },
-                          }} onDateChange={(date) => {this.setState({dateTo: date})}}/>
-                </View>
-                <View style={[AppStyle.searchBox, {paddingTop:5}]}>
-                    <View style={AppStyle.searchTextInput}>
-                        <TextInput
-                            style={{height:35,flex:1,borderWidth:0}}
-                            onChangeText={(text) => this.setState({kw: text})}
-                            value={this.state.kw}
-                            underlineColorAndroid={'transparent'}
-                            placeholder={'商品名/条码/拼音码'}/>
-                    </View>
-                    <TouchableHighlight
-                        underlayColor='#999933'
-                        style={AppStyle.searchBtn}
-                        onPress={this._search.bind(this)}>
-                        <Text style={{color:'#fff'}}>查询</Text>
-                    </TouchableHighlight>
-                </View>
-            </View>)
+        let body = <Loading type={'text'}/>;
         if (this.state.loaded) {
-            return (
-                <View style={AppStyle.container}>
-                    <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
-                    {searchBox}
-                    <View style={{ backgroundColor:'#fff', flex:1}}>
-                        <ListView dataSource={this.state.ds.cloneWithRows(this.state.dataSource)}
-                                  renderRow={this._onRenderRow.bind(this)}
-                                  renderHeader={this._renderHead.bind(this)}
-                                  initialListSize={15}
-                                  pageSize={15}
-                                  enableEmptySections={true}
-                            />
-                    </View>
-                </View>
-            )
-        } else {
-            return (
-                <View style={AppStyle.container}>
-                    <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
-                    {searchBox}
-                    <Loading type={'text'}/>
-                </View>
-            )
+            body = <ListView dataSource={this.state.ds.cloneWithRows(this.state.dataSource)}
+                              renderRow={this._onRenderRow.bind(this)}
+                              renderHeader={this._renderHead.bind(this)}
+                              initialListSize={15}
+                              pageSize={15}
+                              enableEmptySections={true}
+                    />
         }
+        const menu = <SaleMenu dateFrom={this.state.dateFrom} dateTo={this.state.dateTo} value={this.state.kw}
+                               onItemSelected={(item)=>{
+            if(item=='submit'){
+                //完成
+                this.setState({isOpen:false,selectedItem:'时间:'+this.state.dateFrom+'至'+this.state.dateTo})
+                if(this.state.kw != null && this.state.kw != ''){
+                    this.setState({selectedItem:this.state.selectedItem+' 关键字:'+this.state.kw})
+                }
+                this.fetchData();
+            } if(item =='cancel'){
+                //取消
+                this.setState({isOpen:false})
+            } if(item.indexOf('Form')>0){
+                //日期
+                 var dateFrom = item.split(':')[1];
+                 this.setState({dateFrom:dateFrom,})
+            } if(item.indexOf('To')>0){
+                var dateTo = item.split(':')[1];
+                this.setState({dateTo:dateTo})
+            } if(item.indexOf('ey')>0){
+                var key = item.split(':')[1];
+                this.setState({kw:key,})
+            }
+        }}
+        />
+        return (
+            <SideMenu menu={menu}
+                      menuPosition={'right'}
+                      disableGestures={true}
+                      isOpen={this.state.isOpen}
+                      onChange={(isOpen)=>this.updateMenuState(isOpen)}
+            >
+                <View style={AppStyle.container}>
+                    <Head title={this.props.headTitle} canBack={true} onPress={this._onBack.bind(this)}/>
+                    <SearchTitle onPress={()=>this.toggle()} selectedItem={this.state.selectedItem}/>
+                    {body}
+                </View>
+            </SideMenu>
+        )
     }
 }
 
