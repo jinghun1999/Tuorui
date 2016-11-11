@@ -65,16 +65,19 @@ class AddGood extends Component {
             return false;
         }
         NetUtil.getAuth(function (user, hos) {
+            //http://test.tuoruimed.com/service/Api/Store_DirectSell/GetPageConfig?
+            let header = NetUtil.headerClientAuth(user, hos);
             let postjson = {
                 WarehouseID: _this.props.storeId,
-                CateNo: null,
-                InputTxt: kw,
-                BusiTypeCodes: [1, 2, 3, 7, 8, 9, 12],
+                CateNo: "",
+                ItemCode: kw,
+                BusiTypeCodes:["1","2","3","7","8","9","12"],
                 pageSize: 1,
                 pageIndex: 1
             };
-            let header = NetUtil.headerClientAuth(user, hos);
-            NetUtil.postJson(CONSTAPI.HOST + '/ItemTypeLeftJoinItemCount/SearchSellListByPage', postjson, header, function (data) {
+            //http://test.tuoruimed.com/service/Api/ItemTypeLeftJoinItemCount/SearchSellListByItemCodeByPage
+            ///ItemTypeLeftJoinItemCount/SearchSellListByPage
+            NetUtil.postJson(CONSTAPI.HOST + '/ItemTypeLeftJoinItemCount/SearchSellListByItemCodeByPage', postjson, header, function (data) {
                 if (data.Sign && data.Message && data.Message.length > 0) {
                     var good = data.Message[0];
                     good.GoodCount = 1;
