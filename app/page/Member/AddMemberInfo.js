@@ -49,6 +49,7 @@ class AddMemberInfo extends Component {
             pageSize: 15,
             pageIndex: 1,
             levelData: [],
+            disabled:false,
         }
     }
 
@@ -112,6 +113,7 @@ class AddMemberInfo extends Component {
 
     _save(needback) {
         let _this = this;
+        _this.setState({disabled:true,})
         if (_this.state.memberName == null) {
             toastShort("请输入姓名");
             return false;
@@ -239,7 +241,7 @@ class AddMemberInfo extends Component {
             <View style={AppStyle.container}>
                 <Head title={this.props.headTitle}
                       canBack={true} onPress={this._onBack.bind(this)}
-                      canAdd={true} edit='保存' editInfo={this._save.bind(this, true)}
+                      canAdd={true} edit='保存' disabled={this.state.disabled} editInfo={this._save.bind(this, true)}
                     />
                 <ScrollView key={'scrollView'}
                             horizontal={false}

@@ -45,6 +45,7 @@ class AddPet extends Component {
             colorData: [],
             petWeight: '',
             dogBandID: '',
+            dis:false,
         };
     }
 
@@ -168,6 +169,7 @@ class AddPet extends Component {
     _save() {
         //保存
         let _this = this;
+        _this.setState({dis:true,})
         if (_this.state.edit == '保存' && _this.state.isUpdate == false) {
             if (_this.state.petName == null) {
                 toastShort("请输入宠物昵称");
@@ -366,6 +368,7 @@ class AddPet extends Component {
                       onPress={this._onBack.bind(this)}
                       canAdd={true}
                       edit={this.state.edit}
+                      disabled={this.state.dis}
                       editInfo={this._save.bind(this)}/>
                 <ScrollView key={'scrollView'}
                             horizontal={false}

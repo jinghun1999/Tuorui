@@ -23,7 +23,7 @@ class Head extends Component {
     render() {
         var canAdd = null;
         if (this.props.canAdd) {
-            canAdd = <TouchableOpacity style={styles.editBtn} onPress={this.props.editInfo}>
+            canAdd = <TouchableOpacity style={styles.editBtn} disabled={this.props.disabled} onPress={this.props.editInfo}>
                 <Text style={{fontSize: 16, color:'#fff'}}>{this.props.edit}</Text>
             </TouchableOpacity>
         }

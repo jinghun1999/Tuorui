@@ -38,6 +38,7 @@ export default class SaleAdd extends React.Component {
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
             goodDiscountInput: '',
             goodAmountInput: '',
+            disabled:false,
         };
     }
 
@@ -125,6 +126,7 @@ export default class SaleAdd extends React.Component {
 
     _onSave() {
         let _this = this;
+        _this.setState({disabled:true,})
         if (_this.state.Guest.ID == null) {
             toastShort("请选择会员");
             return false;
@@ -344,6 +346,7 @@ export default class SaleAdd extends React.Component {
                       canBack={true}
                       onPress={this._onBack.bind(this)}
                       canAdd={true}
+                      disabled={this.state.disabled}
                       edit={'保存'}
                       editInfo={this._onSave.bind(this)}/>
                 <ScrollView key={'scrollView'}
