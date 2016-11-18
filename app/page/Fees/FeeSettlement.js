@@ -247,6 +247,13 @@ class FeeSettlement extends React.Component {
                     gprList.push(prepay)
                 }
             }
+            if(_this.state.prepaySwitch && _this.state.balanceSwitch){
+                let countMoney = _this.state.prepayMoney+_this.state.vipAccount+_this.state.discount+_this.state.money;
+                if (_this.state.totalAmount !== countMoney) {
+                    toastShort('请核对支付金额')
+                    return false;
+                }
+            }
 
             let postdata={
                 newSA:newSA,
@@ -394,7 +401,6 @@ class FeeSettlement extends React.Component {
                                    }
                                    }}/>
                     </View>
-
                 </ScrollView>
                 <View style={AppStyle.feeView}>
                     <View style={{flex:1}}>
