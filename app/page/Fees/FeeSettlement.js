@@ -103,15 +103,18 @@ class FeeSettlement extends React.Component {
             toastShort('请输入金额')
             return false;
         }
-        if (_this.state.discount == null || _this.state.discount == '') {
+        if (_this.state.discount === null || _this.state.discount === '') {
             return false;
         }
         //判断选择了余额 选择了预付金 或者全选 或者全不选
-        let money = _this.state.money + _this.state.discount+_this.state.vipAccount+_this.state.prepayMoney;
-        if (_this.state.totalAmount !== money) {
-            toastShort('请核对支付金额')
-            return false;
+        let money = _this.state.money + _this.state.discount;
+        if(!_this.state.balanceSwitch && !_this.state.prepaySwitch){
+            if (_this.state.totalAmount !== money) {
+                toastShort('请核对支付金额')
+                return false;
+            }
         }
+
         NetUtil.getAuth(function (user, hos) {
             let header = NetUtil.headerClientAuth(user, hos);
             let now = Util.getTime();
@@ -146,11 +149,11 @@ class FeeSettlement extends React.Component {
             };
             let gprList = [];
             if(_this.state.money!=0){
-                let moeny={
+                let money={
                     "ID":"00000000-0000-0000-0000-000000000000",
                     "GestID":null,
                     "GestName":null,
-                    "OperateAction":_this.state.paidStatus,
+                    "OperateAction":_this.state.paidStatus.toString(),
                     "OperateContent":_this.state.money,
                     "SettleAccountsID":null,
                     "CreatedBy":user.Mobile,
