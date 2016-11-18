@@ -35,6 +35,7 @@ class Login extends React.Component {
 
     _Login() {
         this.refs.pwd.blur();
+        this.refs.user.blur();
         if (!this.state.user || this.state.user.length == 0) {
             toastShort('请输入用户名')
             return;
@@ -103,6 +104,8 @@ class Login extends React.Component {
                     textAlignVertical='center'
                     textAlign='center'
                     keyboardType={'numeric'}
+                    ref='user'
+                    onFocus={()=>{this.refs.user.focus()}}
                     value={this.state.user}/>
                 <View style={{height:1,backgroundColor:'#f4f4f4'}}/>
                 <TextInput

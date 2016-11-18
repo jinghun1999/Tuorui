@@ -12,8 +12,6 @@ import {
     Alert,
     ListView,
     TouchableOpacity,
-    ToastAndroid,
-    Picker,
     InteractionManager,
     ActivityIndicator,
 }from 'react-native';
@@ -415,25 +413,6 @@ class BeautyList extends React.Component {
                 <Icon name={'angle-right'} size={20} color={'#ccc'}/>
             </TouchableOpacity>
         )
-    }
-
-    onSearch(value) {
-        let _this = this;
-        if (value == 1) {
-            _this.setState({searchID: 1});
-        } else if (value == 2) {
-            _this.setState({searchID: 2});
-        }
-    }
-
-    _search() {
-        this.fetchData(1, false);
-    }
-
-    _searchName(txt) {
-        let _this = this;
-        _this.state.value = txt;
-        _this.fetchData(1, false);
     }
 
     toggle() {

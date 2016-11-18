@@ -170,5 +170,24 @@ let AppStyle = StyleSheet.create({
         fontSize:16,
         color:'#EE6A50'
     },
+    /*
+    * FeeSettlement
+    * */
+    feeView:{
+        height:40,
+        flexDirection:'row',
+        justifyContent:'center',
+        backgroundColor:'#ececec',
+    },
+    feeBtn:{
+        width:130,
+        backgroundColor:'#FF5809',
+        justifyContent:'center',
+    },
+    feeText:{
+        color:'white',
+        fontSize:20,
+        textAlign:'center',
+    },
 });
 export default AppStyle;

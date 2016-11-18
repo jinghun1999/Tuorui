@@ -600,7 +600,7 @@ class VaccineService extends Component {
                         <Text style={AppStyle.mpTitle}>数量:</Text>
                         {this.state.canEdit ?
                             <View style={AppStyle.mpBorder}>
-                                <TextInput value={vaccine.ItemNum.toString()}
+                                <TextInput value={vaccine.ItemNum}
                                            defaultValue={this.state.num.toString()}
                                            editable={true}
                                            underlineColorAndroid={'transparent'}

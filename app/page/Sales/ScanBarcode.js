@@ -9,9 +9,10 @@ import {
     TouchableOpacity,
     View,
     InteractionManager
-    } from 'react-native';
+} from 'react-native';
 import BarcodeScanner from 'react-native-barcodescanner';
 import Loading from '../../commonview/Loading';
+import Head from '../../commonview/Head';
 
 class ScanBarcode extends Component {
     constructor(props) {
@@ -43,7 +44,8 @@ class ScanBarcode extends Component {
     }
 
     _onBack() {
-        const { navigator } = this.props;
+        let _this = this;
+        const { navigator } = _this.props;
         if (navigator) {
             navigator.pop();
         }
@@ -51,23 +53,18 @@ class ScanBarcode extends Component {
 
     barcodeReceived(e) {
         let _this = this;
-        if (e.data !== _this.state.barcode || e.type !== _this.state.type){
+        if (e.data !== _this.state.barcode || e.type !== _this.state.type)
             Vibration.vibrate();
             _this.setState({
                 barcode: e.data,
-                text: e.data,
+                text: `${e.data} (${e.type})`,
                 type: e.type,
             });
-            if(_this.state.scaned){
-                if (this.props.onSucess) {
-                    this.timer = setTimeout(() => {
-                        _this.props.onSucess(e.data);
-                        _this._onBack();
-                    }, 500);
-                }
-            }
-            _this.setState({scaned: true});
-        }
+            this.timer = setTimeout(() => {
+                _this.props.onSucess(e.data);
+                _this._onBack();
+            }, 500);
+
     }
 
     componentWillUnmount() {
@@ -75,7 +72,7 @@ class ScanBarcode extends Component {
     }
 
     render() {
-        let body = <View style={{flex:1, alignItems:'center', justifyContent:'center'}}><Loading type={'text'}/></View>
+        let body = <Loading type={'text'}/>
         if (this.state.loaded) {
             body = <BarcodeScanner
                 onBarCodeRead={this.barcodeReceived.bind(this)}
@@ -85,6 +82,7 @@ class ScanBarcode extends Component {
         }
         return (
             <View style={styles.container}>
+                <Head title='扫描二维码' canBack={true} onPress={this._onBack.bind(this)}/>
                 {body}
                 <View style={styles.statusBar}>
                     <View style={{flex:1, alignItems: 'center', justifyContent: 'center',}}>

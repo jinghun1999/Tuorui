@@ -22,7 +22,6 @@ import Loading from '../../commonview/Loading';
 import MemberDetails from './MemberDetails';
 import { toastShort } from '../../util/ToastUtil';
 import Icon from 'react-native-vector-icons/Ionicons';
-import Icons from 'react-native-vector-icons/FontAwesome';
 import AppStyle from '../../theme/appstyle';
 import SideMenu from 'react-native-side-menu';
 import MemberMenu from './MemberMenu';

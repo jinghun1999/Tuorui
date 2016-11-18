@@ -26,7 +26,7 @@ import AppointListInfo from './app/page/Appoint/AppointListInfo';
 import BeautyList from './app/page/Beauty/BeautyList';
 import ReportIndex from './app/page/Report/ReportIndex';
 import NJY from './app/page/Device/NJY';
-import Fees from './app/page/Fees/FeesInfo' ;
+import Fees from './app/page/Fees/FeesList' ;
 import Loading from './app/commonview/Loading';
 import { toastShort } from './app/util/ToastUtil';
 //import Immutable from 'immutable';
