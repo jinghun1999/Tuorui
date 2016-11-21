@@ -99,16 +99,16 @@ class FeeSettlement extends React.Component {
     onSettlement() {
         //结算
         let _this = this;
-        if (_this.state.money == null || _this.state.money == '' || _this.state.money == 0) {
-            toastShort('请输入金额')
-            return false;
-        }
-        if (_this.state.discount === null || _this.state.discount === '') {
-            return false;
-        }
         //判断选择了余额 选择了预付金 或者全选 或者全不选
         let money = _this.state.money + _this.state.discount;
-        if(!_this.state.balanceSwitch && !_this.state.prepaySwitch){
+        if(_this.state.balanceSwitch==false && _this.state.prepaySwitch==false){
+            if (_this.state.money == null || _this.state.money == '' || _this.state.money == 0) {
+                toastShort('请输入金额')
+                return false;
+            }
+            if (_this.state.discount === null || _this.state.discount === '') {
+                return false;
+            }
             if (_this.state.totalAmount !== money) {
                 toastShort('请核对支付金额')
                 return false;
@@ -193,7 +193,7 @@ class FeeSettlement extends React.Component {
                         "GestID":null,
                         "GestName":null,
                         "OperateAction":"余额",
-                        "OperateContent":_this.state.totalAmount-_this.state.discount,
+                        "OperateContent":_this.state.vipAccount,
                         "SettleAccountsID":null,
                         "CreatedBy":user.Mobile,
                         "CreatedOn":now,
@@ -234,7 +234,7 @@ class FeeSettlement extends React.Component {
                         "GestID":null,
                         "GestName":null,
                         "OperateAction":"预付金",
-                        "OperateContent":_this.state.totalAmount-_this.state.discount,
+                        "OperateContent":_this.state.prepayMoney,
                         "SettleAccountsID":null,
                         "CreatedBy":user.Mobile,
                         "CreatedOn":now,
@@ -247,20 +247,11 @@ class FeeSettlement extends React.Component {
                     gprList.push(prepay)
                 }
             }
-            if(_this.state.prepaySwitch && _this.state.balanceSwitch){
-                let countMoney = _this.state.prepayMoney+_this.state.vipAccount+_this.state.discount+_this.state.money;
-                if (_this.state.totalAmount !== countMoney) {
-                    toastShort('请核对支付金额')
-                    return false;
-                }
-            }
-
             let postdata={
                 newSA:newSA,
                 fSADetailList:_this.state.dataSource,
                 gprList:gprList
             };
-            //http://test.tuoruimed.com/service/Api/Finance_SettleAccounts/IsExistNotSettle
             //http://test.tuoruimed.com/service/Api/Finance_SettleAccounts/Finish
             NetUtil.postJson(CONSTAPI.HOST + '/Finance_SettleAccounts/Finish', postdata, header, function (data) {
                 if(data.Sign && data.Message!=null){

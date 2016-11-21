@@ -60,7 +60,7 @@ class VaccineMenu extends React.Component {
                 <View style={SideMenuStyle.searchView}>
                     <Text style={SideMenuStyle.item}>关键字搜索</Text>
                     <TextInput value={this.props.value}
-                               placeholder={'关键字'}
+                               placeholder={'会员编号/姓名/编号'}
                                editable={true}
                                underlineColorAndroid={'transparent'}
                                keyboardType={'default'}
