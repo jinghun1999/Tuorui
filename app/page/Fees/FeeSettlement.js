@@ -35,7 +35,7 @@ class FeeSettlement extends React.Component {
             money: 0,
             discount: 0,
             paidStatus: '现金',
-            prepayMoney: 1,
+            prepayMoney: 0,
             vipAccount: 0,
             balanceSwitch: false,
             prepaySwitch: false,
@@ -100,6 +100,10 @@ class FeeSettlement extends React.Component {
     onSettlement() {
         //结算
         let _this = this;
+        if(_this.state.dataSource.length<=0){
+            toastShort('出了问题吧!请返回列表后刷新')
+            return false;
+        }
         //判断选择了余额 选择了预付金 或者全选 或者全不选
         let money = _this.state.money + _this.state.discount;
         if (_this.state.balanceSwitch == false && _this.state.prepaySwitch == false) {
@@ -419,6 +423,17 @@ class FeeSettlement extends React.Component {
                                     this.setState({money:parseFloat(text)})
                                     //如果支付金额大于应支付金额，显示找零
                                    var p = this.state.totalAmount-this.state.discount;
+                                   if(this.state.prepayMoney+this.state.vipAccount<this.state.totalAmount-this.state.discount){
+                                        if(this.state.balanceSwitch && this.state.prepaySwitch){
+                                            p=this.state.totalAmount-this.state.discount-this.state.prepayMoney-this.state.vipAccount;
+                                        }
+                                        if(this.state.balanceSwitch &&!this.state.prepaySwitch){
+                                            p=this.state.totalAmount-this.state.discount-this.state.prepayMoney;
+                                        }
+                                        if(this.state.prepaySwitch && !this.state.balanceSwitch){
+                                            p=this.state.totalAmount-this.state.discount-this.state.vipAccount;
+                                        }
+                                   }
                                    if(text>p){
                                         this.setState({oddChange:text-p})
                                    }else{
