@@ -39,7 +39,7 @@ class FeeSettlement extends React.Component {
             vipAccount: 0,
             balanceSwitch: false,
             prepaySwitch: false,
-            oddChange:0,
+            oddChange: 0,
         }
     }
 
@@ -100,12 +100,12 @@ class FeeSettlement extends React.Component {
     onSettlement() {
         //结算
         let _this = this;
-        if(_this.state.dataSource.length<=0){
+        if (_this.state.dataSource.length <= 0) {
             toastShort('出了问题吧!请返回列表后刷新')
             return false;
         }
         //判断选择了余额 选择了预付金 或者全选 或者全不选
-        let money = _this.state.money + _this.state.discount;
+        let money = (_this.state.money - _this.state.oddChange ) + _this.state.discount;
         if (_this.state.balanceSwitch == false && _this.state.prepaySwitch == false) {
             if (_this.state.money == null || _this.state.money == '' || _this.state.money == 0) {
                 toastShort('请输入金额')
@@ -119,28 +119,28 @@ class FeeSettlement extends React.Component {
                 return false;
             }
         }
-        if(_this.state.prepayMoney+_this.state.vipAccount<_this.state.totalAmount-_this.state.discount){
+        if (_this.state.prepayMoney + _this.state.vipAccount < _this.state.totalAmount - _this.state.discount) {
             //当预付金+余额<总消费额-折扣额
-            if(_this.state.balanceSwitch==true && _this.state.prepaySwitch==true){
+            if (_this.state.balanceSwitch == true && _this.state.prepaySwitch == true) {
                 //勾选了预付金和余额
-                let totalMoney = _this.state.prepayMoney+_this.state.vipAccount+_this.state.discount+(_this.state.money-_this.state.oddChange);
-                if(_this.state.totalAmount!==totalMoney){
+                let totalMoney = _this.state.prepayMoney + _this.state.vipAccount + _this.state.discount + (_this.state.money - _this.state.oddChange);
+                if (_this.state.totalAmount !== totalMoney) {
                     toastShort('请核对支付金额')
                     return false;
                 }
             }
-            if(_this.state.balanceSwitch==true){
+            if (_this.state.balanceSwitch == true) {
                 //只勾选余额
-                let totalMoney = _this.state.vipAccount+_this.state.discount+(_this.state.money-_this.state.oddChange);
-                if(_this.state.totalAmount!==totalMoney){
+                let totalMoney = _this.state.vipAccount + _this.state.discount + (_this.state.money - _this.state.oddChange);
+                if (_this.state.totalAmount !== totalMoney) {
                     toastShort('请核对支付金额')
                     return false;
                 }
             }
-            if(_this.state.prepaySwitch==true){
+            if (_this.state.prepaySwitch == true) {
                 //只勾选了预付金
-                let totalMoney = _this.state.prepayMoney+_this.state.discount+(_this.state.money-_this.state.oddChange);
-                if(_this.state.totalAmount!==totalMoney){
+                let totalMoney = _this.state.prepayMoney + _this.state.discount + (_this.state.money - _this.state.oddChange);
+                if (_this.state.totalAmount !== totalMoney) {
                     toastShort('请核对支付金额')
                     return false;
                 }
@@ -307,6 +307,15 @@ class FeeSettlement extends React.Component {
         this.pickerState.toggle();
     }
 
+    verifyNum(val) {
+        var re = /^\d+(\.\d+)?$/;
+        var value = val;
+        if (!re.test(val)) {
+            return false;
+        }
+        return value;
+    }
+
     _renderRow(fee) {
         var busiTypeCode = fee.BusiTypeCode;
         return (
@@ -408,7 +417,7 @@ class FeeSettlement extends React.Component {
                     </TouchableOpacity>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>支付金额</Text>
-                        <TextInput value={this.state.money.toString()}
+                        <TextInput value={this.state.money}
                                    underlineColorAndroid={'transparent'}
                                    editable={true}
                                    keyboardType={'numeric'}
@@ -416,11 +425,12 @@ class FeeSettlement extends React.Component {
                                    onChangeText={(text)=>{
                                    this.setState({money:text})
                                    var d = parseFloat(text);
-                                   if(!d || isNaN(d)){
-                                   this.setState({money:0})
+                                   if(!d){
+                                   this.setState({money:0});
                                    return false;
                                    }else{
-                                    this.setState({money:parseFloat(text)})
+                                    var val =this.verifyNum(text)
+                                    this.setState({money:val})
                                     //如果支付金额大于应支付金额，显示找零
                                    var p = this.state.totalAmount-this.state.discount;
                                    if(this.state.prepayMoney+this.state.vipAccount<this.state.totalAmount-this.state.discount){
@@ -447,7 +457,7 @@ class FeeSettlement extends React.Component {
                     <View style={styles.payStyle}>
                         <Text style={styles.amountStyle}>应支付: </Text>
                         <Text style={styles.priceStyle}>¥{this.state.totalAmount - this.state.discount}</Text>
-                        <Text style={styles.amountStyle}> 找零:  </Text>
+                        <Text style={styles.amountStyle}> 找零: </Text>
                         <Text style={styles.priceStyle}>¥ {this.state.oddChange}</Text>
                     </View>
                     <TouchableOpacity style={AppStyle.feeBtn} onPress={this.onSettlement.bind(this)}>

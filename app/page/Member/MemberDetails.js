@@ -263,15 +263,10 @@ class MemberDetails extends Component {
                             NetUtil.postJson(CONSTAPI.HOST + '/Gest/UpdateGest', postJson, header, function (data) {
                                 if (data.Sign) {
                                     if (_this.props.getResult) {
-                                        let id = _this.props.memberInfo.ID;
-                                        _this.props.getResult(id);
-
-                                        _this.setState({
-                                            enable: false,
-                                            edit: '编辑',
-                                        });
+                                        toastShort("保存成功");
+                                        _this.props.getResult();
                                     }
-                                    _this._onBack()
+                                    _this._onBack();
                                 } else {
                                     toastShort("保存失败，" + data.Exception);
                                 }
@@ -459,7 +454,7 @@ class MemberDetails extends Component {
                     </View>
                     <TouchableOpacity onPress={this._onChooseSex.bind(this)} style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>性别</Text>
-                        <Text style={AppStyle.rowVal}>{this.state.memberSex == 'DM00001' ? '男' : '女'}</Text>
+                        <Text style={AppStyle.rowVal}>{this.state.memberSex}</Text>
                         {this.state.edit === '保存'?<Icon name={'angle-right'} size={20} color={'#ccc'}/>:null}
                     </TouchableOpacity>
                     <View style={AppStyle.row}>
@@ -514,10 +509,10 @@ class MemberDetails extends Component {
                     pickerCancelBtnText={'取消'}
                     ref={picker => this.pickerSex = picker}
                     pickerData={['男','女','其他']}
-                    selectedValue={this.state.memberSex=='DM00001'?'男':'女'}
+                    selectedValue={this.state.memberSex}
                     onPickerDone={(sex)=>{
                         this.setState({
-                            memberSex: sex,
+                            memberSex: sex[0]?sex[0]:'',
                         })
                     }}
                 />
@@ -532,10 +527,11 @@ class MemberDetails extends Component {
                     selectedValue={this.state.memberLevel}
                     onPickerDone={(level)=>{
                         this.setState({
-                            memberLevel: level,
+                            memberLevel: level[0]?level[0]:'',
                         })
                     }}
                 />
+
                 <Picker
                     style={{height: 300}}
                     showDuration={300}
@@ -547,7 +543,7 @@ class MemberDetails extends Component {
                     selectedValue={this.state.memberState}
                     onPickerDone={(cardState)=>{
                         this.setState({
-                            memberState:cardState,
+                            memberState:cardState[0]?cardState[0]:'',
                         })
                     }}
                 />

@@ -169,7 +169,6 @@ class AddPet extends Component {
     _save() {
         //保存
         let _this = this;
-        _this.setState({dis:true,})
         if (_this.state.edit == '保存' && _this.state.isUpdate == false) {
             if (_this.state.petName == null) {
                 toastShort("请输入宠物昵称");

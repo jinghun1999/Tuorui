@@ -105,6 +105,19 @@ class MemberListInfo extends Component {
                         "DataType": 0,
                         "Value": _this.state.dateTo + " 23:59:59",
                         "Conn": 1
+                    },
+                    {
+                        "Childrens":null,
+                        "Field":"Status",
+                        "Title":null,
+                        "Operator":{
+                            "Name":"=",
+                            "Title":"等于",
+                            "Expression":null
+                        },
+                        "DataType":0,
+                        "Value":"SM00001",
+                        "Conn":1
                     }
                 ],
                 "sorts": [

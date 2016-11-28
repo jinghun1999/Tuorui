@@ -426,6 +426,17 @@ class BeautyServices extends React.Component {
 
     _saveAndSet() {
         //保存并结算
+        /*{this.state.edit === '编辑' ?
+         <View style={{padding:5,}}>
+         {
+         this.state.paidStatus === 'SM00051'
+         ?null:
+         <NButton onPress={this._saveAndSet.bind(this)} backgroundColor={'#1E90FF'} text="结算"/>
+         }
+
+         </View>
+         : null
+         }*/
         let _this = this;
         const {navigator}=_this.props;
         if (navigator) {
@@ -578,17 +589,7 @@ class BeautyServices extends React.Component {
                           renderHeader={this._renderHeader.bind(this)}
                           renderRow={this._onRenderRow.bind(this)}
                 />
-                /*{this.state.edit === '编辑' ?
-                    <View style={{padding:5,}}>
-                        {
-                            this.state.paidStatus === 'SM00051'
-                                ?null:
-                                <NButton onPress={this._saveAndSet.bind(this)} backgroundColor={'#1E90FF'} text="结算"/>
-                        }
 
-                    </View>
-                    : null
-                }*/
                 <Picker
                     style={{height: 300}}
                     showDuration={300}

@@ -332,7 +332,14 @@ class VaccineService extends Component {
             }
             else if (_this.props.id == 2) {
                 //2 详情修改
-                /*NetUtil.getAuth(function (user, hos) {
+                /*{
+                    this.state.shootStatus === 'SM00030'
+                        ? null :null
+                    <View style={{padding:5,}}>
+                     <NButton onPress={this._saveAndSet.bind(this)} backgroundColor={'#1E90FF'} text="结算"/>
+                     </View>*/
+                }
+            /*NetUtil.getAuth(function (user, hos) {
                  var vaccineGroupCode = _this.state.VaccineGroupCode;
                  let vaccineItems = [];
                  let _vaccine = _this.state.vaccine;
@@ -416,10 +423,7 @@ class VaccineService extends Component {
             })
         }
 
-
-    }
-
-    _onChoosePet() {
+    _onChoosePet(){
         //选择宠物
         let _this = this;
         if (!_this.props.canEdit || _this.state.edit != '保存') {
@@ -718,13 +722,7 @@ class VaccineService extends Component {
                           renderHeader={this._renderHeader.bind(this)}
                           renderRow={this._renderRow.bind(this)}
                 />
-                {
-                    this.state.shootStatus === 'SM00030'
-                        ? null :null
-                    /*<View style={{padding:5,}}>
-                            <NButton onPress={this._saveAndSet.bind(this)} backgroundColor={'#1E90FF'} text="结算"/>
-                        </View>*/
-                }
+
                 <Picker
                     style={{height: 300}}
                     showDuration={300}
