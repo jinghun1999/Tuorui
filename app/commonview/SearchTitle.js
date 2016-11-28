@@ -19,7 +19,7 @@ class SearchTitle extends Component {
     render(){
         return(
             <View style={styles.container}>
-                <Text style={styles.searchSize}>当前筛选：{this.props.selectedItem}</Text>
+                <Text style={styles.searchSize}>当前筛选: {this.props.selectedItem}</Text>
                 <TouchableOpacity
                     onPress={this.props.onPress}
                     style={styles.iconStyle}>

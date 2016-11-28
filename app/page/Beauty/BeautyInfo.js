@@ -56,8 +56,9 @@ class BeautyServices extends React.Component {
     }
 
     componentWillMount() {
+        let _this= this;
         InteractionManager.runAfterInteractions(() => {
-            this._loadData();
+            _this._loadData();
         });
     }
     componentWillUnmount() {

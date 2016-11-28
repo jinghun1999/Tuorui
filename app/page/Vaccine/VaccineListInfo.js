@@ -382,10 +382,7 @@ class VaccineListInfo extends Component {
     _renderFooter() {
         //计算总页数，如果最后一页，则返回没有数据啦~
         if (this.state.pageIndex >= this.state.recordCount / this.state.pageSize) {
-            return (
-                <View style={AppStyle.noMore}>
-                </View>
-            )
+            return (<View></View>)
         }
         return (
             <ActivityIndicator />
