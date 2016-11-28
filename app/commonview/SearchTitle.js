@@ -31,8 +31,17 @@ class SearchTitle extends Component {
     }
 }
 const styles = StyleSheet.create({
-    container:{flexDirection:'row',margin:5},
-    searchSize:{flex:4,},
-    iconStyle:{flex:1,flexDirection:'row',justifyContent:'flex-end',},
+    container:{
+        flexDirection:'row',
+        margin:5
+    },
+    searchSize:{
+        flex:1,
+    },
+    iconStyle:{
+        flexDirection:'row',
+        justifyContent:'flex-end',
+        alignItems:'center',
+    },
 })
 module.exports = SearchTitle;

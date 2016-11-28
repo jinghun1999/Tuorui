@@ -577,7 +577,7 @@ class BeautyServices extends React.Component {
                           renderHeader={this._renderHeader.bind(this)}
                           renderRow={this._onRenderRow.bind(this)}
                 />
-                {this.state.edit === '编辑' ?
+                /*{this.state.edit === '编辑' ?
                     <View style={{padding:5,}}>
                         {
                             this.state.paidStatus === 'SM00051'
@@ -587,7 +587,7 @@ class BeautyServices extends React.Component {
 
                     </View>
                     : null
-                }
+                }*/
                 <Picker
                     style={{height: 300}}
                     showDuration={300}

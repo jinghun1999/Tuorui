@@ -720,10 +720,10 @@ class VaccineService extends Component {
                 />
                 {
                     this.state.shootStatus === 'SM00030'
-                        ? null :
-                        <View style={{padding:5,}}>
+                        ? null :null
+                    /*<View style={{padding:5,}}>
                             <NButton onPress={this._saveAndSet.bind(this)} backgroundColor={'#1E90FF'} text="结算"/>
-                        </View>
+                        </View>*/
                 }
                 <Picker
                     style={{height: 300}}
