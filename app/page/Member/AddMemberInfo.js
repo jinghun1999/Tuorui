@@ -113,7 +113,6 @@ class AddMemberInfo extends Component {
 
     _save(needback) {
         let _this = this;
-        _this.setState({disabled:true,})
         if (_this.state.memberName == null) {
             toastShort("请输入姓名");
             return false;

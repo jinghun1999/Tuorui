@@ -126,7 +126,6 @@ export default class SaleAdd extends React.Component {
 
     _onSave() {
         let _this = this;
-        _this.setState({disabled:true,})
         if (_this.state.Guest.ID == null) {
             toastShort("请选择会员");
             return false;
