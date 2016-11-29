@@ -43,7 +43,7 @@ class AddPet extends Component {
             colorNameData: [''],
             colorName: '',
             colorData: [],
-            petWeight: '',
+            petWeight: 0,
             dogBandID: '',
             dis:false,
         };
