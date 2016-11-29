@@ -13,6 +13,7 @@ import{
     TextInput,
     TouchableOpacity,
     InteractionManager,
+    Dimensions,
 } from 'react-native';
 import Util from '../../util/Util';
 import NetUtil from '../../util/NetUtil';
@@ -24,6 +25,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import DatePicker from 'react-native-datepicker';
 import Picker from 'react-native-picker';
 import AppStyle from '../../theme/appstyle';
+const width=Dimensions.get('window').width;
 class MemberDetails extends Component {
     constructor(props) {
         super(props);
@@ -486,7 +488,7 @@ class MemberDetails extends Component {
                                    editable={this.state.enable}
                                    underlineColorAndroid={'transparent'}
                                    keyboardType={'default'}
-                                   style={AppStyle.input}
+                                   style={[AppStyle.input,{width:width-100,}]}
                                    onChangeText={(text)=>{this.setState({ memberRemark: text })}}
                         />
                     </View>
