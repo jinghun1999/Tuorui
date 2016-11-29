@@ -454,13 +454,13 @@ class AddPet extends Component {
                         <Text style={AppStyle.rowTitle}>体重</Text>
                         {this.state.edit === '保存' ?
                                 <TextInput
-                                    value={this.state.petWeight.toString()}
+                                    value={this.state.petWeight}
                                     editable={true}
                                     underlineColorAndroid={'transparent'}
                                     keyboardType={'numeric'}
                                     style={AppStyle.input}
                                     onBlur={this._check.bind(this)}
-                                    onChangeText={(text)=>{this.setState({ petWeight:text })}}
+                                    onChangeText={(text)=>{this.setState({ petWeight:text.toString() })}}
                                 />
                             :
                             <Text style={AppStyle.rowVal}>{this.state.petWeight}</Text>
