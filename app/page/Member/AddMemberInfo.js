@@ -143,7 +143,7 @@ class AddMemberInfo extends Component {
             let header = NetUtil.headerClientAuth(user, hos);
             NetUtil.postJson(CONSTAPI.HOST + '/Gest/GetModelList', postdata, header, function (data) {
                 if (data.Sign) {
-                    alert(JSON.stringify(data.Message));
+                    //alert(JSON.stringify(data.Message));
                     if (data.Message != null && data.Message.length > 0) {
                         toastShort("该手机已存在，请更换其他手机！");
                         return false;

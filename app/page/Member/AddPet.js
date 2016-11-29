@@ -79,7 +79,13 @@ class AddPet extends Component {
             };
             NetUtil.postJson(CONSTAPI.HOST + '/UserDictDetail/GetModelListWithSort', postData, header, function (data) {
                 if (data.Sign && data.Message != null) {
-                    var colorData = data.Message, colorNameData = [], colorCode = _this.props.petSource.PetSkinColor, _color = '';
+                    var _colorCode='';
+                    if(_this.state.isAdd){
+                        _this.setState({
+                            colorData:data.Message,
+                        })
+                    }
+                    var colorData = data.Message, colorNameData = [], colorCode = _colorCode, _color = '';
                     data.Message.forEach((item, index, array)=> {
                         if (item.Code == colorCode) {
                             _color = item.value_nameCN
@@ -520,7 +526,7 @@ class AddPet extends Component {
                     pickerBtnText={'确认'}
                     pickerCancelBtnText={'取消'}
                     ref={picker => this.pickerState = picker}
-                    pickerData={['未绝育','已绝育']}
+                    pickerData={['未知','未绝育','已绝育']}
                     selectedValue={this.state.petState}
                     onPickerDone={(state)=>{
                         this.setState({
