@@ -91,10 +91,12 @@ class BeautyServices extends React.Component {
                 serviceData.forEach((item, index, array)=> {
                     _data.push(item.PersonName);
                 })
+                if(_this.props.beautyID==1){
+                    _this.state.serviceName=_data[0];
+                }
                 _this.setState({
                     serviceSource: serviceData,
                     ServicerNameData: _data,
-                    serviceName: _data[0],
                     loaded: true,
                 });
             });
@@ -601,7 +603,7 @@ class BeautyServices extends React.Component {
                     selectedValue={this.state.serviceName}
                     onPickerDone={(text)=>{
                  this.setState({
-                     serviceName: text!==null?text[0]:'',
+                     serviceName: text?text[0]:'',
                  })
                  }}
                 />
