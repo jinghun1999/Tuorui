@@ -96,7 +96,7 @@ class AddPet extends Component {
                     _this.setState({
                         colorNameData: colorNameData,
                         colorData: colorData,
-                        colorName: _color == '' ? colorNameData[0] : _color
+                        colorName: _color,
                     })
                 }
             })

@@ -22,6 +22,7 @@ import Loading from '../../commonview/Loading';
 import { toastShort } from '../../util/ToastUtil';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Picker from 'react-native-picker';
+import CheckBox from 'react-native-check-box';
 class FeeSettlement extends React.Component {
     constructor(props) {
         super(props);
@@ -40,6 +41,7 @@ class FeeSettlement extends React.Component {
             balanceSwitch: false,
             prepaySwitch: false,
             oddChange: 0,
+            checkedData:[],
         }
     }
 
@@ -65,6 +67,7 @@ class FeeSettlement extends React.Component {
                 if (data.Message !== null && data.Sign) {
                     data.Message.FSADetalList.forEach((item, index, array)=> {
                         _this.state.totalAmount += item.TotalCost;
+                        _this.state.checkedData.push(item.ItemCode)
                     })
                     //预付金
                     _this.state.prepayMoney = data.Message.CurrentGest.PrepayMoney;
@@ -86,7 +89,6 @@ class FeeSettlement extends React.Component {
         }, function (err) {
             toastShort(err)
         })
-
 
     }
 
@@ -307,22 +309,32 @@ class FeeSettlement extends React.Component {
         this.pickerState.toggle();
     }
 
-    verifyNum(val) {
-        var re = /^\d+(\.\d+)?$/;
-        var value = val;
-        if (!re.test(val)) {
-            return false;
-        }
-        return value;
+    onClick(fee) {
+        let _this =this;
+        let _checked=[];
+        _checked.forEach((item,index,array)=>{
+            if(item.ItemCode==fee.ItemCode){
+                _checked.splice(index,item.length);
+                toastShort('相同ItemCode:'+index);
+            }else{
+                _checked.push(fee.ItemCode);
+                toastShort('不相同:'+index);
+            }
+        })
+        toastShort('finally:'+_checked.length);
+        _this.setState({
+            checkedData:_checked
+        });
+
     }
 
     _renderRow(fee) {
-        var busiTypeCode = fee.BusiTypeCode;
         return (
             <View style={AppStyle.row}>
+                <CheckBox style={{padding:5}} onClick={()=>this.onClick(fee)} isChecked={true} />
                 <View style={{flex:1, marginRight:10,}}>
                     <View style={{flex:1, flexDirection:'row'}}>
-                        <Text style={[AppStyle.titleText,{flex:1,}]}>类型: {this.state.businesCates[busiTypeCode]}</Text>
+                        <Text style={[AppStyle.titleText,{flex:1,}]}>类型: {this.state.businesCates[fee.BusiTypeCode]}</Text>
                         <Text style={{fontSize:18,color:'#FF8040'}}>¥{fee.InfactPrice}</Text>
                     </View>
                     <View style={{flex:1, flexDirection:'row'}}>
@@ -333,6 +345,7 @@ class FeeSettlement extends React.Component {
             </View>
         )
     }
+
 
     render() {
         var setBody = <Loading type='text'/>;
@@ -374,7 +387,7 @@ class FeeSettlement extends React.Component {
                     </View>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>预付金</Text>
-                        <Text style={AppStyle.rowVal}>{this.state.prepayMoney}</Text>
+                        <Text style={AppStyle.rowVal}>{this.state.prepayMoney.toString()}</Text>
                         <Switch
                             onValueChange={(value) => {
                             if(this.state.prepayMoney==0){this.setState({prepaySwitch: false})}
@@ -384,7 +397,7 @@ class FeeSettlement extends React.Component {
                     </View>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>余额</Text>
-                        <Text style={AppStyle.rowVal}>{this.state.vipAccount}</Text>
+                        <Text style={AppStyle.rowVal}>{this.state.vipAccount.toString()}</Text>
                         <Switch
                             onValueChange={(value) => {
                             if(this.state.vipAccount==0){this.setState({balanceSwitch: false})}
@@ -394,19 +407,19 @@ class FeeSettlement extends React.Component {
                     </View>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>折扣金额</Text>
-                        <TextInput value={this.state.discount.toString()}
+                        <TextInput value={this.state.discount}
                                    underlineColorAndroid={'transparent'}
                                    editable={true}
                                    keyboardType={'numeric'}
                                    style={AppStyle.input}
                                    onChangeText={(text)=>{
-                                    this.setState({discount:text})
-                                   var d = parseFloat(text);
+                                    this.setState({discount:text.toString()})
+                                   var d = parseFloat(text.toString());
                                    if(!d || isNaN(d)){
                                    this.setState({discount:0})
                                    return false;
                                    }else{
-                                    this.setState({discount:parseFloat(text),})
+                                    this.setState({discount:parseFloat(text).toString(),})
                                    }
                                    }}/>
                     </View>
@@ -423,14 +436,15 @@ class FeeSettlement extends React.Component {
                                    keyboardType={'numeric'}
                                    style={AppStyle.input}
                                    onChangeText={(text)=>{
-                                   this.setState({money:text})
-                                   var d = parseFloat(text);
-                                   if(!d){
+                                   this.setState({money:text.toString()})
+                                   var d = parseFloat(text.toString());
+                                   if(!d || isNaN(d)){
                                    this.setState({money:0});
                                    return false;
                                    }else{
-                                    var val =this.verifyNum(text)
-                                    this.setState({money:val})
+                                   var reg= /[^\d\.]/;
+                                    var val= text.replace(reg,'')
+                                    this.setState({money:val.toString()})
                                     //如果支付金额大于应支付金额，显示找零
                                    var p = this.state.totalAmount-this.state.discount;
                                    if(this.state.prepayMoney+this.state.vipAccount<this.state.totalAmount-this.state.discount){

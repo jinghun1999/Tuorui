@@ -84,9 +84,10 @@ class MemberDetails extends Component {
                     } else {
                         dataSource = data.Message;
                     }
-                    var gestStatus = _this.props.memberInfo.Status;
-                    var gestStatusName='';
-                    if(gestStatus=='SM00001'){gestStatusName='正常'}else{gestStatusName='停用'}
+                    var gestStatus = _this.props.memberInfo.Status,gestSex = _this.props.memberInfo.GestSex;
+                    var gestStatusName='',sex='';
+                    if(gestStatus=='SM00001'){gestStatusName='正常'}else{gestStatusName='停用'};
+                    if(gestSex=='DM00001'){sex='男'}if(gestSex=='DM00002'){sex='女'};
                     _this.setState({
                         petSource: dataSource,
                         memberLoaded: true,
@@ -94,7 +95,7 @@ class MemberDetails extends Component {
                         memberName: _this.props.memberInfo.GestName,
                         birthDate: _this.props.memberInfo.GestBirthday,
                         memberPhone: _this.props.memberInfo.MobilePhone,
-                        memberSex: _this.props.memberInfo.GestSex,
+                        memberSex: sex,
                         memberAddress: _this.props.memberInfo.GestAddress,
                         memberRemark: _this.props.memberInfo.Remark,
                         memberState:gestStatusName,

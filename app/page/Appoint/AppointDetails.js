@@ -41,17 +41,20 @@ class AppointDetails extends React.Component {
             NetUtil.get(CONSTAPI.HOST + '/Pet/GetModel?ID=' + _this.props.appointInfo.PetID, header, function (data) {
                 let ds = data.Message;
                 if (data.Sign && ds != null) {
-                    let petSexCode = ds.PetSex, petSex;
+                    let petSexCode = ds.PetSex;
+                    /*toastShort(petSexCode)
                     if (petSexCode == 'DM00004') {
                         petSex = '雌性'
-                    } else {
+                    } else if(petSexCode =='DM00003'){
                         petSex = '雄性'
-                    }
+                    }else if(petSexCode=='DM00035'){
+                        petSex='其他'
+                    }*/
                     _this.setState({
                         petBirthday: ds.PetBirthday,
                         petRace: ds.PetRace,
                         petWeight: ds.PetWeight,
-                        petSex: petSex,
+                        petSex: petSexCode,
                         loaded: true,
                     });
                 } else {
