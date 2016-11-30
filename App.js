@@ -217,8 +217,9 @@ class App extends Component {
                          <Text style={{fontSize:15}}>拓瑞检测</Text>
                          </View>
                          </TouchableOpacity>*/}
-                        <View style={{flex:1}}></View>
+                        <View style={{flex:1,}}></View>
                     </View>
+                    <View style={{height:30,}}></View>
                 </ScrollView>);
         } else {
             body = (
