@@ -43,7 +43,7 @@ class AddPet extends Component {
             colorNameData: [''],
             colorName: '',
             colorData: [],
-            petWeight: 0,
+            petWeight: null,
             dogBandID: '',
             dis:false,
         };
@@ -80,10 +80,14 @@ class AddPet extends Component {
             NetUtil.postJson(CONSTAPI.HOST + '/UserDictDetail/GetModelListWithSort', postData, header, function (data) {
                 if (data.Sign && data.Message != null) {
                     var _colorCode='';
-                    if(_this.state.isAdd){
+                    if(_this.props.isAdd){
                         _this.setState({
                             colorData:data.Message,
                         })
+                    }
+                    if(!_this.props.isAdd){
+                        //显示颜色
+                        _colorCode=_this.props.petSource.PetSkinColor;
                     }
                     var colorData = data.Message, colorNameData = [], colorCode = _colorCode, _color = '';
                     data.Message.forEach((item, index, array)=> {
@@ -92,7 +96,6 @@ class AddPet extends Component {
                         }
                         colorNameData.push(item.value_nameCN)
                     })
-
                     _this.setState({
                         colorNameData: colorNameData,
                         colorData: colorData,
@@ -193,7 +196,7 @@ class AddPet extends Component {
                 let _color = _this.state.colorName, _colorCode = '';
                 _this.state.colorData.forEach((item, index, array)=> {
                     if (item.value_nameCN == _color) {
-                        item.Code = _colorCode;
+                        _colorCode=item.Code;
                     }
                 })
                 let item = {
@@ -251,7 +254,7 @@ class AddPet extends Component {
                 let _color = _this.state.colorName, _colorCode = '';
                 _this.state.colorData.forEach((item, index, array)=> {
                     if (item.value_nameCN == _color) {
-                        item.Code = _colorCode;
+                          _colorCode=item.Code;
                     }
                 })
                 let item = {
@@ -454,7 +457,7 @@ class AddPet extends Component {
                         <Text style={AppStyle.rowTitle}>体重</Text>
                         {this.state.edit === '保存' ?
                                 <TextInput
-                                    value={this.state.petWeight}
+                                    value={this.state.petWeight.toString()}
                                     editable={true}
                                     underlineColorAndroid={'transparent'}
                                     keyboardType={'numeric'}

@@ -293,6 +293,7 @@ class MemberDetails extends Component {
                 params: {
                     headTitle: '宠物详情',
                     isAdd: false,
+                    detailID:2,
                     member: {
                         name: _this.props.memberInfo.GestName,
                         phone: _this.props.memberInfo.MobilePhone,
