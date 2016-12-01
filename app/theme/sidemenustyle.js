@@ -1,8 +1,9 @@
 /**
  * Created by tuorui on 2016/11/9.
  */
-import { StyleSheet, } from 'react-native';
+import { StyleSheet,Dimensions } from 'react-native';
 import theme from './theme';
+const width=Dimensions.get('window').width;
 let Sidemenustyle = StyleSheet.create({
     menu: {
         flex: 1,
@@ -50,7 +51,7 @@ let Sidemenustyle = StyleSheet.create({
         borderColor:'#ccc',
     },
     datePic:{
-        flex:1,
+        width:(width/2)-100,
     },
     datePickerView:{
         flexDirection:'row',
