@@ -15,6 +15,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import ComIconView from './app/commonview/ComIconView';
 import MyAccount from './app/page/uc/MyAccount';
 import Setting from './app/page/uc/Setting';
+import Collect from './app/page/uc/Collect';
 import IndexPage from './Index';
 import NButton from './app/commonview/NButton';
 class UC extends React.Component {
@@ -42,6 +43,16 @@ class UC extends React.Component {
             navigator.push({
                 name: 'Setting',
                 component: Setting,
+                params: {}
+            })
+        }
+    }
+    _collect(){
+        const { navigator } = this.props;
+        if (navigator) {
+            navigator.push({
+                name: 'Collect',
+                component: Collect,
                 params: {}
             })
         }
@@ -116,11 +127,11 @@ class UC extends React.Component {
                     <View style={{backgroundColor:'#fff', marginTop:15, marginBottom:30}}>
                         <ComIconView text="我的信息" icon={'ios-contact'} color={'#00BBFF'}
                                      onPress={this._myInfo.bind(this)}/>
+                        <ComIconView text="我的收藏" icon={'ios-star'} color={'#FF6666'}
+                                     onPress={this._collect.bind(this)}/>
                         {/*<ComIconView text="邀请朋友" icon={'md-contacts'} color={'#FF3333'}
                          onPress={this._more.bind(this)}/>
                          <ComIconView text="我的问题" icon={'ios-help-circle'} color={'#BDB76B'}
-                         onPress={this._more.bind(this)}/>
-                         <ComIconView text="我的收藏" icon={'ios-star'} color={'#FF6666'}
                          onPress={this._more.bind(this)}/>
                          <ComIconView text="我的优惠券" icon={'ios-card'} color={'#9370DB'}
                          onPress={this._more.bind(this)}/>
