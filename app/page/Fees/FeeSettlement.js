@@ -67,7 +67,6 @@ class FeeSettlement extends React.Component {
                 if (data.Message !== null && data.Sign) {
                     data.Message.FSADetalList.forEach((item, index, array)=> {
                         _this.state.totalAmount += item.TotalCost;
-                        _this.state.checkedData.push(item.ItemCode)
                     })
                     //预付金
                     _this.state.prepayMoney = data.Message.CurrentGest.PrepayMoney;
@@ -78,6 +77,9 @@ class FeeSettlement extends React.Component {
                         dataSource: data.Message.FSADetalList,
                         businesCates: data.Message.BusinesCates,
                         loaded: true,
+                    })
+                    _this.state.dataSource.forEach((d)=>{
+                        _this.state.checkedData.push(d.RelationID)
                     })
                 } else {
                     toastShort("获取数据失败：" + data.Message);
@@ -311,21 +313,24 @@ class FeeSettlement extends React.Component {
 
     onClick(fee) {
         let _this =this;
-        let _checked=[];
-        _checked.forEach((item,index,array)=>{
-            if(item.ItemCode==fee.ItemCode){
-                _checked.splice(index,item.length);
-                toastShort('相同ItemCode:'+index);
+        _this._check(fee.RelationID);
+    }
+    _check(val){
+        let _this = this;
+        var dataSource = [];
+        _this.state.checkedData.forEach((item,index,array)=>{
+            alert(val)
+            if(item===val){
+                dataSource.splice(index,item.length);
+                alert(1)
             }else{
-                _checked.push(fee.ItemCode);
-                toastShort('不相同:'+index);
+                dataSource.push(val);
+                alert(2)
             }
         })
-        toastShort('finally:'+_checked.length);
         _this.setState({
-            checkedData:_checked
-        });
-
+            checkedData:dataSource,
+        })
     }
 
     _renderRow(fee) {
@@ -387,7 +392,7 @@ class FeeSettlement extends React.Component {
                     </View>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>预付金</Text>
-                        <Text style={AppStyle.rowVal}>{this.state.prepayMoney.toString()}</Text>
+                        <Text style={AppStyle.rowVal}>{this.state.prepayMoney}</Text>
                         <Switch
                             onValueChange={(value) => {
                             if(this.state.prepayMoney==0){this.setState({prepaySwitch: false})}
@@ -397,7 +402,7 @@ class FeeSettlement extends React.Component {
                     </View>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>余额</Text>
-                        <Text style={AppStyle.rowVal}>{this.state.vipAccount.toString()}</Text>
+                        <Text style={AppStyle.rowVal}>{this.state.vipAccount}</Text>
                         <Switch
                             onValueChange={(value) => {
                             if(this.state.vipAccount==0){this.setState({balanceSwitch: false})}
@@ -419,7 +424,7 @@ class FeeSettlement extends React.Component {
                                    this.setState({discount:0})
                                    return false;
                                    }else{
-                                    this.setState({discount:parseFloat(text).toString(),})
+                                    this.setState({discount:parseFloat(text),})
                                    }
                                    }}/>
                     </View>
