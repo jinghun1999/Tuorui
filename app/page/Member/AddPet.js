@@ -118,7 +118,7 @@ class AddPet extends Component {
                 petRace: _this.props.petSource.PetRace,
                 petState: _this.props.petSource.BirthStatus,
                 petBirthday: _this.props.petSource.PetBirthday,
-                petWeight: _this.props.petSource.PetWeight,
+                petWeight: _this.props.petSource.PetWeight?_this.props.petSource.PetWeight:'',
                 dogBandID: _this.props.petSource.DogBandID,
                 isUpdate: true,
                 petDataSource: _this.props.petSource,

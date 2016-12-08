@@ -32,7 +32,7 @@ class Login extends React.Component {
             pwd: '',
             user: '',
             code: '',
-            isConnected: null,
+            isConnected: true,
             connectionInfo:null,
         };
     }

@@ -516,10 +516,11 @@ class VaccineService extends Component {
                         if (vaccine.ItemCode !== item.ItemCode) {
                             newSource.push(item);
                         } else {
-                            let amount = _this.state.totalAmount - (vaccine.SellPrice ? vaccine.SellPrice : vaccine.TotalCost);
+                            let amount = _this.state.totalAmount - ((vaccine.SellPrice ? vaccine.SellPrice : vaccine.TotalCost)*(vaccine.ItemNum?vaccine.ItemNum:1));
+                            var _totalNum = _this.state.totalNum - (vaccine.ItemNum?parseInt(vaccine.ItemNum):parseInt(_this.state.num));
                             _this.setState({
                                 totalAmount: amount,
-                                totalNum: _this.state.totalNum - 1,
+                                totalNum:_totalNum ,
                             })
                         }
                     });
@@ -616,13 +617,15 @@ class VaccineService extends Component {
                                        let _price=vaccine.SellPrice ? vaccine.SellPrice : vaccine.ItemCost;
                                        vaccine.TotalCost=_price*text;
                                        let _countAmount=0;
+                                       var _totalNum=0;
                                        if(this.state.vaccine.length>1){
                                        this.state.vaccine.forEach((item,index,array)=>{
                                             if(item.ItemCode===vaccine.ItemCode){return false;}
-                                            _countAmount+=item.SellPrice*item.ItemNum;
+                                            _countAmount+=item.SellPrice*(item.ItemNum?item.ItemNum:this.state.num);
+                                            _totalNum += (item.ItemNum?parseFloat(item.ItemNum):parseFloat(this.state.num));
                                         })
                                        }
-                                        this.setState({totalAmount:_countAmount+(_price*text)})
+                                        this.setState({totalAmount:_countAmount+(_price*text),totalNum:(parseFloat(text)+parseFloat(_totalNum))})
                                        }}/>
                             </View>
                             : <Text style={AppStyle.mpTitle}>{vaccine.ItemNum.toString() ? vaccine.ItemNum.toString() : 1}</Text>

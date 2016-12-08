@@ -198,7 +198,7 @@ class BeautyServices extends React.Component {
                     _this.state.beautySource.forEach((item, index, array)=> {
                         if (beauty.ItemCode === item.ItemCode) {
                             _this.state.totalAmount -= beauty.SellPrice*(beauty.InputCount?beauty.InputCount:this.state.num);
-                            _this.state.totalNum -= 1;
+                            _this.state.totalNum -= (beauty.InputCount?parseInt(beauty.InputCount):this.state.num);
                         } else {
                             newSource.push(item);
                         }
@@ -548,6 +548,7 @@ class BeautyServices extends React.Component {
                                        beauty.InputCount=text;
                                        beauty.TotalCost=beauty.SellPrice*beauty.InputCount?beauty.InputCount:this.state.num;
                                        let _countAmount=0;
+                                       var _totalNum=0;
                                        if(!text || isNaN(text)){
                                         this.setState({num:1})
                                         return false;
@@ -556,9 +557,11 @@ class BeautyServices extends React.Component {
                                             this.state.beautySource.forEach((item,index,array)=>{
                                                 if(item.ItemCode===beauty.ItemCode){return false;}
                                                 _countAmount+=item.SellPrice*(item.InputCount?item.InputCount:this.state.num)
+                                                _totalNum+=(item.InputCount?parseInt(item.InputCount):parseInt(this.state.num));
                                             })
                                         }
-                                        this.setState({totalAmount:_countAmount+(beauty.SellPrice*(beauty.InputCount?beauty.InputCount:this.state.num))})
+                                        this.setState({totalAmount:_countAmount+(beauty.SellPrice*(beauty.InputCount?beauty.InputCount:this.state.num)),
+                                                        totalNum:(parseInt(_totalNum)+parseInt(text))})
                                        }}/>
                     </View>
                     : <Text style={AppStyle.mpTitle}>{beauty.InputCount ? beauty.InputCount : 1}</Text>
