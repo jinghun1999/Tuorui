@@ -43,7 +43,7 @@ class AddPet extends Component {
             colorNameData: [''],
             colorName: '',
             colorData: [],
-            petWeight: null,
+            petWeight: '',
             dogBandID: '',
             dis:false,
         };
@@ -351,7 +351,7 @@ class AddPet extends Component {
         //验证是否输入的为数字
         let _this= this;
         var re =/^[1-9]\d*$|^0$/;
-        var petWeight = _this.state.petWeight;
+        var petWeight = _this.state.petWeight.toString();
         if(isNaN(petWeight)|| petWeight ===''){
             toastShort('请输入数字');
         }
@@ -466,7 +466,7 @@ class AddPet extends Component {
                                     onChangeText={(text)=>{this.setState({ petWeight:text.toString() })}}
                                 />
                             :
-                            <Text style={AppStyle.rowVal}>{this.state.petWeight}</Text>
+                            <Text style={AppStyle.rowVal}>{this.state.petWeight.toString()}</Text>
                         }
                         <Text>kg</Text>
                     </View>

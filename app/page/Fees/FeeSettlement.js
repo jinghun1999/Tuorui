@@ -41,7 +41,7 @@ class FeeSettlement extends React.Component {
             balanceSwitch: false,
             prepaySwitch: false,
             oddChange: 0,
-            checkedData:[],
+            checkedData: [],
         }
     }
 
@@ -78,7 +78,7 @@ class FeeSettlement extends React.Component {
                         businesCates: data.Message.BusinesCates,
                         loaded: true,
                     })
-                    _this.state.dataSource.forEach((d)=>{
+                    _this.state.dataSource.forEach((d)=> {
                         _this.state.checkedData.push(d.RelationID)
                     })
                 } else {
@@ -109,7 +109,8 @@ class FeeSettlement extends React.Component {
             return false;
         }
         //判断选择了余额 选择了预付金 或者全选 或者全不选
-        let money = (_this.state.money - _this.state.oddChange ) + _this.state.discount;
+        //支付金额+折扣额-找零
+        var money = parseFloat(_this.state.money)+parseFloat(_this.state.discount)-parseFloat(_this.state.oddChange);
         if (_this.state.balanceSwitch == false && _this.state.prepaySwitch == false) {
             if (_this.state.money == null || _this.state.money == '' || _this.state.money == 0) {
                 toastShort('请输入金额')
@@ -312,40 +313,34 @@ class FeeSettlement extends React.Component {
     }
 
     onClick(fee) {
-        let _this =this;
+        let _this = this;
         _this._check(fee.RelationID);
     }
-    _check(val){
+
+    _check(val) {
         let _this = this;
-        var dataSource = [];
-        _this.state.checkedData.forEach((item,index,array)=>{
-            alert(val)
-            if(item===val){
-                dataSource.splice(index,item.length);
-                alert(1)
-            }else{
+        var dataSource = _this.state.checkedData;
+        alert(dataSource[0])
+        dataSource.forEach((item, index, array)=> {
+            if (item === val) {
+                dataSource.splice(index, 1);
+                toastShort('remove')
+            } else {
                 dataSource.push(val);
-                alert(2)
+                toastShort('add')
             }
         })
-        _this.setState({
-            checkedData:dataSource,
-        })
+
     }
 
     _renderRow(fee) {
         return (
             <View style={AppStyle.row}>
-                <CheckBox style={{padding:5}} onClick={()=>this.onClick(fee)} isChecked={true} />
-                <View style={{flex:1, marginRight:10,}}>
-                    <View style={{flex:1, flexDirection:'row'}}>
-                        <Text style={[AppStyle.titleText,{flex:1,}]}>类型: {this.state.businesCates[fee.BusiTypeCode]}</Text>
-                        <Text style={{fontSize:18,color:'#FF8040'}}>¥{fee.InfactPrice}</Text>
-                    </View>
-                    <View style={{flex:1, flexDirection:'row'}}>
-                        <Text style={{flex:1,}}>名称:{fee.ItemName}</Text>
-                        <Text>数量:{fee.TotalNum}</Text>
-                    </View>
+                <CheckBox style={{padding:5}} onClick={(data)=>{this.onClick(fee)}} isChecked={true}/>
+                <View style={{flex:1, flexDirection:'row',justifyContent:'center',alignItems:'center',marginRight:10,}}>
+                    <Text style={{flex:1,fontSize:16,fontWeight:'bold',}}>{fee.ItemName}</Text>
+                    <Text style={{fontSize:16,}}>数量:{fee.TotalNum}</Text>
+                    <Text style={{fontSize:16,color:'#FF8040',flex:1,textAlign:'right'}}>¥{fee.InfactPrice}</Text>
                 </View>
             </View>
         )
@@ -412,19 +407,21 @@ class FeeSettlement extends React.Component {
                     </View>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>折扣金额</Text>
-                        <TextInput value={this.state.discount}
+                        <TextInput value={this.state.discount.toString()}
                                    underlineColorAndroid={'transparent'}
                                    editable={true}
                                    keyboardType={'numeric'}
                                    style={AppStyle.input}
                                    onChangeText={(text)=>{
-                                    this.setState({discount:text.toString()})
-                                   var d = parseFloat(text.toString());
+                                    this.setState({discount:text})
+                                   var d = parseFloat(text);
                                    if(!d || isNaN(d)){
                                    this.setState({discount:0})
                                    return false;
                                    }else{
-                                    this.setState({discount:parseFloat(text),})
+                                   var reg= /[^\d.]/g;
+                                    var val= text.replace(reg,'')
+                                    this.setState({discount:val,})
                                    }
                                    }}/>
                     </View>
@@ -435,21 +432,21 @@ class FeeSettlement extends React.Component {
                     </TouchableOpacity>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>支付金额</Text>
-                        <TextInput value={this.state.money}
+                        <TextInput value={this.state.money.toString()}
                                    underlineColorAndroid={'transparent'}
                                    editable={true}
                                    keyboardType={'numeric'}
                                    style={AppStyle.input}
                                    onChangeText={(text)=>{
-                                   this.setState({money:text.toString()})
-                                   var d = parseFloat(text.toString());
+                                   this.setState({money:text})
+                                   var d = parseFloat(text);
                                    if(!d || isNaN(d)){
                                    this.setState({money:0});
                                    return false;
                                    }else{
-                                   var reg= /[^\d\.]/;
+                                   var reg= /[^\d.]/g;
                                     var val= text.replace(reg,'')
-                                    this.setState({money:val.toString()})
+                                    this.setState({money:val})
                                     //如果支付金额大于应支付金额，显示找零
                                    var p = this.state.totalAmount-this.state.discount;
                                    if(this.state.prepayMoney+this.state.vipAccount<this.state.totalAmount-this.state.discount){
@@ -475,9 +472,9 @@ class FeeSettlement extends React.Component {
                 <View style={AppStyle.feeView}>
                     <View style={styles.payStyle}>
                         <Text style={styles.amountStyle}>应支付: </Text>
-                        <Text style={styles.priceStyle}>¥{this.state.totalAmount - this.state.discount}</Text>
+                        <Text style={styles.priceStyle}>¥{(this.state.totalAmount - this.state.discount).toFixed(2)}</Text>
                         <Text style={styles.amountStyle}> 找零: </Text>
-                        <Text style={styles.priceStyle}>¥ {this.state.oddChange}</Text>
+                        <Text style={styles.priceStyle}>¥ {this.state.oddChange.toFixed(2)}</Text>
                     </View>
                     <TouchableOpacity style={AppStyle.feeBtn} onPress={this.onSettlement.bind(this)}>
                         <Text style={AppStyle.feeText}>提交订单</Text>

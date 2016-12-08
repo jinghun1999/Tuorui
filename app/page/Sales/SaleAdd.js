@@ -109,7 +109,7 @@ export default class SaleAdd extends React.Component {
                                 _exists = true;
                             }
                         });
-                        _goods.RealPay = (_goods.MustPay - _goods.DisCount).toFixed(1);
+                        _goods.RealPay = (_goods.MustPay - _goods.DisCount).toFixed(2);
                         if (!_exists) {
                             _goods.items.push(good);
                         }
@@ -301,18 +301,21 @@ export default class SaleAdd extends React.Component {
                     text: '确定', onPress: () => {
                     let gs = [];
                     let selectedgoods = _this.state.SelectedGoods;
+                    let disCount = 0,mustPay=0;
                     selectedgoods.items.forEach(function (item, i) {
                         if (good.ID !== item.ID) {
                             gs.push(item);
+                            mustPay+=item.GoodAmount;
                         }
                     });
                     selectedgoods.items = gs;
-                    selectedgoods.DisCount = 0;
-                    selectedgoods.MustPay = 0;
-                    selectedgoods.RealPay = 0;
+                    selectedgoods.DisCount = disCount;
+                    selectedgoods.MustPay = mustPay;
+                    selectedgoods.RealPay = (mustPay-disCount).toFixed(2);
+
                     _this.setState({
                         SelectedGoods: selectedgoods,
-                        goodAmountInput: '0',
+                        goodAmountInput: (mustPay-disCount).toString(),
                     });
                 }
                 },
@@ -386,7 +389,7 @@ export default class SaleAdd extends React.Component {
                                 }else{
                                     var good = this.state.SelectedGoods;
                                     good.DisCount = d;
-                                    good.RealPay = (good.MustPay-d).toFixed(1);
+                                    good.RealPay = (good.MustPay-d).toFixed(2);
                                     this.setState({
                                         SelectedGoods: good,
                                         goodAmountInput: good.RealPay,

@@ -14,8 +14,9 @@ import {
     View,
     ToastAndroid,
     TextInput,
-    Alert
-    } from 'react-native';
+    Alert,
+    NetInfo,
+} from 'react-native';
 import Util from '../util/Util';
 import NetUtil from '../util/NetUtil';
 import Index from '../../Index';
@@ -23,6 +24,7 @@ import NButton from '../commonview/NButton';
 import Register from './Register';
 import FindPwd from './FindPwd';
 import { toastShort } from '../util/ToastUtil';
+import NetWorkTool from '../util/NetWorkTool';
 class Login extends React.Component {
     constructor(props) {
         super(props);
@@ -30,7 +32,30 @@ class Login extends React.Component {
             pwd: '',
             user: '',
             code: '',
+            isConnected: null,
+            connectionInfo:null,
         };
+    }
+
+    componentDidMount() {
+
+    }
+    checkConnectState(){
+        NetWorkTool.addEventListener(NetWorkTool.TAG_NETWORK_CHANGE,this._handleConnectivityChange);
+        //检测网络是否连接
+        NetInfo.isConnected.fetch().done(
+            (isConnected) => { this.setState({isConnected}); }
+        );
+    }
+    componentWillUnmount() {
+    }
+    removeListener(){
+        NetWorkTool.removeEventListener(NetWorkTool.TAG_NETWORK_CHANGE,this._handleConnectivityChange);
+    }
+    _handleConnectivityChange(isConnected) {
+        if(!isConnected){
+            toastShort('无网络');
+        }
     }
 
     _Login() {
@@ -44,7 +69,12 @@ class Login extends React.Component {
             toastShort('请输入密码')
             return;
         }
-
+        this.checkConnectState();
+        this.removeListener();
+        if(!this.state.isConnected){
+            toastShort('请检查网络状态');
+            return;
+        }
         var _this = this;
         const { navigator } = _this.props;
         try {
@@ -120,7 +150,7 @@ class Login extends React.Component {
                     ref='pwd'
                     onFocus={() => {this.refs.pwd.focus()}}
                     value={this.state.pwd}
-                    />
+                />
                 <View>
                     <NButton
                         underlayColor='#4169e1'

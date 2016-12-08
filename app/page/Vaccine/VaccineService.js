@@ -113,6 +113,7 @@ class VaccineService extends Component {
                     GestCode: _this.props.vaccine.GestCode,
                     PetName: _this.props.vaccine.PetName,
                     GestID: _this.props.vaccine.GestID,
+                    MobilePhone:_this.props.vaccine.MobilePhone,
                 },
                 enable: false,
                 edit: '编辑',

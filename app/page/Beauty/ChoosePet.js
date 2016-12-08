@@ -107,7 +107,7 @@ class ChoosePet extends Component {
             let header = NetUtil.headerClientAuth(user, hos);
             NetUtil.postJson(CONSTAPI.HOST + '/GestAndPet/GetPageRecord', postdata, header, function (data) {
                 if (data.Sign && data.Message != null) {
-                    let dataSource = _this.state.dataSource;
+                    let dataSource = _this.state.petDataSource;
                     if (isNext) {
                         data.Message.forEach((d)=> {
                             dataSource.push(d);
@@ -191,12 +191,17 @@ class ChoosePet extends Component {
         )
     }
 
+    _onEndReached() {
+        this._fetchData(this.state.kw,this.state.pageIndex + 1, true);
+    }
+
     render() {
         var body = <Loading type={'text'}/>
         if (this.state.loaded) {
             body = <ListView dataSource={this.state.ds.cloneWithRows(this.state.petDataSource)}
                              enableEmptySections={true}
                              renderRow={this._renderPet.bind(this)}
+                             onEndReached={this._onEndReached.bind(this)}
                 />
         }
         return (

@@ -99,6 +99,7 @@ class MemberDetails extends Component {
                         memberAddress: _this.props.memberInfo.GestAddress,
                         memberRemark: _this.props.memberInfo.Remark,
                         memberState:gestStatusName,
+
                     });
                 } else {
                     toastShort("获取数据错误，" + data.Exception);
@@ -108,10 +109,11 @@ class MemberDetails extends Component {
                 }
             })
             ///service/Api/Gest/GetVipUpdatePageConfig?id=875f40b2-c40f-4ef5-935e-ceba855fa491
-            NetUtil.get(CONSTAPI.HOST + '/Gest/GetVipAddPageConfig?', header, function (data) {
+            //http://test.tuoruimed.com/service/Api/Gest/GetVipUpdatePageConfig?id=4ce969ea-4ce6-492d-b911-164e147bf2b2
+            NetUtil.get(CONSTAPI.HOST + '/Gest/GetVipUpdatePageConfig?id='+memberId, header, function (data) {
                 if (data.Sign && data.Message != null) {
                     var levelData = data.Message.Levels, _level = [];
-                    var levelCode = _this.props.memberInfo.GestStyle;
+                    var levelCode = data.Message.Item.GestStyle;
                     var levelName='';
                     levelData.forEach((item, index, array)=> {
                         if(item.LevelCode ==levelCode){
@@ -119,7 +121,6 @@ class MemberDetails extends Component {
                         }
                         _level.push(item.LevelName);
                     });
-
                     _this.setState({
                         levelData: _level,
                         memberLevel:levelName,
@@ -227,7 +228,7 @@ class MemberDetails extends Component {
                             var _memberLevel =_this.state.memberLevel;
                             var _memberLevelCode = '';
                             _this.state.memberLevelData.forEach((item,index,array)=>{
-                                if(item.LevelName=_memberLevel){
+                                if(item.LevelName===_memberLevel){
                                     _memberLevelCode=item.LevelCode;
                                 }
                             })
