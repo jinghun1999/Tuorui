@@ -148,7 +148,7 @@ class VaccineService extends Component {
                         var _totalNum = 0
                         data.Message.forEach((item, index, array)=> {
                             _totalAmount += (item.ItemCost * item.ItemNum);
-                            _totalNum += 1;
+                            _totalNum += item.ItemNum;
                         })
                         _this.setState({
                             vaccine: data.Message,

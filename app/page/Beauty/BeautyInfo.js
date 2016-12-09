@@ -102,20 +102,42 @@ class BeautyServices extends React.Component {
             });
             //查看
             if (!_this.props.canEdit) {
-                _this.setState({
+                // //http://test.tuoruimed.com/service/Api/Service/GetUpdateServiceConfig?id=f8f95c5e-95e8-4c94-9de4-847ff334f55a
+                NetUtil.get(CONSTAPI.HOST + '/Service/GetUpdateServiceConfig?id='+_this.props.beautyInfo.ID,header,function(data){
+                    if(data.Sign && data.Message!=null){
+                        var dataSource = data.Message.ICList;
+                        var _totalNum=0;
+                        dataSource.forEach((d)=>{
+                            _totalNum+=d.InputCount;
+                        })
+                        _this.state.totalNum = _totalNum;
+                        var itemSource = data.Message.Item;
+                        _this.setState({
+                            beautySource:dataSource,
+                            petSource: _this.props.beautyInfo,
+                            servicesFWID:itemSource.ServiceCode,
+                            serviceName: itemSource.HairdresserName,
+                            servicesID: itemSource.HairdresserID,
+                            totalAmount: itemSource.TotalCost,
+                            paidStatus:itemSource.PaidStatus,
+                            edit: '编辑',
+                        })
+                    }
+                })
+
+                /*_this.setState({
                     petSource: _this.props.beautyInfo,
                     servicesFWID: _this.props.beautyInfo.ServiceCode,
                     serviceName: _this.props.beautyInfo.HairdresserName,
                     servicesID: _this.props.beautyInfo.HairdresserID,
-                    totalNum: _this.props.beautyInfo.TotalNum,
                     totalAmount: _this.props.beautyInfo.TotalCost,
                     paidStatus:_this.props.beautyInfo.PaidStatus,
                     edit: '编辑',
-                })
+                })*/
                 if (_this.props.beautyInfo.PaidStatus == 'SM00051') {
                     _this.setState({isEdit: false,})
                 }
-                var postdata = [{
+                /*var postdata = [{
                     "Childrens": null,
                     "Field": "ServiceID",
                     "Title": null,
@@ -137,7 +159,7 @@ class BeautyServices extends React.Component {
                         });
                         toastShort("获取数据失败：" + data.Exception);
                     }
-                })
+                })*/
             }
         }, function (err) {
             toastShort(err);
@@ -538,7 +560,7 @@ class BeautyServices extends React.Component {
                 <Text style={AppStyle.mpTitle}>数量:</Text>
                 {this.state.edit === '保存' ?
                     <View style={AppStyle.mpBorder}>
-                        <TextInput value={beauty.InputCount}
+                        <TextInput value={beauty.InputCount.toString()}
                                    defaultValue={this.state.num.toString()}
                                    editable={true}
                                    underlineColorAndroid={'transparent'}
@@ -556,7 +578,7 @@ class BeautyServices extends React.Component {
                                         if(this.state.beautySource.length>1){
                                             this.state.beautySource.forEach((item,index,array)=>{
                                                 if(item.ItemCode===beauty.ItemCode){return false;}
-                                                _countAmount+=item.SellPrice*(item.InputCount?item.InputCount:this.state.num)
+                                                _countAmount+=item.SellPrice*(item.InputCount?parseInt(item.InputCount):parseInt(this.state.num))
                                                 _totalNum+=(item.InputCount?parseInt(item.InputCount):parseInt(this.state.num));
                                             })
                                         }
