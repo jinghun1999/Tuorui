@@ -383,7 +383,7 @@ class FeeSettlement extends React.Component {
                     </View>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>总消费额</Text>
-                        <Text style={[AppStyle.rowVal,{color:'#FF9D6F',fontSize:18,}]}>¥ {this.state.totalAmount}</Text>
+                        <Text style={[AppStyle.rowVal,{color:'#FF9D6F',fontSize:18,}]}>¥ {this.state.totalAmount.toFixed(2)}</Text>
                     </View>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>预付金</Text>
