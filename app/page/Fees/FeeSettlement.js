@@ -491,7 +491,7 @@ class FeeSettlement extends React.Component {
                     selectedValue={this.state.paidStatus}
                     onPickerDone={(cardState)=>{
                         this.setState({
-                            paidStatus:cardState,
+                            paidStatus:cardState[0]?cardState[0]:'',
                         })
                     }}
                 />
