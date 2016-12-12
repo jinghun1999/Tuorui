@@ -33,9 +33,9 @@ class FeesInfo extends Component {
             dataSource: [],
             loaded: false,
             selectedItem: '全部',
-            value: null,
+            value: '',
             pageIndex: 1,
-            pageSize: 10,
+            pageSize: 15,
             isOpen: false,
         }
     }
@@ -133,8 +133,30 @@ class FeesInfo extends Component {
                     "pageSize":_this.state.pageSize
                 }
             }
-            //http://test.tuoruimed.com/service/Api/NoPaidGest/GetPageRecord
-            NetUtil.postJson(CONSTAPI.HOST + '/NoPaidGest/GetPageRecord', postdata, header, function (data) {
+            //http://test.tuoruimed.com/service/Api/NoPaidGest/GetPageRecord?gestInfo=&index=1&pageSize=15
+            let API= CONSTAPI.HOST + '/NoPaidGest/GetPageRecord?gestInfo='+_this.state.value+'&index='+_this.state.pageIndex+'&pageSize='+_this.state.pageSize
+            NetUtil.get(API,header,function(data){
+                if (data.Sign && data.Message != null) {
+                    let dataSource = _this.state.dataSource;
+                    if (isNext) {
+                        data.Message.forEach((d)=> {
+                            dataSource.push(d);
+                        });
+                    } else {
+                        dataSource = data.Message;
+                    }
+                    _this.setState({
+                        dataSource: dataSource,
+                        loaded: true,
+                    });
+                } else {
+                    toastShort("获取数据失败：" + data.Message);
+                    _this.setState({
+                        loaded: true,
+                    });
+                }
+            })
+            /*NetUtil.postJson(CONSTAPI.HOST + '/NoPaidGest/GetPageRecord', postdata, header, function (data) {
                 if (data.Sign && data.Message != null) {
                     let dataSource = _this.state.dataSource;
                     if (isNext) {
@@ -211,12 +233,13 @@ class FeesInfo extends Component {
                         toastShort("获取记录数失败：" + data.Message);
                     }
                 });
-            }
+            }*/
         },function(err){
             toastShort(err);
         })
 
     }
+
 
     _onFeeDetails(fee){
         let _this =this;
@@ -258,22 +281,6 @@ class FeesInfo extends Component {
         this.fetchData(this.state.pageIndex + 1, true);
     }
 
-    _renderFooter() {
-        //计算总页数，如果最后一页，则返回没有数据啦~
-        let totalPage = this.state.recordCount / this.state.pageSize;
-        if (this.state.pageIndex >= totalPage) {
-            return (
-                <View style={AppStyle.noMore}>
-                </View>
-            )
-        }
-        return (
-            <View style={{height: 120}}>
-                <ActivityIndicator />
-            </View>
-        );
-    }
-
     toggle() {
         this.setState({
             isOpen: !this.state.isOpen,
@@ -293,7 +300,6 @@ class FeesInfo extends Component {
                              renderRow={this._onRenderRow.bind(this)}
                              onEndReached={this._onEndReached.bind(this)}
                              enableEmptySections={true}
-                             renderFooter={this._renderFooter.bind(this)}
             />
         }
         const menu =<FeesMenu value={this.state.value}

@@ -14,6 +14,7 @@ import{
     TouchableOpacity,
     ListView,
     InteractionManager,
+    Dimensions,
     } from 'react-native';
 import Head from './app/commonview/Head';
 import IconButton from './app/commonview/HomeIcon';
@@ -32,6 +33,7 @@ import { toastShort } from './app/util/ToastUtil';
 //import Immutable from 'immutable';
 import Icon from 'react-native-vector-icons/Ionicons';
 //var {List, Map}= Immutable;
+const width=Dimensions.get('window').width;
 class App extends Component {
     constructor(props) {
         super(props);
@@ -145,7 +147,7 @@ class App extends Component {
                                    source={{uri:'http://www.easyicon.net/api/resizeApi.php?id=1173423&size=96'}}/>
                             <TouchableOpacity onPress={this.clearHospital.bind(this)} style={styles.titleViewStyle}>
                                 <Text style={styles.titleTextStyle}>{this.state.hospital.FULLName}</Text>
-                                <Text>地址：{this.state.hospital.Address}</Text>
+                                <Text style={{width:width-100}}>地址：{this.state.hospital.Address}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

@@ -438,7 +438,8 @@ class BeautyList extends React.Component {
         }
         const menu = <BeautyMenu onItemSelected={(item)=>{
             if(item=='submit'){
-                this.setState({isOpen:false,selectedItem:'时间:'+this.state.dateFrom+'至'+this.state.dateTo})
+                var searchName = '时间:'+this.state.dateFrom+'至'+this.state.dateTo;
+                this.setState({isOpen:false,selectedItem:searchName})
                 if(this.state.paidStatus!=null && this.state.paidStatus!=''){
                     var status='';
                     if(this.state.paidStatus=='SM00051'){
@@ -446,10 +447,10 @@ class BeautyList extends React.Component {
                     }else if(this.state.paidStatus=='SM00040'){
                         status='未支付'
                     }
-                    this.setState({selectedItem:this.state.selectedItem+' 支付状态:'+status})
+                    this.setState({selectedItem:searchName+' 支付状态:'+status})
                 }
                 if(this.state.value != null && this.state.value != ''){
-                    this.setState({selectedItem:this.state.selectedItem+' 关键字:'+this.state.value})
+                    this.setState({selectedItem:searchName+' 关键字:'+this.state.value})
                 }
                this.fetchData(1, false);
                return false;
