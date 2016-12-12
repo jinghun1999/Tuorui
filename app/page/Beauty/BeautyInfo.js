@@ -323,7 +323,7 @@ class BeautyServices extends React.Component {
                             "BarCode": _beauty[i].BarCode,
                             "SellPrice": _beauty[i].SellPrice,
                             "InputCount": _beauty[i].InputCount?_beauty[i].InputCount:1,
-                            "TotalCost": _beauty[i].TotalCost,
+                            "TotalCost": _beauty[i].SellPrice*( _beauty[i].InputCount?_beauty[i].InputCount:1),
                             "PackageUnit": _beauty[i].PackageUnit,
                             "PaidStatus": "SM00040",
                             "PaidTime": null,
@@ -560,7 +560,7 @@ class BeautyServices extends React.Component {
                 <Text style={AppStyle.mpTitle}>数量:</Text>
                 {this.state.edit === '保存' ?
                     <View style={AppStyle.mpBorder}>
-                        <TextInput value={beauty.InputCount.toString()}
+                        <TextInput value={beauty.InputCount?beauty.InputCount.toString():this.state.num.toString()}
                                    defaultValue={this.state.num.toString()}
                                    editable={true}
                                    underlineColorAndroid={'transparent'}
@@ -568,7 +568,7 @@ class BeautyServices extends React.Component {
                                    style={AppStyle.input}
                                    onChangeText={(text)=>{
                                        beauty.InputCount=text;
-                                       beauty.TotalCost=beauty.SellPrice*beauty.InputCount?beauty.InputCount:this.state.num;
+                                       //beauty.TotalCost=beauty.SellPrice*(beauty.InputCount?beauty.InputCount:this.state.num);
                                        let _countAmount=0;
                                        var _totalNum=0;
                                        if(!text || isNaN(text)){
