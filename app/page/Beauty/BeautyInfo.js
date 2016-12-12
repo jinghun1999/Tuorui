@@ -406,7 +406,7 @@ class BeautyServices extends React.Component {
                             "BarCode": _beauty[i].BarCode,
                             "SellPrice": _beauty[i].SellPrice,
                             "InputCount": _beauty[i].InputCount?_beauty[i].InputCount:1,
-                            "TotalCost": _beauty[i].TotalCost,
+                            "TotalCost": _beauty[i].SellPrice*( _beauty[i].InputCount?_beauty[i].InputCount:1),
                             "PackageUnit": _beauty[i].PackageUnit,
                             "PaidStatus": _beauty[i].PaidStatus,
                             "PaidTime": _beauty[i].PaidTime,

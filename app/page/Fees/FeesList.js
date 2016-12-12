@@ -50,7 +50,7 @@ class FeesInfo extends Component {
 
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
-            this.fetchData(1, false);
+            this.fetchData(1,false);
         });
     }
 
@@ -58,83 +58,8 @@ class FeesInfo extends Component {
         let _this =this;
         NetUtil.getAuth(function (user, hos) {
             let header = NetUtil.headerClientAuth(user, hos);
-            let postdata = {
-                "items":[
-                ],
-                "sorts":[
-                    {
-                        "Field":"LastPaidTime",
-                        "Title":null,
-                        "Sort":{
-                            "Name":"Desc",
-                            "Title":"降序"
-                        },
-                        "Conn":0
-                    }
-                ],
-                "index":page,
-                "pageSize":_this.state.pageSize
-            }
-            if(_this.state.value!==null && _this.state.value!==''){
-                postdata ={
-                    "items":[
-                        {
-                            "Childrens":null,
-                            "Field":"GestCode",
-                            "Title":null,
-                            "Operator":{
-                                "Name":"like",
-                                "Title":"相似",
-                                "Expression":" @File like '%' + @Value + '%' "
-                            },
-                            "DataType":0,
-                            "Value":_this.state.value,
-                            "Conn":0
-                        },
-                        {
-                            "Childrens":null,
-                            "Field":"GestName",
-                            "Title":null,
-                            "Operator":{
-                                "Name":"like",
-                                "Title":"相似",
-                                "Expression":" @File like '%' + @Value + '%' "
-                            },
-                            "DataType":0,
-                            "Value":_this.state.value,
-                            "Conn":2
-                        },
-                        {
-                            "Childrens":null,
-                            "Field":"MobilePhone",
-                            "Title":null,
-                            "Operator":{
-                                "Name":"like",
-                                "Title":"相似",
-                                "Expression":" @File like '%' + @Value + '%' "
-                            },
-                            "DataType":0,
-                            "Value":_this.state.value,
-                            "Conn":2
-                        }
-                    ],
-                    "sorts":[
-                        {
-                            "Field":"LastPaidTime",
-                            "Title":null,
-                            "Sort":{
-                                "Name":"Desc",
-                                "Title":"降序"
-                            },
-                            "Conn":0
-                        }
-                    ],
-                    "index":page,
-                    "pageSize":_this.state.pageSize
-                }
-            }
             //http://test.tuoruimed.com/service/Api/NoPaidGest/GetPageRecord?gestInfo=&index=1&pageSize=15
-            let API= CONSTAPI.HOST + '/NoPaidGest/GetPageRecord?gestInfo='+_this.state.value+'&index='+_this.state.pageIndex+'&pageSize='+_this.state.pageSize
+            let API= CONSTAPI.HOST + '/NoPaidGest/GetPageRecord?gestInfo='+_this.state.value+'&index='+page+'&pageSize='+_this.state.pageSize
             NetUtil.get(API,header,function(data){
                 if (data.Sign && data.Message != null) {
                     let dataSource = _this.state.dataSource;
@@ -278,7 +203,9 @@ class FeesInfo extends Component {
     }
 
     _onEndReached() {
-        this.fetchData(this.state.pageIndex + 1, true);
+        let _this =this;
+        if(_this.state.pageSize>=_this.state.dataSource.length){return false;}
+        this.fetchData(_this.state.pageIndex+1,true);
     }
 
     toggle() {

@@ -296,7 +296,7 @@ class VaccineService extends Component {
                             "AssistantDoctorID": null,
                             "AssistantDoctorName": "",
                             "ItemNum": _vaccine[i].ItemNum ? _vaccine[i].ItemNum : 1,
-                            "TotalCost": _vaccine[i].TotalCost,
+                            "TotalCost": _vaccine[i].SellPrice*(_vaccine[i].ItemNum ? _vaccine[i].ItemNum : 1),
                             "Sign": null,
                             "EntID": "00000000-0000-0000-0000-000000000000",
                             "CreatedByID": "00000000-0000-0000-0000-000000000000",
