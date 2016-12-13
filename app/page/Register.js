@@ -145,8 +145,7 @@ class Register extends Component {
                     underlineColorAndroid={'transparent'}
                     onChangeText={(text) => this.setState({phone: text})}
                     textAlignVertical='center'
-                    keyboardType={'numeric'}
-                    textAlign='center'/>
+                    keyboardType={'numeric'}/>
                 <View style={{flexDirection: 'row', backgroundColor: '#f4f4f4', marginTop: 10}}>
                     <TextInput
                         style={styles.verifycode_input}
@@ -156,7 +155,6 @@ class Register extends Component {
                         underlineColorAndroid={'transparent'}
                         onChangeText={(text) => this.setState({code: text})}
                         textAlignVertical='center'
-                        textAlign='center'
                         keyboardType={'numeric'}
                         />
                     {this.state.cansend ?
@@ -181,7 +179,6 @@ class Register extends Component {
                     onChangeText={(text) => this.setState({pwd: text})}
                     secureTextEntry={true}
                     textAlignVertical='center'
-                    textAlign='center'
                     ref='pwd'
                     onFocus={() => {
                         this.refs.pwd.focus()

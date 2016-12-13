@@ -108,11 +108,12 @@ class FeeSettlement extends React.Component {
             toastShort('出了问题吧!请返回列表后刷新')
             return false;
         }
+        var _vipAccount=0,_prepayMoney = 0;
         //判断选择了余额 选择了预付金 或者全选 或者全不选
         //支付金额+折扣额-找零
         var money = parseFloat(_this.state.money)+parseFloat(_this.state.discount)-parseFloat(_this.state.oddChange);
         if (_this.state.balanceSwitch == false && _this.state.prepaySwitch == false) {
-            if (_this.state.money == null || _this.state.money == '' || _this.state.money == 0) {
+            if (_this.state.money === null || _this.state.money === '') {
                 toastShort('请输入金额')
                 return false;
             }
@@ -134,20 +135,28 @@ class FeeSettlement extends React.Component {
                     return false;
                 }
             }
-            if (_this.state.balanceSwitch == true) {
+            if (_this.state.balanceSwitch == true && _this.state.prepaySwitch == false) {
                 //只勾选余额
                 let totalMoney = _this.state.vipAccount + _this.state.discount + (_this.state.money - _this.state.oddChange);
                 if (_this.state.totalAmount !== totalMoney) {
                     toastShort('请核对支付金额')
                     return false;
                 }
+                //如果余额大于支付金额，余额最大数只能是总消费额-折扣额
+                if(parseFloat(_this.state.vipAccount)>=(parseFloat(_this.state.totalAmount)-parseFloat(_this.state.discount))){
+                    _vipAccount=parseFloat(_this.state.totalAmount)-parseFloat(_this.state.discount);
+                }
             }
-            if (_this.state.prepaySwitch == true) {
+            if (_this.state.prepaySwitch == true && _this.state.balanceSwitch == false) {
                 //只勾选了预付金
                 let totalMoney = _this.state.prepayMoney + _this.state.discount + (_this.state.money - _this.state.oddChange);
                 if (_this.state.totalAmount !== totalMoney) {
                     toastShort('请核对支付金额')
                     return false;
+                }
+                //如果预付金大于支付金额，预付金最大数只能是总消费额-折扣额
+                if(parseFloat(_this.state.prepayMoney)>=(parseFloat(_this.state.totalAmount)-parseFloat(_this.state.discount))){
+                    _prepayMoney=parseFloat(_this.state.totalAmount)-parseFloat(_this.state.discount);
                 }
             }
         }
@@ -155,6 +164,10 @@ class FeeSettlement extends React.Component {
         NetUtil.getAuth(function (user, hos) {
             let header = NetUtil.headerClientAuth(user, hos);
             let now = Util.getTime();
+
+            var detailList=_this.state.dataSource;
+            let _originalDiscountMoney=0;
+            detailList.forEach((d)=>{_originalDiscountMoney+=d.SumDiscountMoney;})
             let newSA = {
                 "ID": "00000000-0000-0000-0000-000000000000",
                 "SettleCode": null,
@@ -164,9 +177,9 @@ class FeeSettlement extends React.Component {
                 "PetCode": null,
                 "PetName": null,
                 "TotalMoney": _this.state.totalAmount,
-                "DisCountMoney": _this.state.discount,
-                "ShouldPaidMoney": _this.state.totalAmount - _this.state.discount,
-                "FactPaidMoney": _this.state.money,
+                "DisCountMoney": parseFloat(_this.state.discount)+parseFloat(_originalDiscountMoney),
+                "ShouldPaidMoney": parseFloat(_this.state.totalAmount) - parseFloat(_this.state.discount)-_vipAccount-_prepayMoney,
+                "FactPaidMoney": parseFloat(_this.state.totalAmount)-parseFloat(_this.state.discount),
                 "BackMoney": null,
                 "BackReason": null,
                 "PaidStatus": null,
@@ -179,7 +192,7 @@ class FeeSettlement extends React.Component {
                 "EntID": "00000000-0000-0000-0000-000000000000",
                 "HandDiscountMoney": 0,
                 "InputDiscountMoney": _this.state.discount,
-                "OriginalDiscountMoney": 0,
+                "OriginalDiscountMoney": _originalDiscountMoney,
                 "FactTotalMoney": _this.state.totalAmount - _this.state.discount,
                 "CreatedByID": "00000000-0000-0000-0000-000000000000",
                 "ModifiedByID": "00000000-0000-0000-0000-000000000000"
