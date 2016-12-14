@@ -333,14 +333,15 @@ class FeeSettlement extends React.Component {
     _check(val) {
         let _this = this;
         var dataSource = _this.state.checkedData;
-        alert(dataSource[0])
-        dataSource.forEach((item, index, array)=> {
+        _this.state.checkedData.forEach((item, index, array)=> {
             if (item === val) {
                 dataSource.splice(index, 1);
-                toastShort('remove')
+                toastShort('remove'+dataSource);
+                return false;
             } else {
                 dataSource.push(val);
-                toastShort('add')
+                toastShort('add'+dataSource);
+                return false;
             }
         })
 

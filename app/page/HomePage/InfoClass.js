@@ -98,7 +98,7 @@ class InfoClass extends React.Component {
     _renderDrug(g, sectionID, rowID) {
         return (
             <TouchableOpacity style={styles.container} onPress={()=>this.pressRow(g)}>
-                <Icon name={'lens'} size={20} color={'#99CCFF'} style={styles.LeftIconStyles}/>
+                <Icon name={'lens'} size={20} color={'#7A67EE'} style={styles.LeftIconStyles}/>
                 <Text style={styles.NameStyle}>{g.ClassName}</Text>
                 <Icon name={'chevron-right'} size={20} color={'black'} style={styles.IconStyle}/>
             </TouchableOpacity>
@@ -130,19 +130,17 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         height: 50,
         justifyContent: 'center',
-        alignSelf: 'center',
         alignItems: 'center',
-        borderBottomColor: '#666',
+        borderBottomColor: '#ccc',
         borderBottomWidth: StyleSheet.hairlineWidth,
     },
     LeftIconStyles: {
-        marginLeft: 20,
+        margin: 15,
     },
     NameStyle: {
         flex: 1,
         fontSize: 16,
         color: '#888',
-        marginLeft: 20,
     },
     IconStyle: {
         marginRight: 10,

@@ -265,15 +265,15 @@ class HomePage extends Component {
                               onPress={this._onPress.bind(this, InfoClass, 'InfoClass', '药品手册', '5738f12b-3fb7-4fbd-9975-3475251f62d6')}/>
                     <HomeIcon text="检验" iconName={'ios-water'} iconColor={'#6699CC'}
                               onPress={this._onPress.bind(this, InfoClass, 'InfoClass', '检验手册', '2efb2463-029c-4960-9964-7a3670a6fe7f')}/>
-                    <HomeIcon text="诊断" iconName={'ios-medkit'} iconColor={'#9999CC'}
+                    <HomeIcon text="诊断" iconName={'ios-medkit'} iconColor={'#FFD39B'}
                               onPress={this._onPress.bind(this, InfoClass, 'InfoClass', '诊断手册', 'a2f0ae74-9085-466f-a7b6-ac67fa316a8a')}/>
                 </View>
                 <View style={{flexDirection:'row'}}>
-                    <HomeIcon text="文献" iconName={'ios-book'} iconColor={'#CDB7B5'}
+                    <HomeIcon text="文献" iconName={'ios-book'} iconColor={'#E9967A'}
                               onPress={this._onPress.bind(this, InfoClass, 'InfoClass', '医学文献', '23e4546c-ccd8-456b-a91c-ad125d9d67a0')}/>
                     <HomeIcon text="资讯" iconName={'ios-list-box'} iconColor={'#66CCFF'}
                               onPress={this._onPress.bind(this, InfoList, 'InfoList', '行业资讯', null)}/>
-                    <HomeIcon text="工具" iconName={'ios-build'} iconColor={'#FFAEB9'}
+                    <HomeIcon text="工具" iconName={'ios-build'} iconColor={'#CD96CD'}
                               onPress={this._onPress.bind(this, ToolsHome, 'ToolsHome', '健康工具', null)}/>
                 </View>
                 <View style={{padding:5, borderLeftWidth:5, borderLeftColor:'#99CCFF', backgroundColor:'#eef4ff'}}>
