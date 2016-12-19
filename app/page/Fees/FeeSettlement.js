@@ -22,7 +22,8 @@ import Loading from '../../commonview/Loading';
 import { toastShort } from '../../util/ToastUtil';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Picker from 'react-native-picker';
-import CheckBox from 'react-native-check-box';
+import CheckBox from '../../commonview/CheckBox';
+var _newChecked= {};
 class FeeSettlement extends React.Component {
     constructor(props) {
         super(props);
@@ -42,6 +43,7 @@ class FeeSettlement extends React.Component {
             prepaySwitch: false,
             oddChange: 0,
             checkedData: [],
+            iconName:'',
         }
     }
 
@@ -67,6 +69,7 @@ class FeeSettlement extends React.Component {
                 if (data.Message !== null && data.Sign) {
                     data.Message.FSADetalList.forEach((item, index, array)=> {
                         _this.state.totalAmount += item.TotalCost;
+                        _this.state.checkedData.push(item);
                     })
                     //预付金
                     _this.state.prepayMoney = data.Message.CurrentGest.PrepayMoney;
@@ -77,9 +80,6 @@ class FeeSettlement extends React.Component {
                         dataSource: data.Message.FSADetalList,
                         businesCates: data.Message.BusinesCates,
                         loaded: true,
-                    })
-                    _this.state.dataSource.forEach((d)=> {
-                        _this.state.checkedData.push(d.RelationID)
                     })
                 } else {
                     toastShort("获取数据失败：" + data.Message);
@@ -96,9 +96,7 @@ class FeeSettlement extends React.Component {
 
     componentDidMount() {
         //初始化
-        InteractionManager.runAfterInteractions(() => {
-            this.fetchData();
-        });
+        this.fetchData();
     }
 
     onSettlement() {
@@ -108,10 +106,10 @@ class FeeSettlement extends React.Component {
             toastShort('出了问题吧!请返回列表后刷新')
             return false;
         }
-        var _vipAccount=0,_prepayMoney = 0;
+        var _vipAccount = 0, _prepayMoney = 0;
         //判断选择了余额 选择了预付金 或者全选 或者全不选
         //支付金额+折扣额-找零
-        var money = parseFloat(_this.state.money)+parseFloat(_this.state.discount)-parseFloat(_this.state.oddChange);
+        var money = parseFloat(_this.state.money) + parseFloat(_this.state.discount) - parseFloat(_this.state.oddChange);
         if (_this.state.balanceSwitch == false && _this.state.prepaySwitch == false) {
             if (_this.state.money === null || _this.state.money === '') {
                 toastShort('请输入金额')
@@ -143,8 +141,8 @@ class FeeSettlement extends React.Component {
                     return false;
                 }
                 //如果余额大于支付金额，余额最大数只能是总消费额-折扣额
-                if(parseFloat(_this.state.vipAccount)>=(parseFloat(_this.state.totalAmount)-parseFloat(_this.state.discount))){
-                    _vipAccount=parseFloat(_this.state.totalAmount)-parseFloat(_this.state.discount);
+                if (parseFloat(_this.state.vipAccount) >= (parseFloat(_this.state.totalAmount) - parseFloat(_this.state.discount))) {
+                    _vipAccount = parseFloat(_this.state.totalAmount) - parseFloat(_this.state.discount);
                 }
             }
             if (_this.state.prepaySwitch == true && _this.state.balanceSwitch == false) {
@@ -155,8 +153,8 @@ class FeeSettlement extends React.Component {
                     return false;
                 }
                 //如果预付金大于支付金额，预付金最大数只能是总消费额-折扣额
-                if(parseFloat(_this.state.prepayMoney)>=(parseFloat(_this.state.totalAmount)-parseFloat(_this.state.discount))){
-                    _prepayMoney=parseFloat(_this.state.totalAmount)-parseFloat(_this.state.discount);
+                if (parseFloat(_this.state.prepayMoney) >= (parseFloat(_this.state.totalAmount) - parseFloat(_this.state.discount))) {
+                    _prepayMoney = parseFloat(_this.state.totalAmount) - parseFloat(_this.state.discount);
                 }
             }
         }
@@ -165,9 +163,11 @@ class FeeSettlement extends React.Component {
             let header = NetUtil.headerClientAuth(user, hos);
             let now = Util.getTime();
 
-            var detailList=_this.state.dataSource;
-            let _originalDiscountMoney=0;
-            detailList.forEach((d)=>{_originalDiscountMoney+=d.SumDiscountMoney;})
+            var detailList = _this.state.dataSource;
+            let _originalDiscountMoney = 0;
+            detailList.forEach((d)=> {
+                _originalDiscountMoney += d.SumDiscountMoney;
+            })
             let newSA = {
                 "ID": "00000000-0000-0000-0000-000000000000",
                 "SettleCode": null,
@@ -177,9 +177,9 @@ class FeeSettlement extends React.Component {
                 "PetCode": null,
                 "PetName": null,
                 "TotalMoney": _this.state.totalAmount,
-                "DisCountMoney": parseFloat(_this.state.discount)+parseFloat(_originalDiscountMoney),
-                "ShouldPaidMoney": parseFloat(_this.state.totalAmount) - parseFloat(_this.state.discount)-_vipAccount-_prepayMoney,
-                "FactPaidMoney": parseFloat(_this.state.totalAmount)-parseFloat(_this.state.discount),
+                "DisCountMoney": parseFloat(_this.state.discount) + parseFloat(_originalDiscountMoney),
+                "ShouldPaidMoney": parseFloat(_this.state.totalAmount) - parseFloat(_this.state.discount) - _vipAccount - _prepayMoney,
+                "FactPaidMoney": parseFloat(_this.state.totalAmount) - parseFloat(_this.state.discount),
                 "BackMoney": null,
                 "BackReason": null,
                 "PaidStatus": null,
@@ -325,37 +325,66 @@ class FeeSettlement extends React.Component {
         this.pickerState.toggle();
     }
 
-    onClick(fee) {
-        let _this = this;
-        _this._check(fee.RelationID);
-    }
-
-    _check(val) {
-        let _this = this;
-        var dataSource = _this.state.checkedData;
-        _this.state.checkedData.forEach((item, index, array)=> {
-            if (item === val) {
-                dataSource.splice(index, 1);
-                toastShort('remove'+dataSource);
-                return false;
-            } else {
-                dataSource.push(val);
-                toastShort('add'+dataSource);
-                return false;
+    _onPress(fee) {
+        alert(fee.RelationDetailID)
+        /*let _this = this;
+        var dataSource = [];
+        _this.setState({checkedData:_this.state.dataSource});
+        _this.state.checkedData.forEach((item,index,array)=>{
+            if(item.RelationDetailID===fee.RelationDetailID){
+                dataSource.splice(index,1)
+            }else{
+                dataSource.push(item);
             }
         })
-
+        _this.setState({
+            checkedData:dataSource
+        })*/
     }
 
-    _renderRow(fee) {
+     _IsCheckSelected(value){
+    //传进来的ID判断是否存在于该数组中，如果存在则为选中。
+    let _this =this;
+    var dataSource = _this.state.dataSource,iconname='';
+    //alert(dataSource.length)
+    dataSource.forEach((item,index)=>{
+        //alert('次数'+index);
+        if(item.RelationDetailID===value){
+            //alert('success:'+item.RelationDetailID+'     '+value)
+            iconname ='check-square-o';
+            return;
+        }else{
+            //alert('failed:'+item.RelationDetailID+'     '+value)
+            iconname='square-o';
+        }
+    })
+    return iconname;
+}
+
+    checkSelect(checked,id){
+        let _this =this;
+        //_newChecked = _this.state.checkedData;
+        _this.state.checkedData.forEach((item,index)=>{
+            if(item.RelationDetailID === id){
+                _this.state.checkedData.splice(index,1);
+                alert('splice'+_this.state.checkedData.length);
+                return;
+            }else{
+                _this.state.checkedData.push(id);
+                alert('push'+_this.state.checkedData.length);
+            }
+        })
+        //_this.state.checkedData = _newChecked;
+    }
+
+    _renderRow(fee,rowID) {
         return (
             <View style={AppStyle.row}>
-                <CheckBox style={{padding:5}} onClick={(data)=>{this.onClick(fee)}} isChecked={true}/>
-                <View style={{flex:1, flexDirection:'row',justifyContent:'center',alignItems:'center',marginRight:10,}}>
-                    <Text style={{flex:1,fontSize:16,fontWeight:'bold',}}>{fee.ItemName}</Text>
-                    <Text style={{fontSize:16,}}>数量:{fee.TotalNum}</Text>
-                    <Text style={{fontSize:16,color:'#FF8040',flex:1,textAlign:'right'}}>¥{fee.InfactPrice}</Text>
-                </View>
+                    <View  style={{flex:1, flexDirection:'row',justifyContent:'center',alignItems:'center',marginRight:10,}}>
+                        <Text style={{flex:1,fontSize:16,fontWeight:'bold',}}>{fee.ItemName}</Text>
+                        <Text style={{fontSize:16,}}>数量:{fee.TotalNum}</Text>
+                        <Text style={{fontSize:16,color:'#FF8040',flex:1,textAlign:'right'}}>¥{fee.InfactPrice}</Text>
+                    </View>
             </View>
         )
     }
@@ -397,7 +426,8 @@ class FeeSettlement extends React.Component {
                     </View>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>总消费额</Text>
-                        <Text style={[AppStyle.rowVal,{color:'#FF9D6F',fontSize:18,}]}>¥ {this.state.totalAmount.toFixed(2)}</Text>
+                        <Text
+                            style={[AppStyle.rowVal,{color:'#FF9D6F',fontSize:18,}]}>¥ {this.state.totalAmount.toFixed(2)}</Text>
                     </View>
                     <View style={AppStyle.row}>
                         <Text style={AppStyle.rowTitle}>预付金</Text>
@@ -486,7 +516,8 @@ class FeeSettlement extends React.Component {
                 <View style={AppStyle.feeView}>
                     <View style={styles.payStyle}>
                         <Text style={styles.amountStyle}>应支付: </Text>
-                        <Text style={styles.priceStyle}>¥{(this.state.totalAmount - this.state.discount).toFixed(2)}</Text>
+                        <Text
+                            style={styles.priceStyle}>¥{(this.state.totalAmount - this.state.discount).toFixed(2)}</Text>
                         <Text style={styles.amountStyle}> 找零: </Text>
                         <Text style={styles.priceStyle}>¥ {this.state.oddChange.toFixed(2)}</Text>
                     </View>
