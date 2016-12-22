@@ -81,7 +81,6 @@ class VaccineService extends Component {
                 _this.setState({
                     executorSource: serviceData,
                     executorNameData: _data,
-                    executorName: _data[0],
                 });
             });
             let postData = [{
@@ -107,6 +106,7 @@ class VaccineService extends Component {
         })
         if (_this.props.id == 2) {
             //疫苗详情
+            alert(_this.props.vaccine.ExecutorName)
             _this.setState({
                 petSource: {
                     GestName: _this.props.vaccine.GestName,
@@ -738,7 +738,7 @@ class VaccineService extends Component {
                     selectedValue={this.state.executorName}
                     onPickerDone={(text)=>{
                  this.setState({
-                     executorName: text!==null?text[0]:'',
+                     executorName: text?text[0]:'',
                  })
                  }}
                 />

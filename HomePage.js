@@ -25,6 +25,7 @@ import InfoList from './app/page/HomePage/InfoList';
 import ToolsHome from './app/page/tools/ToolsHome';
 import Loading from './app/commonview/Loading';
 import HomeIcon from './app/commonview/HomeIcon';
+import { toastShort } from './app/util/ToastUtil';
 
 import ViewPager from 'react-native-viewpager';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
@@ -39,7 +40,7 @@ class HomePage extends Component {
             connect: false,
             imageSource: [],
             dsImage: new ViewPager.DataSource({pageHasChanged: (p1, p2)=>p1 !== p2}),
-            informationSource: new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2}),
+            ds: new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2}),
             loaded: false,
             focusLoaded: false,
             pageIndex: 1,
@@ -140,7 +141,7 @@ class HomePage extends Component {
                         //alert('没有图片');
                     }
                 } else {
-                    alert("获取数据失败：" + data.message);
+                    toastShort("获取数据失败：" + data.message);
                 }
             });
         }
@@ -149,7 +150,8 @@ class HomePage extends Component {
     _fetchData(page) {
         let _this = this;
         if (_this.state.connect) {
-            NetUtil.get(CONSTAPI.APIAPP + '/AppInfo/GetHomeInfo?pid=&PageSize=' + this.state.pageSize + '&PageIndex=' + page, false, function (result) {
+            var api = CONSTAPI.APIAPP + '/AppInfo/GetHomeInfo?pid=&PageSize=' +this.state.pageSize + '&PageIndex=' + page;
+            NetUtil.get(api, false, function (result) {
                 if (result.Status && result.Data) {
                     let _dataCache = _this.state.dataCache;
                     if (page > 1) {
@@ -175,7 +177,7 @@ class HomePage extends Component {
                     });
                 }
                 else {
-                    alert("get data error")
+                    toastShort("获取数据失败")
                 }
             });
         }
@@ -193,6 +195,7 @@ class HomePage extends Component {
 
     _infoClick(Info) {
         let _this = this;
+        alert(Info.imgs.length);return false;
         const { navigator } = _this.props;
         if (navigator) {
             navigator.push({
@@ -233,14 +236,35 @@ class HomePage extends Component {
          );}*/
     }
 
-    renderInfo(Info) {
+    renderInfo(row) {
+        let imgLen = row.imgs.length;
+        let renderRow =
+            <TouchableOpacity style={styles.rows} onPress={()=>this._infoClick(row)}>
+            {/*<Image resource={Info.ImagePath}/>*/}
+            <Text style={styles.rowText}>{row.InfoTitle}</Text>
+        </TouchableOpacity>;
+        //判断图片3中情况，1：无图片 2：图片1张 3.图片3张以及大于三张
+        if(imgLen===1){
+            renderRow=
+                <TouchableOpacity style={{flexDirection:'row',margin:10,}} onPress={()=>this._infoClick(row)}>
+                    <Text style={{fontSize:20,flex:1,}}>{row.InfoTitle}</Text>
+                    <Image source={{uri:row.imgs[0]}} style={{marginLeft:10,width:200,height:100,}}/>
+                </TouchableOpacity>
+        }else if(imgLen>1){
+            renderRow=
+                <TouchableOpacity style={styles.row3} onPress={()=>this._infoClick(row)}>
+                    <Text style={styles.rowText}>{row.InfoTitle}</Text>
+                <View style={styles.img3}>
+                    <Image source={{uri:row.imgs[0]}} style={styles.img}/>
+                    <Image source={{uri:row.imgs[1]}} style={styles.img}/>
+                    <Image source={{uri:row.imgs[2]}} style={styles.img}/>
+                </View>
+                </TouchableOpacity>
+        }
         return (
-            <TouchableOpacity style={styles.rows} onPress={()=>this._infoClick(Info)}>
-                <Icon name={'local-post-office'} size={20} color={'#ADD8E6'} style={styles.rowIcon}/>
-                {/*<Image resource={Info.ImagePath}/>*/}
-                <Text style={styles.rowText}>{Info.InfoTitle}</Text>
-                <Icon name={'chevron-right'} size={20} color={'#888'} style={styles.rowRight}/>
-            </TouchableOpacity>
+            <View style={styles.rowContainer}>
+                {renderRow}
+            </View>
         )
     }
 
@@ -305,7 +329,7 @@ class HomePage extends Component {
                     <ListView
                         renderHeader={this.renderHeader.bind(this)}
                         renderFooter={this.renderFooter.bind(this)}
-                        dataSource={this.state.informationSource.cloneWithRows(this.state.dataCache)}
+                        dataSource={this.state.ds.cloneWithRows(this.state.dataCache)}
                         renderRow={this.renderInfo.bind(this)}
                         onEndReached={this._onEndReached.bind(this)}
                         onEndReachedThreshold={100}
@@ -332,26 +356,14 @@ class HomePage extends Component {
     }
 }
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    page: {
-        width: deviceWidth,
-        height: 150,
-        resizeMode: 'stretch'
-    },
-    rows: {
-        flex: 1,
-        flexDirection: 'row',
-        height: 50,
-        overflow: 'hidden',
-        backgroundColor: '#fff',
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: '#ccc'
-    },
-    rowIcon: {marginLeft: 10, justifyContent: 'center', alignSelf: 'center'},
-    rowText: {flex: 1, marginLeft: 10, justifyContent: 'center', alignSelf: 'center'},
-    rowRight: {justifyContent: 'center', alignSelf: 'center'},
+    container: {flex: 1,},
+    page: {width: deviceWidth, height: 150,resizeMode: 'stretch'},
+    rowContainer:{flexDirection:'column',margin:10,borderBottomColor: '#ccc',borderBottomWidth:StyleSheet.hairlineWidth,},
+    rows: {},
+    rowText: {fontSize:20},
+    row3:{flex:1,flexDirection:'column',margin:10,},
+    img3:{flexDirection:'row',marginBottom:20,},
+    img:{height:100,width:100,margin:5}
 });
 
 module.exports = HomePage;
