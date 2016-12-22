@@ -106,7 +106,6 @@ class VaccineService extends Component {
         })
         if (_this.props.id == 2) {
             //疫苗详情
-            alert(_this.props.vaccine.ExecutorName)
             _this.setState({
                 petSource: {
                     GestName: _this.props.vaccine.GestName,
