@@ -195,7 +195,6 @@ class HomePage extends Component {
 
     _infoClick(Info) {
         let _this = this;
-        alert(Info.imgs.length);return false;
         const { navigator } = _this.props;
         if (navigator) {
             navigator.push({
