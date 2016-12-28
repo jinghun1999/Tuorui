@@ -192,7 +192,7 @@ class Income extends React.Component {
                 </View>
                 <View style={{flexDirection:'row'}}>
                     <Text>实价:¥{obj.InfactPrice}</Text>
-                    <Text style={{marginLeft:8,}}>优惠:¥{obj.DisCountMoney}</Text>
+                    <Text style={{marginLeft:8,}}>优惠:¥{obj.DetailDiscountMoney}</Text>
                     <Text style={{marginLeft:8,}}>数量:{obj.TotalNum}</Text>
                 </View>
             </View>

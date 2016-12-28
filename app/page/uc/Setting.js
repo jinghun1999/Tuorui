@@ -122,27 +122,27 @@ class MyAccount extends React.Component {
             <View style={Style.container}>
                 <Head title="设置" canBack={true} onPress={this._onBack.bind(this)}/>
                 <TouchableOpacity style={Style.rowBox} onPress={()=>this.showInfo('服务条款')}>
-                    <Text style={Style.titleText}>服务条款</Text>
+                    <Text style={styles.titleText}>服务条款</Text>
                     <Icon name={'chevron-right'} size={20} color={'#888'}/>
                 </TouchableOpacity>
                 <TouchableOpacity style={Style.rowBox} onPress={()=>this.showInfo('使用帮助')}>
-                    <Text style={Style.titleText}>使用帮助</Text>
+                    <Text style={styles.titleText}>使用帮助</Text>
                     <Icon name={'chevron-right'} size={20} color={'#888'}/>
                 </TouchableOpacity>
                 <TouchableOpacity style={[Style.rowBox,{marginTop:10,}]} onPress={()=>this.showInfo('关于我们')}>
-                    <Text style={Style.titleText}>关于我们</Text>
+                    <Text style={styles.titleText}>关于我们</Text>
                     <Icon name={'chevron-right'} size={20} color={'#888'}/>
                 </TouchableOpacity>
                 <TouchableOpacity style={Style.rowBox} onPress={()=>this.showInfo('联系我们')}>
-                    <Text style={Style.titleText}>联系我们</Text>
+                    <Text style={styles.titleText}>联系我们</Text>
                     <Icon name={'chevron-right'} size={20} color={'#888'}/>
                 </TouchableOpacity>
                 <TouchableOpacity style={[Style.rowBox,{marginTop:10,}]} onPress={()=>this.clearCache()}>
-                    <Text style={Style.titleText}>清除缓存</Text>
+                    <Text style={styles.titleText}>清除缓存</Text>
                     <Icon name={'chevron-right'} size={20} color={'#888'}/>
                 </TouchableOpacity>
                 <TouchableOpacity style={[Style.rowBox,{marginTop:10,}]} onPress={()=>this.checkUpdate()}>
-                    <Text style={Style.titleText}>检查更新</Text>
+                    <Text style={styles.titleText}>检查更新</Text>
                     <Text style={{color:'#ccc'}}>当前版本:V{packageVersion}</Text>
                     <Icon name={'chevron-right'} size={20} color={'#888'}/>
                 </TouchableOpacity>
@@ -150,5 +150,7 @@ class MyAccount extends React.Component {
         );
     }
 }
-
+const styles = StyleSheet.create({
+  titleText:{fontSize:15,flex:1,},
+})
 module.exports = MyAccount;

@@ -152,7 +152,7 @@ let AppStyle = StyleSheet.create({
         fontSize: 14,
     },
     sumValue: {
-        fontSize: 32,
+        fontSize: 20,
         color: '#0099CC',
         fontWeight: 'bold',
     },

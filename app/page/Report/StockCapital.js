@@ -94,7 +94,7 @@ class StockCapital extends React.Component {
                 </View>
                 <View style={AppStyle.outerRow}>
                     <View style={AppStyle.sumRow}>
-                        <Text style={AppStyle.sumValue}>{this.state.totalCount}</Text>
+                        <Text style={AppStyle.sumValue}>{this.state.totalCount.toFixed(2)}</Text>
                         <Text style={AppStyle.sumTitle}>资产数量</Text>
                     </View>
                     <View style={[AppStyle.sumRow,{borderRightWidth:0,}]}>
@@ -127,7 +127,7 @@ class StockCapital extends React.Component {
             <View style={AppStyle.listRow}>
                 <View style={{flexDirection:'row'}}>
                     <Text style={AppStyle.itemName}>{obj.ItemName}</Text>
-                    <Text style={AppStyle.subName}>{obj.BarCode}</Text>
+                    <Text style={AppStyle.subName}>{obj.ItemCode}</Text>
                 </View>
                 <View style={{flexDirection:'row'}}>
                     <Text>售价:¥{obj.SellPrice}</Text>
