@@ -246,8 +246,8 @@ class HomePage extends Component {
         if(imgLen===1){
             renderRow=
                 <TouchableOpacity style={{flexDirection:'row',margin:10,}} onPress={()=>this._infoClick(row)}>
-                    <Text style={{fontSize:20,flex:1,}}>{row.InfoTitle}</Text>
-                    <Image source={{uri:row.imgs[0]}} style={{marginLeft:10,width:200,height:100,}}/>
+                    <Text style={[styles.rowText,{flex:1,}]}>{row.InfoTitle}</Text>
+                    <Image source={{uri:row.imgs[0]}} style={{marginLeft:10,width:180,height:100,}}/>
                 </TouchableOpacity>
         }else if(imgLen>1){
             renderRow=
@@ -357,12 +357,12 @@ class HomePage extends Component {
 const styles = StyleSheet.create({
     container: {flex: 1,},
     page: {width: deviceWidth, height: 150,resizeMode: 'stretch'},
-    rowContainer:{flexDirection:'column',margin:10,borderBottomColor: '#ccc',borderBottomWidth:StyleSheet.hairlineWidth,},
-    rows: {},
-    rowText: {fontSize:20},
-    row3:{flex:1,flexDirection:'column',margin:10,},
-    img3:{flexDirection:'row',marginBottom:20,},
-    img:{height:100,width:100,margin:5}
+    rowContainer:{flexDirection:'column',margin:5,borderBottomColor: '#ccc',borderBottomWidth:StyleSheet.hairlineWidth,},
+    rows: {margin:10},
+    rowText: {fontSize:15,width:deviceWidth-100,},
+    row3:{flexDirection:'column',margin:10,},
+    img3:{flex:1,flexDirection:'row',marginBottom:20,height:80,},
+    img:{flex:1,margin:5,}
 });
 
 module.exports = HomePage;
