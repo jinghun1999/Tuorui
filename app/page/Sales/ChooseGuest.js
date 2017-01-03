@@ -60,18 +60,47 @@ class ChooseGuest extends Component {
         let _this = this;
         NetUtil.getAuth(function (user, hos) {
             let postjson = {
-                "items": [{
-                    "Childrens": null,
-                    "Field": "isVIP",
-                    "Title": null,
-                    "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                    "DataType": 0,
-                    "Value": "SM00054",
-                    "Conn": 0
-                }],
-                "sorts": [{"Field": "ModifiedOn", "Title": null, "Sort": {"Name": "Desc", "Title": "降序"}, "Conn": 0}],
-                "index": page,
-                "pageSize": _this.state.pageSize
+                "items":[
+                    {
+                        "Childrens":null,
+                        "Field":"Status",
+                        "Title":null,
+                        "Operator":{
+                            "Name":"=",
+                            "Title":"等于",
+                            "Expression":null
+                        },
+                        "DataType":0,
+                        "Value":"SM00001",
+                        "Conn":0
+                    },
+                    {
+                        "Childrens":null,
+                        "Field":"isVIP",
+                        "Title":null,
+                        "Operator":{
+                            "Name":"=",
+                            "Title":"等于",
+                            "Expression":null
+                        },
+                        "DataType":0,
+                        "Value":"SM00054",
+                        "Conn":1
+                    }
+                ],
+                "sorts":[
+                    {
+                        "Field":"ModifiedOn",
+                        "Title":null,
+                        "Sort":{
+                            "Name":"Desc",
+                            "Title":"降序"
+                        },
+                        "Conn":0
+                    }
+                ],
+                "index":page,
+                "pageSize":_this.state.pageSize
             };
             if (_this.state.kw.length > 0) {
                 let query = {
@@ -133,15 +162,34 @@ class ChooseGuest extends Component {
                     });
                 }
             });
-            postjson = [{
-                "Childrens": null,
-                "Field": "isVIP",
-                "Title": null,
-                "Operator": {"Name": "=", "Title": "等于", "Expression": null},
-                "DataType": 0,
-                "Value": "SM00054",
-                "Conn": 0
-            }];
+            postjson = [
+                {
+                    "Childrens":null,
+                    "Field":"Status",
+                    "Title":null,
+                    "Operator":{
+                        "Name":"=",
+                        "Title":"等于",
+                        "Expression":null
+                    },
+                    "DataType":0,
+                    "Value":"SM00001",
+                    "Conn":0
+                },
+                {
+                    "Childrens":null,
+                    "Field":"isVIP",
+                    "Title":null,
+                    "Operator":{
+                        "Name":"=",
+                        "Title":"等于",
+                        "Expression":null
+                    },
+                    "DataType":0,
+                    "Value":"SM00054",
+                    "Conn":1
+                }
+            ]
             if (_this.state.kw.length > 0) {
                 let query = {
                     "Childrens": [{

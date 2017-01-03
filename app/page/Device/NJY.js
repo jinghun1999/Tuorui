@@ -73,13 +73,15 @@ class NJY extends Component {
                 //获取设备号
                 NetUtil.get(CONSTAPI.APIAPP + '/AppInfo/GetNJYDeviceInfo?phone=' + ret.user.Mobile, null, function (data) {
                     if (data.Status) {
-                        let deviceInfo = data.Data;
-                        if (deviceInfo.DeviceID != null && deviceInfo.DeviceID != '') {
-                            _this.setState({deviceId: deviceInfo.DeviceID});
-                            _this._search();   //获取设备号成功，查询数据
+                        if(data.Data!=null){
+                            let deviceInfo = data.Data;
+                            if (deviceInfo.DeviceID != null && deviceInfo.DeviceID != '') {
+                                _this.setState({deviceId: deviceInfo.DeviceID});
+                                _this._search();   //获取设备号成功，查询数据
+                            }
                         }
                         else {
-                            _this.setState({clues: '您还没有绑定设备，请先绑定设备'});
+                            _this.setState({clues: '您还没有绑定设备，请先绑定设备',loaded: true,});
                         }
                     }
                 });
