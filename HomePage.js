@@ -242,7 +242,7 @@ class HomePage extends Component {
             {/*<Image resource={Info.ImagePath}/>*/}
             <Text style={styles.rowText}>{row.InfoTitle}</Text>
         </TouchableOpacity>;
-        //判断图片3中情况，1：无图片 2：图片1张 3.图片3张以及大于三张
+        /*判断图片3中情况，1：无图片 2：图片1张 3.图片3张以及大于三张
         if(imgLen===1){
             renderRow=
                 <TouchableOpacity style={{flexDirection:'row',margin:10,}} onPress={()=>this._infoClick(row)}>
@@ -259,7 +259,7 @@ class HomePage extends Component {
                     <Image source={{uri:row.imgs[2]}} style={styles.img}/>
                 </View>
                 </TouchableOpacity>
-        }
+        }*/
         return (
             <View style={styles.rowContainer}>
                 {renderRow}

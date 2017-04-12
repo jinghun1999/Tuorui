@@ -22,7 +22,7 @@ import Loading from '../../commonview/Loading';
 import { toastShort } from '../../util/ToastUtil';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Picker from 'react-native-picker';
-import CheckBox from '../../commonview/CheckBox';
+//import CheckBox from '../../commonview/CheckBox';
 var _newChecked= {};
 class FeeSettlement extends React.Component {
     constructor(props) {
